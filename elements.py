@@ -4,14 +4,41 @@ from main import Element
 Normal = Element('Normal')
 Fire = Element('Fire')
 Water = Element('Water')
-Grass = Element('Grass')
+Earth = Element('Earth')
+Electric = Element('Electric')
+Wind = Element('Wind')
+
+Light = Element('Light')
+Dark = Element('Dark')
 
 #interactions
 Fire.special_modifiers[Water] = 0.5
-Fire.special_modifiers[Grass] = 2.0
+Fire.special_modifiers[Wind] = 1.5
+Fire.special_modifiers[Fire] = 0.75
 
 Water.special_modifiers[Fire] = 2.0
-Water.special_modifiers[Grass] = 0.5
+Water.special_modifiers[Earth] = 1.5
+Water.special_modifiers[Electric] = 0.5
+Water.special_modifiers[Water] = 0.75
 
-Grass.special_modifiers[Fire] = 0.5
-Grass.special_modifiers[Water] = 2.0
+Earth.special_modifiers[Water] = 1.5
+Earth.special_modifiers[Electric] = 2
+Earth.special_modifiers[Earth] = 0.75
+
+Electric.special_modifiers[Water] = 2.0
+Electric.special_modifiers[Earth] = 0.5
+Electric.special_modifiers[Electric] = 0.75
+
+Wind.special_modifiers[Fire] = 1.5
+Wind.special_modifiers[Earth] = 1.5
+Wind.special_modifiers[Wind] = 0.75
+
+Light.special_modifiers[Dark] = 1.5
+Light.special_modifiers[Light] = 0.5
+Light.special_modifiers[Normal] = 2.0
+
+Dark.special_modifiers[Light] = 1.5
+Dark.special_modifiers[Dark] = 0.5
+Dark.special_modifiers[Normal] = 2.0
+
+
