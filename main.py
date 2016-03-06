@@ -1,4 +1,5 @@
 import random
+import math
 
 class Element(object):
 	def __init__(self, name, nominal = 1.0, bonus=1.5):
@@ -11,19 +12,50 @@ class Element(object):
 		return self.special_modifiers[defending_element] if (defending_element in self.special_modifiers) else self.nominal_modifier
 
 
+OTHER = 1
+SELF = 0
 class Move(object):
-	def __init__(self,name, elements, accuracy, mp):
+	def __init__(self,name, elements, accuracy, power, mp, effects, default_target):
 		self.name = name
 		self.mp = mp
 		self.max_mp = mp
-		self.mp_cost = cost
 		self.accuracy = accuracy
+		self.power = power
 		self.elements = elements
 		self.uses = 0
+		self.effects = effects
+		self.default_target = default_target
 
 	def attack(self, user, target): # do whatever the attack needs to do
-		self.uses += 1
-		pass
+		print user.name, 'used move', self.name
+		hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
+		val =  user.physical_strength/target.physical_strength
+
+		if hit_chance > random.random():
+			if self.power > 0:
+				damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power)
+
+				for atk_element in self.elements:
+					for target_element in target.elements:
+						damage *= atk_element.effectiveness(target_element)
+					for user_element in user.elements:
+						if user_element == atk_element:
+							damage *= atk_element.bonus
+
+				self.uses += 1
+
+				damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+				damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
+				damage = max(1,damage)
+
+				target.hp -= damage
+
+			for effect, chance in self.effects:
+				if chance > random.random():
+					target.status.append(effect)
+					print target.name, 'was effected by', effect.name
+
+
 
 class Status(object):
 	def __init__(self, name=None):
@@ -78,6 +110,7 @@ class Character(object):
 		self.elements = []
 		self.status = []
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self._level = 1
 		self.level = 1
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
@@ -86,13 +119,49 @@ class Character(object):
 		self.base_speed = 10
 		self.base_hp = 10
 		self._hp = self.max_hp
+		self._exp = 0
+
+	@property
+	def level(self):
+		return self._level
+
+	@level.setter
+	def level(self, value):
+		self._level = value
+		print self.name, 'leveled up to ', self.level
+		self.exp = 0
+		self.heal()
+
+	@property
+	def exp(self):
+		return self._exp
+
+	@exp.setter
+	def exp(self, value):
+		if value == 0:
+			self._exp = self.level ** 3
+		self._exp += value
+		check_level = True
+		while check_level:
+			next_level = (self.level + 1) ** 3
+			if self._exp > next_level:
+				self.level += 1
+			else:
+				check_level = False
+
+	@property
+	def exp_value(self):
+		val = self.physical_strength + self.physical_defense
+		val += self.special_strength + self.special_defense
+		val += self.speed + self.max_hp
+		val *= self.level / 3
+		return int(val)
 
 	@property
 	def physical_strength(self):
 		stat = (self.base_physical_strength + self.coefficients[0]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
 			stat = status.physical_strength(stat)
-		print 'strength: ', stat
 		return stat
 	@property
 	def physical_defense(self):
@@ -155,7 +224,8 @@ class Character(object):
 		for move in self.moves:
 			move.mp = move.max_mp
 			self.hp = self.max_hp
-
+	def levelup(self):
+		pass
 
 class Battle(object):
 	pass
