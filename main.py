@@ -154,7 +154,7 @@ class Character(object):
 		val = self.physical_strength + self.physical_defense
 		val += self.special_strength + self.special_defense
 		val += self.speed + self.max_hp
-		val *= self.level / 3
+		val *= self.level / 6
 		return int(val)
 
 	@property
