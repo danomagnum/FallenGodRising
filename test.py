@@ -1,16 +1,18 @@
 import characters
+import battle
 
 a = characters.TestChar()
 b = characters.TestChar()
 
 damage = []
 
-a.level = 100
-b.level = 100
+a.level = 50
+a.name = 'my mon'
+b.level = 52
+b.name = 'enemy mon'
 a.heal()
 b.heal()
-for x in xrange(100):
-	damage.append(a.moves[0].attack(a,b))
 
-print damage[0], damage[-1]
-print a.hp, b.hp
+battle.battle(a,b)
+
+#print a.exp, '/', (a.level+1)**3 - a.exp
