@@ -27,7 +27,17 @@ class Move(object):
 		self.default_target = default_target
 
 	def attack(self, user, target): # do whatever the attack needs to do
-		print user.name, 'used move', self.name
+		if (self.mp > 0):
+			print user.name, 'used move', self.name
+			self.mp -= 1
+		else:
+			print user.name, 'is out of mp to use move', self.name
+			self.mp = 0
+			if 0.2 > random.random():
+				print user.name, 'used move', self.name
+			else:
+				return
+
 		hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
 		val =  user.physical_strength/target.physical_strength
 
@@ -54,6 +64,11 @@ class Move(object):
 				if chance > random.random():
 					target.status.append(effect)
 					print target.name, 'was effected by', effect.name
+	def __str__(self):
+		string = ''
+		string += self.name + ' '
+		string += '( ' + str(self.mp) + '/' + str(self.max_mp) + ' )'
+		return string
 
 
 
@@ -157,6 +172,9 @@ class Character(object):
 		val *= self.level / 6
 		return int(val)
 
+	def exp_to_next_level(self):
+		next_level = (self.level + 1) ** 3
+		return next_level
 	@property
 	def physical_strength(self):
 		stat = (self.base_physical_strength + self.coefficients[0]) * 3 * self.level / 100.0 + 5

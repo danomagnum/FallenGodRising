@@ -6,12 +6,13 @@ b = characters.TestChar()
 
 damage = []
 
-a.level = 50
 a.name = 'my mon'
-b.level = 52
+a.level = 50
 b.name = 'enemy mon'
+b.level = 52
 a.heal()
 b.heal()
+a.moves[0].mp = 1
 
 battle.battle(a,b)
 

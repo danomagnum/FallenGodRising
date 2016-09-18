@@ -1,5 +1,6 @@
 import math
 import random
+DEBUG = True
 
 def battle(user, enemy):
 	battle_continue = True
@@ -11,7 +12,7 @@ def battle(user, enemy):
 		while need_selection:
 			i = 0
 			for move in user.moves:
-				print i, ')', move.name
+				print i, ')', str(move)
 				i += 1
 
 			selection = int(input('Which Move?'))
