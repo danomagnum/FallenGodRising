@@ -67,7 +67,7 @@ class Move(object):
 	def __str__(self):
 		string = ''
 		string += self.name + ' '
-		string += '( ' + str(self.mp) + '/' + str(self.max_mp) + ' )'
+		string += '( ' + str(int(self.mp)) + '/' + str(int(self.max_mp)) + ' )'
 		return string
 
 
@@ -121,6 +121,7 @@ class Character(object):
 			self.name = 'MissingNo'
 		else:
 			self.name = name
+		self._exp = 0
 		self.moves = []
 		self.elements = []
 		self.status = []
@@ -134,7 +135,6 @@ class Character(object):
 		self.base_speed = 10
 		self.base_hp = 10
 		self._hp = self.max_hp
-		self._exp = 0
 
 	@property
 	def level(self):
@@ -144,7 +144,7 @@ class Character(object):
 	def level(self, value):
 		self._level = value
 		print self.name, 'leveled up to ', self.level
-		self.exp = 0
+		self._exp = self.exp_to_current_level()
 		self.heal()
 
 	@property
@@ -153,13 +153,10 @@ class Character(object):
 
 	@exp.setter
 	def exp(self, value):
-		if value == 0:
-			self._exp = self.level ** 3
-		self._exp += value
+		self._exp = value
 		check_level = True
 		while check_level:
-			next_level = (self.level + 1) ** 3
-			if self._exp > next_level:
+			if self._exp > self.exp_to_next_level():
 				self.level += 1
 			else:
 				check_level = False
@@ -172,9 +169,12 @@ class Character(object):
 		val *= self.level / 6
 		return int(val)
 
+	def exp_to_current_level(self):
+		return (self.level ) ** 3
 	def exp_to_next_level(self):
-		next_level = (self.level + 1) ** 3
-		return next_level
+		return (self.level + 1) ** 3
+	def exp_progress(self):
+		return (float(self.exp) - float(self.exp_to_current_level()) ) / float(self.exp_to_next_level())
 	@property
 	def physical_strength(self):
 		stat = (self.base_physical_strength + self.coefficients[0]) * 3 * self.level / 100.0 + 5
