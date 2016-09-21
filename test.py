@@ -28,7 +28,7 @@ junk = sys.stdout.readlines()
 
 battledisplay = curses_interface.curses_display(battleuser, battleenemy)
 
-battle.Battle([battleuser], [battleenemy,battleenemy2], battledisplay, battle.Random_AI())
+battle.Battle([battleuser], battle.Random_AI([battleenemy,battleenemy2]), battledisplay)
 
 time.sleep(3)
 
