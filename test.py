@@ -6,19 +6,19 @@ import time
 
 curses_interface.initialize()
 
-battleuser = characters.TestChar()
+battleuser = characters.TestChar2()
 battleenemy = characters.TestChar()
 battleenemy2 = characters.TestChar()
 
-battleuser.name = 'my mon'
+battleuser.name = 'my comb'
 battleuser.level = 55
 battleuser.heal()
 
-battleenemy.name = 'enemy mon'
+battleenemy.name = 'enemy comb'
 battleenemy.level = 52
 battleenemy.heal()
 
-battleenemy2.name = 'enemy mon 2'
+battleenemy2.name = 'enemy comb 2'
 battleenemy2.level = 11
 battleenemy2.heal()
 

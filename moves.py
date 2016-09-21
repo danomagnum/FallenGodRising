@@ -14,3 +14,5 @@ Pound = MoveGen('Pound')
 Slam = MoveGen('Slam', power=20)
 
 Buff = MoveGen('Buff', effect_list=[(effects.Strength2x(), 1)], accuracy = 1 , power=0, target=main.SELF)
+
+Poison = MoveGen('Poison', effect_list=[(effects.Poison_Minor(), 1)], power=0)
