@@ -8,3 +8,10 @@ class TestChar(Character):
 		self.elements.append(elements.Normal)
 		self.moves = [moves.Pound(), moves.Slam(), moves.Buff()]
 		self.heal()
+
+class TestChar2(Character):
+	def __init__(self):
+		self.setup('test')
+		self.elements.append(elements.Normal)
+		self.moves = [moves.Pound(), moves.Slam(), moves.Buff(), moves.Poison()]
+		self.heal()

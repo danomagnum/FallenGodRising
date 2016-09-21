@@ -11,7 +11,7 @@ from StringIO import StringIO
 import characters
 
 screen = None
-original_stdout = None
+original_stdout = sys.stdout
 
 def initialize():
 	global screen
@@ -30,7 +30,7 @@ def initialize():
 
 	curses.noecho()
 
-	orignal_stdout = sys.stdout
+	original_stdout = sys.stdout
 	sys.stdout = stdoutCatcher.ioCatcher()
 
 
@@ -49,10 +49,10 @@ class curses_display(object):
 
 		YMAX, XMAX = self.screen.getmaxyx()
 
-		self.monboxsize = [5, 20]
+		self.combatantboxsize = [5, 20]
 		self.msgboxsize = [5, XMAX]
-		self.nmebox = curses.newwin(self.monboxsize[0],self.monboxsize[1],0,0)
-		self.mybox = curses.newwin(self.monboxsize[0],self.monboxsize[1],YMAX-(self.monboxsize[0] + 5),XMAX-self.monboxsize[1])
+		self.nmebox = curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],0,0)
+		self.mybox = curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],YMAX-(self.combatantboxsize[0] + 5),XMAX-self.combatantboxsize[1])
 		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
 
 		self.user = user
@@ -65,7 +65,7 @@ class curses_display(object):
 		self.nmebox.box()
 		self.mybox.box()
 		self.msgbox.box()
-		self.refresh_mon()
+		self.refresh_combatant()
 		self.nmebox.refresh()
 		self.mybox.refresh()
 		self.msgbox.refresh()
@@ -74,14 +74,14 @@ class curses_display(object):
 		self.msgbox.overlay(screen)
 		self.screen.refresh()
 
-	def show_mon(self, mon, box, hideexp=False):
+	def show_combatant(self, combatant, box, hideexp=False):
 		box.clear()
 		box.box()
-		box.addstr(0, 1, mon.name)
-		box.addstr(1, 1, progress_bar(mon.hp, mon.max_hp, self.monboxsize[1] - 2), curses.color_pair(1))
-		box.addstr(2, 1, str(int(math.ceil(mon.hp))) + ' / ' + str(int(math.ceil(mon.max_hp))), curses.color_pair(11))
+		box.addstr(0, 1, combatant.name)
+		box.addstr(1, 1, progress_bar(combatant.hp, combatant.max_hp, self.combatantboxsize[1] - 2), curses.color_pair(1))
+		box.addstr(2, 1, str(int(math.ceil(combatant.hp))) + ' / ' + str(int(math.ceil(combatant.max_hp))), curses.color_pair(11))
 		if not hideexp:
-			box.addstr(3, 1, progress_bar(mon.exp - mon.exp_at_level(mon.level), mon.exp_at_level(mon.level + 1) - mon.exp_at_level(mon.level), self.monboxsize[1] - 2), curses.color_pair(4))
+			box.addstr(3, 1, progress_bar(combatant.exp - combatant.exp_at_level(combatant.level), combatant.exp_at_level(combatant.level + 1) - combatant.exp_at_level(combatant.level), self.combatantboxsize[1] - 2), curses.color_pair(4))
 		box.refresh()
 
 	def menu(self, options, cols = 1, selected = 0):
@@ -179,10 +179,11 @@ class curses_display(object):
 			self.msgbox.box()
 			self.msgbox.refresh()
 
-	def refresh_mon(self):
-		self.show_mon(self.user, self.mybox)
-		self.show_mon(self.enemy, self.nmebox)
+	def refresh_combatant(self):
+		self.show_combatant(self.user, self.mybox)
+		self.show_combatant(self.enemy, self.nmebox)
+		self.show_messages()
 
 def shutdown():
 	curses.endwin()
-	sys.stdout = orignal_stdout
+	sys.stdout = original_stdout
