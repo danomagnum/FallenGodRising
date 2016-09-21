@@ -1,19 +1,37 @@
 import characters
+import sys
 import battle
+import curses_interface
+import time
 
-a = characters.TestChar()
-b = characters.TestChar()
+curses_interface.initialize()
 
-damage = []
+battleuser = characters.TestChar()
+battleenemy = characters.TestChar()
+battleenemy2 = characters.TestChar()
 
-a.name = 'my mon'
-a.level = 50
-b.name = 'enemy mon'
-b.level = 52
-a.heal()
-b.heal()
-a.moves[0].mp = 1
+battleuser.name = 'my mon'
+battleuser.level = 55
+battleuser.heal()
 
-battle.battle(a,b)
+battleenemy.name = 'enemy mon'
+battleenemy.level = 52
+battleenemy.heal()
 
-#print a.exp, '/', (a.level+1)**3 - a.exp
+battleenemy2.name = 'enemy mon 2'
+battleenemy2.level = 11
+battleenemy2.heal()
+
+
+
+junk = sys.stdout.readlines()
+
+battledisplay = curses_interface.curses_display(battleuser, battleenemy)
+
+battle.Battle([battleuser], [battleenemy,battleenemy2], battledisplay, battle.Random_AI())
+
+time.sleep(3)
+
+curses_interface.shutdown()
+
+sys.exit(0)
