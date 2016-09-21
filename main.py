@@ -92,7 +92,7 @@ class Status(object):
 	def post_turn(self, effected):
 		pass
 	def post_battle(self, effected):
-		pass
+		effected.status.remove(self)
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		return initial
 	def physical_defense(self, initial):
@@ -144,7 +144,7 @@ class Character(object):
 	def level(self, value):
 		self._level = value
 		print self.name, 'leveled up to ', self.level
-		self._exp = self.exp_to_current_level()
+		self._exp = self.exp_at_level(self.level)
 		self.heal()
 
 	@property
@@ -156,7 +156,7 @@ class Character(object):
 		self._exp = value
 		check_level = True
 		while check_level:
-			if self._exp > self.exp_to_next_level():
+			if self._exp > self.exp_at_level(self.level + 1):
 				self.level += 1
 			else:
 				check_level = False
@@ -169,12 +169,11 @@ class Character(object):
 		val *= self.level / 6
 		return int(val)
 
-	def exp_to_current_level(self):
-		return (self.level ) ** 3
-	def exp_to_next_level(self):
-		return (self.level + 1) ** 3
+	def exp_at_level(self, level):
+		return (level ) ** 3
+
 	def exp_progress(self):
-		return (float(self.exp) - float(self.exp_to_current_level()) ) / float(self.exp_to_next_level())
+		return (float(self.exp) - float(self.exp_at_level(self.level)) ) / float(self.exp_at_level(self.level + 1))
 	@property
 	def physical_strength(self):
 		stat = (self.base_physical_strength + self.coefficients[0]) * 3 * self.level / 100.0 + 5
