@@ -10,6 +10,8 @@ from StringIO import StringIO
 
 import characters
 
+DEBUG = True
+
 screen = None
 original_stdout = sys.stdout
 
@@ -152,12 +154,17 @@ class curses_display(object):
 				selected = selected + 1
 			elif key == curses.KEY_ENTER or key == 10:
 				loop = False
+			elif key == -1 or key == curses.KEY_BACKSPACE or key == 127:
+				return None #escape key
 
 			if selected < 0:
 				selected = 0
 			elif selected >= opt_count:
 				selected = opt_count - 1
 
+			if DEBUG:
+				self.msgbox.addstr(3, 1, str(key))
+				self.msgbox.refresh()
 			window.refresh()
 
 		window.clear()
@@ -180,8 +187,8 @@ class curses_display(object):
 			self.msgbox.refresh()
 
 	def refresh_combatant(self):
-		self.show_combatant(self.user, self.mybox)
-		self.show_combatant(self.enemy, self.nmebox)
+		self.show_combatant(self.user.combatant, self.mybox)
+		self.show_combatant(self.enemy.combatant, self.nmebox)
 		self.show_messages()
 
 def shutdown():
