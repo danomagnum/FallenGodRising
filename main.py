@@ -136,6 +136,9 @@ class Character(object):
 		self.base_hp = 10
 		self._hp = self.max_hp
 
+	def __str__(self):
+		return self.name
+
 	@property
 	def level(self):
 		return self._level
@@ -244,5 +247,18 @@ class Character(object):
 	def levelup(self):
 		pass
 
-class Battle(object):
-	pass
+class User(object):
+	def __init__(self, name, combatants, items=None):
+		self.name = name
+		self.combatants = combatants
+		self.combatant = combatants[0]
+		if items is None:
+			self.items = []
+		else:
+			self.items = items
+	def get_available(self):
+		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
+	
+	def get_standby(self):
+		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
+	

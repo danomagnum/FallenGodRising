@@ -1,34 +1,43 @@
 import characters
 import sys
 import battle
+import main
 import curses_interface
 import time
 
 curses_interface.initialize()
 
 battleuser = characters.TestChar2()
+battleuser2 = characters.TestChar()
+
 battleenemy = characters.TestChar()
 battleenemy2 = characters.TestChar()
 
-battleuser.name = 'my comb'
+battleuser.name = 'dude'
 battleuser.level = 55
 battleuser.heal()
 
-battleenemy.name = 'enemy comb'
+battleuser2.name = 'bloke'
+battleuser2.level = 50
+battleuser2.heal()
+
+battleenemy.name = 'chap'
 battleenemy.level = 52
 battleenemy.heal()
 
-battleenemy2.name = 'enemy comb 2'
-battleenemy2.level = 11
+battleenemy2.name = 'brah'
+battleenemy2.level = 48
 battleenemy2.heal()
 
+user = main.User('playercharacter', [battleuser, battleuser2])
+enemy = battle.Random_AI([battleenemy,battleenemy2])
 
 
 junk = sys.stdout.readlines()
 
-battledisplay = curses_interface.curses_display(battleuser, battleenemy)
+#battledisplay = curses_interface.curses_display(user,enemy, battleenemy)
 
-battle.Battle([battleuser], battle.Random_AI([battleenemy,battleenemy2]), battledisplay)
+battle.Battle(user, enemy , curses_interface.curses_display)
 
 time.sleep(3)
 
