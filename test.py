@@ -1,5 +1,8 @@
-import characters
 import sys
+
+sys.dont_write_bytecode = True
+
+import characters
 import battle
 import main
 import curses_interface
