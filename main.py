@@ -1,6 +1,17 @@
 import random
 import math
 
+TARGET_NONE = 0
+TARGET_COMBATANT = 1
+TARGET_COMMANDER = 2
+class Item(object):
+	def __init__(self, name, target=TARGET_NONE):
+		self.name = name
+		self.target_type = target
+
+	def use(target = None):
+		pass
+
 class Element(object):
 	def __init__(self, name, nominal = 1.0, bonus=1.5):
 		self.name = name
