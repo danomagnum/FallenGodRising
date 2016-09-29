@@ -44,6 +44,8 @@ def progress_bar(actual, maxvalue, length):
 	unfilled_char = ''
 	return filled_char * filled + unfilled_char * unfilled
 
+MAX_COMBATANTS = 3
+
 class curses_display(object):
 	def __init__(self, user, enemy):
 		self.screen = screen
@@ -51,10 +53,13 @@ class curses_display(object):
 
 		YMAX, XMAX = self.screen.getmaxyx()
 
-		self.combatantboxsize = [5, 20]
+		self.combatantboxsize = [5, XMAX/MAX_COMBATANTS]
 		self.msgboxsize = [5, XMAX]
-		self.nmebox = curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],0,0)
-		self.mybox = curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],YMAX-(self.combatantboxsize[0] + 5),XMAX-self.combatantboxsize[1])
+		self.nmebox = []
+		self.mybox = []
+		for i in xrange(MAX_COMBATANTS):
+			self.nmebox.append(curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],0,self.combatantboxsize[1]*i))
+			self.mybox.append(curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],YMAX-(self.combatantboxsize[0] + 5),self.combatantboxsize[1]*i))
 		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
 
 		self.user = user
@@ -64,15 +69,18 @@ class curses_display(object):
 
 	def refresh_full(self):
 		self.screen.clear()
-		self.nmebox.box()
-		self.mybox.box()
+		for i in xrange(MAX_COMBATANTS):
+			if i < len(self.user.combatants):
+				self.mybox[i].box()
+				self.mybox[i].refresh()
+				self.mybox[i].overlay(screen)
+			if i < len(self.enemy.combatants):
+				self.nmebox[i].box()
+				self.nmebox[i].refresh()
+				self.nmebox[i].overlay(screen)
 		self.msgbox.box()
 		self.refresh_combatant()
-		self.nmebox.refresh()
-		self.mybox.refresh()
 		self.msgbox.refresh()
-		self.nmebox.overlay(screen)
-		self.mybox.overlay(screen)
 		self.msgbox.overlay(screen)
 		self.screen.refresh()
 
@@ -84,6 +92,8 @@ class curses_display(object):
 		box.addstr(2, 1, str(int(math.ceil(combatant.hp))) + ' / ' + str(int(math.ceil(combatant.max_hp))), curses.color_pair(11))
 		if not hideexp:
 			box.addstr(3, 1, progress_bar(combatant.exp - combatant.exp_at_level(combatant.level), combatant.exp_at_level(combatant.level + 1) - combatant.exp_at_level(combatant.level), self.combatantboxsize[1] - 2), curses.color_pair(4))
+		if (combatant == self.user.combatant) or (combatant == self.enemy.combatant):
+			box.addstr(4, 1, 'Active')
 		box.refresh()
 
 	def menu(self, options, cols = 1, selected = 0):
@@ -187,8 +197,11 @@ class curses_display(object):
 			self.msgbox.refresh()
 
 	def refresh_combatant(self):
-		self.show_combatant(self.user.combatant, self.mybox)
-		self.show_combatant(self.enemy.combatant, self.nmebox)
+		for i in xrange(MAX_COMBATANTS):
+			if i < len(self.user.combatants):
+				self.show_combatant(self.user.combatants[i], self.mybox[i])
+			if i < len(self.enemy.combatants):
+				self.show_combatant(self.enemy.combatants[i], self.nmebox[i])
 		self.show_messages()
 
 def shutdown():

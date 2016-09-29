@@ -22,8 +22,10 @@ class Element(object):
 	def effectiveness(self, defending_element):
 		return self.special_modifiers[defending_element] if (defending_element in self.special_modifiers) else self.nominal_modifier
 
-
-OTHER = 1
+MULTI_SELF = 4
+MULTI_ENEMY = 3
+ACTIVE = 2
+ENEMY = 1
 SELF = 0
 class Move(object):
 	def __init__(self,name, elements, accuracy, power, mp, effects, default_target):
@@ -37,7 +39,7 @@ class Move(object):
 		self.effects = effects
 		self.default_target = default_target
 
-	def attack(self, user, target): # do whatever the attack needs to do
+	def attack(self, user, targets): # do whatever the attack needs to do
 		if (self.mp > 0):
 			print user.name, 'used move', self.name
 			self.mp -= 1
@@ -49,32 +51,33 @@ class Move(object):
 			else:
 				return
 
-		hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
-		val =  user.physical_strength/target.physical_strength
+		for target in targets:
+			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
+			val =  user.physical_strength/target.physical_strength
 
-		if hit_chance > random.random():
-			if self.power > 0:
-				damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power)
+			if hit_chance > random.random():
+				if self.power > 0:
+					damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power)
 
-				for atk_element in self.elements:
-					for target_element in target.elements:
-						damage *= atk_element.effectiveness(target_element)
-					for user_element in user.elements:
-						if user_element == atk_element:
-							damage *= atk_element.bonus
+					for atk_element in self.elements:
+						for target_element in target.elements:
+							damage *= atk_element.effectiveness(target_element)
+						for user_element in user.elements:
+							if user_element == atk_element:
+								damage *= atk_element.bonus
 
-				self.uses += 1
+					self.uses += 1
 
-				damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
-				damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
-				damage = max(1,damage)
+					damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+					damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
+					damage = max(1,damage)
 
-				target.hp -= damage
+					target.hp -= damage
 
-			for effect, chance in self.effects:
-				if chance > random.random():
-					target.status.append(effect)
-					print target.name, 'was effected by', effect.name
+				for effect, chance in self.effects:
+					if chance > random.random():
+						target.status.append(effect)
+						print target.name, 'was effected by', effect.name
 	def __str__(self):
 		string = ''
 		string += self.name + ' '
