@@ -2,6 +2,8 @@ import math
 import random
 import time
 import main
+import sayings
+import sys
 DEBUG = True
 
 ATTACK = 0
@@ -64,7 +66,7 @@ def Battle(user, enemy_ai, display):
 	display = display(user, enemy_ai)
 
 	battle_continue = True
-	last_attack = 0
+	user_move = None
 	winner = None
 
 	#make sure all pre-battle status take effect
@@ -73,7 +75,8 @@ def Battle(user, enemy_ai, display):
 			status.pre_battle(combatant)
 	display.refresh_combatant()
 
-	target_id = 0
+	selected_target = None
+	first_choice = None
 
 	while battle_continue:
 		valid_users = user.get_available()
@@ -89,29 +92,28 @@ def Battle(user, enemy_ai, display):
 		#have the user select an action
 		selection_needed = True
 		while selection_needed:
-			first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
+			first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2, selected=first_choice)
 			if first_choice == 'Attack':
 				first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
-				user_move = display.menu(user.combatant.moves, cols=2, selected=last_attack)
+				user_move = display.menu(user.combatant.moves, cols=2, selected=user_move)
 				if user_move is not None:
-					for move_id in xrange(len(user.combatant.moves)):
-						if user.combatant.moves[move_id] == user_move:
-							last_attack = move_id
-					#select the target of the user's move. 
 					target = user_move.default_target
 					if target == main.SELF:
 						user_target = [user.combatant]
 						user_is_attacking = True
 						selection_needed = False
 					elif target == main.ENEMY:
-						user_target = display.menu(enemy_ai.get_available(), selected=target_id)
-						if user_target is not None:
-							user_target = [user_target]
+						if len(enemy_ai.get_available()) > 1:
+							selected_target = display.menu(enemy_ai.get_available(), selected=selected_target)
+							if selected_target is not None:
+								user_target = [selected_target]
+								user_is_attacking = True
+								selection_needed = False
+						else:
+							user_target = enemy_ai.get_available()
 							user_is_attacking = True
 							selection_needed = False
-							for target_id in xrange(len(enemy_ai.get_available())):
-								if enemy_ai.get_available()[target_id] == user_target:
-									last_target = target_id
+
 					elif target == main.ACTIVE:
 						user_target = [enemy_ai.combatant]
 						user_is_attacking = True
@@ -202,21 +204,27 @@ def Battle(user, enemy_ai, display):
 
 
 		# check for any deaths
-		if enemy_ai.combatant.hp == 0:
-			print enemy_ai.combatant.name, 'fainted'
-			exp = enemy_ai.combatant.exp_value
-			divied_exp = exp / len(user.combatants)
-			for comb in user.combatants:
-				print comb.name, 'gained', int(divied_exp), 'xp. '
-				comb.exp += exp
-				#print (comb.exp_at_level(comb.level + 1) - comb.exp), 'to go'
+		for e in valid_enemies:
+			if e.hp == 0:
+				print e.name, random.choice(sayings.death)
+				exp = e.exp_value
+				divied_exp = exp / (len(user.combatants) + 1) # plus one because the active comatant gets a larger share of exp.
+				for comb in user.get_available():
+					if comb == user.combatant:
+						#active combatant gets twice the experience of everyone else
+						gained = divied_exp * 2
+					else:
+						gained = divied_exp
+					print comb.name, 'gained', int(gained), 'xp. '
+					comb.exp += gained
+					#print (comb.exp_at_level(comb.level + 1) - comb.exp), 'to go'
 
-			if enemy_ai.change(user.combatant) is not None:
-				print enemy_ai.name, 'sent out', enemy_ai.combatant.name
-				display.refresh_combatant()
-			else:
-				battle_continue = False
-				winner = USER
+				if enemy_ai.change(user.combatant) is not None:
+					print enemy_ai.name, 'sent out', e.name
+					display.refresh_combatant()
+				else:
+					battle_continue = False
+					winner = USER
 
 				
 		if user.combatant.hp == 0:
@@ -231,7 +239,7 @@ def Battle(user, enemy_ai, display):
 						need_choice = False
 			else:
 				battle_continue = False
-				print user.combatant.name, 'fainted'
+				print user.combatant.name, random.choice(sayings.death)
 				print 'you lost'
 				winner = ENEMY
 

@@ -4,6 +4,8 @@ import os
 import time
 import random
 import math
+import sayings
+import keys
 
 import stdoutCatcher
 from StringIO import StringIO
@@ -43,6 +45,105 @@ def progress_bar(actual, maxvalue, length):
 	filled_char = ' '
 	unfilled_char = ''
 	return filled_char * filled + unfilled_char * unfilled
+
+def menu(window, options, cols = 1, selected = None):
+	#window = curses.newwin(4, 40, 20, 10)
+	#YMAX, XMAX = self.screen.getmaxyx()
+	#window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
+	try:
+		old_cursor = curses.curs_set(0)
+	except:
+		pass # xterm does not like this
+	window.keypad(1)
+	for opt_id in xrange(len(options)):
+		if selected == options[opt_id]:
+			selected = opt_id
+			break
+	offset = 0
+	ymax, xmax = window.getmaxyx()
+	colgap = int(xmax / cols)
+	selected_row = 0
+	opt_count = len(options)
+
+	if selected < 0:
+		selected = 0
+	elif selected > (opt_count - 1):
+		selected = opt_count - 1
+		
+	maxrow = opt_count / cols
+
+	loop = True
+	while loop:
+		window.clear()
+		window.box()
+		count = 0
+		col = 0
+		row = 0
+		for option in options:
+			yposition = 1 + row - offset
+			xposition = 1 + col * colgap
+			if (yposition <= (ymax - 2)) and (yposition >= 1):
+				if count == selected:
+					selected_row = row
+					color = curses.color_pair(1)
+				else:
+					color = curses.color_pair(11)
+				window.addstr(yposition, xposition, str(option), color)
+			else:
+				if (yposition > (ymax - 2)):
+					window.addstr(ymax - 1, 1, '...')
+				if (yposition < 1):
+					window.addstr(0, 1, '...')
+			count += 1
+			col += 1
+			if col >= cols:
+				col = 0
+				row += 1
+		key = window.getch()
+		if key in keys.UP:
+			if selected > 0:
+				if selected_row == 0:
+					offset = 0
+				else:
+					if ( 1 + selected_row - offset) == 1:
+						offset -= 1
+			selected = selected - cols
+		elif key in keys.DOWN:
+			if selected < (opt_count - 1):
+				if ( 1 + selected_row - offset) == (ymax - 2):
+					offset += 1
+			selected = selected + cols
+		elif key in keys.LEFT:
+			selected = selected - 1
+		elif key in keys.RIGHT:
+			selected = selected + 1
+		elif key in keys.SELECT:
+			loop = False
+			#sys.exit(key)
+		elif key in keys.BACK:
+			#sys.exit(key)
+			return None #escape key
+
+		if selected < 0:
+			selected = 0
+		elif selected >= opt_count:
+			selected = opt_count - 1
+
+		if DEBUG:
+			#options += str(key)
+			#print str(key)
+			pass
+		window.refresh()
+
+	window.clear()
+	window.refresh()
+	try:
+		curses.curs_set(old_cursor)
+	except:
+		pass # xterm does not like this
+	return options[selected]
+
+
 
 MAX_COMBATANTS = 3
 
@@ -96,102 +197,23 @@ class curses_display(object):
 			box.addstr(4, 1, 'Active')
 		box.refresh()
 
-	def menu(self, options, cols = 1, selected = 0):
-		window = curses.newwin(4, 40, 20, 10)
-		try:
-			old_cursor = curses.curs_set(0)
-		except:
-			pass # xterm does not like this
-
-		offset = 0
-		ymax, xmax = window.getmaxyx()
-		colgap = int(xmax / cols)
-		window.keypad(1)
-		selected_row = 0
-		opt_count = len(options)
-
-		if selected < 0:
-			selected = 0
-		elif selected > (opt_count - 1):
-			selected = opt_count - 1
-			
-		maxrow = opt_count / cols
-
-		loop = True
-		while loop:
-			window.clear()
-			window.box()
-			count = 0
-			col = 0
-			row = 0
-			for option in options:
-				yposition = 1 + row - offset
-				xposition = 1 + col * colgap
-				if (yposition <= (ymax - 2)) and (yposition >= 1):
-					if count == selected:
-						selected_row = row
-						color = curses.color_pair(1)
-					else:
-						color = curses.color_pair(11)
-					window.addstr(yposition, xposition, str(option), color)
-				else:
-					if (yposition > (ymax - 2)):
-						window.addstr(ymax - 1, 1, '...')
-					if (yposition < 1):
-						window.addstr(0, 1, '...')
-				count += 1
-				col += 1
-				if col >= cols:
-					col = 0
-					row += 1
-			key = window.getch()
-			if key == curses.KEY_UP:
-				if selected > 0:
-					if selected_row == 0:
-						offset = 0
-					else:
-						if ( 1 + selected_row - offset) == 1:
-							offset -= 1
-				selected = selected - cols
-			elif key == curses.KEY_DOWN:
-				if selected <= (opt_count - 1):
-					if ( 1 + selected_row - offset) == (ymax - 1):
-						offset += 1
-				selected = selected + cols
-			elif key == curses.KEY_LEFT:
-				selected = selected - 1
-			elif key == curses.KEY_RIGHT:
-				selected = selected + 1
-			elif key == curses.KEY_ENTER or key == 10:
-				loop = False
-			elif key == -1 or key == curses.KEY_BACKSPACE or key == 127:
-				return None #escape key
-
-			if selected < 0:
-				selected = 0
-			elif selected >= opt_count:
-				selected = opt_count - 1
-
-			if DEBUG:
-				self.msgbox.addstr(3, 1, str(key))
-				self.msgbox.refresh()
-			window.refresh()
-
-		window.clear()
-		window.refresh()
-		try:
-			curses.curs_set(old_cursor)
-		except:
-			pass # xterm does not like this
-		return options[selected]
-
-
+	def menu(self, options, cols = 1, selected = None):
+		#window = curses.newwin(4, 40, 20, 10)
+		YMAX, XMAX = self.screen.getmaxyx()
+		window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
+		return menu(window, options, cols, selected)
+	
 	def show_messages(self):
 		for out in sys.stdout.readlines():
 			if out.strip() != '':
 				self.msgbox.addstr(1, 1, out)
+				self.msgbox.addstr(4, 1, sayings.press_to_continue)
 				self.msgbox.refresh()
-				key = self.msgbox.getch()
+				waiting = True
+				while waiting:
+					key = self.msgbox.getch()
+					if key in keys.SELECT + keys.BACK:
+						waiting = False
 			self.msgbox.clear()
 			self.msgbox.box()
 			self.msgbox.refresh()

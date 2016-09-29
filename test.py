@@ -7,6 +7,7 @@ import battle
 import main
 import curses_interface
 import time
+import curses
 
 curses_interface.initialize()
 
@@ -38,7 +39,9 @@ enemy = battle.Random_AI([battleenemy,battleenemy2])
 
 junk = sys.stdout.readlines()
 
-#battledisplay = curses_interface.curses_display(user,enemy, battleenemy)
+#window = curses.newwin(30,5,10,0)
+#curses_interface.menu(window, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+#sys.exit()
 
 battle.Battle(user, enemy , curses_interface.curses_display)
 
