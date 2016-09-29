@@ -1,6 +1,7 @@
 import math
 import random
 import time
+import main
 DEBUG = True
 
 ATTACK = 0
@@ -30,7 +31,7 @@ class Random_AI(object):
 	def attack(self, enemy):
 		move = random.choice(self.combatant.moves)
 		target = [self.combatant, enemy][move.default_target]
-		return [move, target]
+		return [move, [target]]
 
 	def change(self, enemy):
 		standby = self.get_standby()
@@ -72,6 +73,8 @@ def Battle(user, enemy_ai, display):
 			status.pre_battle(combatant)
 	display.refresh_combatant()
 
+	target_id = 0
+
 	while battle_continue:
 		valid_users = user.get_available()
 		valid_enemies = enemy_ai.get_available()
@@ -88,19 +91,41 @@ def Battle(user, enemy_ai, display):
 		while selection_needed:
 			first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
 			if first_choice == 'Attack':
+				first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
 				user_move = display.menu(user.combatant.moves, cols=2, selected=last_attack)
 				if user_move is not None:
 					for move_id in xrange(len(user.combatant.moves)):
 						if user.combatant.moves[move_id] == user_move:
 							last_attack = move_id
-					user_is_attacking = True
-					selection_needed = False
+					#select the target of the user's move. 
+					target = user_move.default_target
+					if target == main.SELF:
+						user_target = [user.combatant]
+						user_is_attacking = True
+						selection_needed = False
+					elif target == main.ENEMY:
+						user_target = display.menu(enemy_ai.get_available(), selected=target_id)
+						if user_target is not None:
+							user_target = [user_target]
+							user_is_attacking = True
+							selection_needed = False
+							for target_id in xrange(len(enemy_ai.get_available())):
+								if enemy_ai.get_available()[target_id] == user_target:
+									last_target = target_id
+					elif target == main.ACTIVE:
+						user_target = [enemy_ai.combatant]
+						user_is_attacking = True
+						selection_needed = False
+					elif target == main.MULTI_ENEMY:
+						user_target = enemy_ai.get_available()
+					elif target == main.MULTI_SELF:
+						user_target = user.get_available()
 			elif first_choice == 'Change':
 				if user.get_standby():
 					change_choice = display.menu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
-						print 'changed to', user.combatant
+						#print 'changed to', user.combatant
 						display.refresh_combatant()
 			elif first_choice == 'Items':
 				print 'not yet implemented - items'
@@ -116,13 +141,11 @@ def Battle(user, enemy_ai, display):
 			enemy_move = None
 			enemy_target = None
 			enemy_is_attacking = False
-			print enemy_ai.name, 'switched to', enemy_ai.combatant.name
+			#print enemy_ai.name, 'switched to', enemy_ai.combatant.name
 			display.refresh_combatant()
+			enemy_move, enemy_target = enemy_ai.attack(user.combatant)
+			enemy_is_attacking = True
 
-		#select the target of the user's move. Have to do this after the enemy has
-		#gone so that you target their new combatant if they switch or something
-		if user_is_attacking:
-			user_target = [user.combatant, enemy_ai.combatant][user_move.default_target]
 
 		#decide who should attack first
 		if user.combatant.speed >= enemy_ai.combatant.speed:
@@ -182,8 +205,11 @@ def Battle(user, enemy_ai, display):
 		if enemy_ai.combatant.hp == 0:
 			print enemy_ai.combatant.name, 'fainted'
 			exp = enemy_ai.combatant.exp_value
-			print user.combatant.name, 'gained', int(exp), 'xp. ', ((user.combatant.level+1) ** 3) - user.combatant.exp, 'to go'
-			user.combatant.exp += exp
+			divied_exp = exp / len(user.combatants)
+			for comb in user.combatants:
+				print comb.name, 'gained', int(divied_exp), 'xp. '
+				comb.exp += exp
+				#print (comb.exp_at_level(comb.level + 1) - comb.exp), 'to go'
 
 			if enemy_ai.change(user.combatant) is not None:
 				print enemy_ai.name, 'sent out', enemy_ai.combatant.name

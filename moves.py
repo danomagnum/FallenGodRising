@@ -3,7 +3,7 @@ import random
 import elements
 import effects
 
-def MoveGen(name, elementlist=None, effect_list=None, power=10.0, mp=10.0, cost=1, accuracy=0.9, target=main.OTHER):
+def MoveGen(name, elementlist=None, effect_list=None, power=10.0, mp=10.0, cost=1, accuracy=0.9, target=main.ENEMY):
 	if elementlist is None:
 		elementlist = [elements.Normal]
 	if effect_list is None:
