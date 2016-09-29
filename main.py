@@ -50,6 +50,7 @@ class Move(object):
 				print user.name, 'used move', self.name
 			else:
 				return
+		target_coefficient = 1.1 / len(targets)
 
 		for target in targets:
 			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
@@ -57,7 +58,7 @@ class Move(object):
 
 			if hit_chance > random.random():
 				if self.power > 0:
-					damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power)
+					damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power) * target_coefficient
 
 					for atk_element in self.elements:
 						for target_element in target.elements:
