@@ -59,6 +59,8 @@ def menu(window, options, cols = 1, selected = None):
 		if selected == options[opt_id]:
 			selected = opt_id
 			break
+	else:
+		selected = 0
 	offset = 0
 	ymax, xmax = window.getmaxyx()
 	colgap = int(xmax / cols)
@@ -174,11 +176,11 @@ class curses_display(object):
 			if i < len(self.user.combatants):
 				self.mybox[i].box()
 				self.mybox[i].refresh()
-				self.mybox[i].overlay(screen)
+				self.mybox[i].overlay(self.screen)
 			if i < len(self.enemy.combatants):
 				self.nmebox[i].box()
 				self.nmebox[i].refresh()
-				self.nmebox[i].overlay(screen)
+				self.nmebox[i].overlay(self.screen)
 		self.msgbox.box()
 		self.refresh_combatant()
 		self.msgbox.refresh()
