@@ -8,6 +8,7 @@ import main
 import curses_interface
 import time
 import curses
+import items
 
 curses_interface.initialize()
 
@@ -15,25 +16,26 @@ battleuser = characters.TestChar2()
 battleuser2 = characters.TestChar()
 
 battleenemy = characters.TestChar()
-battleenemy2 = characters.TestChar()
+battleenemy2 = characters.TestChar2()
 
 battleuser.name = 'dude'
 battleuser.level = 55
-battleuser.heal()
+battleuser.full_heal()
 
 battleuser2.name = 'bloke'
 battleuser2.level = 50
-battleuser2.heal()
+battleuser2.full_heal()
 
 battleenemy.name = 'chap'
 battleenemy.level = 52
-battleenemy.heal()
+battleenemy.full_heal()
 
 battleenemy2.name = 'brah'
 battleenemy2.level = 48
-battleenemy2.heal()
+battleenemy2.full_heal()
 
 user = main.User('playercharacter', [battleuser, battleuser2])
+user.items = [items.Potion(), items.Potion(), items.Booster()]
 enemy = battle.Random_AI([battleenemy,battleenemy2])
 
 

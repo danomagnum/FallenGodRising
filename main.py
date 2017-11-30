@@ -1,16 +1,21 @@
 import random
 import math
+import utility
 
 TARGET_NONE = 0
 TARGET_COMBATANT = 1
 TARGET_COMMANDER = 2
 class Item(object):
-	def __init__(self, name, target=TARGET_NONE):
+	def __init__(self, name, target=TARGET_NONE, use=None):
 		self.name = name
 		self.target_type = target
+		if use is not None:
+			self.use = use
 
-	def use(target = None):
+	def use(self, target = None):
 		pass
+	def __str__(self):
+		return self.name
 
 class Element(object):
 	def __init__(self, name, nominal = 1.0, bonus=1.5):
@@ -28,7 +33,7 @@ ACTIVE = 2
 ENEMY = 1
 SELF = 0
 class Move(object):
-	def __init__(self,name, elements, accuracy, power, mp, effects, default_target):
+	def __init__(self,name, elements, accuracy, power, mp,  default_target):
 		self.name = name
 		self.mp = mp
 		self.max_mp = mp
@@ -36,7 +41,6 @@ class Move(object):
 		self.power = power
 		self.elements = elements
 		self.uses = 0
-		self.effects = effects
 		self.default_target = default_target
 
 	def attack(self, user, targets): # do whatever the attack needs to do
@@ -75,10 +79,9 @@ class Move(object):
 
 					target.hp -= damage
 
-				for effect, chance in self.effects:
-					if chance > random.random():
-						target.status.append(effect)
-						print target.name, 'was effected by', effect.name
+				self.effect(target)
+	def effect(self, target):
+		pass
 	def __str__(self):
 		string = ''
 		string += self.name + ' '
@@ -163,7 +166,7 @@ class Character(object):
 		self._level = value
 		print self.name, 'leveled up to ', self.level
 		self._exp = self.exp_at_level(self.level)
-		self.heal()
+		self.full_heal()
 
 	@property
 	def exp(self):
@@ -197,31 +200,31 @@ class Character(object):
 		stat = (self.base_physical_strength + self.coefficients[0]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
 			stat = status.physical_strength(stat)
-		return stat
+		return utility.clamp(stat, 1, 3* self.base_physical_strength)
 	@property
 	def physical_defense(self):
 		stat = (self.base_physical_defense + self.coefficients[1]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
 			stat = status.physical_defense(stat)
-		return stat
+		return utility.clamp(stat, 1, 3* self.base_physical_defense)
 	@property
 	def special_strength(self):
 		stat = (self.base_special_strength + self.coefficients[2]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
 			stat = status.special_strength(stat)
-		return stat
+		return utility.clamp(stat, 1, 3* self.base_special_strength)
 	@property
 	def special_defense(self):
 		stat = (self.base_special_defense + self.coefficients[3]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
 			stat = status.special_defense(stat)
-		return stat
+		return utility.clamp(stat, 1, 3* self.base_special_defense)
 	@property
 	def speed(self):
 		stat = (self.base_speed + self.coefficients[4]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
 			stat = status.speed(stat)
-		return stat
+		return utility.clamp(stat, 1, 3* self.base_speed)
 
 	@property
 	def hp(self):
@@ -233,6 +236,9 @@ class Character(object):
 	@hp.setter
 	def hp(self, value):
 		self._hp = min(max(0,value), self.max_hp)
+
+	def heal(self, amount):
+		self._hp = min(max(0,self._hp + amount), self.max_hp)
 
 	@property
 	def max_hp(self):
@@ -255,7 +261,7 @@ class Character(object):
 			stat = status.accuracy(stat)
 		return stat
 
-	def heal(self):
+	def full_heal(self):
 		for move in self.moves:
 			move.mp = move.max_mp
 			self.hp = self.max_hp

@@ -6,12 +6,14 @@ class TestChar(Character):
 	def __init__(self):
 		self.setup('test')
 		self.elements.append(elements.Normal)
+		self.elements.append(elements.Water)
 		self.moves = [moves.Pound(), moves.Slam(), moves.Buff()]
-		self.heal()
+		self.full_heal()
 
 class TestChar2(Character):
 	def __init__(self):
 		self.setup('test')
 		self.elements.append(elements.Normal)
-		self.moves = [moves.Pound(), moves.Slam(), moves.Buff(), moves.Poison()]
-		self.heal()
+		self.elements.append(elements.Fire)
+		self.moves = [moves.Pound(), moves.Slam(), moves.Buff(), moves.Poison(), moves.Spray()]
+		self.full_heal()

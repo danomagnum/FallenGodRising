@@ -91,10 +91,12 @@ def Battle(user, enemy_ai, display):
 
 		#have the user select an action
 		selection_needed = True
+		user_is_attacking = False
+		user_target = enemy_ai.combatant
 		while selection_needed:
 			first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2, selected=first_choice)
 			if first_choice == 'Attack':
-				first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
+				#first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
 				user_move = display.menu(user.combatant.moves, cols=2, selected=user_move)
 				if user_move is not None:
 					target = user_move.default_target
@@ -130,7 +132,14 @@ def Battle(user, enemy_ai, display):
 						#print 'changed to', user.combatant
 						display.refresh_combatant()
 			elif first_choice == 'Items':
-				print 'not yet implemented - items'
+				#print 'not yet implemented - items'
+				item_used = display.menu(user.items, cols=2)
+				if item_used is not None:
+					item_target = display.menu(user.combatants + enemy_ai.combatants, cols=2)
+					if item_target is not None:
+						user.items.remove(item_used)
+						item_used.use(item_target)
+						selection_needed = False
 				display.refresh_combatant()
 
 		#have the enemy select a move and target
