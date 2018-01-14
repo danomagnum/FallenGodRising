@@ -58,7 +58,7 @@ class Random_AI(object):
 	
 	def get_standby(self):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
-	
+
 def Battle(user, enemy_ai, display):
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()

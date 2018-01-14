@@ -25,6 +25,7 @@ battleuser.full_heal()
 battleuser2.name = 'bloke'
 battleuser2.level = 50
 battleuser2.full_heal()
+battleuser2.hp -= 25
 
 battleenemy.name = 'chap'
 battleenemy.level = 52
