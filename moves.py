@@ -58,6 +58,39 @@ class Buff(main.Move):
 		target.status.append(effects.Strength_Mult(1.15))
 
 
+class Heal(main.Move):
+	def __init__(self):
+		self.name = 'Heal'
+		self.mp = 10.0
+		self.max_mp = 10.0
+		self.accuracy = 1
+		self.power = 20
+		self.elements = [elements.Normal]
+		self.uses = 0
+		self.default_target = main.SELF
+
+	def attack(self, user, targets): # do whatever the attack needs to do
+		if (self.mp > 0):
+			print user.name, 'used move', self.name
+			self.mp -= 1
+		else:
+			print user.name, 'is out of mp to use move', self.name
+			self.mp = 0
+			if 0.2 > random.random():
+				print user.name, 'used move', self.name
+			else:
+				return
+		target_coefficient = 1.1 / len(targets)
+
+		for target in targets:
+			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
+
+			if hit_chance > random.random():
+				target.hp += self.power
+
+				self.effect(target)
+
+
 class Debuff(main.Move):
 	def __init__(self):
 		self.name = 'Debuff'

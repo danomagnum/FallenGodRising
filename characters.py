@@ -7,7 +7,7 @@ class TestChar(Character):
 		self.setup('test')
 		self.elements.append(elements.Normal)
 		self.elements.append(elements.Water)
-		self.moves = [moves.Pound(), moves.Slam(), moves.Buff()]
+		self.moves = [moves.Pound(), moves.Slam(), moves.Buff(), moves.Heal()]
 		self.full_heal()
 
 class TestChar2(Character):

@@ -29,3 +29,5 @@ class Poison_Major(Status):
 	def pre_turn(self, effected):
 		print effected.name, 'was effected by', self.name
 		effected.hp -= max(1, effected.hp / 6)
+
+
