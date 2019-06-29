@@ -71,3 +71,34 @@ def find_valid_position(area):
 			return (x, y)
 
 
+def move(direction, display):
+	UP = 1
+	DOWN = 2
+	LEFT = 3
+	RIGHT = 4
+	if direction == UP:
+		if display.area_map[display.char_y - 1][display.char_x] == '.':
+			display.mappad.addch(display.char_y, display.char_x, '.')
+			display.mappad.addch(display.char_y - 1, display.char_x, '@')
+			display.char_y -= 1
+			display.y = max(0, display.y -1)
+	elif direction == DOWN:
+		if display.area_map[display.char_y + 1][display.char_x] == '.':
+			display.mappad.addch(display.char_y, display.char_x, '.')
+			display.mappad.addch(display.char_y + 1, display.char_x, '@')
+			display.char_y += 1
+			display.y = min((display.mappad.getmaxyx()[0]  - display.mapbox.getmaxyx()[0]), display.y + 1)
+	elif direction == LEFT:
+		if display.area_map[display.char_y][display.char_x - 1] == '.':
+			display.mappad.addch(display.char_y, display.char_x, '.')
+			display.mappad.addch(display.char_y, display.char_x - 1, '@')
+			display.char_x -= 1
+			display.x = max(0, display.x -1)
+	elif direction == RIGHT:
+		if display.area_map[display.char_y][display.char_x + 1] == '.':
+			display.mappad.addch(display.char_y, display.char_x, '.')
+			display.mappad.addch(display.char_y, display.char_x + 1, '@')
+			display.char_x += 1
+			display.x = min((display.mappad.getmaxyx()[1]  - display.mapbox.getmaxyx()[1]), display.x + 1)
+
+
