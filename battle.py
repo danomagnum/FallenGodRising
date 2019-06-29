@@ -129,10 +129,8 @@ def Battle(user, enemy_ai, display):
 					change_choice = display.menu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
-						#print 'changed to', user.combatant
 						display.refresh_combatant()
 			elif first_choice == 'Items':
-				#print 'not yet implemented - items'
 				item_used = display.menu(user.items, cols=2)
 				if item_used is not None:
 					item_target = display.menu(user.combatants + enemy_ai.combatants, cols=2)
@@ -152,7 +150,6 @@ def Battle(user, enemy_ai, display):
 			enemy_move = None
 			enemy_target = None
 			enemy_is_attacking = False
-			#print enemy_ai.name, 'switched to', enemy_ai.combatant.name
 			display.refresh_combatant()
 			enemy_move, enemy_target = enemy_ai.attack(user.combatant)
 			enemy_is_attacking = True
@@ -215,7 +212,7 @@ def Battle(user, enemy_ai, display):
 		# check for any deaths
 		for e in valid_enemies:
 			if e.hp == 0:
-				print e.name, random.choice(sayings.death)
+				print("{}: {}".format(e.name, random.choice(sayings.death)))
 				exp = e.exp_value
 				divied_exp = exp / (len(user.combatants) + 1) # plus one because the active comatant gets a larger share of exp.
 				for comb in user.get_available():
@@ -224,12 +221,11 @@ def Battle(user, enemy_ai, display):
 						gained = divied_exp * 2
 					else:
 						gained = divied_exp
-					print comb.name, 'gained', int(gained), 'xp. '
+					print("{} gained {} xp".format(comb.name, int(gained)))
 					comb.exp += gained
-					#print (comb.exp_at_level(comb.level + 1) - comb.exp), 'to go'
 
 				if enemy_ai.change(user.combatant) is not None:
-					print enemy_ai.name, 'sent out', e.name
+					print("{} sent out {}".format(enemy_ai.name, e.name))
 					display.refresh_combatant()
 				else:
 					battle_continue = False
@@ -243,13 +239,13 @@ def Battle(user, enemy_ai, display):
 					change_choice = display.menu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
-						print 'changed to', user.combatant
+						print('changed to {}'.format(user.combatant))
 						display.refresh_combatant()
 						need_choice = False
 			else:
 				battle_continue = False
-				print user.combatant.name, random.choice(sayings.death)
-				print 'you lost'
+				print("{} {}".format(user.combatant.name, random.choice(sayings.death)))
+				print('you lost')
 				winner = ENEMY
 
 		display.refresh_combatant()
@@ -259,8 +255,8 @@ def Battle(user, enemy_ai, display):
 		status.post_battle(user.combatant)
 	
 	if winner == USER:
-		print 'Got', enemy_ai.money, 'for winning'
-		print enemy_ai.name, ':', enemy_ai.defeated_text
+		print('Got {} for winning'.format(enemy_ai.money))
+		print('{}: {}'.format(enemy_ai.name,enemy_ai.defeated_text))
 
 	display.show_messages()
 

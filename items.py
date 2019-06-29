@@ -7,7 +7,7 @@ class Potion(Item):
 		self.target = TARGET_COMBATANT
 	def use(self, target):
 		target.heal(20)
-		print target.name, ' used ', self.name
+		print('{} used {}'.format(target.name,self.name))
 
 class Booster(Item):
 	def __init__(self):
@@ -15,4 +15,4 @@ class Booster(Item):
 		self.target = TARGET_COMBATANT
 	def use(self, target):
 		target.status.append(effects.Strength2x())
-		print target.name, ' used ', self.name
+		print('{} used {}'.format(target.name,self.name))

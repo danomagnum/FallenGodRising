@@ -45,13 +45,13 @@ class Move(object):
 
 	def attack(self, user, targets): # do whatever the attack needs to do
 		if (self.mp > 0):
-			print user.name, 'used move', self.name
+			print('{} used move {}'.format(user.name,self.name))
 			self.mp -= 1
 		else:
-			print user.name, 'is out of mp to use move', self.name
+			print('{} is out of MP to use move {}'.format(user.name,self.name))
 			self.mp = 0
 			if 0.2 > random.random():
-				print user.name, 'used move', self.name
+				print('{} used move {}'.format(user.name,self.name))
 			else:
 				return
 		target_coefficient = 1.1 / len(targets)
@@ -164,7 +164,7 @@ class Character(object):
 	@level.setter
 	def level(self, value):
 		self._level = value
-		print self.name, 'leveled up to ', self.level
+		print('{} leveled up to {}'.format(self.name, self.level))
 		self._exp = self.exp_at_level(self.level)
 		self.full_heal()
 
