@@ -1,37 +1,10 @@
 import random
 import math
 import utility
+import items
+from targets import *
 
-TARGET_NONE = 0
-TARGET_COMBATANT = 1
-TARGET_COMMANDER = 2
-class Item(object):
-	def __init__(self, name, target=TARGET_NONE, use=None):
-		self.name = name
-		self.target_type = target
-		if use is not None:
-			self.use = use
 
-	def use(self, target = None):
-		pass
-	def __str__(self):
-		return self.name
-
-class Element(object):
-	def __init__(self, name, nominal = 1.0, bonus=1.5):
-		self.name = name
-		self.nominal_modifier = nominal
-		self.special_modifiers = {}
-		self.bonus = bonus
-
-	def effectiveness(self, defending_element):
-		return self.special_modifiers[defending_element] if (defending_element in self.special_modifiers) else self.nominal_modifier
-
-MULTI_SELF = 4
-MULTI_ENEMY = 3
-ACTIVE = 2
-ENEMY = 1
-SELF = 0
 class Move(object):
 	def __init__(self,name, elements, accuracy, power, mp,  default_target):
 		self.name = name
@@ -88,47 +61,6 @@ class Move(object):
 		string += '( ' + str(int(self.mp)) + '/' + str(int(self.max_mp)) + ' )'
 		return string
 
-
-
-class Status(object):
-	def __init__(self, name=None):
-		if name is None:
-			self.name = 'Status'
-		else:
-			self.name = name
-		self.expired = False
-	def pre_battle(self, effected):
-		pass
-	def pre_turn(self, effected):
-		pass
-	def pre_attack(self, effected):
-		pass
-	def allow_attack(self, effected): # something like paralyze would use this to prevent attacking.
-		return True
-	def post_attack(self, effected): # things like poison should happen here.
-		pass
-	def post_turn(self, effected):
-		pass
-	def post_battle(self, effected):
-		effected.status.remove(self)
-	def physical_strength(self, initial): # passive stat boosts take effect on these routines
-		return initial
-	def physical_defense(self, initial):
-		return initial
-	def special_strength(self, initial):
-		return initial
-	def special_defense(self, initial):
-		return initial
-	def speed(self, initial):
-		return initial
-	def hp(self, initial):
-		return initial
-	def max_hp(self, initial):
-		return initial
-	def evasion(self, initial):
-		return initial
-	def accuracy(self, initial):
-		return initial
 
 class Character(object):
 	def __init__(self):
@@ -269,14 +201,15 @@ class Character(object):
 		pass
 
 class User(object):
-	def __init__(self, name, combatants, items=None):
+	def __init__(self, name, combatants, item_list=None):
 		self.name = name
 		self.combatants = combatants
 		self.combatant = combatants[0]
-		if items is None:
-			self.items = []
-		else:
-			self.items = items
+		self.backpack = items.Backpack()
+		if item_list is not None:
+			for item in item_list:
+				self.backpack.store(item)
+
 	def get_available(self):
 		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
 	

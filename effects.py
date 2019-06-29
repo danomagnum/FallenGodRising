@@ -1,5 +1,46 @@
-from main import Status
 from elements import *
+
+class Status(object):
+	def __init__(self, name=None):
+		if name is None:
+			self.name = 'Status'
+		else:
+			self.name = name
+		self.expired = False
+	def pre_battle(self, effected):
+		pass
+	def pre_turn(self, effected):
+		pass
+	def pre_attack(self, effected):
+		pass
+	def allow_attack(self, effected): # something like paralyze would use this to prevent attacking.
+		return True
+	def post_attack(self, effected): # things like poison should happen here.
+		pass
+	def post_turn(self, effected):
+		pass
+	def post_battle(self, effected):
+		effected.status.remove(self)
+	def physical_strength(self, initial): # passive stat boosts take effect on these routines
+		return initial
+	def physical_defense(self, initial):
+		return initial
+	def special_strength(self, initial):
+		return initial
+	def special_defense(self, initial):
+		return initial
+	def speed(self, initial):
+		return initial
+	def hp(self, initial):
+		return initial
+	def max_hp(self, initial):
+		return initial
+	def evasion(self, initial):
+		return initial
+	def accuracy(self, initial):
+		return initial
+
+
 
 class Strength2x(Status):
 	def __init__(self):

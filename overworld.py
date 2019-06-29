@@ -185,8 +185,8 @@ class curses_display(object):
 
 if __name__ == '__main__':
 	initialize()
-	#zone = readmap('maps/test7.map')
-	zone = showmap(map_gen(40, 40, 10, 8))
+	zone = readmap('maps/test0.map')
+	#zone = showmap(map_gen(40, 40, 10, 8))
 	x, y = find_valid_position(zone)
 	display = curses_display(zone)
 	display.char_x = x
