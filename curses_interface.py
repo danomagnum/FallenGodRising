@@ -289,37 +289,6 @@ class curses_display(object):
 	##################################
 	##### Map Draw Routines
 	##################################
-
-	def move(self, direction):
-		UP = 1
-		DOWN = 2
-		LEFT = 3
-		RIGHT = 4
-		if direction == UP:
-			if self.area_map[self.char_y - 1][self.char_x] == '.':
-				self.mappad.addch(self.char_y, self.char_x, '.')
-				self.mappad.addch(self.char_y - 1, self.char_x, '@')
-				self.char_y -= 1
-				self.y = max(0, self.y -1)
-		elif direction == DOWN:
-			if self.area_map[self.char_y + 1][self.char_x] == '.':
-				self.mappad.addch(self.char_y, self.char_x, '.')
-				self.mappad.addch(self.char_y + 1, self.char_x, '@')
-				self.char_y += 1
-				self.y = min((self.mappad.getmaxyx()[0]  - self.mapbox.getmaxyx()[0]), self.y + 1)
-		elif direction == LEFT:
-			if self.area_map[self.char_y][self.char_x - 1] == '.':
-				self.mappad.addch(self.char_y, self.char_x, '.')
-				self.mappad.addch(self.char_y, self.char_x - 1, '@')
-				self.char_x -= 1
-				self.x = max(0, self.x -1)
-		elif direction == RIGHT:
-			if self.area_map[self.char_y][self.char_x + 1] == '.':
-				self.mappad.addch(self.char_y, self.char_x, '.')
-				self.mappad.addch(self.char_y, self.char_x + 1, '@')
-				self.char_x += 1
-				self.x = min((self.mappad.getmaxyx()[1]  - self.mapbox.getmaxyx()[1]), self.x + 1)
-
 	def recenter(self, x = None, y = None):
 		if x is None:
 			x = self.char_x
