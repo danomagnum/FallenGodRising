@@ -38,23 +38,23 @@ def initialize():
 	sys.stdout = stdoutCatcher.ioCatcher()
 
 def map_gen(height, width, rooms, minroomsize = 4):
-	tiles = [[0 for y in xrange(height)] for x in xrange(width)]
-	for room in xrange(rooms):
+	tiles = [[0 for y in range(height)] for x in range(width)]
+	for room in range(rooms):
 		room_width = random.randint(minroomsize, max(minroomsize + 1, width/rooms))
 		room_height = random.randint(minroomsize, max(minroomsize + 1, height/rooms))
 		room_x = random.randint(1, width - room_width - 1)
 		room_y = random.randint(1, height - room_height - 1)
 
-		for x in xrange(room_width):
-			for y in xrange(room_height):
+		for x in range(room_width):
+			for y in range(room_height):
 				try:
 					tiles[room_x + x][room_y + y] = 1
 				except IndexError:
 					pass
 
 	#set up walls
-	for x in xrange(width):
-		for y in xrange(height):
+	for x in range(width):
+		for y in range(height):
 			if tiles[x][y] == 1:
 				if x > 0:
 					if tiles[x-1][y] == 0:

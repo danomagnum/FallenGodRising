@@ -12,6 +12,7 @@ import items
 
 curses_interface.initialize()
 
+
 battleuser = characters.TestChar2()
 battleuser2 = characters.TestChar()
 
@@ -40,7 +41,7 @@ user.items = [items.Potion(), items.Potion(), items.Booster()]
 enemy = battle.Random_AI([battleenemy,battleenemy2])
 
 
-junk = sys.stdout.readlines()
+#junk = sys.stdout.readlines()
 
 #window = curses.newwin(30,5,10,0)
 #curses_interface.menu(window, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])

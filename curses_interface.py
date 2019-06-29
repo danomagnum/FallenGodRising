@@ -8,11 +8,13 @@ import sayings
 import keys
 
 import stdoutCatcher
-from StringIO import StringIO
+#from StringIO import StringIO
 
 import characters
 
 DEBUG = True
+
+DEBUG_STDOUT = False
 
 screen = None
 original_stdout = sys.stdout
@@ -35,7 +37,9 @@ def initialize():
 	curses.noecho()
 
 	original_stdout = sys.stdout
-	sys.stdout = stdoutCatcher.ioCatcher()
+	if not DEBUG_STDOUT:
+		sys.stdout = stdoutCatcher.ioCatcher()
+
 
 
 def progress_bar(actual, maxvalue, length):
@@ -55,7 +59,7 @@ def menu(window, options, cols = 1, selected = None):
 	except:
 		pass # xterm does not like this
 	window.keypad(1)
-	for opt_id in xrange(len(options)):
+	for opt_id in range(len(options)):
 		if selected == options[opt_id]:
 			selected = opt_id
 			break
@@ -156,11 +160,11 @@ class curses_display(object):
 
 		YMAX, XMAX = self.screen.getmaxyx()
 
-		self.combatantboxsize = [5, XMAX/MAX_COMBATANTS]
-		self.msgboxsize = [5, XMAX]
+		self.combatantboxsize = [5, int(XMAX/MAX_COMBATANTS)]
+		self.msgboxsize = [5, int(XMAX)]
 		self.nmebox = []
 		self.mybox = []
-		for i in xrange(MAX_COMBATANTS):
+		for i in range(MAX_COMBATANTS):
 			self.nmebox.append(curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],0,self.combatantboxsize[1]*i))
 			self.mybox.append(curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],YMAX-(self.combatantboxsize[0] + 5),self.combatantboxsize[1]*i))
 		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
@@ -172,7 +176,7 @@ class curses_display(object):
 
 	def refresh_full(self):
 		self.screen.clear()
-		for i in xrange(MAX_COMBATANTS):
+		for i in range(MAX_COMBATANTS):
 			if i < len(self.user.combatants):
 				self.mybox[i].box()
 				self.mybox[i].refresh()
@@ -206,22 +210,22 @@ class curses_display(object):
 		return menu(window, options, cols, selected)
 	
 	def show_messages(self):
-		for out in sys.stdout.readlines():
-			if out.strip() != '':
-				self.msgbox.addstr(1, 1, out)
-				self.msgbox.addstr(4, 1, sayings.press_to_continue)
-				self.msgbox.refresh()
-				waiting = True
-				while waiting:
-					key = self.msgbox.getch()
-					if key in keys.SELECT + keys.BACK:
-						waiting = False
-			self.msgbox.clear()
-			self.msgbox.box()
-			self.msgbox.refresh()
+	    for out in sys.stdout.readlines():
+		    if out.strip() != '':
+			    self.msgbox.addstr(1, 1, out)
+			    self.msgbox.addstr(4, 1, sayings.press_to_continue)
+			    self.msgbox.refresh()
+			    waiting = True
+			    while waiting:
+				    key = self.msgbox.getch()
+				    if key in keys.SELECT + keys.BACK:
+					    waiting = False
+		    self.msgbox.clear()
+		    self.msgbox.box()
+		    self.msgbox.refresh()
 
 	def refresh_combatant(self):
-		for i in xrange(MAX_COMBATANTS):
+		for i in range(MAX_COMBATANTS):
 			if i < len(self.user.combatants):
 				self.show_combatant(self.user.combatants[i], self.mybox[i])
 			if i < len(self.enemy.combatants):
