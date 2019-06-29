@@ -4,17 +4,13 @@ import time
 import main
 import sayings
 import sys
+import items
+from targets import *
+
 DEBUG = True
 
-ATTACK = 0
-SWITCH = 1
-ITEM = 2
-
-USER = 0
-ENEMY = 1
-
 class Random_AI(object):
-	def __init__(self, combatants, money=0, name='AI', items=None, defeated_text='Oh Snap! I lost!'):
+	def __init__(self, combatants, money=0, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name
 		self.combatants = combatants
 		self.combatant = combatants[0]
@@ -25,10 +21,10 @@ class Random_AI(object):
 		else:
 			self.money = money
 
-		if items is not None:
-			self.items = items
-		else:
-			self.items = []
+		self.backpack = items.Backpack()
+		if item_list is not None:
+			for item in item_list:
+				self.backpack.store(item)
 
 	def attack(self, enemy):
 		move = random.choice(self.combatant.moves)
@@ -131,11 +127,11 @@ def Battle(user, enemy_ai, display):
 						user.combatant = change_choice
 						display.refresh_combatant()
 			elif first_choice == 'Items':
-				item_used = display.menu(user.items, cols=2)
-				if item_used is not None:
+				item_slot_used = display.menu(user.backpack.show(), cols=2)
+				if item_slot_used is not None:
 					item_target = display.menu(user.combatants + enemy_ai.combatants, cols=2)
 					if item_target is not None:
-						user.items.remove(item_used)
+						item_used = item_slot_used.take()
 						item_used.use(item_target)
 						selection_needed = False
 				display.refresh_combatant()

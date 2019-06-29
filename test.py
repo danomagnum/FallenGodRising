@@ -36,8 +36,7 @@ battleenemy2.name = 'brah'
 battleenemy2.level = 48
 battleenemy2.full_heal()
 
-user = main.User('playercharacter', [battleuser, battleuser2])
-user.items = [items.Potion(), items.Potion(), items.Booster()]
+user = main.User('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster()])
 enemy = battle.Random_AI([battleenemy,battleenemy2])
 
 
@@ -47,7 +46,11 @@ enemy = battle.Random_AI([battleenemy,battleenemy2])
 #curses_interface.menu(window, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
 #sys.exit()
 
-battle.Battle(user, enemy , curses_interface.curses_display)
+try:
+	battle.Battle(user, enemy , curses_interface.curses_display)
+except Exception as e:
+	curses_interface.shutdown()
+	print e
 
 time.sleep(3)
 

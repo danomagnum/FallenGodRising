@@ -1,4 +1,13 @@
-from main import Element
+class Element(object):
+	def __init__(self, name, nominal = 1.0, bonus=1.5):
+		self.name = name
+		self.nominal_modifier = nominal
+		self.special_modifiers = {}
+		self.bonus = bonus
+
+	def effectiveness(self, defending_element):
+		return self.special_modifiers[defending_element] if (defending_element in self.special_modifiers) else self.nominal_modifier
+
 
 #base definitions
 Normal = Element('Normal')
