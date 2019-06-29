@@ -56,10 +56,11 @@ class Random_AI(object):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
 
 def Battle(user, enemy_ai, display):
+	display.start_battle(user, enemy_ai)
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
 	all_combatants = valid_users + valid_enemies
-	display = display(user, enemy_ai)
+	#display = display(user, enemy_ai)
 
 	battle_continue = True
 	user_move = None
@@ -255,4 +256,6 @@ def Battle(user, enemy_ai, display):
 		print('{}: {}'.format(enemy_ai.name,enemy_ai.defeated_text))
 
 	display.show_messages()
+
+	display.end_battle()
 

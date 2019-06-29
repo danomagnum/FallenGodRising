@@ -7,6 +7,9 @@ import math
 import sayings
 import keys
 
+MAP = 0
+COMBAT = 1
+
 import stdoutCatcher
 #from StringIO import StringIO
 
@@ -154,7 +157,7 @@ def menu(window, options, cols = 1, selected = None):
 MAX_COMBATANTS = 3
 
 class curses_display(object):
-	def __init__(self, user, enemy):
+	def __init__(self, user=None, enemy=None, area_map=None):
 		self.screen = screen
 		self.screen.keypad(1)
 
@@ -172,10 +175,61 @@ class curses_display(object):
 		self.user = user
 		self.enemy = enemy
 
+
+		self.area_map = area_map
+		self.area_size = (len(area_map), len(area_map[0]))
+		self.mapbox = curses.newwin(YMAX-2, XMAX - 2, 1, 1)
+		self.mappad = curses.newpad(self.area_size[0] + 1, self.area_size[1] + 1)
+		self.x = 0
+		self.y = 0
+
+		self.char_x = 0
+		self.char_y = 0
+		self.mode = MAP
+
 		self.refresh_full()
 
+	##################################
+	##### General Draw Routines
+	##################################
+
 	def refresh_full(self):
+		if self.mode == MAP:
+			self.refresh_full_map()
+		elif self.mode == COMBAT:
+			self.refresh_full_combat()
+
+	def clear(self):
+		self.mapbox.clear()
+		self.mapbox.refresh()
+		for box in self.nmebox:
+			box.clear()
+			box.refresh()
+		for box in self.mybox:
+			box.clear()
+			box.refresh()
+		
+
+	##################################
+	##### Combat Draw Routines
+	##################################
+
+	def end_battle(self):
+		self.user = None
+		self.enemy = None
+		self.mode = MAP
+		self.clear()
+		self.refresh_full
+	def start_battle(self, user, enemy):
+		self.user = user
+		self.enemy = enemy
+		self.mode = COMBAT
+		self.clear()
+		self.refresh_full
+
+	def refresh_full_combat(self):
 		self.screen.clear()
+		self.screen.refresh()
 		for i in range(MAX_COMBATANTS):
 			if i < len(self.user.combatants):
 				self.mybox[i].box()
@@ -232,6 +286,78 @@ class curses_display(object):
 				self.show_combatant(self.enemy.combatants[i], self.nmebox[i])
 		self.show_messages()
 
+	##################################
+	##### Map Draw Routines
+	##################################
+
+	def move(self, direction):
+		UP = 1
+		DOWN = 2
+		LEFT = 3
+		RIGHT = 4
+		if direction == UP:
+			if self.area_map[self.char_y - 1][self.char_x] == '.':
+				self.mappad.addch(self.char_y, self.char_x, '.')
+				self.mappad.addch(self.char_y - 1, self.char_x, '@')
+				self.char_y -= 1
+				self.y = max(0, self.y -1)
+		elif direction == DOWN:
+			if self.area_map[self.char_y + 1][self.char_x] == '.':
+				self.mappad.addch(self.char_y, self.char_x, '.')
+				self.mappad.addch(self.char_y + 1, self.char_x, '@')
+				self.char_y += 1
+				self.y = min((self.mappad.getmaxyx()[0]  - self.mapbox.getmaxyx()[0]), self.y + 1)
+		elif direction == LEFT:
+			if self.area_map[self.char_y][self.char_x - 1] == '.':
+				self.mappad.addch(self.char_y, self.char_x, '.')
+				self.mappad.addch(self.char_y, self.char_x - 1, '@')
+				self.char_x -= 1
+				self.x = max(0, self.x -1)
+		elif direction == RIGHT:
+			if self.area_map[self.char_y][self.char_x + 1] == '.':
+				self.mappad.addch(self.char_y, self.char_x, '.')
+				self.mappad.addch(self.char_y, self.char_x + 1, '@')
+				self.char_x += 1
+				self.x = min((self.mappad.getmaxyx()[1]  - self.mapbox.getmaxyx()[1]), self.x + 1)
+
+	def recenter(self, x = None, y = None):
+		if x is None:
+			x = self.char_x
+		if y is None:
+			y = self.char_y
+
+		self.x = max(1, x - self.mapbox.getmaxyx()[1]/2)
+		self.y = max(1, y - self.mapbox.getmaxyx()[0]/2)
+
+	def update_pad(self):
+		i = 0
+		for line in self.area_map:
+			self.mappad.addstr(i, 0, line)
+			i += 1
+		self.mappad.addch(self.char_y, self.char_x, '@')
+
+	def set_position(self, x, y):
+		self.char_x = x
+		self.char_y = y
+		self.recenter()
+		self.update_pad()
+		self.refresh_full()
+
+
+	def refresh_full_map(self):
+		self.screen.clear()
+		self.screen.refresh()
+		self.mapbox.box()
+		self.mapbox.refresh()
+		self.mapbox.overlay(self.screen)
+		y0, x0 = self.mapbox.getbegyx()
+		ya, xa = self.mapbox.getmaxyx()
+		self.mappad.move(self.char_y, self.char_x)
+		self.mappad.refresh(self.y, self.x, y0 + 1, x0 + 1, y0+ya - 2, x0+xa - 2)
+
+
+
+#TODO: work this into the object
 def shutdown():
 	curses.endwin()
 	sys.stdout = original_stdout
