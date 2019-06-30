@@ -157,7 +157,7 @@ def menu(window, options, cols = 1, selected = None):
 MAX_COMBATANTS = 3
 
 class curses_display(object):
-	def __init__(self, user=None, enemy=None, area_map=None):
+	def __init__(self, user=None, enemy=None, zone=None):
 		self.screen = screen
 		self.screen.keypad(1)
 
@@ -176,15 +176,12 @@ class curses_display(object):
 		self.enemy = enemy
 
 
-		self.area_map = area_map
-		self.area_size = (len(area_map), len(area_map[0]))
-		self.mapbox = curses.newwin(YMAX-2, XMAX - 2, 1, 1)
-		self.mappad = curses.newpad(self.area_size[0] + 1, self.area_size[1] + 1)
+		self.zone = zone
+		self.mapbox = curses.newwin(YMAX-1 - self.msgboxsize[0], XMAX - 2, 1, 1)
+		self.mappad = curses.newpad(zone.height + 1, zone.width + 1)
 		self.x = 0
 		self.y = 0
 
-		self.char_x = 0
-		self.char_y = 0
 		self.mode = MAP
 
 		self.refresh_full()
@@ -209,6 +206,22 @@ class curses_display(object):
 			box.clear()
 			box.refresh()
 		
+	def show_messages(self):
+	    for out in sys.stdout.readlines():
+		    if out.strip() != '':
+			    self.msgbox.addstr(1, 1, out)
+			    self.msgbox.addstr(4, 1, sayings.press_to_continue)
+			    self.msgbox.box()
+			    self.msgbox.refresh()
+			    waiting = True
+			    while waiting:
+				    key = self.msgbox.getch()
+				    if key in keys.SELECT + keys.BACK:
+					    waiting = False
+		    self.msgbox.clear()
+		    self.msgbox.box()
+		    self.msgbox.refresh()
+
 
 	##################################
 	##### Combat Draw Routines
@@ -239,10 +252,10 @@ class curses_display(object):
 				self.nmebox[i].box()
 				self.nmebox[i].refresh()
 				self.nmebox[i].overlay(self.screen)
-		self.msgbox.box()
 		self.refresh_combatant()
+		self.msgbox.box()
 		self.msgbox.refresh()
-		self.msgbox.overlay(screen)
+		self.msgbox.overlay(self.screen)
 		self.screen.refresh()
 
 	def show_combatant(self, combatant, box, hideexp=False):
@@ -262,21 +275,6 @@ class curses_display(object):
 		YMAX, XMAX = self.screen.getmaxyx()
 		window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
 		return menu(window, options, cols, selected)
-	
-	def show_messages(self):
-	    for out in sys.stdout.readlines():
-		    if out.strip() != '':
-			    self.msgbox.addstr(1, 1, out)
-			    self.msgbox.addstr(4, 1, sayings.press_to_continue)
-			    self.msgbox.refresh()
-			    waiting = True
-			    while waiting:
-				    key = self.msgbox.getch()
-				    if key in keys.SELECT + keys.BACK:
-					    waiting = False
-		    self.msgbox.clear()
-		    self.msgbox.box()
-		    self.msgbox.refresh()
 
 	def refresh_combatant(self):
 		for i in range(MAX_COMBATANTS):
@@ -291,39 +289,42 @@ class curses_display(object):
 	##################################
 	def recenter(self, x = None, y = None):
 		if x is None:
-			x = self.char_x
+			x = self.zone.Player.x
 		if y is None:
-			y = self.char_y
+			y = self.zone.Player.y
 
 		self.x = max(1, x - self.mapbox.getmaxyx()[1]/2)
 		self.y = max(1, y - self.mapbox.getmaxyx()[0]/2)
 
 	def update_pad(self):
 		i = 0
-		for line in self.area_map:
+		for line in self.zone.map:
 			self.mappad.addstr(i, 0, line)
 			i += 1
-		self.mappad.addch(self.char_y, self.char_x, '@')
+		self.mappad.addch(self.zone.Player.y, self.zone.Player.x, '@')
 
 	def set_position(self, x, y):
-		self.char_x = x
-		self.char_y = y
+		self.zone.Player.x = x
+		self.zone.Player.y = y
 		self.recenter()
 		self.update_pad()
 		self.refresh_full()
 
 
 	def refresh_full_map(self):
-		self.screen.clear()
+		#self.screen.clear()
 		self.screen.refresh()
 		self.mapbox.box()
 		self.mapbox.refresh()
 		self.mapbox.overlay(self.screen)
 		y0, x0 = self.mapbox.getbegyx()
 		ya, xa = self.mapbox.getmaxyx()
-		self.mappad.move(self.char_y, self.char_x)
+		self.mappad.move(self.zone.Player.y, self.zone.Player.x)
 		self.mappad.refresh(self.y, self.x, y0 + 1, x0 + 1, y0+ya - 2, x0+xa - 2)
 
+		self.msgbox.box()
+		self.msgbox.refresh()
+		self.msgbox.overlay(self.screen)
 
 
 #TODO: work this into the object
