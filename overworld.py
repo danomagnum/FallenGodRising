@@ -63,42 +63,65 @@ def readmap(filename):
 	content = f.readlines()
 	return content
 
-def find_valid_position(area):
-	while True:
-		x = random.randint(0, len(area[0]) - 1)
-		y = random.randint(0, len(area) - 1)
-		if area[y][x] == '.':
-			return (x, y)
+class Entity(object):
+	def __init__(self, x=0, y=0, char='@'):
+		self.x = x
+		self.y = y
+		self.char = char
+
+class Zone(object):
+	def __init__(self, display, filename=None):
+		if filename is None:
+			self.map = showmap(map_gen(40, 40, 10, 8))
+		else:
+			self.map = readmap('maps/test0.map')
+		self.Player = Entity()
+
+		Others = []
+
+		self.display = display
+
+		self.width = len(self.map[0])
+		self.height = len(self.map)
+		self.display = display
+
+	def move(self, direction):
+		UP = 1
+		DOWN = 2
+		LEFT = 3
+		RIGHT = 4
 
 
-def move(direction, display):
-	UP = 1
-	DOWN = 2
-	LEFT = 3
-	RIGHT = 4
-	if direction == UP:
-		if display.area_map[display.char_y - 1][display.char_x] == '.':
-			display.mappad.addch(display.char_y, display.char_x, '.')
-			display.mappad.addch(display.char_y - 1, display.char_x, '@')
-			display.char_y -= 1
-			display.y = max(0, display.y -1)
-	elif direction == DOWN:
-		if display.area_map[display.char_y + 1][display.char_x] == '.':
-			display.mappad.addch(display.char_y, display.char_x, '.')
-			display.mappad.addch(display.char_y + 1, display.char_x, '@')
-			display.char_y += 1
-			display.y = min((display.mappad.getmaxyx()[0]  - display.mapbox.getmaxyx()[0]), display.y + 1)
-	elif direction == LEFT:
-		if display.area_map[display.char_y][display.char_x - 1] == '.':
-			display.mappad.addch(display.char_y, display.char_x, '.')
-			display.mappad.addch(display.char_y, display.char_x - 1, '@')
-			display.char_x -= 1
-			display.x = max(0, display.x -1)
-	elif direction == RIGHT:
-		if display.area_map[display.char_y][display.char_x + 1] == '.':
-			display.mappad.addch(display.char_y, display.char_x, '.')
-			display.mappad.addch(display.char_y, display.char_x + 1, '@')
-			display.char_x += 1
-			display.x = min((display.mappad.getmaxyx()[1]  - display.mapbox.getmaxyx()[1]), display.x + 1)
+		if direction == UP:
+			if self.map[self.Player.y - 1][self.Player.x] == '.':
+				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
+				self.display.mappad.addch(self.Player.y - 1, self.Player.x, self.Player.char)
+				self.Player.y -= 1
+				self.display.y = max(0, self.display.y -1)
+		elif direction == DOWN:
+			if self.map[self.Player.y + 1][self.Player.x] == '.':
+				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
+				self.display.mappad.addch(self.Player.y + 1, self.Player.x, '@')
+				self.Player.y += 1
+				self.display.y = min((self.display.mappad.getmaxyx()[0]  - self.display.mapbox.getmaxyx()[0]), self.display.y + 1)
+		elif direction == LEFT:
+			if self.map[self.Player.y][self.Player.x - 1] == '.':
+				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
+				self.display.mappad.addch(self.Player.y, self.Player.x - 1, '@')
+				self.Player.x -= 1
+				self.display.x = max(0, self.display.x -1)
+		elif direction == RIGHT:
+			if self.map[self.Player.y][self.Player.x + 1] == '.':
+				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
+				self.display.mappad.addch(self.Player.y, self.Player.x + 1, '@')
+				self.Player.x += 1
+				self.display.x = min((self.display.mappad.getmaxyx()[1]  - self.display.mapbox.getmaxyx()[1]), self.display.x + 1)
+
+	def find_empty_position(self):
+		while True:
+			x = random.randint(0, len(self.map[0]) - 1)
+			y = random.randint(0, len(self.map) - 1)
+			if self.map[y][x] == '.':
+				return (x, y)
 
 
