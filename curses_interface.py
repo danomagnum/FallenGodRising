@@ -53,6 +53,9 @@ def progress_bar(actual, maxvalue, length):
 	unfilled_char = ''
 	return filled_char * filled + unfilled_char * unfilled
 
+#TODO: add a "helptext" function where you can hit "?" on a menu to get more
+# information on the entry you've selected before going back to the menu right
+# where you left off.  Some items could even give better help info (on monsters, etc...)
 def menu(window, options, cols = 1, selected = None):
 	#window = curses.newwin(4, 40, 20, 10)
 	#YMAX, XMAX = self.screen.getmaxyx()

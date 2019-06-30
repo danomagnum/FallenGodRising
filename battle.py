@@ -244,10 +244,13 @@ def Battle(user, enemy_ai, display):
 				print("{} {}".format(user.combatant.name, random.choice(sayings.death)))
 				print('you lost')
 				winner = ENEMY
+				#TODO: Raise GameOver exception
 
 		display.refresh_combatant()
 
 		time.sleep(1.0 / 60.0)
+
+	#TODO: Check that this does the post battle on each of the users combatants
 	for status in user.combatant.status:
 		status.post_battle(user.combatant)
 	
