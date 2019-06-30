@@ -65,6 +65,7 @@ try:
 		zone.display = display
 		display.set_position(x, y)
 		user = gen_testuser()
+		display.user = user
 		loop = True
 		while loop:
 			key = display.mapbox.getch()
@@ -79,7 +80,14 @@ try:
 			elif key == ord('m'):
 				#Menu
 				choice = display.menu(['Battlers', 'Info', 'Transport', 'Save', 'Stats', 'Options', 'Items'], 4)
-				if choice == 'Items':
+				if choice == 'Battlers':
+					display.mode=curses_interface.STATS
+					display.refresh_full()
+					key = display.mapbox.getch()
+					display.mode=curses_interface.MAP
+					display.refresh_full()
+
+				elif choice == 'Items':
 					item_slot_used = display.menu(user.backpack.show(), cols=2)
 					if item_slot_used is not None:
 						item_target = display.menu(user.combatants, cols=2)
@@ -88,8 +96,11 @@ try:
 							item_used.use(item_target)
 
 			elif key in keys.SELECT:
-				display.mode = curses_interface.COMBAT
-				dotestbattle(user, display, 30)
+				#display.mode = curses_interface.COMBAT
+				try:
+					dotestbattle(user, display, 30)
+				except main.GameOver:
+					print("GameOver")
 				display.mode = curses_interface.MAP
 			display.show_messages()
 			display.refresh_full()

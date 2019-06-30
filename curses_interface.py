@@ -9,6 +9,7 @@ import keys
 
 MAP = 0
 COMBAT = 1
+STATS = 2
 
 import stdoutCatcher
 #from StringIO import StringIO
@@ -167,6 +168,7 @@ class curses_display(object):
 		YMAX, XMAX = self.screen.getmaxyx()
 
 		self.combatantboxsize = [5, int(XMAX/MAX_COMBATANTS)]
+		self.statboxsize = [10, int(XMAX/MAX_COMBATANTS)]
 		self.msgboxsize = [5, int(XMAX)]
 		self.nmebox = []
 		self.mybox = []
@@ -180,13 +182,28 @@ class curses_display(object):
 
 
 		self.zone = zone
-		self.mapbox = curses.newwin(YMAX-1 - self.msgboxsize[0], XMAX - 2, 1, 1)
+		self.mapbox = curses.newwin(YMAX-1 - self.msgboxsize[0], XMAX - 2, 0, 0)
 		self.mappad = curses.newpad(zone.height + 1, zone.width + 1)
 		self.x = 0
 		self.y = 0
 
-		self.mode = MAP
+		self.statbox = []
+		for i in range(MAX_COMBATANTS):
+			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i))
+			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],YMAX-(self.statboxsize[0] + 5),self.statboxsize[1]*i))
 
+		self._mode = MAP
+
+		self.refresh_full()
+
+	@property
+	def mode(self):
+		return self._mode
+	
+	@mode.setter
+	def mode(self, value):
+		self._mode = value
+		self.clear()
 		self.refresh_full()
 
 	##################################
@@ -198,6 +215,8 @@ class curses_display(object):
 			self.refresh_full_map()
 		elif self.mode == COMBAT:
 			self.refresh_full_combat()
+		elif self.mode == STATS:
+			self.refresh_full_stats()
 
 	def clear(self):
 		self.mapbox.clear()
@@ -208,6 +227,12 @@ class curses_display(object):
 		for box in self.mybox:
 			box.clear()
 			box.refresh()
+		for box in self.statbox:
+			box.clear()
+			box.refresh()
+		self.msgbox.clear()
+		self.msgbox.refresh()
+		self.screen.refresh()
 		
 	def show_messages(self):
 	    for out in sys.stdout.readlines():
@@ -328,6 +353,61 @@ class curses_display(object):
 		self.msgbox.box()
 		self.msgbox.refresh()
 		self.msgbox.overlay(self.screen)
+
+	
+	##################################
+	##### Stat Draw Routines
+	##################################
+
+
+	def refresh_full_stats(self):
+		#self.screen.clear()
+		self.screen.refresh()
+		for i in range(MAX_COMBATANTS):
+			if i < len(self.user.combatants):
+				#self.statbox[i].box()
+				self.show_combatant_stats(self.user.combatants[i],self.statbox[i])
+				#self.statbox[i].refresh()
+				self.statbox[i].overlay(self.screen)
+		self.msgbox.box()
+		self.msgbox.refresh()
+		self.msgbox.overlay(self.screen)
+		self.screen.refresh()
+
+
+	def show_combatant_stats(self, combatant, box):
+		box.clear()
+		box.box()
+		
+		#Name
+		box.addstr(0, 1, combatant.name)
+
+		#HP
+		box.addstr(1, 1, progress_bar(combatant.hp, combatant.max_hp, self.combatantboxsize[1] - 2), curses.color_pair(1))
+		box.addstr(2, 1, str(int(math.ceil(combatant.hp))) + ' / ' + str(int(math.ceil(combatant.max_hp))), curses.color_pair(11))
+		
+		#Experience
+		box.addstr(3, 1, progress_bar(combatant.exp - combatant.exp_at_level(combatant.level), combatant.exp_at_level(combatant.level + 1) - combatant.exp_at_level(combatant.level), self.combatantboxsize[1] - 2), curses.color_pair(4))
+
+		#Level
+		box.addstr(4, 1, "Level: {}".format(combatant.level), curses.color_pair(1))
+
+		#physical
+		box.addstr(5, 1, "Phys. Atk./Def.: {}/{}".format(combatant.physical_strength,combatant.physical_defense), curses.color_pair(1))
+
+		#special
+		box.addstr(6, 1, "Spcl. Atk./Def: {}/{}".format(combatant.special_strength,combatant.special_defense), curses.color_pair(1))
+
+		#speed
+		box.addstr(7, 1, "Speed: {}".format(combatant.speed), curses.color_pair(1))
+
+		#elements
+		element_list = ' '.join([str(element) for element in combatant.elements])
+		box.addstr(8, 1, "Elements: {}".format(element_list), curses.color_pair(1))
+
+		box.refresh()
+
+
 
 
 #TODO: work this into the object

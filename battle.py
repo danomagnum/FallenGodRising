@@ -244,15 +244,16 @@ def Battle(user, enemy_ai, display):
 				print("{} {}".format(user.combatant.name, random.choice(sayings.death)))
 				print('you lost')
 				winner = ENEMY
-				#TODO: Raise GameOver exception
+				raise main.GameOver()
 
 		display.refresh_combatant()
 
 		time.sleep(1.0 / 60.0)
 
 	#TODO: Check that this does the post battle on each of the users combatants
-	for status in user.combatant.status:
-		status.post_battle(user.combatant)
+	for combatant in user.combatants:
+		for status in combatant.status:
+			status.post_battle(combatant)
 	
 	if winner == USER:
 		print('Got {} for winning'.format(enemy_ai.money))
