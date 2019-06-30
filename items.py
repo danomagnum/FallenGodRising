@@ -19,6 +19,7 @@ class ItemSlot(list):
 		self.name = item.name
 		self.backpack = backpack
 		list.__init__(self,[item])
+		self.target_type = item.target_type
 		#self.add_item(item)
 
 	def add_item(self, item):
@@ -79,26 +80,26 @@ class Backpack():
 
 class Potion(Item):
 	def __init__(self):
-		self.name = 'Potion 1'
-		self.target = TARGET_COMBATANT
+		Item.__init__(self, 'Potion 1', SELF)
 	def use(self, target):
 		target.heal(20)
 		print('{} used {}'.format(target.name,self.name))
 
+class HealAll(Item):
+	def __init__(self):
+		Item.__init__(self, 'Heal All 1', MULTI_SELF)
+	def use(self, target):
+		target.heal(20)
+		print('{} used {}'.format(target.name,self.name))
+
+
+
 class Booster(Item):
 	def __init__(self):
-		self.name = 'Roids 1'
-		self.target = TARGET_COMBATANT
+		Item.__init__(self, 'Roids 1', SELF)
 	def use(self, target):
 		target.status.append(effects.Strength2x())
 		print('{} used {}'.format(target.name,self.name))
 
 
 
-
-test_a = Backpack()
-test_a.store(Potion())
-test_a.store(Potion())
-test_a.store(Potion())
-test_a.store(Booster())
-test_a.store(Booster())

@@ -65,28 +65,31 @@ class Move(object):
 
 
 class Character(object):
-	def __init__(self):
-		self.setup('')
-
-	def setup(self, name=None):
+	def __init__(self, name=None, level=1):
 		if name is None:
-			self.name = 'MissingNo'
+			#self.name = 'MissingNo'
+			self.name = self.__class__.__name__
 		else:
 			self.name = name
 		self._exp = 0
+		self.config()
+		self._level = level
+		self.level = level
+		self._hp = self.max_hp
+		self.full_heal()
+
+	def config(self):
 		self.moves = []
 		self.elements = []
 		self.status = []
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-		self._level = 1
-		self.level = 1
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
 		self.base_special_strength = 10
 		self.base_special_defense = 10
 		self.base_speed = 10
 		self.base_hp = 10
-		self._hp = self.max_hp
+
 
 	def __str__(self):
 		return self.name

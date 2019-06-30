@@ -9,6 +9,13 @@ from targets import *
 
 DEBUG = True
 
+ATTACK = 0
+SWITCH = 1
+ITEM = 2
+
+USER = 10
+ENEMY = 11
+
 class Random_AI(object):
 	def __init__(self, combatants, money=0, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name
@@ -130,11 +137,22 @@ def Battle(user, enemy_ai, display):
 			elif first_choice == 'Items':
 				item_slot_used = display.menu(user.backpack.show(), cols=2)
 				if item_slot_used is not None:
-					item_target = display.menu(user.combatants + enemy_ai.combatants, cols=2)
+					item_target_type = item_slot_used.target_type
+					if item_target_type == SELF:
+						item_target = [display.menu(user.combatants, cols=2)]
+					elif item_target_type == ENEMY:
+						item_target = [display.menu(enemy_ai.combatants, cols=2)]
+					elif item_target_type == MULTI_SELF:
+						item_target = user.combatants
+					elif item_target_type == MULTI_ENEMY:
+						item_target = enemy_ai.combatants
+					else:
+						print("Can't Use that now")
 					if item_target is not None:
 						item_used = item_slot_used.take()
-						item_used.use(item_target)
 						selection_needed = False
+						for t in item_target:
+							item_used.use(t)
 				display.refresh_combatant()
 
 		#have the enemy select a move and target
@@ -222,7 +240,7 @@ def Battle(user, enemy_ai, display):
 					comb.exp += gained
 
 				if enemy_ai.change(user.combatant) is not None:
-					print("{} sent out {}".format(enemy_ai.name, e.name))
+					#print("{} sent out {}".format(enemy_ai.name, e.name))
 					display.refresh_combatant()
 				else:
 					battle_continue = False

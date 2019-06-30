@@ -11,42 +11,14 @@ import items
 import overworld
 import keys
 
-def gen_testuser():
-	sys.stdout.silent = True
-	battleuser = characters.TestChar2()
-	battleuser2 = characters.TestChar()
-
-	battleuser.name = 'dude'
-	battleuser.level = 55
-	battleuser.full_heal()
-
-	battleuser2.name = 'bloke'
-	battleuser2.level = 50
-	battleuser2.full_heal()
-	battleuser2.hp -= 25
-
-	user = main.User('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster()])
-
-	sys.stdout.silent = False
-	return user
-
-
 def dotestbattle(user, display, level=50):
 
 	sys.stdout.silent = True
-	battleenemy = characters.TestChar()
-	battleenemy2 = characters.TestChar2()
+	battleenemy = characters.Page(level=(level+2))
+	battleenemy2 = characters.Cleric(level=(level-2))
+	battleenemy3 = characters.Fighter(level=(level-3))
 
-	battleenemy.name = 'chap'
-	battleenemy.level = level + 2
-	battleenemy.full_heal()
-
-	battleenemy2.name = 'brah'
-	battleenemy2.level = level + 2
-	battleenemy2.full_heal()
-
-	enemy = battle.Random_AI([battleenemy,battleenemy2])
-
+	enemy = battle.Random_AI([battleenemy,battleenemy2,battleenemy3])
 
 	sys.stdout.silent = False
 	battle.Battle(user, enemy , display)
@@ -64,7 +36,7 @@ try:
 		display = curses_interface.curses_display(zone=zone)
 		zone.display = display
 		display.set_position(x, y)
-		user = gen_testuser()
+		user = characters.gen_testuser()
 		display.user = user
 		loop = True
 		while loop:
