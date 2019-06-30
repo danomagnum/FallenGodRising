@@ -4,6 +4,8 @@ import utility
 import items
 from targets import *
 
+class GameOver(Exception):
+	pass
 
 class Move(object):
 	def __init__(self,name, elements, accuracy, power, mp,  default_target):

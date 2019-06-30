@@ -8,6 +8,9 @@ class Element(object):
 	def effectiveness(self, defending_element):
 		return self.special_modifiers[defending_element] if (defending_element in self.special_modifiers) else self.nominal_modifier
 
+	def __str__(self):
+		return self.name
+
 
 #base definitions
 Normal = Element('Normal')
