@@ -21,6 +21,7 @@ def dotestbattle(user, display, level=50):
 	enemy = battle.Random_AI([battleenemy,battleenemy2,battleenemy3])
 
 	sys.stdout.silent = False
+	display.flash_screen()
 	battle.Battle(user, enemy , display)
 
 
@@ -62,10 +63,21 @@ try:
 				elif choice == 'Items':
 					item_slot_used = display.menu(user.backpack.show(), cols=2)
 					if item_slot_used is not None:
-						item_target = display.menu(user.combatants, cols=2)
+						item_target_type = item_slot_used.target_type
+						if item_target_type == SELF:
+							item_target = [display.menu(user.combatants, cols=2)]
+						elif item_target_type == MULTI_SELF:
+							item_target = user.combatants
+						elif item_target_type in EQUIPPABLE:
+							pass
+						else:
+							print("Can't Use that now")
 						if item_target is not None:
 							item_used = item_slot_used.take()
-							item_used.use(item_target)
+							selection_needed = False
+							for t in item_target:
+								item_used.use(t)
+
 
 			elif key in keys.SELECT:
 				#display.mode = curses_interface.COMBAT

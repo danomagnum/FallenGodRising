@@ -13,6 +13,27 @@ class Item(object):
 	def __str__(self):
 		return self.name
 
+class Equipment(Item):
+	def physical_strength(self, initial): # passive stat boosts take effect on these routines
+		return initial
+	def physical_defense(self, initial):
+		return initial
+	def special_strength(self, initial):
+		return initial
+	def special_defense(self, initial):
+		return initial
+	def speed(self, initial):
+		return initial
+	def hp(self, initial):
+		return initial
+	def max_hp(self, initial):
+		return initial
+	def evasion(self, initial):
+		return initial
+	def accuracy(self, initial):
+		return initial
+
+
 
 class ItemSlot(list):
 	def __init__(self, backpack, item):

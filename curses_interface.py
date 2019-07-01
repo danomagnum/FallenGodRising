@@ -168,7 +168,7 @@ class curses_display(object):
 		YMAX, XMAX = self.screen.getmaxyx()
 
 		self.combatantboxsize = [5, int(XMAX/MAX_COMBATANTS)]
-		self.statboxsize = [10, int(XMAX/MAX_COMBATANTS)]
+		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.msgboxsize = [5, int(XMAX)]
 		self.nmebox = []
 		self.mybox = []
@@ -190,7 +190,7 @@ class curses_display(object):
 		self.statbox = []
 		for i in range(MAX_COMBATANTS):
 			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i))
-			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],YMAX-(self.statboxsize[0] + 5),self.statboxsize[1]*i))
+			#self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],YMAX-(self.statboxsize[0] + 5),self.statboxsize[1]*i))
 
 		self._mode = MAP
 
@@ -209,6 +209,10 @@ class curses_display(object):
 	##################################
 	##### General Draw Routines
 	##################################
+
+	def flash_screen(self, wait_time=0.25):
+		curses.flash()
+		time.sleep(wait_time)
 
 	def refresh_full(self):
 		if self.mode == MAP:
@@ -354,6 +358,7 @@ class curses_display(object):
 		self.msgbox.refresh()
 		self.msgbox.overlay(self.screen)
 
+
 	
 	##################################
 	##### Stat Draw Routines
@@ -376,6 +381,7 @@ class curses_display(object):
 
 
 	def show_combatant_stats(self, combatant, box):
+		col2pos = 40
 		box.clear()
 		box.box()
 		
@@ -384,26 +390,39 @@ class curses_display(object):
 
 		#HP
 		box.addstr(1, 1, progress_bar(combatant.hp, combatant.max_hp, self.combatantboxsize[1] - 2), curses.color_pair(1))
-		box.addstr(2, 1, str(int(math.ceil(combatant.hp))) + ' / ' + str(int(math.ceil(combatant.max_hp))), curses.color_pair(11))
+		box.addstr(2, 1, 'HP: {} / {}'.format(int(math.ceil(combatant.hp)),int(math.ceil(combatant.max_hp))), curses.color_pair(11))
 		
 		#Experience
-		box.addstr(3, 1, progress_bar(combatant.exp - combatant.exp_at_level(combatant.level), combatant.exp_at_level(combatant.level + 1) - combatant.exp_at_level(combatant.level), self.combatantboxsize[1] - 2), curses.color_pair(4))
+		box.addstr(3, 1, 'Exp: {} / {}'.format(int(combatant.exp), int(combatant.exp_at_level(combatant.level + 1))))
 
 		#Level
-		box.addstr(4, 1, "Level: {}".format(combatant.level), curses.color_pair(1))
+		box.addstr(4, 1, "Level: {}".format(combatant.level), curses.color_pair(11))
 
 		#physical
-		box.addstr(5, 1, "Phys. Atk./Def.: {}/{}".format(combatant.physical_strength,combatant.physical_defense), curses.color_pair(1))
+		box.addstr(5, 1, "P. Atk.: {}".format(combatant.physical_strength), curses.color_pair(11))
+		box.addstr(6, 1, "P. Def.: {}".format(combatant.physical_defense), curses.color_pair(11))
 
 		#special
-		box.addstr(6, 1, "Spcl. Atk./Def: {}/{}".format(combatant.special_strength,combatant.special_defense), curses.color_pair(1))
+		box.addstr(7, 1, "S. Atk: {}".format(combatant.special_strength), curses.color_pair(11))
+		box.addstr(8, 1, "S. Def: {}".format(combatant.special_defense), curses.color_pair(11))
 
 		#speed
-		box.addstr(7, 1, "Speed: {}".format(combatant.speed), curses.color_pair(1))
+		box.addstr(9, 1, "Speed: {}".format(combatant.speed), curses.color_pair(11))
 
 		#elements
 		element_list = ' '.join([str(element) for element in combatant.elements])
-		box.addstr(8, 1, "Elements: {}".format(element_list), curses.color_pair(1))
+		box.addstr(10, 1, "Elements: {}".format(element_list), curses.color_pair(11))
+
+		box.addstr(4, col2pos, "Head: {}".format(combatant.equipment.Head), curses.color_pair(11))
+		box.addstr(5, col2pos, "Body: {}".format(combatant.equipment.Body), curses.color_pair(11))
+		box.addstr(6, col2pos, "Body: {}".format(combatant.equipment.Legs), curses.color_pair(11))
+		if combatant.equipment.Hands is None:
+			box.addstr(7, col2pos, "Body: {}".format(combatant.equipment.Left), curses.color_pair(11))
+			box.addstr(8, col2pos, "Body: {}".format(combatant.equipment.Right), curses.color_pair(11))
+		else:
+			box.addstr(7, col2pos, "Body: {}".format(combatant.equipment.Hands), curses.color_pair(11))
+
+		box.addstr(9, col2pos, "Token: {}".format(combatant.equipment.Token), curses.color_pair(11))
 
 		box.refresh()
 
