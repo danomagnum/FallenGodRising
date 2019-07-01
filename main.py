@@ -3,6 +3,7 @@ import math
 import utility
 import items
 import elements
+import battle
 from constants import *
 
 class GameOver(Exception):
@@ -429,6 +430,7 @@ class Equipment(object):
 
 class Character(object):
 	def __init__(self, name=None, level=1):
+		self.initialized = False
 		if name is None:
 			#self.name = 'MissingNo'
 			self.name = self.__class__.__name__
@@ -445,6 +447,7 @@ class Character(object):
 		self.level = level
 		self._hp = self.max_hp
 		self.full_heal()
+		self.initialized = True
 
 	def config(self):
 		self.moves = []
@@ -466,7 +469,8 @@ class Character(object):
 	@level.setter
 	def level(self, value):
 		self._level = value
-		print('{} leveled up to {}'.format(self.name, self.level))
+		if self.initialized:
+			print('{} leveled up to {}'.format(self.name, self.level))
 		self._exp = self.exp_at_level(self.level)
 		self.full_heal()
 
@@ -580,23 +584,34 @@ class Character(object):
 		pass
 
 class Entity(object):
-	def __init__(self, name, combatants = None, item_list=None, x=0, y=0, char=None):
+	def __init__(self, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
+		if name is None:
+			name = ''
 		self.name = name
-		self.combatants = combatants
-		if combatants is not None:
-			self.combatant = combatants[0]
-		else:
+		if combatants is None:
+			self.combatants = []
 			self.combatant = None
+		else:
+			self.combatants = combatants
+			self.combatant = combatants[0]
 		self.backpack = items.Backpack()
 		if item_list is not None:
 			for item in item_list:
 				self.backpack.store(item)
 
+		self.AI = AI
 		self.x = x
 		self.y = y
 		self.char = char
 
-		self.collisions = []
+		self.enabled = True
+
+		self.is_player = is_player
+		
+		self.config()
+
+	def config(self):
+		pass
 
 	def get_available(self):
 		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
@@ -605,13 +620,10 @@ class Entity(object):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
 	
 	def tick(self, zone):
-		for collision in self.collisions:
-			print('{} collided with {}'.format(self.name, collision.name))
-		self.collisions = []
 		pass
 
-	def collide(self, entity):
-		self.collisions.append(entity)
+	def collide(self, entity, zone):
+		pass
 
 	def move(self, zone, direction):
 		test_x = self.x
@@ -631,5 +643,27 @@ class Entity(object):
 			self.x = test_x
 			self.y = test_y
 		elif at_pos[0] == ENTITY:
-			#print('collision')
-			self.collide(at_pos[1])
+			self.collide(at_pos[1], zone)
+			at_pos[1].collide(self, zone)
+
+class Battler(Entity):
+	def collide(self, entity, zone):
+		#self.enabled = False
+		if entity.is_player == True: #Is the player if no AI
+			my_ai = self.AI(self.combatants)
+			battle.Battle(entity, my_ai, zone.display)
+			self.enabled = False
+			entity.backpack.absorb(self.backpack, message = True)
+
+class RandWalker(Entity):
+	def tick(self, zone):
+		if random.random() > 0.8:
+			self.move(zone, random.choice([UP, DOWN, LEFT, RIGHT]))
+
+class Treasure(Entity):
+	def collide(self, entity, zone):
+		self.enabled = False
+		entity.backpack.absorb(self.backpack, message = True)
+
+
+

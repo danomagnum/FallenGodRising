@@ -49,7 +49,7 @@ def gen_testuser():
 	battleuser = Fighter('Fighter Joe', 55)
 	battleuser2 = Page('MiniMage', 50)
 
-	user = Entity('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@')
+	user = Entity('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@',is_player=True)
 
 	sys.stdout.silent = False
 	return user

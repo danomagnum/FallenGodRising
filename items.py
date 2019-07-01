@@ -79,9 +79,23 @@ class Backpack():
 
 	def show(self):
 		return self.slots.values()
+	
+	def empty(self):
+		self.slots = {}
 		
-		
+	def absorb(self, backpack, message=False):
+		for item in backpack.all_items():
+			self.store(item)
+			if message:
+				print('Got item {}'.format(item.name))
+		backpack.empty()
 
+	def all_items(self):
+		item_list = []
+		for slot in self.slots:
+			for item_entry in self.slots[slot]:
+				item_list.append(item_entry)
+		return item_list
 
 	def __len__(self):
 		return sum(len(slot) for slot in self.slots.values())

@@ -16,7 +16,7 @@ ITEM = 2
 USER = 10
 ENEMY = 11
 
-class Random_AI(object):
+class AI(object):
 	def __init__(self, combatants, money=0, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name
 		self.combatants = combatants
@@ -61,6 +61,48 @@ class Random_AI(object):
 	
 	def get_standby(self):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
+
+
+
+class Random_AI(AI):
+	def __init__(self, combatants, money=0, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
+		self.name = name
+		self.combatants = combatants
+		self.combatant = combatants[0]
+		self.defeated_text = defeated_text
+
+		if money == 0:
+			self.money = int(sum([c.exp_value for c in combatants]) / 10)
+		else:
+			self.money = money
+
+		self.backpack = items.Backpack()
+		if item_list is not None:
+			for item in item_list:
+				self.backpack.store(item)
+
+	def attack(self, enemy):
+		move = random.choice(self.combatant.moves)
+		target = [self.combatant, enemy][move.default_target]
+		return [move, [target]]
+
+	def change(self, enemy):
+		standby = self.get_standby()
+		available = self.get_available()
+		if standby:
+			self.combatant = random.choice(standby)
+			return self.combatant
+		elif available:
+			self.combatant = random.choice(available)
+			return self.combatant
+		else:
+			return None
+	
+	def action(self, enemy):
+		if self.get_standby():
+			return random.choice([ATTACK, SWITCH])
+		else:
+			return ATTACK
 
 def Battle(user, enemy_ai, display):
 	display.start_battle(user, enemy_ai)
