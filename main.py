@@ -3,7 +3,7 @@ import math
 import utility
 import items
 import elements
-from targets import *
+from constants import *
 
 class GameOver(Exception):
 	pass
@@ -579,15 +579,24 @@ class Character(object):
 	def levelup(self):
 		pass
 
-class User(object):
-	def __init__(self, name, combatants, item_list=None):
+class Entity(object):
+	def __init__(self, name, combatants = None, item_list=None, x=0, y=0, char=None):
 		self.name = name
 		self.combatants = combatants
-		self.combatant = combatants[0]
+		if combatants is not None:
+			self.combatant = combatants[0]
+		else:
+			self.combatant = None
 		self.backpack = items.Backpack()
 		if item_list is not None:
 			for item in item_list:
 				self.backpack.store(item)
+
+		self.x = x
+		self.y = y
+		self.char = char
+
+		self.collisions = []
 
 	def get_available(self):
 		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
@@ -595,3 +604,32 @@ class User(object):
 	def get_standby(self):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
 	
+	def tick(self, zone):
+		for collision in self.collisions:
+			print('{} collided with {}'.format(self.name, collision.name))
+		self.collisions = []
+		pass
+
+	def collide(self, entity):
+		self.collisions.append(entity)
+
+	def move(self, zone, direction):
+		test_x = self.x
+		test_y = self.y
+
+		if direction == UP:
+			test_y -= 1
+		elif direction == DOWN:
+			test_y += 1
+		elif direction == LEFT:
+			test_x -= 1
+		elif direction == RIGHT:
+			test_x += 1
+
+		at_pos = zone.check_pos(test_x, test_y)
+		if at_pos[0] == EMPTY:
+			self.x = test_x
+			self.y = test_y
+		elif at_pos[0] == ENTITY:
+			#print('collision')
+			self.collide(at_pos[1])

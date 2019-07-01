@@ -180,10 +180,10 @@ class curses_display(object):
 		self.user = user
 		self.enemy = enemy
 
-
-		self.zone = zone
 		self.mapbox = curses.newwin(YMAX-1 - self.msgboxsize[0], XMAX - 2, 0, 0)
-		self.mappad = curses.newpad(zone.height + 1, zone.width + 1)
+
+		self.change_zone(zone)
+
 		self.x = 0
 		self.y = 0
 
@@ -329,15 +329,22 @@ class curses_display(object):
 		self.y = max(1, y - self.mapbox.getmaxyx()[0]/2)
 
 	def update_pad(self):
+		if self.zone is None:
+			return
 		i = 0
 		for line in self.zone.map:
 			self.mappad.addstr(i, 0, line)
 			i += 1
-		self.mappad.addch(self.zone.Player.y, self.zone.Player.x, '@')
+		if self.zone.player is not None:
+			self.mappad.addch(self.zone.player.y, self.zone.player.x, self.zone.player.char)
+		for e in self.zone.entities:
+			self.mappad.addch(e.y, e.x, e.char)
 
 	def set_position(self, x, y):
-		self.zone.Player.x = x
-		self.zone.Player.y = y
+		if self.zone is None:
+			return
+		self.zone.player.x = x
+		self.zone.player.y = y
 		self.recenter()
 		self.update_pad()
 		self.refresh_full()
@@ -345,18 +352,28 @@ class curses_display(object):
 
 	def refresh_full_map(self):
 		#self.screen.clear()
+		if self.zone is None:
+			return
+		self.update_pad()
 		self.screen.refresh()
 		self.mapbox.box()
 		self.mapbox.refresh()
 		self.mapbox.overlay(self.screen)
 		y0, x0 = self.mapbox.getbegyx()
 		ya, xa = self.mapbox.getmaxyx()
-		self.mappad.move(self.zone.Player.y, self.zone.Player.x)
+		if self.zone.player is not None:
+			self.mappad.move(self.zone.player.y, self.zone.player.x)
 		self.mappad.refresh(self.y, self.x, y0 + 1, x0 + 1, y0+ya - 2, x0+xa - 2)
 
 		self.msgbox.box()
 		self.msgbox.refresh()
 		self.msgbox.overlay(self.screen)
+	
+	def change_zone(self, zone):
+		self.zone = zone
+		if zone is not None:
+			self.mappad = curses.newpad(zone.height + 1, zone.width + 1)
+
 
 
 	

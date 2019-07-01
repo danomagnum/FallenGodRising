@@ -10,6 +10,7 @@ import time
 import items
 import overworld
 import keys
+from constants import *
 
 def dotestbattle(user, display, level=50):
 
@@ -28,28 +29,40 @@ def dotestbattle(user, display, level=50):
 try:
 	if __name__ == '__main__':
 		curses_interface.initialize()
-		#zone = overworld.readmap('maps/test0.map')
-		#zone = showmap(map_gen(40, 40, 10, 8))
-		zone = overworld.Zone(None, 'maps/test0.map')
-		x, y = zone.find_empty_position()
-		zone.Player.x = x
-		zone.Player.y = y
+		zone = overworld.Zone(filename='maps/test0.map')
+
+		user = characters.gen_testuser()
+		user.x, user.y = zone.find_empty_position()
+
 		display = curses_interface.curses_display(zone=zone)
 		zone.display = display
-		display.set_position(x, y)
-		user = characters.gen_testuser()
+
+		zone.set_player(user)
+
 		display.user = user
 		loop = True
+
+		pos = zone.find_empty_position()
+		e1 = main.Entity('guy1', x=pos[0], y=pos[1], char='x')
+		zone.add_entity(e1)
+
+		pos = zone.find_empty_position()
+		e2 = main.Entity('guy2', x=pos[0], y=pos[1], char='o')
+		zone.add_entity(e2)
+
+		other_entities = [e1, e2]
+
+
 		while loop:
 			key = display.mapbox.getch()
 			if key in keys.UP:
-				zone.move(1)
+				user.move(zone, UP)
 			elif key in keys.DOWN:
-				zone.move(2)
+				user.move(zone, DOWN)
 			elif key in keys.LEFT:
-				zone.move(3)
+				user.move(zone, LEFT)
 			elif key in keys.RIGHT:
-				zone.move(4)
+				user.move(zone, RIGHT)
 			elif key == ord('m'):
 				#Menu
 				choice = display.menu(['Battlers', 'Info', 'Transport', 'Save', 'Stats', 'Options', 'Items'], 4)
@@ -86,6 +99,7 @@ try:
 				except main.GameOver:
 					print("GameOver")
 				display.mode = curses_interface.MAP
+			zone.tick()
 			display.show_messages()
 			display.refresh_full()
 except Exception as e:

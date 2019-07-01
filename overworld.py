@@ -1,4 +1,7 @@
 import random
+from main import Entity
+from constants import *
+
 
 def map_gen(height, width, rooms, minroomsize = 4):
 	tiles = [[0 for y in range(height)] for x in range(width)]
@@ -42,7 +45,7 @@ def showmap(tiles, printout = False):
 			if y == 0:
 				line += ' '
 			elif y  == 1:
-				line += '.'
+				line += WALKABLE
 			elif y == 2:
 				line += '#'
 
@@ -63,21 +66,16 @@ def readmap(filename):
 	content = f.readlines()
 	return content
 
-class Entity(object):
-	def __init__(self, x=0, y=0, char='@'):
-		self.x = x
-		self.y = y
-		self.char = char
-
 class Zone(object):
-	def __init__(self, display, filename=None):
+	def __init__(self, display = None, filename=None):
 		if filename is None:
 			self.map = showmap(map_gen(40, 40, 10, 8))
 		else:
 			self.map = readmap('maps/test0.map')
-		self.Player = Entity()
 
-		Others = []
+		self.player = None
+
+		self.entities = []
 
 		self.display = display
 
@@ -85,43 +83,39 @@ class Zone(object):
 		self.height = len(self.map)
 		self.display = display
 
-	def move(self, direction):
-		UP = 1
-		DOWN = 2
-		LEFT = 3
-		RIGHT = 4
+		self.redraw = []
 
+	def add_entity(self, entity):
+		self.entities.append(entity)
 
-		if direction == UP:
-			if self.map[self.Player.y - 1][self.Player.x] == '.':
-				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
-				self.display.mappad.addch(self.Player.y - 1, self.Player.x, self.Player.char)
-				self.Player.y -= 1
-				self.display.y = max(0, self.display.y -1)
-		elif direction == DOWN:
-			if self.map[self.Player.y + 1][self.Player.x] == '.':
-				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
-				self.display.mappad.addch(self.Player.y + 1, self.Player.x, '@')
-				self.Player.y += 1
-				self.display.y = min((self.display.mappad.getmaxyx()[0]  - self.display.mapbox.getmaxyx()[0]), self.display.y + 1)
-		elif direction == LEFT:
-			if self.map[self.Player.y][self.Player.x - 1] == '.':
-				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
-				self.display.mappad.addch(self.Player.y, self.Player.x - 1, '@')
-				self.Player.x -= 1
-				self.display.x = max(0, self.display.x -1)
-		elif direction == RIGHT:
-			if self.map[self.Player.y][self.Player.x + 1] == '.':
-				self.display.mappad.addch(self.Player.y, self.Player.x, '.')
-				self.display.mappad.addch(self.Player.y, self.Player.x + 1, '@')
-				self.Player.x += 1
-				self.display.x = min((self.display.mappad.getmaxyx()[1]  - self.display.mapbox.getmaxyx()[1]), self.display.x + 1)
+	def set_player(self, entity):
+		self.player = entity
+	
+	def tick(self):
+		if self.player is not None:
+			self.redraw.append([self.player.x, self.player.y])
+			self.player.tick(zone=self)
+		for e in self.entities:
+			# first we will mark the positions of the entities as needing redrawn.  This will
+			# make sure the map is redrawn if they move or are removed.  If they haven't moved,
+			# they will be drawn on top of the map anyway so it's no problem.
+			self.redraw.append([e.x, e.y])
+			e.tick(zone=self)
 
 	def find_empty_position(self):
 		while True:
 			x = random.randint(0, len(self.map[0]) - 1)
 			y = random.randint(0, len(self.map) - 1)
-			if self.map[y][x] == '.':
+			if self.map[y][x] == WALKABLE:
 				return (x, y)
 
+	def check_pos(self, x, y):
+		if self.map[y][x] != WALKABLE:
+			return [WALL, None]
+		for e in self.entities:
+			if (e.x == x) and (e.y == y):
+				return [ENTITY, e]
+		if (self.player.x == x) and (self.player.y == y):
+			return [PLAYER, self.player]
+		return [EMPTY, None]
 

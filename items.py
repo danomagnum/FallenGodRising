@@ -1,4 +1,4 @@
-from targets import *
+from constants import *
 import effects
 
 class Item(object):
