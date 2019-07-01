@@ -5,7 +5,7 @@ import main
 import sayings
 import sys
 import items
-from targets import *
+from constants import *
 
 DEBUG = True
 

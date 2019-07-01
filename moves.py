@@ -3,6 +3,7 @@ import random
 import elements
 import effects
 from utility import clamp, scale
+from constants import *
 
 
 class Pound(main.Move):
@@ -14,7 +15,7 @@ class Pound(main.Move):
 		self.power = 10.0
 		self.elements = [elements.Normal]
 		self.uses = 0
-		self.default_target = main.ENEMY
+		self.default_target = ENEMY
 
 
 class Slam(main.Move):
@@ -26,7 +27,7 @@ class Slam(main.Move):
 		self.power = 20.0
 		self.elements = [elements.Normal]
 		self.uses = 0
-		self.default_target = main.ENEMY
+		self.default_target = ENEMY
 
 
 
@@ -39,7 +40,7 @@ class Spray(main.Move):
 		self.power = 20.0
 		self.elements = [elements.Water]
 		self.uses = 0
-		self.default_target = main.ENEMY
+		self.default_target = ENEMY
 
 
 
@@ -52,7 +53,7 @@ class Buff(main.Move):
 		self.power = 0
 		self.elements = [elements.Normal]
 		self.uses = 0
-		self.default_target = main.SELF
+		self.default_target = SELF
 
 	def effect(self, target):
 		target.status.append(effects.Strength_Mult(1.15))
@@ -67,7 +68,7 @@ class Heal(main.Move):
 		self.power = 20
 		self.elements = [elements.Normal]
 		self.uses = 0
-		self.default_target = main.SELF
+		self.default_target = SELF
 
 	def attack(self, user, targets): # do whatever the attack needs to do
 		if (self.mp > 0):
@@ -100,7 +101,7 @@ class Debuff(main.Move):
 		self.power = 0
 		self.elements = [elements.Normal]
 		self.uses = 0
-		self.default_target = main.ENEMY
+		self.default_target = ENEMY
 
 	def effect(self, target):
 		target.status.append(effects.Strength_Mult(0.85))
@@ -114,7 +115,7 @@ class Poison(main.Move):
 		self.power = 2.0
 		self.elements = [elements.Normal]
 		self.uses = 0
-		self.default_target = main.ENEMY
+		self.default_target = ENEMY
 
 
 	def effect(self, target):

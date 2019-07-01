@@ -1,4 +1,4 @@
-from main import Character, User
+from main import Character, Entity
 import sys
 import items
 import elements
@@ -49,7 +49,7 @@ def gen_testuser():
 	battleuser = Fighter('Fighter Joe', 55)
 	battleuser2 = Page('MiniMage', 50)
 
-	user = User('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()])
+	user = Entity('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@')
 
 	sys.stdout.silent = False
 	return user
