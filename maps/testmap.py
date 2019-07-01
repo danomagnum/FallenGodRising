@@ -4,9 +4,10 @@ import random
 import maptools
 
 
-
+#####################
 # The characters subclasses are how you create enemies.
-
+# You can used "canned" ones or creat your own.
+#####################
 class LittleRat(main.Character):
 	def config(self):
 		self.moves = [moves.Slam()]
@@ -20,9 +21,12 @@ class LittleRat(main.Character):
 		self.base_speed = 6
 		self.base_hp = 6
 
-
+#####################
 # The entities subclasses are items that will appear in the world.
-
+# You can used "canned" ones or creat your own.
+# This is also where you set up battle groups by inheriting entities.Battler and
+# assigning combatants
+#####################
 class Rat(entities.RandWalker, entities.Battler):
 	# example basic enemy
 	def config(self):
@@ -49,16 +53,24 @@ class RatPack(entities.RandWalker, entities.Battler):
 		self.char = 'R'
 		self.AI = battle.Random_AI
 
+#####################
+# load the map file and create the zone
+#####################
 
 filename = __file__[:-3] + '.map'
 zone = overworld.Zone(filename=filename)
 
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, PackRat)
-maptools.Random_Map_Insert(zone, PackRat)
 
+#####################
+# populate the zone with entities
+#####################
+
+maptools.Positional_Map_Insert(zone, entities.Shop, 1)
+maptools.Random_Map_Insert(zone, RatPack)
+maptools.Random_Map_Insert(zone, RatPack)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, PackRat)

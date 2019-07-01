@@ -13,6 +13,14 @@ class Battler(Entity):
 			self.enabled = False
 			entity.backpack.absorb(self.backpack, message = True)
 
+class Shop(Entity):
+	def config(self):
+		self.name = 'Shop'
+		self.char = '$'
+	def collide(self, entity, zone):
+		#self.enabled = False
+		print('I will be a shop')
+
 class RandWalker(Entity):
 	def tick(self, zone):
 		if random.random() > 0.8:
