@@ -100,7 +100,11 @@ class Zone(object):
 			# make sure the map is redrawn if they move or are removed.  If they haven't moved,
 			# they will be drawn on top of the map anyway so it's no problem.
 			self.redraw.append([e.x, e.y])
-			e.tick(zone=self)
+			if e.enabled:
+				e.tick(zone=self)
+		# get rid of any entities that were disabled
+		self.entities = [e for e in self.entities if e.enabled]
+
 
 	def find_empty_position(self):
 		while True:

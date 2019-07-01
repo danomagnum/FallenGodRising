@@ -10,7 +10,10 @@ import time
 import items
 import overworld
 import keys
+import entities
 from constants import *
+
+import maps.testmap
 
 def dotestbattle(user, display, level=50):
 
@@ -29,7 +32,8 @@ def dotestbattle(user, display, level=50):
 try:
 	if __name__ == '__main__':
 		curses_interface.initialize()
-		zone = overworld.Zone(filename='maps/test0.map')
+		#zone = overworld.Zone(filename='maps/test0.map')
+		zone = maps.testmap.zone
 
 		user = characters.gen_testuser()
 		user.x, user.y = zone.find_empty_position()
@@ -42,15 +46,17 @@ try:
 		display.user = user
 		loop = True
 
-		pos = zone.find_empty_position()
-		e1 = main.Entity('guy1', x=pos[0], y=pos[1], char='x')
-		zone.add_entity(e1)
+		#pos = zone.find_empty_position()
+		#e1 = entities.RandWalker('guy1', x=pos[0], y=pos[1], char='x')
+		#zone.add_entity(e1)
 
-		pos = zone.find_empty_position()
-		e2 = main.Entity('guy2', x=pos[0], y=pos[1], char='o')
-		zone.add_entity(e2)
+		#pos = zone.find_empty_position()
+		#e2 = entities.Rat('somerat', x=pos[0], y=pos[1], char='o', AI=battle.Random_AI)
+		#zone.add_entity(e2)
 
-		other_entities = [e1, e2]
+		#pos = zone.find_empty_position()
+		#e3 = entities.Treasure('TreasureChest', item_list=[items.Potion()],x=pos[0], y=pos[1], char='c')
+		#zone.add_entity(e3)
 
 
 		while loop:
