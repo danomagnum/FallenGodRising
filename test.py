@@ -58,6 +58,8 @@ try:
 		#e3 = entities.Treasure('TreasureChest', item_list=[items.Potion()],x=pos[0], y=pos[1], char='c')
 		#zone.add_entity(e3)
 
+		print(maps.testmap.filename)
+
 
 		while loop:
 			key = display.mapbox.getch()

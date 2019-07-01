@@ -71,7 +71,7 @@ class Zone(object):
 		if filename is None:
 			self.map = showmap(map_gen(40, 40, 10, 8))
 		else:
-			self.map = readmap('maps/test0.map')
+			self.map = readmap(filename)
 
 		self.player = None
 
@@ -114,12 +114,12 @@ class Zone(object):
 				return (x, y)
 
 	def check_pos(self, x, y):
-		if self.map[y][x] != WALKABLE:
-			return [WALL, None]
 		for e in self.entities:
 			if (e.x == x) and (e.y == y):
 				return [ENTITY, e]
 		if (self.player.x == x) and (self.player.y == y):
 			return [PLAYER, self.player]
+		if self.map[y][x] != WALKABLE:
+			return [WALL, None]
 		return [EMPTY, None]
 
