@@ -53,6 +53,14 @@ class RatPack(entities.RandWalker, entities.Battler):
 		self.char = 'R'
 		self.AI = battle.Random_AI
 
+class SeeTest(entities.BasicAI1):
+	def config(self):
+		self.name = 'See Test'
+		self.char = 'S'
+		self.standby_delay = 10
+
+
+
 #####################
 # load the map file and create the zone
 #####################
@@ -66,11 +74,12 @@ zone = overworld.Zone(filename=filename)
 #####################
 
 maptools.Positional_Map_Insert(zone, entities.Shop, 1)
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, PackRat)
-maptools.Random_Map_Insert(zone, PackRat)
+#maptools.Random_Map_Insert(zone, RatPack)
+#maptools.Random_Map_Insert(zone, RatPack)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, PackRat)
+#maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, SeeTest)

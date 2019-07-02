@@ -608,6 +608,11 @@ class Entity(object):
 
 		self.is_player = is_player
 		
+		for base in self.__class__.__bases__:
+			try:
+				base.config(self)
+			except:
+				pass
 		self.config()
 
 	def config(self):
@@ -642,7 +647,7 @@ class Entity(object):
 		if at_pos[0] == EMPTY:
 			self.x = test_x
 			self.y = test_y
-		elif at_pos[0] == ENTITY:
+		elif (at_pos[0] == ENTITY) or (at_pos[0] == PLAYER):
 			self.collide(at_pos[1], zone)
 			at_pos[1].collide(self, zone)
 

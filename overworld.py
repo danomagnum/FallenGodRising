@@ -127,7 +127,6 @@ class Zone(object):
 		return [EMPTY, None]
 
 	def calcDistGraph(self):
-		#TODO: this is broken
 		self.dist_map = [[-1 for x in range(self.width)] for x in range(self.height)]
 		#self.dist_map = [[99999] * self.width] * self.height
 		x0 = self.player.x
@@ -188,6 +187,9 @@ class Zone(object):
 
 		if options:
 			minval = min(options)
+
+			if minval == 0:
+				print 'targeting hero'
 			if up == minval:
 				return UP
 			elif down == minval:
@@ -210,3 +212,31 @@ class Zone(object):
 		print(line)
 		#print('{}'.format(self.dist_map[:10]))
 
+	def LOS_check(self, x0, y0, x1, y1):
+		"Bresenham's line algorithm"
+		pts = set()
+		dx = abs(x1 - x0)
+		dy = abs(y1 - y0)
+		x, y = x0, y0
+		sx = -1 if x0 > x1 else 1
+		sy = -1 if y0 > y1 else 1
+		if dx > dy:
+			err = dx / 2.0
+			while x != x1:
+				pts.add((x, y))
+				err -= dy
+				if err < 0:
+					y += sy
+					err += dx
+				x += sx
+		else:
+			err = dy / 2.0
+			while y != y1:
+				pts.add((x, y))
+				err -= dx
+				if err < 0:
+					x += sx
+					err += dy
+				y += sy		
+		visibilities = [self.check_pos(pt[0], pt[1])[0] for pt in pts]
+		return not (WALL in visibilities)

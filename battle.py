@@ -310,7 +310,6 @@ def Battle(user, enemy_ai, display):
 
 		time.sleep(1.0 / 60.0)
 
-	#TODO: Check that this does the post battle on each of the users combatants
 	for combatant in user.combatants:
 		for status in combatant.status:
 			status.post_battle(combatant)
