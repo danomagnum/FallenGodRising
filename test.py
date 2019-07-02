@@ -77,13 +77,15 @@ try:
 				zone.calcDistGraph()
 			elif key == ord('m'):
 				#Menu
-				choice = display.menu(['Battlers', 'Info', 'Transport', 'Save', 'Stats', 'Options', 'Items'], 4)
+				choice = display.menu(['Battlers', 'Quests', 'Transport', 'Save', 'Options', 'Items'], 4)
 				if choice == 'Battlers':
 					display.mode=curses_interface.STATS
 					display.refresh_full()
 					key = display.mapbox.getch()
 					display.mode=curses_interface.MAP
 					display.refresh_full()
+				elif choice == 'Quests':
+					pass
 
 				elif choice == 'Items':
 					item_slot_used = display.menu(user.backpack.show(), cols=2)

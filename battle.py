@@ -17,16 +17,11 @@ USER = 10
 ENEMY = 11
 
 class AI(object):
-	def __init__(self, combatants, money=0, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
+	def __init__(self, combatants, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name
 		self.combatants = combatants
 		self.combatant = combatants[0]
 		self.defeated_text = defeated_text
-
-		if money == 0:
-			self.money = int(sum([c.exp_value for c in combatants]) / 10)
-		else:
-			self.money = money
 
 		self.backpack = items.Backpack()
 		if item_list is not None:
@@ -65,16 +60,12 @@ class AI(object):
 
 
 class Random_AI(AI):
-	def __init__(self, combatants, money=0, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
+	def __init__(self, combatants,  name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name
 		self.combatants = combatants
 		self.combatant = combatants[0]
 		self.defeated_text = defeated_text
 
-		if money == 0:
-			self.money = int(sum([c.exp_value for c in combatants]) / 10)
-		else:
-			self.money = money
 
 		self.backpack = items.Backpack()
 		if item_list is not None:
@@ -315,7 +306,6 @@ def Battle(user, enemy_ai, display):
 			status.post_battle(combatant)
 	
 	if winner == USER:
-		print('Got {} for winning'.format(enemy_ai.money))
 		print('{}: {}'.format(enemy_ai.name,enemy_ai.defeated_text))
 
 	display.show_messages()
