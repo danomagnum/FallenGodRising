@@ -35,3 +35,9 @@ class Rat(RandWalker, Battler):
 	def config(self):
 		self.combatants.append(characters.Page(level=20))
 
+class TowardWalker(Entity):
+	def tick(self, zone):
+		#print('walking towards from {},{}'.format(self.x, self.y))
+		dir = zone.toward_player(self.x, self.y)
+		if dir is not None:
+			self.move(zone, dir)

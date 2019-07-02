@@ -65,12 +65,16 @@ try:
 			key = display.mapbox.getch()
 			if key in keys.UP:
 				user.move(zone, UP)
+				zone.calcDistGraph()
 			elif key in keys.DOWN:
 				user.move(zone, DOWN)
+				zone.calcDistGraph()
 			elif key in keys.LEFT:
 				user.move(zone, LEFT)
+				zone.calcDistGraph()
 			elif key in keys.RIGHT:
 				user.move(zone, RIGHT)
+				zone.calcDistGraph()
 			elif key == ord('m'):
 				#Menu
 				choice = display.menu(['Battlers', 'Info', 'Transport', 'Save', 'Stats', 'Options', 'Items'], 4)
@@ -101,12 +105,8 @@ try:
 
 
 			elif key in keys.SELECT:
-				#display.mode = curses_interface.COMBAT
-				try:
-					dotestbattle(user, display, 30)
-				except main.GameOver:
-					print("GameOver")
-				display.mode = curses_interface.MAP
+				#print('{}, {}, {}'.format(user.x, user.y, zone.dist_map[user.y][user.x]))
+				zone.show_distmap()
 			zone.tick()
 			display.show_messages()
 			display.refresh_full()
