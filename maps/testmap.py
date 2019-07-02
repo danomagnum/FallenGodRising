@@ -60,6 +60,19 @@ class SeeTest(entities.BasicAI1):
 		self.standby_delay = 10
 
 
+class KeyChest(entities.Treasure):
+	# example basic enemy that gives an item when killed
+	def config(self):
+		self.name = 'Key Chest'
+		self.backpack.store(items.Key())
+		self.char = 'k'
+
+class Door1(entities.Door):
+	pass
+class Door2(entities.Door):
+	def key(self):
+		self.lock='Key'
+
 
 #####################
 # load the map file and create the zone
@@ -82,4 +95,7 @@ maptools.Positional_Map_Insert(zone, entities.Shop, 1)
 #maptools.Random_Map_Insert(zone, Rat)
 #maptools.Random_Map_Insert(zone, PackRat)
 #maptools.Random_Map_Insert(zone, PackRat)
-maptools.Random_Map_Insert(zone, SeeTest)
+#maptools.Random_Map_Insert(zone, SeeTest)
+maptools.Random_Map_Insert(zone, KeyChest)
+maptools.Random_Map_Insert(zone, Door1)
+maptools.Random_Map_Insert(zone, Door2)

@@ -21,6 +21,26 @@ class Shop(Entity):
 		#self.enabled = False
 		print('I will be a shop')
 
+
+class Door(Entity):
+	def config(self):
+		self.name = 'Door'
+		self.char = '+'
+		self.key()
+	def key(self):
+		self.lock = None
+	def collide(self, entity, zone):
+		#self.enabled = False
+		if self.lock is None:
+			self.enabled = False
+		elif self.lock in entity.backpack:
+			entity.backpack.take_by_name(self.lock)
+			self.enabled = False
+		else:
+			print('Locked.  Key={}'.format(self.lock))
+
+
+
 class RandWalker(Entity):
 	def tick(self, zone):
 		if random.random() > 0.8:

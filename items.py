@@ -78,6 +78,9 @@ class Backpack():
 	def take(self, slot):
 		return slot.take()
 
+	def take_by_name(self, name):
+		return self.slots[name].take()
+
 	def show(self):
 		return self.slots.values()
 	
@@ -113,7 +116,9 @@ class Backpack():
 
 	def has(self, item, qty=1):
 		itemname = str(item)
+		print('checking for "{}"'.format(itemname))
 		if itemname in self.slots:
+			print('found it')
 			if len(self.slots[itemname]) >=qty:
 				return True
 		return False
@@ -136,7 +141,6 @@ class HealAll(Item):
 		print('{} used {}'.format(target.name,self.name))
 
 
-
 class Booster(Item):
 	def __init__(self):
 		Item.__init__(self, 'Roids 1', SELF)
@@ -145,4 +149,7 @@ class Booster(Item):
 		print('{} used {}'.format(target.name,self.name))
 
 
+class Key(Item):
+	def __init__(self):
+		Item.__init__(self, 'Key', TARGET_NONE)
 
