@@ -63,6 +63,7 @@ class ItemSlot(list):
 class Backpack():
 	def __init__(self):
 		self.slots = {}
+		self.gold = 0
 
 	def store(self, item):
 		itemname = str(item)
@@ -89,6 +90,13 @@ class Backpack():
 			if message:
 				print('Got item {}'.format(item.name))
 		backpack.empty()
+
+		self.gold += backpack.gold
+
+		if backpack.gold > 0:
+			if message:
+				print('Got ${}'.format(backpack.gold))
+		backpack.gold = 0
 
 	def all_items(self):
 		item_list = []
