@@ -41,3 +41,33 @@ class TowardWalker(Entity):
 		dir = zone.toward_player(self.x, self.y)
 		if dir is not None:
 			self.move(zone, dir)
+
+class BasicAI1(Entity):
+	STANDBY = 1
+	AGRESSIVE = 2
+
+	def config(self):
+		print 'configured'
+		self.state = self.STANDBY
+		self.standby_delay = 2
+		self.standby_counter = 0
+		self.configured = 1
+
+	def tick(self, zone):
+		#print('walking towards from {},{}'.format(self.x, self.y))
+		if not self.configured:
+			print 'what?'
+		if zone.LOS_check(self.x, self.y, zone.player.x, zone.player.y):
+			self.state = self.AGRESSIVE
+			self.standby_counter = 0
+		else:
+			self.standby_counter += 1
+			if self.standby_counter > self.standby_delay:
+				self.state = self.STANDBY
+
+		if self.state == self.AGRESSIVE:
+			dir = zone.toward_player(self.x, self.y)
+			if dir is not None:
+				self.move(zone, dir)
+
+

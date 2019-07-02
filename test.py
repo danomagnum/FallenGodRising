@@ -106,10 +106,12 @@ try:
 
 			elif key in keys.SELECT:
 				#print('{}, {}, {}'.format(user.x, user.y, zone.dist_map[user.y][user.x]))
-				zone.show_distmap()
+				#zone.show_distmap()
+				pass
 			zone.tick()
 			display.show_messages()
 			display.refresh_full()
+
 except Exception as e:
 	curses_interface.shutdown()
 	raise e, None, sys.exc_info()[2]
