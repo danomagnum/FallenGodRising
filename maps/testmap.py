@@ -35,13 +35,13 @@ class Rat(entities.RandWalker, entities.Battler):
 		self.char = 'r'
 		self.AI = battle.Random_AI
 
-class PackRat(entities.RandWalker, entities.Battler):
+class PackRat(entities.TowardWalker, entities.Battler):
 	# example basic enemy that gives an item when killed
 	def config(self):
 		self.name = 'Rat Pack'
 		self.combatants.append(LittleRat(level=20))
 		self.backpack.store(items.Potion())
-		self.char = 'r'
+		self.char = 'F'
 		self.AI = battle.Random_AI
 
 class RatPack(entities.RandWalker, entities.Battler):

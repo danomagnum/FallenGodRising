@@ -655,15 +655,7 @@ class Battler(Entity):
 			self.enabled = False
 			entity.backpack.absorb(self.backpack, message = True)
 
-class RandWalker(Entity):
-	def tick(self, zone):
-		if random.random() > 0.8:
-			self.move(zone, random.choice([UP, DOWN, LEFT, RIGHT]))
 
-class Treasure(Entity):
-	def collide(self, entity, zone):
-		self.enabled = False
-		entity.backpack.absorb(self.backpack, message = True)
 
 
 
