@@ -5,6 +5,9 @@ class Item(object):
 	def __init__(self, name, target=TARGET_NONE, use=None):
 		self.name = name
 		self.target_type = target
+		self.weight = 0
+		self.value = 0
+		self.rarity = 0.5
 		if use is not None:
 			self.use = use
 
@@ -31,6 +34,8 @@ class Equipment(Item):
 	def evasion(self, initial):
 		return initial
 	def accuracy(self, initial):
+		return initial
+	def luck(self, initial):
 		return initial
 
 

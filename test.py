@@ -32,7 +32,6 @@ def dotestbattle(user, display, level=50):
 try:
 	if __name__ == '__main__':
 		curses_interface.initialize()
-		#zone = overworld.Zone(filename='maps/test0.map')
 		zone = maps.testmap.zone
 
 		user = characters.gen_testuser()
@@ -46,35 +45,16 @@ try:
 		display.user = user
 		loop = True
 
-		#pos = zone.find_empty_position()
-		#e1 = entities.RandWalker('guy1', x=pos[0], y=pos[1], char='x')
-		#zone.add_entity(e1)
-
-		#pos = zone.find_empty_position()
-		#e2 = entities.Rat('somerat', x=pos[0], y=pos[1], char='o', AI=battle.Random_AI)
-		#zone.add_entity(e2)
-
-		#pos = zone.find_empty_position()
-		#e3 = entities.Treasure('TreasureChest', item_list=[items.Potion()],x=pos[0], y=pos[1], char='c')
-		#zone.add_entity(e3)
-
-		print(maps.testmap.filename)
-
-
 		while loop:
 			key = display.mapbox.getch()
 			if key in keys.UP:
 				user.move(zone, UP)
-				zone.calcDistGraph()
 			elif key in keys.DOWN:
 				user.move(zone, DOWN)
-				zone.calcDistGraph()
 			elif key in keys.LEFT:
 				user.move(zone, LEFT)
-				zone.calcDistGraph()
 			elif key in keys.RIGHT:
 				user.move(zone, RIGHT)
-				zone.calcDistGraph()
 			elif key == ord('m'):
 				#Menu
 				choice = display.menu(['Battlers', 'Quests', 'Transport', 'Save', 'Options', 'Items'], 4)
@@ -107,8 +87,6 @@ try:
 
 
 			elif key in keys.SELECT:
-				#print('{}, {}, {}'.format(user.x, user.y, zone.dist_map[user.y][user.x]))
-				#zone.show_distmap()
 				pass
 			zone.tick()
 			display.show_messages()

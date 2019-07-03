@@ -58,7 +58,8 @@ class Rat(RandWalker, Battler):
 class TowardWalker(Entity):
 	def tick(self, zone):
 		#print('walking towards from {},{}'.format(self.x, self.y))
-		dir = zone.toward_player(self.x, self.y)
+		#dir = zone.toward_player(self.x, self.y)
+		dir = self.toward_entity(zone.player)
 		if dir is not None:
 			self.move(zone, dir)
 

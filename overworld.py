@@ -83,7 +83,7 @@ class Zone(object):
 		self.width = len(self.map[0])
 		self.height = len(self.map)
 
-		self.dist_map = [[0] * self.width] * self.height
+		#self.dist_map = [[0] * self.width] * self.height
 
 		self.display = display
 
@@ -125,92 +125,6 @@ class Zone(object):
 		if self.map[y][x] != WALKABLE:
 			return [WALL, None]
 		return [EMPTY, None]
-
-	def calcDistGraph(self):
-		self.dist_map = [[-1 for x in range(self.width)] for x in range(self.height)]
-		#self.dist_map = [[99999] * self.width] * self.height
-		x0 = self.player.x
-		y0 = self.player.y
-		d = 0
-		self.dist_map[y0][x0] = d
-		#print('init {}, {}, {}'.format(x0, y0, self.dist_map[y0][x0]) )
-		checked = set()
-		checked.add((x0,y0))
-		to_check = [(x0,y0)]
-		checking = []
-		i = 0
-		while len(to_check) > 0:
-			checking = to_check[:]
-			to_check = []
-			for point in checking:
-				d = self.dist_map[point[1]][point[0]]
-				pts = []
-				if point[1] > 0:
-					up = (point[0], point[1] - 1)
-					pts.append(up)
-				if point[1] < self.height - 2:
-					down = (point[0], point[1] + 1)
-					pts.append(down)
-				if point[0] > 0:
-					left = (point[0] - 1, point[1])
-					pts.append(left)
-				if point[0] < self.width - 2:
-					right = (point[0] + 1, point[1])
-					pts.append(right)
-
-				d = d + 1
-				#for pt in [up, down, left, right]:
-				for pt in pts:
-					if pt not in checked:
-						chk_pos = self.check_pos(pt[0], pt[1])
-						if chk_pos[0] != WALL:
-							if pt[0] == x0 and pt[1] == y0:
-								print('error')
-								print (str(checked))
-							if (self.dist_map[pt[1]][pt[0]] > d) or (self.dist_map[pt[1]][pt[0]] < 0):
-								#print('error 2 {} {}'.format(d,self.dist_map[pt[1]][pt[0]] ))
-								self.dist_map[pt[1]][pt[0]] = d
-								to_check.append(pt)
-							i = i + 1
-							checked.add(pt)
-
-
-	def toward_player(self, x, y):
-		up = self.dist_map[y - 1][x]
-		down = self.dist_map[y + 1][x]
-		left = self.dist_map[y][x - 1]
-		right = self.dist_map[y][x + 1]
-
-		options = [up, down, left, right]
-
-		options = [opt for opt in options if opt >= 0]
-
-		if options:
-			minval = min(options)
-
-			if minval == 0:
-				print 'targeting hero'
-			if up == minval:
-				return UP
-			elif down == minval:
-				return DOWN 
-			elif left==minval:
-				return LEFT
-			elif right==minval:
-				return RIGHT
-		return None
-
-
-	def show_distmap(self):
-		self.map = []
-		for y in range(self.height - 1):
-			line = ''
-			for x in range(self.width):
-				line = line + str(self.dist_map[y][x])[-1]
-			self.map.append(line)
-			line = None
-		print(line)
-		#print('{}'.format(self.dist_map[:10]))
 
 	def LOS_check(self, x0, y0, x1, y1):
 		"Bresenham's line algorithm"
