@@ -335,10 +335,15 @@ class curses_display(object):
 		for line in self.zone.map:
 			self.mappad.addstr(i, 0, line)
 			i += 1
+		drawn = set()
+		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)
+		for e in entity_list:
+			if (e.x, e.y) not in drawn:
+				self.mappad.addch(e.y, e.x, e.char)
+				drawn.add((e.x, e.y))
+
 		if self.zone.player is not None:
 			self.mappad.addch(self.zone.player.y, self.zone.player.x, self.zone.player.char)
-		for e in self.zone.entities:
-			self.mappad.addch(e.y, e.x, e.char)
 
 	def set_position(self, x, y):
 		if self.zone is None:

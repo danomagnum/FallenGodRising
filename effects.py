@@ -19,8 +19,10 @@ class Status(object):
 		pass
 	def post_turn(self, effected):
 		pass
-	def post_battle(self, effected):
+	def post_battle(self, effected): # remove yourself at the end of a battle if needed
 		effected.status.remove(self)
+	def tick(self, effected): # for persistant effects
+		pass
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		return initial
 	def physical_defense(self, initial):
