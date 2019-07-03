@@ -32,10 +32,13 @@ class Door(Entity):
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if self.lock is None:
-			self.enabled = False
+			return WALKABLE
+			#self.enabled = False
 		elif self.lock in entity.backpack:
 			entity.backpack.take_by_name(self.lock)
-			self.enabled = False
+			#self.enabled = False
+			self.lock = None
+			return WALKABLE
 		else:
 			print('Locked.  Key={}'.format(self.lock))
 
@@ -87,7 +90,8 @@ class BasicAI1(Entity):
 				self.state = self.STANDBY
 
 		if self.state == self.AGRESSIVE:
-			dir = zone.toward_player(self.x, self.y)
+			#dir = zone.toward_player(self.x, self.y)
+			dir = self.toward_entity(zone.player)
 			if dir is not None:
 				self.move(zone, dir)
 

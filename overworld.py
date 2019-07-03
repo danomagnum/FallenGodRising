@@ -106,6 +106,7 @@ class Zone(object):
 			self.redraw.append([e.x, e.y])
 			if e.enabled:
 				e.tick(zone=self)
+				e.subtick(zone=self)
 		# get rid of any entities that were disabled
 		self.entities = [e for e in self.entities if e.enabled] 
 

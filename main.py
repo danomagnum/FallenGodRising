@@ -496,7 +496,13 @@ class Character(object):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+	
+	def tick(self):
+		pass
 
+	def subtick(self):
+		for stat in self.status:
+			stat.tick(self)
 
 	def __str__(self):
 		return self.name
@@ -598,7 +604,8 @@ class Character(object):
 		self._hp = min(max(0,value), self.max_hp)
 
 	def heal(self, amount):
-		self._hp = min(max(0,self._hp + amount), self.max_hp)
+		if self.hp > 0:
+			self._hp = min(max(0,self._hp + amount), self.max_hp)
 
 	@property
 	def max_hp(self):
@@ -627,15 +634,21 @@ class Character(object):
 	def full_heal(self):
 		for move in self.moves:
 			move.mp = move.max_mp
+		if self.hp > 0:
 			self.hp = self.max_hp
 	def levelup(self):
 		pass
+
+	def revive(self):
+		if self.hp <= 0:
+			self.hp = 1
 
 class Entity(object):
 	def __init__(self, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
 		if name is None:
 			name = ''
 		self.name = name
+		self.dist_map = None
 		if combatants is None:
 			self.combatants = []
 			self.combatant = None
@@ -661,6 +674,10 @@ class Entity(object):
 				base.config(self)
 			except:
 				pass
+		if self.is_player:
+			self.priority = 10
+		else:
+			self.priority = 100
 		self.config()
 
 	def config(self):
@@ -674,6 +691,11 @@ class Entity(object):
 	
 	def tick(self, zone):
 		pass
+
+	def subtick(self, zone):
+		for combatant in self.combatants:
+			combatant.tick()
+			combatant.subtick()
 
 	def collide(self, entity, zone):
 		pass
@@ -698,7 +720,10 @@ class Entity(object):
 			self.calcDistGraph(zone)
 		elif (at_pos[0] == ENTITY) or (at_pos[0] == PLAYER):
 			self.collide(at_pos[1], zone)
-			at_pos[1].collide(self, zone)
+			walk_over = at_pos[1].collide(self, zone)
+			if walk_over == WALKABLE:
+				self.x = test_x
+				self.y = test_y
 
 	def calcDistGraph(self, zone):
 		self.dist_map = [[-1 for x in range(zone.width)] for x in range(zone.height)]
@@ -748,26 +773,27 @@ class Entity(object):
 	def toward_entity(self, entity):
 		y = self.y
 		x = self.x
-		up = entity.dist_map[y - 1][x]
-		down = entity.dist_map[y + 1][x]
-		left = entity.dist_map[y][x - 1]
-		right = entity.dist_map[y][x + 1]
+		if entity.dist_map:
+			up = entity.dist_map[y - 1][x]
+			down = entity.dist_map[y + 1][x]
+			left = entity.dist_map[y][x - 1]
+			right = entity.dist_map[y][x + 1]
 
-		options = [up, down, left, right]
+			options = [up, down, left, right]
 
-		options = [opt for opt in options if opt >= 0]
+			options = [opt for opt in options if opt >= 0]
 
-		if options:
-			minval = min(options)
+			if options:
+				minval = min(options)
 
-			if up == minval:
-				return UP
-			elif down == minval:
-				return DOWN 
-			elif left==minval:
-				return LEFT
-			elif right==minval:
-				return RIGHT
+				if up == minval:
+					return UP
+				elif down == minval:
+					return DOWN 
+				elif left==minval:
+					return LEFT
+				elif right==minval:
+					return RIGHT
 		return None
 
 
@@ -780,7 +806,7 @@ class Entity(object):
 class Battler(Entity):
 	def collide(self, entity, zone):
 		#self.enabled = False
-		if entity.is_player == True: #Is the player if no AI
+		if entity.is_player == True: #I hit the player
 			my_ai = self.AI(self.combatants)
 			battle.Battle(entity, my_ai, zone.display)
 			self.enabled = False
