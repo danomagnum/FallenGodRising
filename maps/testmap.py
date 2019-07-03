@@ -20,6 +20,7 @@ class LittleRat(main.Character):
 		self.base_special_defense = 6
 		self.base_speed = 6
 		self.base_hp = 6
+		self.base_luck = 10
 
 #####################
 # The entities subclasses are items that will appear in the world.
@@ -87,15 +88,15 @@ zone = overworld.Zone(filename=filename)
 #####################
 
 maptools.Positional_Map_Insert(zone, entities.Shop, 1)
-#maptools.Random_Map_Insert(zone, RatPack)
-#maptools.Random_Map_Insert(zone, RatPack)
-#maptools.Random_Map_Insert(zone, Rat)
-#maptools.Random_Map_Insert(zone, Rat)
-#maptools.Random_Map_Insert(zone, Rat)
-#maptools.Random_Map_Insert(zone, Rat)
-#maptools.Random_Map_Insert(zone, PackRat)
-#maptools.Random_Map_Insert(zone, PackRat)
-#maptools.Random_Map_Insert(zone, SeeTest)
+maptools.Random_Map_Insert(zone, RatPack)
+maptools.Random_Map_Insert(zone, RatPack)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, Rat)
+maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, SeeTest)
 maptools.Random_Map_Insert(zone, KeyChest)
 maptools.Random_Map_Insert(zone, Door1)
 maptools.Random_Map_Insert(zone, Door2)

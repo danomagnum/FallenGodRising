@@ -39,6 +39,8 @@ class Status(object):
 		return initial
 	def accuracy(self, initial):
 		return initial
+	def luck(self, initial):
+		return initial
 
 
 

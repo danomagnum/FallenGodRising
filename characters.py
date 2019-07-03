@@ -17,6 +17,7 @@ class Fighter(Character):
 		self.base_special_defense = 10
 		self.base_speed = 10
 		self.base_hp = 10
+		self.base_luck = 10
 
 class Page(Character):
 	def config(self):
@@ -30,6 +31,7 @@ class Page(Character):
 		self.base_special_defense = 12
 		self.base_speed = 10
 		self.base_hp = 10
+		self.base_luck = 10
 
 class Cleric(Character):
 	def config(self):
@@ -43,6 +45,7 @@ class Cleric(Character):
 		self.base_special_defense = 12
 		self.base_speed = 8
 		self.base_hp = 12
+		self.base_luck = 10
 
 def gen_testuser():
 	sys.stdout.silent = True

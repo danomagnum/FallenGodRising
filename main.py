@@ -6,6 +6,9 @@ import elements
 import battle
 from constants import *
 
+NEWDIST = True
+
+
 class GameOver(Exception):
 	pass
 
@@ -27,7 +30,7 @@ class Move(object):
 		else:
 			print('{} is out of MP to use move {}'.format(user.name,self.name))
 			self.mp = 0
-			if 0.2 > random.random():
+			if 0.2 * user.luck > random.random():
 				print('{} used move {}'.format(user.name,self.name))
 			else:
 				return
@@ -37,7 +40,7 @@ class Move(object):
 			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
 			val =  user.physical_strength/target.physical_strength
 
-			if hit_chance > random.random():
+			if hit_chance * user.luck > random.random():
 				if self.power > 0:
 					damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power) * target_coefficient
 
@@ -51,7 +54,15 @@ class Move(object):
 					self.uses += 1
 
 					damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
-					damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
+					if NEWDIST:
+						dist_probability = random.betavariate(damage / 8.0, damage/8.0)
+						low = damage - (damage/8.0)
+						high = damage + (damage/8.0)
+						mode = max(min(high, damage * user.luck), low)
+						damage = random.triangular(low, high, mode)# normal distribution with stdev of 8% for randomness
+						print low, high, mode, damage
+					else:
+						damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
 					damage = max(1,damage)
 
 					target.hp -= damage
@@ -428,6 +439,33 @@ class Equipment(object):
 			initial = self.Token.accuracy(initial)
 		return initial
 
+	def luck(self, initial):
+		if self.Head is not None:
+			initial = self.Head.luck(initial)
+		if self.Body is not None:
+			initial = self.Body.luck(initial)
+		if self.Legs is not None:
+			initial = self.Legs.luck(initial)
+		if self.Hands is not None:
+			initial = self.Hands.luck(initial)
+		if self.Right is not None:
+			initial = self.Right.luck(initial)
+		if self.Hands is not None:
+			initial = self.Hands.luck(initial)
+		if self.Left is not None:
+			initial = self.Left.luck(initial)
+		if self.Hands is not None:
+			initial = self.Hands.luck(initial)
+		if self.Left is not None:
+			initial = self.Left.luck(initial)
+		if self.Right is not None:
+			initial = self.Right.luck(initial)
+		if self.Token is not None:
+			initial = self.Token.luck(initial)
+		return initial
+
+
+
 class Character(object):
 	def __init__(self, name=None, level=1):
 		self.initialized = False
@@ -457,6 +495,7 @@ class Character(object):
 		self.base_special_defense = 10
 		self.base_speed = 10
 		self.base_hp = 10
+		self.base_luck = 10
 
 
 	def __str__(self):
@@ -529,6 +568,7 @@ class Character(object):
 			stat = status.special_defense(stat)
 		stat = self.equipment.special_defense(stat)
 		return utility.clamp(stat, 1, 3* self.base_special_defense)
+
 	@property
 	def speed(self):
 		stat = (self.base_speed + self.coefficients[4]) * 3 * self.level / 100.0 + 5
@@ -545,6 +585,14 @@ class Character(object):
 		stat = self.equipment.hp(stat)
 		return  min(max(0,stat), self.max_hp)
 	
+	@property
+	def luck(self):
+		stat = (self.base_luck + 40) / 50.0 # One point of luck is a 2% change. Will need balanced.
+		for status in self.status:
+			stat = status.luck(stat)
+		stat = self.equipment.luck(stat)
+		return utility.clamp(stat, 1, 3* self.base_speed)
+
 	@hp.setter
 	def hp(self, value):
 		self._hp = min(max(0,value), self.max_hp)
@@ -647,9 +695,87 @@ class Entity(object):
 		if at_pos[0] == EMPTY:
 			self.x = test_x
 			self.y = test_y
+			self.calcDistGraph(zone)
 		elif (at_pos[0] == ENTITY) or (at_pos[0] == PLAYER):
 			self.collide(at_pos[1], zone)
 			at_pos[1].collide(self, zone)
+
+	def calcDistGraph(self, zone):
+		self.dist_map = [[-1 for x in range(zone.width)] for x in range(zone.height)]
+		x0 = self.x
+		y0 = self.y
+		d = 0
+		self.dist_map[y0][x0] = d
+		checked = set()
+		checked.add((x0,y0))
+		to_check = [(x0,y0)]
+		checking = []
+		i = 0
+		while len(to_check) > 0:
+			checking = to_check[:]
+			to_check = []
+			for point in checking:
+				d = self.dist_map[point[1]][point[0]]
+				pts = []
+				if point[1] > 0:
+					up = (point[0], point[1] - 1)
+					pts.append(up)
+				if point[1] < zone.height - 2:
+					down = (point[0], point[1] + 1)
+					pts.append(down)
+				if point[0] > 0:
+					left = (point[0] - 1, point[1])
+					pts.append(left)
+				if point[0] < zone.width - 2:
+					right = (point[0] + 1, point[1])
+					pts.append(right)
+
+				d = d + 1
+				for pt in pts:
+					if pt not in checked:
+						chk_pos = zone.check_pos(pt[0], pt[1])
+						if chk_pos[0] != WALL:
+							if pt[0] == x0 and pt[1] == y0:
+								print('error')
+								print (str(checked))
+							if (self.dist_map[pt[1]][pt[0]] > d) or (self.dist_map[pt[1]][pt[0]] < 0):
+								#print('error 2 {} {}'.format(d,self.dist_map[pt[1]][pt[0]] ))
+								self.dist_map[pt[1]][pt[0]] = d
+								to_check.append(pt)
+							i = i + 1
+							checked.add(pt)
+
+	def toward_entity(self, entity):
+		y = self.y
+		x = self.x
+		up = entity.dist_map[y - 1][x]
+		down = entity.dist_map[y + 1][x]
+		left = entity.dist_map[y][x - 1]
+		right = entity.dist_map[y][x + 1]
+
+		options = [up, down, left, right]
+
+		options = [opt for opt in options if opt >= 0]
+
+		if options:
+			minval = min(options)
+
+			if up == minval:
+				return UP
+			elif down == minval:
+				return DOWN 
+			elif left==minval:
+				return LEFT
+			elif right==minval:
+				return RIGHT
+		return None
+
+
+
+
+
+
+
 
 class Battler(Entity):
 	def collide(self, entity, zone):
@@ -659,8 +785,4 @@ class Battler(Entity):
 			battle.Battle(entity, my_ai, zone.display)
 			self.enabled = False
 			entity.backpack.absorb(self.backpack, message = True)
-
-
-
-
 
