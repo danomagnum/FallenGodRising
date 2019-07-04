@@ -87,7 +87,8 @@ path = os.path.dirname(os.path.realpath(__file__))
 files = []
 for i in os.listdir(path):
 	if os.path.isfile(os.path.join(path,i)) and filename[:-3] in i:
-		files.append(os.path.join(path, i))
+		if i[-3:] == 'map':
+			files.append(os.path.join(path, i))
 		
 		
 zone = overworld.Zone(files=files)
@@ -110,5 +111,6 @@ maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, KeyChest)
 maptools.Random_Map_Insert(zone, Door1)
 maptools.Random_Map_Insert(zone, Door2)
-maptools.Positional_Map_Insert(zone, main.UpStairs, '\\')
-maptools.Positional_Map_Insert(zone, main.DownStairs, '/')
+#maptools.Positional_Map_Insert(zone, main.UpStairs, '\\')
+#maptools.Positional_Map_Insert(zone, main.DownStairs, '/')
+maptools.Stair_Handler(zone)
