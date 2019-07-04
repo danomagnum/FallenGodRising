@@ -2,6 +2,7 @@ import main, battle, characters, overworld, entities, moves, elements, items
 from constants import *
 import random
 import maptools
+import os
 
 
 #####################
@@ -76,11 +77,20 @@ class Door2(entities.Door):
 
 
 #####################
-# load the map file and create the zone
+# load the map file(s) and create the zone
 #####################
 
-filename = __file__[:-3] + '.map'
-zone = overworld.Zone(filename=filename)
+filename = os.path.split(__file__)[-1]
+#__file__[:-3]
+path = os.path.dirname(os.path.realpath(__file__))
+#+ '.map'
+files = []
+for i in os.listdir(path):
+	if os.path.isfile(os.path.join(path,i)) and filename[:-3] in i:
+		files.append(os.path.join(path, i))
+		
+		
+zone = overworld.Zone(files=files)
 
 
 #####################
@@ -88,15 +98,17 @@ zone = overworld.Zone(filename=filename)
 #####################
 
 maptools.Positional_Map_Insert(zone, entities.Shop, 1)
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, RatPack)
+#maptools.Random_Map_Insert(zone, RatPack)
+#maptools.Random_Map_Insert(zone, RatPack)
 maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, PackRat)
-maptools.Random_Map_Insert(zone, PackRat)
-maptools.Random_Map_Insert(zone, SeeTest)
+#maptools.Random_Map_Insert(zone, PackRat)
+#maptools.Random_Map_Insert(zone, PackRat)
+#maptools.Random_Map_Insert(zone, SeeTest)
 maptools.Random_Map_Insert(zone, KeyChest)
 maptools.Random_Map_Insert(zone, Door1)
 maptools.Random_Map_Insert(zone, Door2)
+maptools.Positional_Map_Insert(zone, main.UpStairs, '\\')
+maptools.Positional_Map_Insert(zone, main.DownStairs, '/')
