@@ -51,7 +51,7 @@ def showmap(tiles, printout = False):
 
 		lines.append(line)
 		if printout:
-			print line
+			print(line)
 	return lines
 
 def savelines(lines, filename):
@@ -104,7 +104,7 @@ class Zone(object):
 			self.level_entities[self.level] = self.entities
 			self.level = level
 			self.map = self.maps[self.level]
-			print len(self.level_entities), level
+			print(len(self.level_entities), level)
 			self.entities = self.level_entities[level]
 			self.width = len(self.map[0])
 			self.height = len(self.map)

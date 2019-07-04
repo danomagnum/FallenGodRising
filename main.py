@@ -60,7 +60,7 @@ class Move(object):
 						high = damage + (damage/8.0)
 						mode = max(min(high, damage * user.luck), low)
 						damage = random.triangular(low, high, mode)# normal distribution with stdev of 8% for randomness
-						print low, high, mode, damage
+						#print low, high, mode, damage
 					else:
 						damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
 					damage = max(1,damage)

@@ -160,7 +160,7 @@ def menu(window, options, cols = 1, selected = None):
 
 MAX_COMBATANTS = 3
 
-class curses_display(object):
+class Display(object):
 	def __init__(self, user=None, enemy=None, zone=None):
 		self.screen = screen
 		self.screen.keypad(1)

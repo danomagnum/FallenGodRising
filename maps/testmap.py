@@ -1,13 +1,13 @@
 import main, battle, characters, overworld, entities, moves, elements, items
 from constants import *
 import random
-import maptools
+import maps.maptools as maptools
 import os
 
 
 #####################
 # The characters subclasses are how you create enemies.
-# You can used "canned" ones or creat your own.
+# You can used "canned" ones or create your own.
 #####################
 class LittleRat(main.Character):
 	def config(self):
@@ -25,7 +25,7 @@ class LittleRat(main.Character):
 
 #####################
 # The entities subclasses are items that will appear in the world.
-# You can used "canned" ones or creat your own.
+# You can used "canned" ones or create your own.
 # This is also where you set up battle groups by inheriting entities.Battler and
 # assigning combatants
 #####################
