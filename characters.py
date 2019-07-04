@@ -17,10 +17,7 @@ def gen_testuser():
 
 class Fighter(Character):
 	def config(self):
-		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.moves = [moves.Strike(), moves.Buff()]
 		self.base_physical_strength = 10 
 		self.base_physical_defense = 10
 		self.base_special_strength = 10
@@ -28,14 +25,12 @@ class Fighter(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {2: moves.}
 
 
 class Wizard(Character):
 	def config(self):
-		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.moves = [moves.Blast(), moves.Focus()]
 		self.base_physical_strength = 8 
 		self.base_physical_defense = 8
 		self.base_special_strength = 12
@@ -43,13 +38,11 @@ class Wizard(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 
 class Cleric(Character):
 	def config(self):
-		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.moves = [moves.Strike(), moves.Heal()]
 		self.base_physical_strength = 8
 		self.base_physical_defense = 12
 		self.base_special_strength = 8
@@ -57,13 +50,11 @@ class Cleric(Character):
 		self.base_speed = 8
 		self.base_hp = 12
 		self.base_luck = 10
+		self.movepool = {}
 
 class Knight(Character):
 	def config(self):
-		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.moves = [moves.Strike(), moves.Taunt()]
 		self.base_physical_strength = 12
 		self.base_physical_defense = 12
 		self.base_special_strength = 8
@@ -71,13 +62,11 @@ class Knight(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 
 class Paladin(Character):
 	def config(self):
-		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.moves = [moves.Strike(), moves.LightBlast()]
 		self.base_physical_strength = 12
 		self.base_physical_defense = 10
 		self.base_special_strength = 6
@@ -85,13 +74,11 @@ class Paladin(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 
 class Rogue(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
 		self.base_special_strength = 8
@@ -99,13 +86,11 @@ class Rogue(Character):
 		self.base_speed = 12
 		self.base_hp = 8
 		self.base_luck = 12
+		self.movepool = {}
 
 class Dragoon(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 12
 		self.base_physical_defense = 8
 		self.base_special_strength = 10
@@ -113,13 +98,11 @@ class Dragoon(Character):
 		self.base_speed = 12
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 
 class Juggernaut(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 15
 		self.base_physical_defense = 15
 		self.base_special_strength = 4
@@ -127,13 +110,11 @@ class Juggernaut(Character):
 		self.base_speed = 8
 		self.base_hp = 14
 		self.base_luck = 10
+		self.movepool = {}
 
 class Battlemage(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 8
 		self.base_physical_defense = 12
 		self.base_special_strength = 11
@@ -141,13 +122,11 @@ class Battlemage(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 
 class Nightblade(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 12
 		self.base_physical_defense = 8
 		self.base_special_strength = 12
@@ -155,13 +134,11 @@ class Nightblade(Character):
 		self.base_speed = 12
 		self.base_hp = 8
 		self.base_luck = 10
+		self.movepool = {}
 
 class Spellsword(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 12
 		self.base_physical_defense = 8
 		self.base_special_strength = 12
@@ -169,13 +146,11 @@ class Spellsword(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 
 class Witchhunter(Character):
 	def config(self):
 		self.moves = []
-		self.elements = []
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 10
 		self.base_physical_defense = 8
 		self.base_special_strength = 8
@@ -183,4 +158,5 @@ class Witchhunter(Character):
 		self.base_speed = 11
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
 

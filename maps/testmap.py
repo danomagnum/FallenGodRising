@@ -11,7 +11,7 @@ import os
 #####################
 class LittleRat(main.Character):
 	def config(self):
-		self.moves = [moves.Slam()]
+		self.moves = [moves.Strike()]
 		self.elements = [elements.Normal]
 		self.status = []
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)

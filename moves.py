@@ -6,117 +6,138 @@ from utility import clamp, scale
 from constants import *
 
 
-class Pound(main.Move):
-	def __init__(self):
+class Strike(main.Move):
+	def config(self):
 		self.name = 'Pound'
-		self.mp = 10.0
-		self.max_mp = 10.0
+		self.max_mp = 20.0
 		self.accuracy = 0.9
-		self.power = 10.0
-		self.elements = [elements.Normal]
-		self.uses = 0
-		self.default_target = ENEMY
+		self.physical = (True, True)
 
 
-class Slam(main.Move):
-	def __init__(self):
-		self.name = 'Slam'
-		self.mp = 10.0
-		self.max_mp = 10.0
-		self.accuracy = 0.9
-		self.power = 20.0
-		self.elements = [elements.Normal]
-		self.uses = 0
-		self.default_target = ENEMY
+class FireStrike(Strike):
+	def config(self):
+		self.name = 'Fire Strike'
+		self.elements = [elements.Fire]
 
 
-
-class Spray(main.Move):
-	def __init__(self):
-		self.name = 'Spray'
-		self.mp = 10.0
-		self.max_mp = 10.0
-		self.accuracy = 0.9
-		self.power = 20.0
+class WaterStrike(Strike):
+	def config(self):
+		self.name = 'Water Strike'
 		self.elements = [elements.Water]
-		self.uses = 0
-		self.default_target = ENEMY
+
+class EarthStrike(Strike):
+	def config(self):
+		self.name = 'Earth Strike'
+		self.elements = [elements.Earth]
+
+class ElectricStrike(Strike):
+	def config(self):
+		self.name = 'Electric Strike'
+		self.elements = [elements.Electric]
+
+class WindStrike(Strike):
+	def config(self):
+		self.name = 'Wind Strike'
+		self.elements = [elements.Wind]
+
+class LightStrike(Strike):
+	def config(self):
+		self.name = 'Light Strike'
+		self.elements = [elements.Light]
+
+class DarkStrike(Strike):
+	def config(self):
+		self.name = 'Dark Strike'
+		self.elements = [elements.Dark]
 
 
 
 class Buff(main.Move):
-	def __init__(self):
+	def config(self):
 		self.name = 'Buff'
-		self.mp = 10.0
-		self.max_mp = 10.0
 		self.accuracy = 1
 		self.power = 0
-		self.elements = [elements.Normal]
-		self.uses = 0
 		self.default_target = SELF
 
 	def effect(self, target):
-		target.status.append(effects.Strength_Mult(1.15))
+		target.status.append(effects.StatMod(1.15, PHYSTR))
+
+class Taunt(main.Move):
+	def config(self):
+		self.name = 'Taunt'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = ENEMY
+
+	def effect(self, target):
+		target.status.append(effects.StatMod(0.85, PHYSTR))
+
+
+class Focus(main.Move):
+	def config(self):
+		self.name = 'Focus'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = SELF
+
+	def effect(self, target):
+		target.status.append(effects.StatMod(1.15, SPCSTR))
+
+class Guard(main.Move):
+	def config(self):
+		self.name = 'Guard'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = SELF
+
+	def effect(self, target):
+		target.status.append(effects.StatMod(1.15, PHYDEF))
+		
+class Protect(main.Move):
+	def config(self):
+		self.name = 'Protect'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = SELF
+
+	def effect(self, target):
+		target.status.append(effects.StatMod(1.15, SPCDEF))
+
+class Smoke(main.Move):
+	def config(self):
+		self.name = 'Smoke'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = SELF
+
+	def effect(self, target):
+		target.status.append(effects.StatMod(1.15, EVASION))
+
+class Haste(main.Move):
+	def config(self):
+		self.name = 'Haste'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = SELF
+
+	def effect(self, target):
+		target.status.append(effects.StatMod(1.15, SPEED))
 
 
 class Heal(main.Move):
-	def __init__(self):
+	def config(self):
 		self.name = 'Heal'
-		self.mp = 10.0
-		self.max_mp = 10.0
-		self.accuracy = 1
-		self.power = 20
-		self.elements = [elements.Normal]
-		self.uses = 0
+		self.accuracy = 0.9
+		self.power = -10
 		self.default_target = SELF
-
-	def attack(self, user, targets): # do whatever the attack needs to do
-		if (self.mp > 0):
-			print('{} used move {}'.format(user.name,self.name))
-			self.mp -= 1
-		else:
-			print('{} is out of MP to use move {}'.format(user.name,self.name))
-			self.mp = 0
-			if 0.2 > random.random():
-				print('{} used move {}'.format(user.name,self.name))
-			else:
-				return
-		target_coefficient = 1.1 / len(targets)
-
-		for target in targets:
-			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
-
-			if hit_chance > random.random():
-				target.hp += self.power
-
-				self.effect(target)
-
-
-class Debuff(main.Move):
-	def __init__(self):
-		self.name = 'Debuff'
-		self.mp = 10.0
-		self.max_mp = 10.0
-		self.accuracy = 1
-		self.power = 0
-		self.elements = [elements.Normal]
-		self.uses = 0
-		self.default_target = ENEMY
-
-	def effect(self, target):
-		target.status.append(effects.Strength_Mult(0.85))
+		self.physical = (False, False)
 
 class Poison(main.Move):
-	def __init__(self):
+	def config(self):
 		self.name = 'Poison'
-		self.mp = 10.0
-		self.max_mp = 10.0
-		self.accuracy = 0.9
 		self.power = 2.0
 		self.elements = [elements.Normal]
-		self.uses = 0
-		self.default_target = ENEMY
-
+		self.physical = (True, True)
 
 	def effect(self, target):
 		randval = random.random()
@@ -128,4 +149,48 @@ class Poison(main.Move):
 			target.status.append(effects.Poison_Major())
 		elif randval < minor_range:
 			target.status.append(effects.Poison_Minor())
+
+class Blast(main.Move):
+	def config(self):
+		self.name = 'Blast'
+		self.max_mp = 20.0
+		self.accuracy = 0.9
+		self.physical = (False, False)
+
+class FireBlast(Blast):
+	def config(self):
+		self.name = 'Fire Blast'
+		self.elements = [elements.Fire]
+
+
+class WaterBlast(Blast):
+	def config(self):
+		self.name = 'Water Blast'
+		self.elements = [elements.Water]
+
+class EarthBlast(Blast):
+	def config(self):
+		self.name = 'Earth Blast'
+		self.elements = [elements.Earth]
+
+class ElectricBlast(Blast):
+	def config(self):
+		self.name = 'Electric Blast'
+		self.elements = [elements.Electric]
+
+class WindBlast(Blast):
+	def config(self):
+		self.name = 'Wind Blast'
+		self.elements = [elements.Wind]
+
+class LightBlast(Blast):
+	def config(self):
+		self.name = 'Light Blast'
+		self.elements = [elements.Light]
+
+class DarkBlast(Blast):
+	def config(self):
+		self.name = 'Dark Blast'
+		self.elements = [elements.Dark]
+
 
