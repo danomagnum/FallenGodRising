@@ -5,7 +5,8 @@ sys.dont_write_bytecode = True
 import characters
 import battle
 import main
-import curses_interface
+import curses_interface as graphics_interface
+#import pygcurses_interface as graphics_interface
 import time
 import items
 import overworld
@@ -31,13 +32,13 @@ def dotestbattle(user, display, level=50):
 
 try:
 	if __name__ == '__main__':
-		curses_interface.initialize()
+		graphics_interface.initialize()
 		zone = maps.testmap.zone
 
 		user = characters.gen_testuser()
 		user.x, user.y = zone.find_empty_position()
 
-		display = curses_interface.curses_display(zone=zone)
+		display = graphics_interface.Display(zone=zone)
 		zone.display = display
 
 		zone.set_player(user)
@@ -59,10 +60,10 @@ try:
 				#Menu
 				choice = display.menu(['Battlers', 'Quests', 'Transport', 'Save', 'Options', 'Items'], 4)
 				if choice == 'Battlers':
-					display.mode=curses_interface.STATS
+					display.mode=graphics_interface.STATS
 					display.refresh_full()
 					key = display.mapbox.getch()
-					display.mode=curses_interface.MAP
+					display.mode=graphics_interface.MAP
 					display.refresh_full()
 				elif choice == 'Quests':
 					pass
@@ -93,13 +94,12 @@ try:
 			display.refresh_full()
 
 except Exception as e:
-	curses_interface.shutdown()
-	raise e, None, sys.exc_info()[2]
+	graphics_interface.shutdown()
 
 
 
 time.sleep(3)
 
-curses_interface.shutdown()
+graphics_interface.shutdown()
 
 sys.exit(0)

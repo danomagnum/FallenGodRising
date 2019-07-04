@@ -71,7 +71,6 @@ class BasicAI1(Entity):
 	AGRESSIVE = 2
 
 	def config(self):
-		print 'configured'
 		self.state = self.STANDBY
 		self.standby_delay = 2
 		self.standby_counter = 0
@@ -79,8 +78,6 @@ class BasicAI1(Entity):
 
 	def tick(self, zone):
 		#print('walking towards from {},{}'.format(self.x, self.y))
-		if not self.configured:
-			print 'what?'
 		if zone.LOS_check(self.x, self.y, zone.player.x, zone.player.y):
 			self.state = self.AGRESSIVE
 			self.standby_counter = 0
