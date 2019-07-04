@@ -29,3 +29,14 @@ WALL = 120
 PLAYER = 121
 ENTITY = 122
 EMPTY = 123
+
+PHYSTR = 'Phy. Atk.'
+PHYDEF = 'Phy. Def.'
+SPCSTR = 'Spc. Atk.'
+SPCDEF = 'Spc. Def.'
+SPEED = 'Speed'
+HP = 'HP'
+MAXHP = 'Max HP'
+ACCRUACY = 'Accuracy'
+EVASION = 'Evasion'
+LUCK = 'Luck'

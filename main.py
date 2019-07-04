@@ -13,15 +13,39 @@ class GameOver(Exception):
 	pass
 
 class Move(object):
-	def __init__(self,name, elements, accuracy, power, mp,  default_target):
+	def __init__(self,name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
+		if name is None:
+			name = 'MISSINGNAME'
 		self.name = name
-		self.mp = mp
+		if mp is None:
+			mp = 10.0
 		self.max_mp = mp
+		if accuracy is None:
+			accuracy = 0.99
 		self.accuracy = accuracy
+		if power is None:
+			power = 10
 		self.power = power
-		self.elements = elements
+		if element_list is None:
+			element_list = [elements.Normal]
+		self.elements = element_list
 		self.uses = 0
+		self.physical = (True, True) # Attack stat to use, def stat to use
+		if default_target is None:
+			default_target=ENEMY
 		self.default_target = default_target
+	
+		for base in self.__class__.__bases__:
+			try:
+				base.config(self)
+			except:
+				pass
+
+		self.config()
+		self.mp = self.max_mp
+
+	def config(self):
+		pass
 
 	def attack(self, user, targets): # do whatever the attack needs to do
 		if (self.mp > 0):
@@ -38,11 +62,19 @@ class Move(object):
 
 		for target in targets:
 			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
-			val =  user.physical_strength/target.physical_strength
 
 			if hit_chance * user.luck > random.random():
-				if self.power > 0:
-					damage = ((user.level/100.0 ) * user.physical_strength/target.physical_defense * self.power) * target_coefficient
+				if self.power != 0:
+					if self.physical[0]:
+						attack_str = user.physical_strength
+					else:
+						attack_str = user.special_strength
+					if self.physical[1]:
+						attack_def = user.physical_defense
+					else:
+						attack_def = user.special_defense
+
+					damage = ((user.level/100.0 ) * attack_str/attack_def * self.power) * target_coefficient
 
 					for atk_element in self.elements:
 						for target_element in target.elements:
@@ -53,8 +85,11 @@ class Move(object):
 
 					self.uses += 1
 
+					# This makes athe attacks do more damage as you've got more experience using them
 					damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+
 					if NEWDIST:
+						# Using the triangle distribution now so the mean can be off-center
 						dist_probability = random.betavariate(damage / 8.0, damage/8.0)
 						low = damage - (damage/8.0)
 						high = damage + (damage/8.0)
@@ -63,7 +98,10 @@ class Move(object):
 						#print low, high, mode, damage
 					else:
 						damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
-					damage = max(1,damage)
+					if damage >= 0:
+						damage = max(1,damage)
+					else:
+						damage = min(-1,damage)
 
 					target.hp -= damage
 
@@ -478,11 +516,12 @@ class Character(object):
 		self._exp = 0
 		self.elements = [elements.Normal]
 		self.status = []
+		self.movepool = {}
 		self.equipment = Equipment()
 		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.config()
-		self._level = level
+		self._level = 1
 		self.level = level
 		self.full_heal()
 		self.initialized = True
@@ -496,6 +535,8 @@ class Character(object):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
+		self.movepool = {}
+		self.physical = True
 	
 	def tick(self):
 		pass
@@ -513,10 +554,14 @@ class Character(object):
 
 	@level.setter
 	def level(self, value):
-		self._level = value
 		if self.initialized:
-			print('{} leveled up to {}'.format(self.name, self.level))
-		self._exp = self.exp_at_level(self.level)
+			print('{} leveled up to {}'.format(self.name, value))
+		if value > self._level:
+			for lvl in range(self._level, value):
+				self._level = lvl
+				self._exp = self.exp_at_level(self.level)
+				self.levelup()
+				self.levelup_movepool()
 		self.full_heal()
 
 	@property
@@ -636,8 +681,16 @@ class Character(object):
 			move.mp = move.max_mp
 		if self.hp > 0:
 			self.hp = self.max_hp
-	def levelup(self):
+
+	def levelup(self): # override this with sub classes to do fancy things
 		pass
+
+	def levelup_movepool(self): # override this with sub classes to do fancy things
+		if self.level in self.movepool:
+			newmove = self.movepool[self.level]()
+			self.moves.appendd(newmove)
+			if self.initialized:
+				print('{} Gained a New Move: {}.'.format(self.name, newmove.name))
 
 	def revive(self):
 		if self.hp <= 0:

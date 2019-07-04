@@ -1,4 +1,5 @@
 from elements import *
+from constants import *
 
 class Status(object):
 	def __init__(self, name=None):
@@ -44,22 +45,61 @@ class Status(object):
 	def luck(self, initial):
 		return initial
 
-
-
-class Strength2x(Status):
-	def __init__(self):
-		self.name = 'Strength 2x'
-	def physical_strength(self, initial):
-		return initial * 2
-
-class Strength_Mult(Status):
-	def __init__(self, multiplier):
+class StatMod(Status):
+	def __init__(self, multiplier, stat):
 		self.multiplier = multiplier
-		self.name = 'Strength ' + str(self.multiplier) + '%'
+		self.stat = stat
+		self.name = '{} {}%'.format(stat,self.multiplier)
 	def physical_strength(self, initial):
-		return initial * self.multiplier
-
-
+		if self.stat == PHYSTR:
+			return initial * self.multiplier
+		else:
+			return initial
+	def physical_defense(self, initial):
+		if self.stat == PHYDEF:
+			return initial * self.multiplier
+		else:
+			return initial
+	def special_strength(self, initial):
+		if self.stat == SPCSTR:
+			return initial * self.multiplier
+		else:
+			return initial
+	def special_defense(self, initial):
+		if self.stat == SPCDEF:
+			return initial * self.multiplier
+		else:
+			return initial
+	def speed(self, initial):
+		if self.stat == SPEED:
+			return initial * self.multiplier
+		else:
+			return initial
+	def hp(self, initial):
+		if self.stat == HP:
+			return initial * self.multiplier
+		else:
+			return initial
+	def max_hp(self, initial):
+		if self.stat == MAXHP:
+			return initial * self.multiplier
+		else:
+			return initial
+	def evasion(self, initial):
+		if self.stat == EVASION:
+			return initial * self.multiplier
+		else:
+			return initial
+	def accuracy(self, initial):
+		if self.stat == ACCURACY:
+			return initial * self.multiplier
+		else:
+			return initial
+	def luck(self, initial):
+		if self.stat == LUCK:
+			return initial * self.multiplier
+		else:
+			return initial
 
 class Poison_Minor(Status):
 	def __init__(self):
