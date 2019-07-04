@@ -67,27 +67,47 @@ def readmap(filename):
 	return content
 
 class Zone(object):
-	def __init__(self, display = None, filename=None):
-		if filename is None:
-			self.map = showmap(map_gen(40, 40, 10, 8))
+	def __init__(self, display = None, files=None):
+		if files is None:
+			self.maps = [showmap(map_gen(40, 40, 10, 8))]
+			self.levels = 1
 		else:
-			self.map = readmap(filename)
+			self.maps = []
+			self.levels = len(files)
+			for file in files:
+				self.maps.append(readmap(file))
 
+		self.level = 0
+		self.map = self.maps[self.level]
 
 		self.player = None
-
-		self.entities = []
+		self.level_entities = [[] for level in range(self.levels)]
+		self.entities = self.level_entities[self.level]
 
 		self.display = display
 
 		self.width = len(self.map[0])
 		self.height = len(self.map)
 
-		#self.dist_map = [[0] * self.width] * self.height
 
 		self.display = display
 
 		self.redraw = []
+
+	def change_level(self, level):
+		if level < 0:
+			print("Can't go below level 0")
+		elif level > (len(self.maps) - 1):
+			print("Can't go past end of zone")
+		else:
+			print("Level {}".format(level))
+			self.level_entities[self.level] = self.entities
+			self.level = level
+			self.map = self.maps[self.level]
+			print len(self.level_entities), level
+			self.entities = self.level_entities[level]
+			self.width = len(self.map[0])
+			self.height = len(self.map)
 
 	def add_entity(self, entity):
 		self.entities.append(entity)
@@ -110,11 +130,13 @@ class Zone(object):
 		# get rid of any entities that were disabled
 		self.entities = [e for e in self.entities if e.enabled] 
 
-	def find_empty_position(self):
+	def find_empty_position(self, level=None):
+		if level == None:
+			level = self.level
 		while True:
-			x = random.randint(0, len(self.map[0]) - 1)
-			y = random.randint(0, len(self.map) - 1)
-			if self.map[y][x] == WALKABLE:
+			x = random.randint(0, len(self.maps[level][0]) - 1)
+			y = random.randint(0, len(self.maps[level]) - 1)
+			if self.maps[level][y][x] == WALKABLE:
 				return (x, y)
 
 	def check_pos(self, x, y):
@@ -123,8 +145,9 @@ class Zone(object):
 				return [ENTITY, e]
 		if (self.player.x == x) and (self.player.y == y):
 			return [PLAYER, self.player]
-		if self.map[y][x] != WALKABLE:
-			return [WALL, None]
+		if len(self.map) > y and len(self.map[0]) > x:
+			if self.map[y][x] != WALKABLE:
+				return [WALL, None]
 		return [EMPTY, None]
 
 	def LOS_check(self, x0, y0, x1, y1):

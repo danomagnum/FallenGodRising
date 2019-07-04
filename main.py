@@ -474,6 +474,7 @@ class Character(object):
 			self.name = self.__class__.__name__
 		else:
 			self.name = name
+		self._hp = 1
 		self._exp = 0
 		self.elements = [elements.Normal]
 		self.status = []
@@ -483,7 +484,6 @@ class Character(object):
 		self.config()
 		self._level = level
 		self.level = level
-		self._hp = self.max_hp
 		self.full_heal()
 		self.initialized = True
 
@@ -796,13 +796,6 @@ class Entity(object):
 					return RIGHT
 		return None
 
-
-
-
-
-
-
-
 class Battler(Entity):
 	def collide(self, entity, zone):
 		#self.enabled = False
@@ -811,4 +804,30 @@ class Battler(Entity):
 			battle.Battle(entity, my_ai, zone.display)
 			self.enabled = False
 			entity.backpack.absorb(self.backpack, message = True)
+
+class UpStairs(Entity):
+
+	def config(self):
+		self.char = '/'
+		self.new_x = None
+		self.new_y = None
+
+	def collide(self, entity, zone):
+		zone.change_level(zone.level - 1)
+		if self.new_x is not None:
+			zone.player.x = self.new_x
+			zone.player.y = self.new_y
+
+class DownStairs(Entity):
+
+	def config(self):
+		self.char = '\\'
+		self.new_x = None
+		self.new_y = None
+
+	def collide(self, entity, zone):
+		zone.change_level(zone.level + 1)
+		if self.new_x is not None:
+			zone.player.x = self.new_x
+			zone.player.y = self.new_y
 
