@@ -10,6 +10,8 @@ import keys
 MAP = 0
 COMBAT = 1
 STATS = 2
+STARTMENU = 3
+SPLASH = 4
 
 import stdoutCatcher
 #from StringIO import StringIO
@@ -57,7 +59,7 @@ def progress_bar(actual, maxvalue, length):
 #TODO: add a "helptext" function where you can hit "?" on a menu to get more
 # information on the entry you've selected before going back to the menu right
 # where you left off.  Some items could even give better help info (on monsters, etc...)
-def menu(window, options, cols = 1, selected = None):
+def menu(window, options, cols = 1, selected = None, clear=True):
 	#window = curses.newwin(4, 40, 20, 10)
 	#YMAX, XMAX = self.screen.getmaxyx()
 	#window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
@@ -148,7 +150,8 @@ def menu(window, options, cols = 1, selected = None):
 			pass
 		window.refresh()
 
-	window.clear()
+	if clear:
+		window.clear()
 	window.refresh()
 	try:
 		curses.curs_set(old_cursor)
@@ -192,6 +195,17 @@ class Display(object):
 			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i))
 			#self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],YMAX-(self.statboxsize[0] + 5),self.statboxsize[1]*i))
 
+		self.startmenusize = ((YMAX - 1 - self.msgboxsize[0]) / MAX_COMBATANTS, (XMAX - 1) / MAX_COMBATANTS)
+		self.start_menus = []
+		for i in range(MAX_COMBATANTS):
+			classbox = curses.newwin(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*0)
+			elementbox = curses.newwin(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*1) 
+			confirmbox = curses.newwin(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*2) 
+			self.start_menus.append(classbox)
+			self.start_menus.append(elementbox)
+			self.start_menus.append(confirmbox)
+
+
 		self._mode = MAP
 
 		self.refresh_full()
@@ -221,6 +235,8 @@ class Display(object):
 			self.refresh_full_combat()
 		elif self.mode == STATS:
 			self.refresh_full_stats()
+		elif self.mode == STARTMENU:
+			self.refresh_full_startmenu()
 
 	def clear(self):
 		self.mapbox.clear()
@@ -447,6 +463,23 @@ class Display(object):
 		box.addstr(9, col2pos, "Token: {}".format(combatant.equipment.Token), curses.color_pair(11))
 
 		box.refresh()
+
+	##################################
+	##### Start Menu Draw Routines
+	##################################
+	def refresh_full_startmenu(self):
+		#self.screen.clear()
+		self.screen.refresh()
+		for box in self.start_menus:
+			box.overlay(self.screen)
+			box.box()
+			box.refresh()
+
+		self.msgbox.box()
+		self.msgbox.refresh()
+		self.msgbox.overlay(self.screen)
+		self.screen.refresh()
+
 
 
 
