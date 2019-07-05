@@ -3,6 +3,7 @@ import battle
 import random
 from constants import *
 import characters
+import curses_interface as graphics_interface
 
 class Battler(Entity):
 	def collide(self, entity, zone):
@@ -19,7 +20,12 @@ class Shop(Entity):
 		self.char = '$'
 	def collide(self, entity, zone):
 		#self.enabled = False
-		print('I will be a shop')
+		zonemode = zone.display.mode
+		zone.display.mode = SHOP
+		def update_info_box(choice):
+			pass
+		graphics_interface.menu(zone.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
+		zone.display.mode = zonemode
 
 
 class Door(Entity):

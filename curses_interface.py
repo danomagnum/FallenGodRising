@@ -6,12 +6,7 @@ import random
 import math
 import sayings
 import keys
-
-MAP = 0
-COMBAT = 1
-STATS = 2
-STARTMENU = 3
-SPLASH = 4
+from constants import *
 
 import stdoutCatcher
 #from StringIO import StringIO
@@ -208,12 +203,21 @@ class Display(object):
 			self.start_menus.append(elementbox)
 			self.start_menus.append(confirmbox)
 
-		self.storemenusize = ((YMAX - 1 - self.msgboxsize[0]), 15)
+		self.storemenusize = ((YMAX - 1 - self.msgboxsize[0]), (XMAX -1) / 3)
 		self.storebox = curses.newwin(self.storemenusize[0], self.storemenusize[1],0,0)
+		self.storeinfobox = curses.newwin(self.storemenusize[0], self.storemenusize[1],0,self.storemenusize[1])
+		self.charboxes = []
+		for i in range(MAX_COMBATANTS):
+			charbox = curses.newwin(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*2) 
+			self.charboxes.append(charbox)
 
 		self._mode = MAP
 
 		self.refresh_full()
+
+		#self.storebox
+		#self.storeinfobox
+		#self.charboxes
 
 	@property
 	def mode(self):
@@ -242,6 +246,9 @@ class Display(object):
 			self.refresh_full_stats()
 		elif self.mode == STARTMENU:
 			self.refresh_full_startmenu()
+		elif self.mode == SHOP:
+			self.refresh_full_shop()
+
 
 	def clear(self):
 		self.mapbox.clear()
@@ -485,8 +492,25 @@ class Display(object):
 		self.msgbox.overlay(self.screen)
 		self.screen.refresh()
 
+	##################################
+	##### Start Shop Draw Routines
+	##################################
+	def refresh_full_shop(self):
+		self.storebox.box()
+		self.storebox.refresh()
+		self.storeinfobox.box()
+		self.storeinfobox.refresh()
+		for box in self.charboxes:
+			box.box()
+			box.refresh()
 
+	def display_item_stats(self, item):
+		self.storeinfobox.addstr(0, 1, item.name)
+		self.storeinfobox.addstr(1, 1, 'In Backpkack: {}'.format('TODO'))
+		self.storeinfobox.addstr(2, 1, 'Cost: {}'.format(item.cost))
+#TODO: working on this.
 
+		pass
 
 
 #TODO: work this into the object

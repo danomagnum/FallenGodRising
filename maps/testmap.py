@@ -93,20 +93,27 @@ for i in os.listdir(path):
 		
 zone = overworld.Zone(files=files)
 
+class MyShop(entities.Shop):
+	def config(self):
+		self.backpack.store(items.Potion())
+		self.backpack.store(items.Potion())
+		self.backpack.store(items.Potion())
+		self.backpack.store(items.Potion())
+		self.backpack.store(items.Potion())
 
 #####################
 # populate the zone with entities
 #####################
 
-maptools.Positional_Map_Insert(zone, entities.Shop, 1)
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, RatPack)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, Rat)
-maptools.Random_Map_Insert(zone, PackRat)
-maptools.Random_Map_Insert(zone, PackRat)
+maptools.Positional_Map_Insert(zone, MyShop, 1)
+#maptools.Random_Map_Insert(zone, RatPack)
+#maptools.Random_Map_Insert(zone, RatPack)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, Rat)
+#maptools.Random_Map_Insert(zone, PackRat)
+#maptools.Random_Map_Insert(zone, PackRat)
 #maptools.Random_Map_Insert(zone, SeeTest)
 maptools.Random_Map_Insert(zone, KeyChest)
 maptools.Random_Map_Insert(zone, Door1)

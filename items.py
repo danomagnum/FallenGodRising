@@ -150,7 +150,7 @@ class Booster(Item):
 	def __init__(self):
 		Item.__init__(self, 'Roids 1', SELF)
 	def use(self, target):
-		target.status.append(effects.Strength2x())
+		target.status.append(effects.StatMod(1.15, PHYSTR))
 		print('{} used {}'.format(target.name,self.name))
 
 
