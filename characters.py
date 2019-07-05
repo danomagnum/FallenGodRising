@@ -25,7 +25,7 @@ class Fighter(Character):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
-		self.movepool = {2: moves.}
+		#self.movepool = {2: moves.}
 
 
 class Wizard(Character):

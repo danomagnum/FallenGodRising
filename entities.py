@@ -59,12 +59,13 @@ class Rat(RandWalker, Battler):
 		self.combatants.append(characters.Page(level=20))
 
 class TowardWalker(Entity):
+	def config(self):
+		self.walkchance = 0.75
 	def tick(self, zone):
-		#print('walking towards from {},{}'.format(self.x, self.y))
-		#dir = zone.toward_player(self.x, self.y)
-		dir = self.toward_entity(zone.player)
-		if dir is not None:
-			self.move(zone, dir)
+		if random.random() < self.walkchance:
+			dir = self.toward_entity(zone.player)
+			if dir is not None:
+				self.move(zone, dir)
 
 class BasicAI1(Entity):
 	STANDBY = 1
@@ -92,4 +93,15 @@ class BasicAI1(Entity):
 			if dir is not None:
 				self.move(zone, dir)
 
+
+class NPC(Entity):
+	def config(self):
+		self.name = 'NPC'
+		self.char = 'N'
+	def collide(self, entity, zone):
+		if entity == zone.player:
+			return self.NPC(zone)
+	
+	def NPC(self, zone):
+		return WALKABLE
 

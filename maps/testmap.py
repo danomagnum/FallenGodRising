@@ -33,7 +33,7 @@ class Rat(entities.RandWalker, entities.Battler):
 	# example basic enemy
 	def config(self):
 		self.name = 'Rat'
-		self.combatants.append(LittleRat(level=20))
+		self.combatants.append(LittleRat(level=2))
 		self.char = 'r'
 		self.AI = battle.Random_AI
 
@@ -41,7 +41,7 @@ class PackRat(entities.TowardWalker, entities.Battler):
 	# example basic enemy that gives an item when killed
 	def config(self):
 		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(level=20))
+		self.combatants.append(LittleRat(level=2))
 		self.backpack.store(items.Potion())
 		self.char = 'F'
 		self.AI = battle.Random_AI
@@ -49,9 +49,9 @@ class PackRat(entities.TowardWalker, entities.Battler):
 class RatPack(entities.RandWalker, entities.Battler):
 	def config(self):
 		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(level=20))
-		self.combatants.append(LittleRat(level=20))
-		self.combatants.append(LittleRat(level=20))
+		self.combatants.append(LittleRat(level=2))
+		self.combatants.append(LittleRat(level=2))
+		self.combatants.append(LittleRat(level=2))
 		self.char = 'R'
 		self.AI = battle.Random_AI
 
@@ -99,14 +99,14 @@ zone = overworld.Zone(files=files)
 #####################
 
 maptools.Positional_Map_Insert(zone, entities.Shop, 1)
-#maptools.Random_Map_Insert(zone, RatPack)
-#maptools.Random_Map_Insert(zone, RatPack)
+maptools.Random_Map_Insert(zone, RatPack)
+maptools.Random_Map_Insert(zone, RatPack)
 maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, Rat)
 maptools.Random_Map_Insert(zone, Rat)
-#maptools.Random_Map_Insert(zone, PackRat)
-#maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, PackRat)
 #maptools.Random_Map_Insert(zone, SeeTest)
 maptools.Random_Map_Insert(zone, KeyChest)
 maptools.Random_Map_Insert(zone, Door1)

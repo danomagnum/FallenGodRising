@@ -59,7 +59,7 @@ def progress_bar(actual, maxvalue, length):
 #TODO: add a "helptext" function where you can hit "?" on a menu to get more
 # information on the entry you've selected before going back to the menu right
 # where you left off.  Some items could even give better help info (on monsters, etc...)
-def menu(window, options, cols = 1, selected = None, clear=True):
+def menu(window, options, cols = 1, selected = None, clear=True, callback_on_change=None):
 	#window = curses.newwin(4, 40, 20, 10)
 	#YMAX, XMAX = self.screen.getmaxyx()
 	#window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
@@ -144,6 +144,9 @@ def menu(window, options, cols = 1, selected = None, clear=True):
 		elif selected >= opt_count:
 			selected = opt_count - 1
 
+		if callback_on_change is not None:
+			callback_on_change(options[selected])
+
 		if DEBUG:
 			#options += str(key)
 			#print str(key)
@@ -205,6 +208,8 @@ class Display(object):
 			self.start_menus.append(elementbox)
 			self.start_menus.append(confirmbox)
 
+		self.storemenusize = ((YMAX - 1 - self.msgboxsize[0]), 15)
+		self.storebox = curses.newwin(self.storemenusize[0], self.storemenusize[1],0,0)
 
 		self._mode = MAP
 

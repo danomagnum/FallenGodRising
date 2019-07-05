@@ -262,7 +262,7 @@ def Battle(user, enemy_ai, display):
 			if e.hp == 0:
 				print("{}: {}".format(e.name, random.choice(sayings.death)))
 				exp = e.exp_value
-				divied_exp = exp / (len(user.combatants) + 1) # plus one because the active comatant gets a larger share of exp.
+				divied_exp = max(1, exp / (len(user.combatants) + 1)) # plus one because the active comatant gets a larger share of exp.
 				for comb in user.get_available():
 					if comb == user.combatant:
 						#active combatant gets twice the experience of everyone else

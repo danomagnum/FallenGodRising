@@ -22,43 +22,70 @@ try:
 		graphics_interface.initialize()
 		zone = maps.testmap.zone
 
-		user = characters.gen_testuser()
-		user.x, user.y = zone.find_empty_position()
+		#user = characters.gen_testuser()
+		#user.x, user.y = zone.find_empty_position()
 
 		display = graphics_interface.Display(zone=zone)
 		zone.display = display
 
-		zone.set_player(user)
+		#zone.set_player(user)
 
-		display.user = user
 		loop = True
 		display.mode = graphics_interface.STARTMENU
 		i = 0
+		##########################
+		# Let player select their party
+		##########################
 		player_party = [None, None, None]
+			
 		while loop:
 			if i >= graphics_interface.MAX_COMBATANTS:
 				i = 0
 			player_characters = [characters.Fighter(), characters.Wizard(), characters.Cleric(), characters.Knight(), characters.Paladin(), characters.Rogue(), characters.Dragoon(), characters.Juggernaut(), characters.Battlemage(), characters.Nightblade(), characters.Spellsword(), characters.Witchhunter()]
-			player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters, clear=False)
-
-			player_elements = [elements.Normal, elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
-			element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, clear=False)
-
-			confirm_choices = ['Accept', 'Cancel', 'Randomize']
-			confirm_choice = graphics_interface.menu(display.start_menus[(i * 3) + 2], confirm_choices, clear=False)
-			if confirm_choice == 'Accept':
-				player_choice.elements.append(element_choice)
-				player_party[i] = player_choice
-				i += 1
-				if i == graphics_interface.MAX_COMBATANTS:
-					user.combatants = player_party
-					loop = False
 
 
+			def update_confirm_box(choice):
+				display.show_combatant_stats(choice, display.start_menus[(i * 3) + 2])
+
+			update_confirm_box(player_characters[0])
+			player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters, clear=False, callback_on_change=update_confirm_box)
+
+			if player_choice is not None:
+				player_elements = [elements.Normal, elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
+				def update_confirm_box(choice):
+					player_choice.elements = [choice]
+					display.show_combatant_stats(player_choice, display.start_menus[(i * 3) + 2])
+
+				element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, clear=False, callback_on_change=update_confirm_box)
+
+				#confirm_choices = ['Accept', 'Cancel', 'Randomize']
+				#confirm_choice = graphics_interface.menu(display.start_menus[(i * 3) + 2], confirm_choices, clear=False)
+				if element_choice is not None:
+					player_choice.elements.append(element_choice)
+					player_party[i] = player_choice
+					i += 1
+					if i == graphics_interface.MAX_COMBATANTS:
+						user = main.Entity('playercharacter', combatants=player_party, item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@',is_player=True)
+						#user.combatants = player_party
+						user.x, user.y = zone.find_empty_position()
+						zone.set_player(user)
+						display.user = user
+						loop = False
+			else:
+				if i > 0:
+					i -= 1
+
+
+		##########################
+		# Main Game Loop
+		##########################
 		display.mode = graphics_interface.MAP
 		loop = True
 		while loop:
 			key = display.mapbox.getch()
+			##########################
+			# Player movement
+			##########################
 			if key in keys.UP:
 				user.move(zone, UP)
 			elif key in keys.DOWN:
@@ -67,6 +94,10 @@ try:
 				user.move(zone, LEFT)
 			elif key in keys.RIGHT:
 				user.move(zone, RIGHT)
+
+			##########################
+			# Player menu
+			##########################
 			elif key == ord('m'):
 				#Menu
 				choice = display.menu(['Battlers', 'Quests', 'Transport', 'Save', 'Options', 'Items'], 4)
@@ -98,6 +129,9 @@ try:
 								item_used.use(t)
 
 
+			##########################
+			# Player did nothing
+			##########################
 			elif key in keys.SELECT:
 				pass
 			zone.tick()
@@ -106,7 +140,7 @@ try:
 
 except Exception as e:
 	graphics_interface.shutdown()
-	raise e
+	raise
 
 
 

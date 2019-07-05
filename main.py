@@ -49,7 +49,7 @@ class Move(object):
 
 	def attack(self, user, targets): # do whatever the attack needs to do
 		if (self.mp > 0):
-			print('{} used move {}'.format(user.name,self.name))
+			print('{} used move {} on {}'.format(user.name,self.name, targets[0].name))
 			self.mp -= 1
 		else:
 			print('{} is out of MP to use move {}'.format(user.name,self.name))
@@ -103,9 +103,13 @@ class Move(object):
 					else:
 						damage = min(-1,damage)
 
+					#print( 'damage: {}, low: {}, high: {}, hp: {}'.format(damage, low, high, target.hp))
 					target.hp -= damage
+					#print(target.hp)
 
 				self.effect(target)
+			else:
+				print('miss!')
 	def effect(self, target):
 		pass
 	def __str__(self):
@@ -524,6 +528,7 @@ class Character(object):
 		self._level = 1
 		self.level = level
 		self.full_heal()
+		self._exp = self.exp_at_level(self.level)
 		self.initialized = True
 
 	def config(self):
@@ -815,7 +820,6 @@ class Entity(object):
 						if chk_pos[0] != WALL:
 							if pt[0] == x0 and pt[1] == y0:
 								print('error')
-								print (str(checked))
 							if (self.dist_map[pt[1]][pt[0]] > d) or (self.dist_map[pt[1]][pt[0]] < 0):
 								#print('error 2 {} {}'.format(d,self.dist_map[pt[1]][pt[0]] ))
 								self.dist_map[pt[1]][pt[0]] = d
