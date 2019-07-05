@@ -40,3 +40,12 @@ MAXHP = 'Max HP'
 ACCURACY = 'Accuracy'
 EVASION = 'Evasion'
 LUCK = 'Luck'
+
+# Display states
+MAP = 0
+COMBAT = 1
+STATS = 2
+STARTMENU = 3
+SPLASH = 4
+SHOP = 5
+
