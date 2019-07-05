@@ -8,6 +8,7 @@ class Item(object):
 		self.weight = 0
 		self.value = 0
 		self.rarity = 0.5
+		self.helptext = ''
 		if use is not None:
 			self.use = use
 
@@ -46,10 +47,15 @@ class ItemSlot(list):
 		self.backpack = backpack
 		list.__init__(self,[item])
 		self.target_type = item.target_type
-		#self.add_item(item)
 
 	def add_item(self, item):
 		self.append(item)
+
+	def cost(self):
+		return self[0].value
+
+	def helptext(self):
+		return self[0].helptext
 	
 	def take(self):
 		if len(self) >= 1:
@@ -121,12 +127,17 @@ class Backpack():
 
 	def has(self, item, qty=1):
 		itemname = str(item)
-		print('checking for "{}"'.format(itemname))
 		if itemname in self.slots:
-			print('found it')
 			if len(self.slots[itemname]) >=qty:
 				return True
 		return False
+
+	def qty(self, item):
+		itemname = str(item)
+		if itemname in self.slots:
+			return len(self.slots[itemname])
+		return 0
+
 	
 
 	
