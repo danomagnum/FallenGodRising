@@ -68,6 +68,7 @@ try:
 						user = main.Entity('playercharacter', combatants=player_party, item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@',is_player=True)
 						#user.combatants = player_party
 						user.x, user.y = zone.find_empty_position()
+						user.backpack.gold = 100
 						zone.set_player(user)
 						display.user = user
 						loop = False

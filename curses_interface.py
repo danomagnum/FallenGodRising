@@ -504,14 +504,14 @@ class Display(object):
 			box.box()
 			box.refresh()
 
-	def display_item_stats(self, item):
+	def display_item_stats(self, item, backpack = None):
+		self.storeinfobox.box()
 		self.storeinfobox.addstr(0, 1, item.name)
-		self.storeinfobox.addstr(1, 1, 'In Backpkack: {}'.format('TODO'))
-		self.storeinfobox.addstr(2, 1, 'Cost: {}'.format(item.cost))
-#TODO: working on this.
-
-		pass
-
+		if backpack is not None:
+			self.storeinfobox.addstr(1, 1, 'In Backpack: {}'.format(backpack.qty(item.name)))
+		self.storeinfobox.addstr(2, 1, 'Cost: {}'.format(item.cost()))
+		self.storeinfobox.addstr(3, 1, 'Desc: {}'.format(item.helptext()))
+		self.storeinfobox.refresh()
 
 #TODO: work this into the object
 def shutdown():

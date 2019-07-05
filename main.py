@@ -35,6 +35,8 @@ class Move(object):
 			default_target=ENEMY
 		self.default_target = default_target
 	
+		self.helptext = ''
+
 		for base in self.__class__.__bases__:
 			try:
 				base.config(self)
@@ -128,6 +130,7 @@ class Equipment(object):
 		self.Right = None
 		self.Hands = None
 		self.Token = None
+		self.helptext = ''
 	
 	def equip(self, item):
 		return_items = []
@@ -524,6 +527,7 @@ class Character(object):
 		self.equipment = Equipment()
 		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.helptext = ''
 		self.config()
 		self._level = 1
 		self.level = level
@@ -726,6 +730,7 @@ class Entity(object):
 		self.enabled = True
 
 		self.is_player = is_player
+		self.helptext = ''
 		
 		for base in self.__class__.__bases__:
 			try:
