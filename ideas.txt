@@ -4,6 +4,9 @@ TODO:
 	NPCs
 	Shops
 	Global game data variables (dict on the player class?)
+	Warp between zones
+
+WISHLIST:
 	if an entity hits a locked door, it should look for the key.
 
 Done:
