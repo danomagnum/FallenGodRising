@@ -20,28 +20,29 @@ class Shop(Entity):
 		self.char = '$'
 	def collide(self, entity, zone):
 		#self.enabled = False
-		shopping = True
-		zonemode = zone.display.mode
+		if entity == zone.player:
+			shopping = True
+			zonemode = zone.display.mode
 
-		if len(self.backpack) > 0:
-			zone.display.mode = SHOP
-		else:
-			print('Shop is empty')
-		def update_info_box(choice):
-			zone.display.display_item_stats(choice, zone.player.backpack)
-		while shopping:
 			if len(self.backpack) > 0:
-				selected_item = graphics_interface.menu(zone.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
-				if selected_item is not None:
-					if zone.player.backpack.gold >= selected_item.cost():
-						zone.player.backpack.gold -= selected_item.cost()
-						zone.player.backpack.store(selected_item.take())
+				zone.display.mode = SHOP
+			else:
+				print('Shop is empty')
+			def update_info_box(choice):
+				zone.display.display_item_stats(choice, zone.player.backpack)
+			while shopping:
+				if len(self.backpack) > 0:
+					selected_item = graphics_interface.menu(zone.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
+					if selected_item is not None:
+						if zone.player.backpack.gold >= selected_item.cost():
+							zone.player.backpack.gold -= selected_item.cost()
+							zone.player.backpack.store(selected_item.take())
+					else:
+						shopping = False
 				else:
 					shopping = False
-			else:
-				shopping = False
 
-		zone.display.mode = zonemode
+			zone.display.mode = zonemode
 
 
 class Door(Entity):
