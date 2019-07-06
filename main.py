@@ -4,10 +4,11 @@ import utility
 import items
 import elements
 import battle
+import keys
 from constants import *
 
 NEWDIST = True
-
+DAMAGE_CALC = 1
 
 class GameOver(Exception):
 	pass
@@ -42,6 +43,13 @@ class Game(object):
 
 	def set_var(self, variable, value):
 		self.game_vars[variable] = value
+	
+	def get_confirm(self):
+		key = self.display.msgbox.getch()
+		if key in keys.SELECT:
+			return True
+		else:
+			return False
 	
 
 class Move(object):
@@ -84,7 +92,6 @@ class Move(object):
 
 	def attack(self, user, targets): # do whatever the attack needs to do
 		if (self.mp > 0):
-			print('{} used move {} on {}'.format(user.name,self.name, targets[0].name))
 			self.mp -= 1
 		else:
 			print('{} is out of MP to use move {}'.format(user.name,self.name))
@@ -105,11 +112,20 @@ class Move(object):
 					else:
 						attack_str = user.special_strength
 					if self.physical[1]:
-						attack_def = user.physical_defense
+						attack_def = target.physical_defense
 					else:
-						attack_def = user.special_defense
+						attack_def = target.special_defense
 
-					damage = ((user.level/100.0 ) * attack_str/attack_def * self.power) * target_coefficient
+					if DAMAGE_CALC == 0:
+						damage = ((user.level/100.0 ) * attack_str/attack_def * self.power + 2) * target_coefficient
+					elif DAMAGE_CALC == 1:
+						hp_ratio = (target.virtual_hp / 6.0) # virtual hp is the health of a neutrally 
+						strdef_ratio = attack_str / attack_def
+						power_ratio = self.power / 10.0
+						level_factor1 =  utility.clamp((1 + (user.level - target.level) / 10), 0.9, 4)
+						level_factor1 = math.sqrt(level_factor1)
+
+						damage = hp_ratio * strdef_ratio * power_ratio * level_factor1
 
 					for atk_element in self.elements:
 						for target_element in target.elements:
@@ -121,11 +137,13 @@ class Move(object):
 					self.uses += 1
 
 					# This makes athe attacks do more damage as you've got more experience using them
-					damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+					if damage > 0:
+						damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+					else:
+						damage -= ((-damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
 
 					if NEWDIST:
 						# Using the triangle distribution now so the mean can be off-center
-						dist_probability = random.betavariate(damage / 8.0, damage/8.0)
 						low = damage - (damage/8.0)
 						high = damage + (damage/8.0)
 						mode = max(min(high, damage * user.luck), low)
@@ -140,6 +158,8 @@ class Move(object):
 
 					#print( 'damage: {}, low: {}, high: {}, hp: {}'.format(damage, low, high, target.hp))
 					target.hp -= damage
+
+					print('{} used move {} on {} for {}'.format(user.name,self.name, targets[0].name, damage))
 					#print(target.hp)
 
 				self.effect(target)
@@ -599,9 +619,9 @@ class Character(object):
 	@level.setter
 	def level(self, value):
 		if self.initialized:
-			print('{} leveled up to {}'.format(self.name, value))
+			print('{} leveled up from {} to {}'.format(self.name, self._level, value))
 		if value > self._level:
-			for lvl in range(self._level, value):
+			for lvl in range(self._level, value + 1):
 				self._level = lvl
 				self._exp = self.exp_at_level(self.level)
 				self.levelup()
@@ -703,6 +723,12 @@ class Character(object):
 			stat = status.max_hp(stat)
 		stat = self.equipment.max_hp(stat)
 		return stat
+
+	@property
+	def virtual_hp(self):
+		stat = int((100 + self.coefficients[5]) * 10 * self.level / 100.0 + 5)
+		return stat
+
 
 	@property
 	def evasion(self):

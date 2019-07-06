@@ -47,9 +47,9 @@ class AI(object):
 	
 	def action(self, enemy_ai):
 		if self.get_standby():
-			action = random.choice([ATTACK, SWITCH, RUN])
+			action = random.choice([ATTACK, SWITCH, ATTACK, ATTACK, ATTACK, ATTACK])
 		else:
-			action = random.choice([ATTACK, RUN])
+			action = random.choice([ATTACK, ATTACK])
 		return action
 	
 	def get_available(self):
@@ -94,12 +94,12 @@ class Random_AI(AI):
 	
 	def action(self, enemy):
 		if self.get_standby():
-			return random.choice([ATTACK, SWITCH, RUN])
+			return random.choice([ATTACK, SWITCH])
 		else:
-			return random.choice([ATTACK, RUN])
+			return random.choice([ATTACK, ATTACK])
 
-def Battle(user, enemy_ai, display):
-	display.start_battle(user, enemy_ai)
+def Battle(game, user, enemy_ai):
+	game.display.start_battle(user, enemy_ai)
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
 	all_combatants = valid_users + valid_enemies
@@ -113,7 +113,7 @@ def Battle(user, enemy_ai, display):
 	for combatant in all_combatants:
 		for status in combatant.status:
 			status.pre_battle(combatant)
-	display.refresh_combatant()
+	game.display.refresh_combatant()
 
 	selected_target = None
 	first_choice = None
@@ -128,17 +128,17 @@ def Battle(user, enemy_ai, display):
 		for combatant in all_combatants:
 			for status in combatant.status:
 				status.pre_turn(combatant)
-		display.refresh_combatant()
+		game.display.refresh_combatant()
 
 		#have the user select an action
 		selection_needed = True
 		user_is_attacking = False
 		user_target = enemy_ai.combatant
 		while selection_needed:
-			first_choice = display.menu(['Attack', 'Change', 'Items', 'Run'], cols=2, selected=first_choice)
+			first_choice = game.display.menu(['Attack', 'Change', 'Items', 'Run'], cols=2, selected=first_choice)
 			if first_choice == 'Attack':
 				#first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
-				user_move = display.menu(user.combatant.moves, cols=2, selected=user_move)
+				user_move = game.display.menu(user.combatant.moves, cols=2, selected=user_move)
 				if user_move is not None:
 					target = user_move.default_target
 					if target == main.SELF:
@@ -147,7 +147,7 @@ def Battle(user, enemy_ai, display):
 						selection_needed = False
 					elif target == main.ENEMY:
 						if len(enemy_ai.get_available()) > 1:
-							selected_target = display.menu(enemy_ai.get_available(), selected=selected_target)
+							selected_target = game.display.menu(enemy_ai.get_available(), selected=selected_target)
 							if selected_target is not None:
 								user_target = [selected_target]
 								user_is_attacking = True
@@ -167,18 +167,18 @@ def Battle(user, enemy_ai, display):
 						user_target = user.get_available()
 			elif first_choice == 'Change':
 				if user.get_standby():
-					change_choice = display.menu(user.get_standby())
+					change_choice = game.display.menu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
-						display.refresh_combatant()
+						game.display.refresh_combatant()
 			elif first_choice == 'Items':
-				item_slot_used = display.menu(user.backpack.show(), cols=2)
+				item_slot_used = game.display.menu(user.backpack.show(), cols=2)
 				if item_slot_used is not None:
 					item_target_type = item_slot_used.target_type
 					if item_target_type == SELF:
-						item_target = [display.menu(user.combatants, cols=2)]
+						item_target = [game.display.menu(user.combatants, cols=2)]
 					elif item_target_type == ENEMY:
-						item_target = [display.menu(enemy_ai.combatants, cols=2)]
+						item_target = [game.display.menu(enemy_ai.combatants, cols=2)]
 					elif item_target_type == MULTI_SELF:
 						item_target = user.combatants
 					elif item_target_type == MULTI_ENEMY:
@@ -190,7 +190,7 @@ def Battle(user, enemy_ai, display):
 						selection_needed = False
 						for t in item_target:
 							item_used.use(t)
-				display.refresh_combatant()
+				game.display.refresh_combatant()
 			elif first_choice == 'Run':
 				running = True
 				selection_needed = False
@@ -207,7 +207,7 @@ def Battle(user, enemy_ai, display):
 			enemy_move = None
 			enemy_target = None
 			enemy_is_attacking = False
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 			enemy_move, enemy_target = enemy_ai.attack(user)
 			enemy_is_attacking = True
 		elif enemy_decision == RUN:
@@ -243,34 +243,34 @@ def Battle(user, enemy_ai, display):
 		if first_is_attacking:
 			for status in first.status:
 				status.pre_attack(first)
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 
 			first_move.attack(first, first_target)
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 
 			for status in first.status:
 				status.post_attack(first)
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 
 		#second attack, assuming they did not die
 		if second_is_attacking and second.hp > 0:
 			for status in second.status:
 				status.pre_attack(second)
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 
 			second_move.attack(second, second_target)
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 
 			for status in second.status:
 				status.post_attack(second)
 
-			display.refresh_combatant()
+			game.display.refresh_combatant()
 	
 		# make sure all post-turn status take place
 		for combatant in all_combatants:
 			for status in combatant.status:
 				status.post_turn(combatant)
-		display.refresh_combatant()
+		game.display.refresh_combatant()
 
 
 		# check for any deaths
@@ -290,7 +290,7 @@ def Battle(user, enemy_ai, display):
 
 				if enemy_ai.change(user.combatant) is not None:
 					#print("{} sent out {}".format(enemy_ai.name, e.name))
-					display.refresh_combatant()
+					game.display.refresh_combatant()
 				else:
 					battle_continue = False
 					winner = USER
@@ -300,11 +300,11 @@ def Battle(user, enemy_ai, display):
 			if user.get_standby():
 				need_choice = True
 				while need_choice:
-					change_choice = display.menu(user.get_standby())
+					change_choice = game.display.menu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
 						print('changed to {}'.format(user.combatant))
-						display.refresh_combatant()
+						game.display.refresh_combatant()
 						need_choice = False
 			else:
 				battle_continue = False
@@ -313,9 +313,10 @@ def Battle(user, enemy_ai, display):
 				winner = ENEMY
 				raise main.GameOver()
 
-		display.refresh_combatant()
+		game.display.refresh_combatant()
+		game.get_confirm()
 
-		time.sleep(1.0 / 60.0)
+		#time.sleep(1.0 / 60.0)
 
 	for combatant in user.combatants:
 		for status in combatant.status:
@@ -324,8 +325,8 @@ def Battle(user, enemy_ai, display):
 	if winner == USER:
 		print('{}: {}'.format(enemy_ai.name,enemy_ai.defeated_text))
 	
-	display.show_messages()
+	game.display.show_messages()
 
-	display.end_battle()
+	game.display.end_battle()
 	return winner
 

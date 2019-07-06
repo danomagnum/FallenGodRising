@@ -16,13 +16,13 @@ class LittleRat(main.Character):
 		self.elements = [elements.Normal]
 		self.status = []
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-		self.base_physical_strength = 6
-		self.base_physical_defense = 6
-		self.base_special_strength = 6
-		self.base_special_defense = 6
-		self.base_speed = 6
-		self.base_hp = 6
-		self.base_luck = 10
+		self.base_physical_strength = 50
+		self.base_physical_defense = 50
+		self.base_special_strength = 50
+		self.base_special_defense = 50
+		self.base_speed = 50
+		self.base_hp = 50
+		self.base_luck = 100
 
 #####################
 # The entities subclasses are items that will appear in the world.
@@ -34,7 +34,7 @@ class Rat(entities.RandWalker, entities.Battler):
 	# example basic enemy
 	def config(self):
 		self.name = 'Rat'
-		self.combatants.append(LittleRat(level=2))
+		self.combatants.append(LittleRat(self.game, level=1))
 		self.char = 'r'
 		self.AI = battle.Random_AI
 
@@ -117,12 +117,12 @@ def genzone(game):
 
 	# Populate zone with entities
 	maptools.Positional_Map_Insert(zone, MyShop, 1)
-	#maptools.Random_Map_Insert(zone, RatPack)
-	#maptools.Random_Map_Insert(zone, RatPack)
-	#maptools.Random_Map_Insert(zone, Rat)
-	#maptools.Random_Map_Insert(zone, Rat)
-	#maptools.Random_Map_Insert(zone, Rat)
-	#maptools.Random_Map_Insert(zone, Rat)
+	maptools.Random_Map_Insert(zone, RatPack)
+	maptools.Random_Map_Insert(zone, RatPack)
+	maptools.Random_Map_Insert(zone, Rat)
+	maptools.Random_Map_Insert(zone, Rat)
+	maptools.Random_Map_Insert(zone, Rat)
+	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, PackRat)
 	maptools.Random_Map_Insert(zone, PackRat)
 	#maptools.Random_Map_Insert(zone, SeeTest)
