@@ -12,6 +12,14 @@ NEWDIST = True
 class GameOver(Exception):
 	pass
 
+class Game(object):
+	def __init__(self):
+		self.zone = None
+		self.zones = []
+		self.display = None
+		self.player = None
+
+
 class Move(object):
 	def __init__(self,name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
 		if name is None:
