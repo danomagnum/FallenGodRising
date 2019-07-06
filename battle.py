@@ -12,9 +12,8 @@ DEBUG = True
 ATTACK = 0
 SWITCH = 1
 ITEM = 2
+RUN = 3
 
-USER = 10
-ENEMY = 11
 
 class AI(object):
 	def __init__(self, combatants, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
@@ -28,8 +27,9 @@ class AI(object):
 			for item in item_list:
 				self.backpack.store(item)
 
-	def attack(self, enemy):
+	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
+		enemy = random.choice(enemy_ai.combatants)
 		target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 
@@ -45,11 +45,12 @@ class AI(object):
 		else:
 			return None
 	
-	def action(self, enemy):
+	def action(self, enemy_ai):
 		if self.get_standby():
-			return random.choice([ATTACK, SWITCH])
+			action = random.choice([ATTACK, SWITCH, RUN])
 		else:
-			return ATTACK
+			action = random.choice([ATTACK, RUN])
+		return action
 	
 	def get_available(self):
 		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
@@ -72,8 +73,9 @@ class Random_AI(AI):
 			for item in item_list:
 				self.backpack.store(item)
 
-	def attack(self, enemy):
+	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
+		enemy = random.choice(enemy_ai.combatants)
 		target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 
@@ -91,9 +93,9 @@ class Random_AI(AI):
 	
 	def action(self, enemy):
 		if self.get_standby():
-			return random.choice([ATTACK, SWITCH])
+			return random.choice([ATTACK, SWITCH, RUN])
 		else:
-			return ATTACK
+			return random.choice([ATTACK, RUN])
 
 def Battle(user, enemy_ai, display):
 	display.start_battle(user, enemy_ai)
@@ -114,6 +116,7 @@ def Battle(user, enemy_ai, display):
 
 	selected_target = None
 	first_choice = None
+	running = False
 
 	while battle_continue:
 		valid_users = user.get_available()
@@ -131,7 +134,7 @@ def Battle(user, enemy_ai, display):
 		user_is_attacking = False
 		user_target = enemy_ai.combatant
 		while selection_needed:
-			first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2, selected=first_choice)
+			first_choice = display.menu(['Attack', 'Change', 'Items', 'Run'], cols=2, selected=first_choice)
 			if first_choice == 'Attack':
 				#first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
 				user_move = display.menu(user.combatant.moves, cols=2, selected=user_move)
@@ -187,20 +190,32 @@ def Battle(user, enemy_ai, display):
 						for t in item_target:
 							item_used.use(t)
 				display.refresh_combatant()
+			elif first_choice == 'Run':
+				running = True
+				selection_needed = False
+				battle_continue = False
+				
 
 		#have the enemy select a move and target
-		enemy_decision = enemy_ai.action(user.combatant)
+		enemy_decision = enemy_ai.action(user)
 		if enemy_decision == ATTACK:
-			enemy_move, enemy_target = enemy_ai.attack(user.combatant)
+			enemy_move, enemy_target = enemy_ai.attack(user)
 			enemy_is_attacking = True
 		elif enemy_decision == SWITCH:
-			enemy_ai.change(user.combatant)
+			enemy_ai.change(user)
 			enemy_move = None
 			enemy_target = None
 			enemy_is_attacking = False
 			display.refresh_combatant()
-			enemy_move, enemy_target = enemy_ai.attack(user.combatant)
+			enemy_move, enemy_target = enemy_ai.attack(user)
 			enemy_is_attacking = True
+		elif enemy_decision == RUN:
+			enemy_move = None
+			enemy_target = None
+			enemy_is_attacking = False
+			running = True
+			print('Enemy Is Running')
+			battle_continue = False
 
 
 		#decide who should attack first
@@ -307,8 +322,9 @@ def Battle(user, enemy_ai, display):
 	
 	if winner == USER:
 		print('{}: {}'.format(enemy_ai.name,enemy_ai.defeated_text))
-
+	
 	display.show_messages()
 
 	display.end_battle()
+	return winner
 

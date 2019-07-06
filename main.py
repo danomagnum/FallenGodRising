@@ -858,38 +858,4 @@ class Entity(object):
 					return RIGHT
 		return None
 
-class Battler(Entity):
-	def collide(self, entity, zone):
-		#self.enabled = False
-		if entity.is_player == True: #I hit the player
-			my_ai = self.AI(self.combatants)
-			battle.Battle(entity, my_ai, zone.display)
-			self.enabled = False
-			entity.backpack.absorb(self.backpack, message = True)
-
-class UpStairs(Entity):
-
-	def config(self):
-		self.char = '/'
-		self.new_x = None
-		self.new_y = None
-
-	def collide(self, entity, zone):
-		zone.change_level(zone.level - 1)
-		if self.new_x is not None:
-			zone.player.x = self.new_x
-			zone.player.y = self.new_y
-
-class DownStairs(Entity):
-
-	def config(self):
-		self.char = '\\'
-		self.new_x = None
-		self.new_y = None
-
-	def collide(self, entity, zone):
-		zone.change_level(zone.level + 1)
-		if self.new_x is not None:
-			zone.player.x = self.new_x
-			zone.player.y = self.new_y
 

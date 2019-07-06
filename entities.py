@@ -10,9 +10,10 @@ class Battler(Entity):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
 			my_ai = self.AI(self.combatants)
-			battle.Battle(entity, my_ai, zone.display)
-			self.enabled = False
-			entity.backpack.absorb(self.backpack, message = True)
+			result = battle.Battle(entity, my_ai, zone.display)
+			if result == USER:
+				self.enabled = False
+				entity.backpack.absorb(self.backpack, message = True)
 
 class Shop(Entity):
 	def config(self):
@@ -55,6 +56,7 @@ class Door(Entity):
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if self.lock is None:
+			self.char = '-'
 			return WALKABLE
 			#self.enabled = False
 		elif self.lock in entity.backpack:
@@ -127,4 +129,52 @@ class NPC(Entity):
 	
 	def NPC(self, zone):
 		return WALKABLE
+
+class UpStairs(Entity):
+
+	def config(self):
+		self.char = '<'
+		self.new_x = None
+		self.new_y = None
+
+	def collide(self, entity, zone):
+		if self.new_x is not None:
+			entity.x = self.new_x
+			entity.y = self.new_y
+		if zone.player == entity:
+			zone.change_level(zone.level - 1)
+		else:
+			zone.remove_entity(entity)
+			zone.add_entity(entity, zone.level - 1)
+
+class DownStairs(Entity):
+
+	def config(self):
+		self.char = '>'
+		self.new_x = None
+		self.new_y = None
+
+	def collide(self, entity, zone):
+		if self.new_x is not None:
+			entity.x = self.new_x
+			entity.y = self.new_y
+		if zone.player == entity:
+			zone.change_level(zone.level + 1)
+		else:
+			zone.remove_entity(entity)
+			zone.add_entity(entity, zone.level + 1)
+
+class ZoneWarp(Entity):
+	def config(self):
+		self.char = '^'
+		self.new_x = None
+		self.new_y = None
+		self.new_zone = None
+
+	def collide(self, entity, zone):
+		if None not in [self.new_zone, self.new_x, self.new_y]:
+			zone.player.x = self.new_x
+			zone.player.y = self.new_y
+			zone.display.zone = self.new_zone
+
 
