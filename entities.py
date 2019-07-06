@@ -21,7 +21,7 @@ class Shop(Entity):
 		self.char = '$'
 	def collide(self, entity, zone):
 		#self.enabled = False
-		if entity == zone.player:
+		if entity.is_player:
 			shopping = True
 			zonemode = zone.display.mode
 
@@ -124,7 +124,7 @@ class NPC(Entity):
 		self.name = 'NPC'
 		self.char = 'N'
 	def collide(self, entity, zone):
-		if entity == zone.player:
+		if entity.is_player:
 			return self.NPC(zone)
 	
 	def NPC(self, zone):
@@ -141,7 +141,7 @@ class UpStairs(Entity):
 		if self.new_x is not None:
 			entity.x = self.new_x
 			entity.y = self.new_y
-		if zone.player == entity:
+		if entity.is_player:
 			zone.change_level(zone.level - 1)
 		else:
 			zone.remove_entity(entity)
@@ -158,7 +158,7 @@ class DownStairs(Entity):
 		if self.new_x is not None:
 			entity.x = self.new_x
 			entity.y = self.new_y
-		if zone.player == entity:
+		if entity.is_player:
 			zone.change_level(zone.level + 1)
 		else:
 			zone.remove_entity(entity)
