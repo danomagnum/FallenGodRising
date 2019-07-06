@@ -1,4 +1,5 @@
 import main
+import entities
 import random
 from constants import *
 
@@ -20,7 +21,10 @@ def Positional_Map_Insert(zone, entity, id, level=0, replace=True):
 		e1 = entity(x=result[0], y=result[1])
 		zone.add_entity(e1)
 		if replace:
-			zone.maps[level][entity.y][entity.x] = '.'
+			line0 = zone.maps[level][e1.y][:e1.x]
+			line1 = zone.maps[level][e1.y][e1.x + 1:]
+			zone.maps[level][e1.y] = line0 + '.' + line1
+			#zone.maps[level][e1.y][e1.x] = '.'
 
 def Stair_Handler(zone, dir=0):
 	levels = len(zone.maps)
@@ -33,12 +37,12 @@ def Stair_Handler(zone, dir=0):
 				down_pos = map_search(zone, '>', level + 1)
 				up_pos = map_search(zone, '<', level)
 			
-			up = main.UpStairs()
+			up = entities.UpStairs()
 			up.new_x = down_pos[0]
 			up.new_y = down_pos[1]
 			up.x = up_pos[0]
 			up.y = up_pos[1]
-			down = main.DownStairs()
+			down = entities.DownStairs()
 			down.new_x = up_pos[0]
 			down.new_y = up_pos[1]
 			down.x = down_pos[0]

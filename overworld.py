@@ -67,10 +67,17 @@ def readmap(filename):
 	return content
 
 class Zone(object):
-	def __init__(self, display = None, files=None):
+	def __init__(self, display = None, files=None, levels = 1, maps = None):
 		if files is None:
-			self.maps = [showmap(map_gen(40, 40, 10, 8))]
-			self.levels = 1
+			if maps is None:
+				self.maps = []
+				self.levels = 0
+				for x in range(levels):
+					self.maps.append(showmap(map_gen(40, 40, 10, 8)))
+					self.levels += 1
+			else:
+				self.maps = maps
+				self.levels = len(maps)
 		else:
 			self.maps = []
 			self.levels = len(files)
@@ -86,7 +93,11 @@ class Zone(object):
 
 		self.display = display
 
-		self.width = len(self.map[0])
+		self.width = 0
+		for line in self.map:
+			w = len(line)
+			self.width = max(w, self.width)
+		#self.width = len(self.map[0])
 		self.height = len(self.map)
 
 
@@ -106,11 +117,41 @@ class Zone(object):
 			self.map = self.maps[self.level]
 			print(len(self.level_entities), level)
 			self.entities = self.level_entities[level]
-			self.width = len(self.map[0])
+			#self.width = len(self.map[0])
+
+			self.width = 0
+			for line in self.map:
+				w = len(line)
+				self.width = max(w, self.width)
 			self.height = len(self.map)
 
-	def add_entity(self, entity):
-		self.entities.append(entity)
+	def add_entity(self, entity, level=None):
+		if entity == self.player:
+			return
+		if level is None:
+			level = self.level
+		if level < 0:
+			return
+		if level > self.levels:
+			return
+		if entity in self.level_entities[level]:
+			print 'in list already'
+			return
+		self.level_entities[level].append(entity)
+		self.entities = self.level_entities[self.level]
+
+	def remove_entity(self, entity, level=None):
+		if entity == self.player:
+			return
+		if level is None:
+			level = self.level
+		if level < 0:
+			return
+		if level > self.levels:
+			return
+		if entity in self.entities:
+			self.level_entities[level].remove(entity)
+			self.entities = self.level_entities[self.level]
 
 	def set_player(self, entity):
 		self.player = entity
@@ -134,8 +175,8 @@ class Zone(object):
 		if level == None:
 			level = self.level
 		while True:
-			x = random.randint(0, len(self.maps[level][0]) - 1)
 			y = random.randint(0, len(self.maps[level]) - 1)
+			x = random.randint(0, len(self.maps[level][y]) - 1)
 			if self.maps[level][y][x] == WALKABLE:
 				return (x, y)
 
@@ -145,7 +186,7 @@ class Zone(object):
 				return [ENTITY, e]
 		if (self.player.x == x) and (self.player.y == y):
 			return [PLAYER, self.player]
-		if len(self.map) > y and len(self.map[0]) > x:
+		if len(self.map) > y and len(self.map[y]) > x:
 			if self.map[y][x] != WALKABLE:
 				return [WALL, None]
 		return [EMPTY, None]

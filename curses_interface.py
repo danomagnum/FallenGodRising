@@ -367,6 +367,7 @@ class Display(object):
 		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)
 		for e in entity_list:
 			if (e.x, e.y) not in drawn:
+				#print e.y, e.x, e.char
 				self.mappad.addch(e.y, e.x, e.char)
 				drawn.add((e.x, e.y))
 

@@ -41,7 +41,7 @@ class PackRat(entities.TowardWalker, entities.Battler):
 	# example basic enemy that gives an item when killed
 	def config(self):
 		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(level=2))
+		self.combatants.append(LittleRat(level=1))
 		self.backpack.store(items.Potion())
 		self.char = 'F'
 		self.AI = battle.Random_AI
@@ -49,9 +49,9 @@ class PackRat(entities.TowardWalker, entities.Battler):
 class RatPack(entities.RandWalker, entities.Battler):
 	def config(self):
 		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(level=2))
-		self.combatants.append(LittleRat(level=2))
-		self.combatants.append(LittleRat(level=2))
+		self.combatants.append(LittleRat(level=1))
+		self.combatants.append(LittleRat(level=1))
+		self.combatants.append(LittleRat(level=1))
 		self.char = 'R'
 		self.AI = battle.Random_AI
 
@@ -112,8 +112,8 @@ maptools.Positional_Map_Insert(zone, MyShop, 1)
 #maptools.Random_Map_Insert(zone, Rat)
 #maptools.Random_Map_Insert(zone, Rat)
 #maptools.Random_Map_Insert(zone, Rat)
-#maptools.Random_Map_Insert(zone, PackRat)
-#maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, PackRat)
+maptools.Random_Map_Insert(zone, PackRat)
 #maptools.Random_Map_Insert(zone, SeeTest)
 maptools.Random_Map_Insert(zone, KeyChest)
 maptools.Random_Map_Insert(zone, Door1)
