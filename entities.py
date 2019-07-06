@@ -10,7 +10,7 @@ class Battler(Entity):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
 			my_ai = self.AI(self.game, self.combatants)
-			result = battle.Battle(entity, my_ai, zone.display)
+			result = battle.Battle(self.game, entity, my_ai)
 			if result == USER:
 				self.enabled = False
 				entity.backpack.absorb(self.backpack, message = True)

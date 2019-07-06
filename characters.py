@@ -18,145 +18,133 @@ def gen_testuser():
 class Fighter(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
-		self.base_physical_strength = 10 
-		self.base_physical_defense = 10
-		self.base_special_strength = 10
-		self.base_special_defense = 10
-		self.base_speed = 10
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 100 
+		self.base_physical_defense = 100
+		self.base_special_strength = 100
+		self.base_special_defense = 100
+		self.base_speed = 100
+		self.base_hp = 100
+		self.base_luck = 100
 		#self.movepool = {2: moves.}
 
 
 class Wizard(Character):
 	def config(self):
 		self.moves = [moves.Blast(self.game), moves.Focus(self.game)]
-		self.base_physical_strength = 8 
-		self.base_physical_defense = 8
-		self.base_special_strength = 12
-		self.base_special_defense = 12
-		self.base_speed = 10
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 80 
+		self.base_physical_defense = 80
+		self.base_special_strength = 120
+		self.base_special_defense = 120
+		self.base_speed = 100
+		self.base_hp = 100
+		self.base_luck = 100
 		self.movepool = {}
 
 class Cleric(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Heal(self.game)]
-		self.base_physical_strength = 8
-		self.base_physical_defense = 12
-		self.base_special_strength = 8
-		self.base_special_defense = 12
-		self.base_speed = 8
-		self.base_hp = 12
-		self.base_luck = 10
+		self.base_physical_strength = 80
+		self.base_physical_defense = 120
+		self.base_special_strength = 80
+		self.base_special_defense = 120
+		self.base_speed = 80
+		self.base_hp = 120
+		self.base_luck = 100
 		self.movepool = {}
 
 class Knight(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Taunt(self.game)]
-		self.base_physical_strength = 12
-		self.base_physical_defense = 12
-		self.base_special_strength = 8
-		self.base_special_defense = 8
-		self.base_speed = 10
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 120
+		self.base_physical_defense = 120
+		self.base_special_strength = 80
+		self.base_special_defense = 80
+		self.base_speed = 100
+		self.base_hp = 100
+		self.base_luck = 100
 		self.movepool = {}
 
 class Paladin(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.LightBlast(self.game)]
-		self.base_physical_strength = 12
-		self.base_physical_defense = 10
-		self.base_special_strength = 6
-		self.base_special_defense = 12
-		self.base_speed = 10
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 110
+		self.base_physical_defense = 110
+		self.base_special_strength = 50
+		self.base_special_defense = 110
+		self.base_speed = 100
+		self.base_hp = 110
+		self.base_luck = 100
 		self.movepool = {}
 
 class Rogue(Character):
 	def config(self):
 		self.moves = []
-		self.base_physical_strength = 10
-		self.base_physical_defense = 10
-		self.base_special_strength = 8
-		self.base_special_defense = 10
-		self.base_speed = 12
-		self.base_hp = 8
-		self.base_luck = 12
+		self.base_physical_strength = 100
+		self.base_physical_defense = 100
+		self.base_special_strength = 80
+		self.base_special_defense = 100
+		self.base_speed = 120
+		self.base_hp = 80
+		self.base_luck = 120
 		self.movepool = {}
 
 class Dragoon(Character):
 	def config(self):
 		self.moves = []
-		self.base_physical_strength = 12
-		self.base_physical_defense = 8
-		self.base_special_strength = 10
-		self.base_special_defense = 8
-		self.base_speed = 12
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 120
+		self.base_physical_defense = 80
+		self.base_special_strength = 100
+		self.base_special_defense = 80
+		self.base_speed = 120
+		self.base_hp = 120
+		self.base_luck = 100
 		self.movepool = {}
 
 class Juggernaut(Character):
 	def config(self):
 		self.moves = []
-		self.base_physical_strength = 15
-		self.base_physical_defense = 15
-		self.base_special_strength = 4
-		self.base_special_defense = 4
-		self.base_speed = 8
-		self.base_hp = 14
-		self.base_luck = 10
+		self.base_physical_strength = 140
+		self.base_physical_defense = 140
+		self.base_special_strength = 60
+		self.base_special_defense = 60
+		self.base_speed = 60
+		self.base_hp = 140
+		self.base_luck = 100
 		self.movepool = {}
 
 class Battlemage(Character):
 	def config(self):
 		self.moves = []
-		self.base_physical_strength = 8
-		self.base_physical_defense = 12
-		self.base_special_strength = 11
-		self.base_special_defense = 11
-		self.base_speed = 10
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 80
+		self.base_physical_defense = 120
+		self.base_special_strength = 100
+		self.base_special_defense = 100
+		self.base_speed = 100
+		self.base_hp = 100
+		self.base_luck = 100
 		self.movepool = {}
 
 class Nightblade(Character):
 	def config(self):
 		self.moves = []
-		self.base_physical_strength = 12
-		self.base_physical_defense = 8
-		self.base_special_strength = 12
-		self.base_special_defense = 8
-		self.base_speed = 12
-		self.base_hp = 8
-		self.base_luck = 10
-		self.movepool = {}
-
-class Spellsword(Character):
-	def config(self):
-		self.moves = []
-		self.base_physical_strength = 12
-		self.base_physical_defense = 8
-		self.base_special_strength = 12
-		self.base_special_defense = 8
-		self.base_speed = 10
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 120
+		self.base_physical_defense = 80
+		self.base_special_strength = 120
+		self.base_special_defense = 80
+		self.base_speed = 100
+		self.base_hp = 80
+		self.base_luck = 100
 		self.movepool = {}
 
 class Witchhunter(Character):
 	def config(self):
 		self.moves = []
-		self.base_physical_strength = 10
-		self.base_physical_defense = 8
-		self.base_special_strength = 8
-		self.base_special_defense = 13
-		self.base_speed = 11
-		self.base_hp = 10
-		self.base_luck = 10
+		self.base_physical_strength = 100
+		self.base_physical_defense = 100
+		self.base_special_strength = 60
+		self.base_special_defense = 140
+		self.base_speed = 100
+		self.base_hp = 100
+		self.base_luck = 100
 		self.movepool = {}
 
