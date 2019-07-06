@@ -9,7 +9,7 @@ class Battler(Entity):
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
-			my_ai = self.AI(self.combatants)
+			my_ai = self.AI(self.game, self.combatants)
 			result = battle.Battle(entity, my_ai, zone.display)
 			if result == USER:
 				self.enabled = False
@@ -30,14 +30,14 @@ class Shop(Entity):
 			else:
 				print('Shop is empty')
 			def update_info_box(choice):
-				zone.display.display_item_stats(choice, zone.player.backpack)
+				zone.display.display_item_stats(choice, entity.backpack)
 			while shopping:
 				if len(self.backpack) > 0:
 					selected_item = graphics_interface.menu(zone.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
 					if selected_item is not None:
-						if zone.player.backpack.gold >= selected_item.cost():
-							zone.player.backpack.gold -= selected_item.cost()
-							zone.player.backpack.store(selected_item.take())
+						if entity.backpack.gold >= selected_item.cost():
+							entity.backpack.gold -= selected_item.cost()
+							entity.backpack.store(selected_item.take())
 					else:
 						shopping = False
 				else:
@@ -88,7 +88,7 @@ class TowardWalker(Entity):
 		self.walkchance = 0.75
 	def tick(self, zone):
 		if random.random() < self.walkchance:
-			dir = self.toward_entity(zone.player)
+			dir = self.toward_entity(self.game.player)
 			if dir is not None:
 				self.move(zone, dir)
 
@@ -104,7 +104,7 @@ class BasicAI1(Entity):
 
 	def tick(self, zone):
 		#print('walking towards from {},{}'.format(self.x, self.y))
-		if zone.LOS_check(self.x, self.y, zone.player.x, zone.player.y):
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
 			self.state = self.AGRESSIVE
 			self.standby_counter = 0
 		else:
@@ -114,7 +114,7 @@ class BasicAI1(Entity):
 
 		if self.state == self.AGRESSIVE:
 			#dir = zone.toward_player(self.x, self.y)
-			dir = self.toward_entity(zone.player)
+			dir = self.toward_entity(self.game.player)
 			if dir is not None:
 				self.move(zone, dir)
 
@@ -172,9 +172,6 @@ class ZoneWarp(Entity):
 		self.new_zone = None
 
 	def collide(self, entity, zone):
-		if None not in [self.new_zone, self.new_x, self.new_y]:
-			zone.player.x = self.new_x
-			zone.player.y = self.new_y
-			zone.display.zone = self.new_zone
-
+		if self.new_zone is not None:
+			self.game.change_zone(self.new_zone, self.new_x, self.new_y)
 

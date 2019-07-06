@@ -15,13 +15,38 @@ class GameOver(Exception):
 class Game(object):
 	def __init__(self):
 		self.zone = None
-		self.zones = []
+		self.zones = {}
 		self.display = None
 		self.player = None
+		self.game_vars = {}
 
+	def add_zone(self, zone):
+		if zone.name not in self.zones:
+			self.zones[zone.name] = zone
+		if self.zone is None:
+			self.zone = zone
+
+	def change_zone(self, zonename, newx = None, newy = None):
+		if zonename in self.zones:
+			self.zone = self.zones[zonename]
+			if newx is not None:
+				self.player.x = newx
+			if newy is not None:
+				self.player.y = newy
+
+		else:
+			print('Zone {} does not exist'.format(zonename))
+
+	def get_var(self, variable):
+		self.game_vars.get(variable, 0)
+
+	def set_var(self, variable, value):
+		self.game_vars[variable] = value
+	
 
 class Move(object):
-	def __init__(self,name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
+	def __init__(self,game, name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
+		self.game = game
 		if name is None:
 			name = 'MISSINGNAME'
 		self.name = name
@@ -130,7 +155,8 @@ class Move(object):
 
 
 class Equipment(object):
-	def __init__(self):
+	def __init__(self, game):
+		self.game = game
 		self.Head = None
 		self.Body = None
 		self.Legs = None
@@ -520,7 +546,8 @@ class Equipment(object):
 
 
 class Character(object):
-	def __init__(self, name=None, level=1):
+	def __init__(self, game,  name=None, level=1):
+		self.game = game
 		self.initialized = False
 		if name is None:
 			#self.name = 'MissingNo'
@@ -532,7 +559,7 @@ class Character(object):
 		self.elements = [elements.Normal]
 		self.status = []
 		self.movepool = {}
-		self.equipment = Equipment()
+		self.equipment = Equipment(game)
 		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.helptext = ''
@@ -714,7 +741,8 @@ class Character(object):
 			self.hp = 1
 
 class Entity(object):
-	def __init__(self, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
+	def __init__(self,game, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
+		self.game = game
 		if name is None:
 			name = ''
 		self.name = name
@@ -725,7 +753,7 @@ class Entity(object):
 		else:
 			self.combatants = combatants
 			self.combatant = combatants[0]
-		self.backpack = items.Backpack()
+		self.backpack = items.Backpack(game)
 		if item_list is not None:
 			for item in item_list:
 				self.backpack.store(item)

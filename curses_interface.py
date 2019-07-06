@@ -162,7 +162,8 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 MAX_COMBATANTS = 3
 
 class Display(object):
-	def __init__(self, user=None, enemy=None, zone=None):
+	def __init__(self, game, user=None, enemy=None, zone=None):
+		self.game = game
 		self.screen = screen
 		self.screen.keypad(1)
 
@@ -347,15 +348,6 @@ class Display(object):
 	##################################
 	##### Map Draw Routines
 	##################################
-	def recenter(self, x = None, y = None):
-		if x is None:
-			x = self.zone.Player.x
-		if y is None:
-			y = self.zone.Player.y
-
-		self.x = max(1, x - self.mapbox.getmaxyx()[1]/2)
-		self.y = max(1, y - self.mapbox.getmaxyx()[0]/2)
-
 	def update_pad(self):
 		if self.zone is None:
 			return
@@ -371,18 +363,8 @@ class Display(object):
 				self.mappad.addch(e.y, e.x, e.char)
 				drawn.add((e.x, e.y))
 
-		if self.zone.player is not None:
-			self.mappad.addch(self.zone.player.y, self.zone.player.x, self.zone.player.char)
-
-	def set_position(self, x, y):
-		if self.zone is None:
-			return
-		self.zone.player.x = x
-		self.zone.player.y = y
-		self.recenter()
-		self.update_pad()
-		self.refresh_full()
-
+		if self.game.player is not None:
+			self.mappad.addch(self.game.player.y, self.game.player.x, self.game.player.char)
 
 	def refresh_full_map(self):
 		#self.screen.clear()
@@ -395,8 +377,6 @@ class Display(object):
 		self.mapbox.overlay(self.screen)
 		y0, x0 = self.mapbox.getbegyx()
 		ya, xa = self.mapbox.getmaxyx()
-		if self.zone.player is not None:
-			self.mappad.move(self.zone.player.y, self.zone.player.x)
 		self.mappad.refresh(self.y, self.x, y0 + 1, x0 + 1, y0+ya - 2, x0+xa - 2)
 
 		self.msgbox.box()
@@ -420,7 +400,7 @@ class Display(object):
 		#self.screen.clear()
 		self.screen.refresh()
 		for i in range(MAX_COMBATANTS):
-			if i < len(self.user.combatants):
+			if i < len(self.game.player.combatants):
 				#self.statbox[i].box()
 				self.show_combatant_stats(self.user.combatants[i],self.statbox[i])
 				#self.statbox[i].refresh()
