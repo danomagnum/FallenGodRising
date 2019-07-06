@@ -60,29 +60,13 @@ def savelines(lines, filename):
 		f.write(line)
 		f.write('\n')
 	f.close()
-
-def readmap(filename):
-	f = open(filename, 'r')
-	content = f.readlines()
-	return content
-
 class Zone(object):
-	def __init__(self, display = None, files=None, levels = 1, maps = None):
-		if files is None:
-			if maps is None:
-				self.maps = []
-				self.levels = 0
-				for x in range(levels):
-					self.maps.append(showmap(map_gen(40, 40, 10, 8)))
-					self.levels += 1
-			else:
-				self.maps = maps
-				self.levels = len(maps)
-		else:
-			self.maps = []
-			self.levels = len(files)
-			for file in files:
-				self.maps.append(readmap(file))
+	def __init__(self, name, game = None, maps = None):
+		self.levels = 0
+		self.name = name
+		if maps is not None:
+			self.maps = maps
+			self.levels = len(maps)
 
 		self.level = 0
 		self.map = self.maps[self.level]
@@ -91,7 +75,7 @@ class Zone(object):
 		self.level_entities = [[] for level in range(self.levels)]
 		self.entities = self.level_entities[self.level]
 
-		self.display = display
+		self.game = game
 
 		self.width = 0
 		for line in self.map:
@@ -99,9 +83,6 @@ class Zone(object):
 			self.width = max(w, self.width)
 		#self.width = len(self.map[0])
 		self.height = len(self.map)
-
-
-		self.display = display
 
 		self.redraw = []
 

@@ -5,7 +5,7 @@ from constants import *
 
 def Random_Map_Insert(zone, entity, level=0):
 	pos = zone.find_empty_position(level)
-	e1 = entity(x=pos[0], y=pos[1])
+	e1 = entity(zone.game, x=pos[0], y=pos[1])
 	zone.add_entity(e1)
 
 def map_search(zone, id, level=0):
@@ -18,7 +18,7 @@ def map_search(zone, id, level=0):
 def Positional_Map_Insert(zone, entity, id, level=0, replace=True):
 	result = map_search(zone, id, level)
 	if result[0] is not None:
-		e1 = entity(x=result[0], y=result[1])
+		e1 = entity(zone.game, x=result[0], y=result[1])
 		zone.add_entity(e1)
 		if replace:
 			line0 = zone.maps[level][e1.y][:e1.x]
@@ -37,12 +37,12 @@ def Stair_Handler(zone, dir=0):
 				down_pos = map_search(zone, '>', level + 1)
 				up_pos = map_search(zone, '<', level)
 			
-			up = entities.UpStairs()
+			up = entities.UpStairs(zone.game)
 			up.new_x = down_pos[0]
 			up.new_y = down_pos[1]
 			up.x = up_pos[0]
 			up.y = up_pos[1]
-			down = entities.DownStairs()
+			down = entities.DownStairs(zone.game)
 			down.new_x = up_pos[0]
 			down.new_y = up_pos[1]
 			down.x = down_pos[0]

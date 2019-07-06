@@ -20,12 +20,13 @@ import maps.testmap
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
-		zone = maps.testmap.zone
+		game = main.Game()
+		zone = maps.testmap.genzone(game)
 
 		#user = characters.gen_testuser()
 		#user.x, user.y = zone.find_empty_position()
 
-		display = graphics_interface.Display(zone=zone)
+		display = graphics_interface.Display(game, zone=zone)
 		zone.display = display
 
 		#zone.set_player(user)
@@ -41,7 +42,7 @@ try:
 		while loop:
 			if i >= graphics_interface.MAX_COMBATANTS:
 				i = 0
-			player_characters = [characters.Fighter(), characters.Wizard(), characters.Cleric(), characters.Knight(), characters.Paladin(), characters.Rogue(), characters.Dragoon(), characters.Juggernaut(), characters.Battlemage(), characters.Nightblade(), characters.Spellsword(), characters.Witchhunter()]
+			player_characters = [characters.Fighter(game), characters.Wizard(game), characters.Cleric(game), characters.Knight(game), characters.Paladin(game), characters.Rogue(game), characters.Dragoon(game), characters.Juggernaut(game), characters.Battlemage(game), characters.Nightblade(game), characters.Spellsword(game), characters.Witchhunter(game)]
 
 
 			def update_confirm_box(choice):
@@ -65,12 +66,13 @@ try:
 					player_party[i] = player_choice
 					i += 1
 					if i == graphics_interface.MAX_COMBATANTS:
-						user = main.Entity('playercharacter', combatants=player_party, item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@',is_player=True)
+						user = main.Entity('playercharacter', game, combatants=player_party, item_list=[items.Potion(game), items.Potion(game), items.Booster(game), items.HealAll(game)], char='@',is_player=True)
 						#user.combatants = player_party
 						user.x, user.y = zone.find_empty_position()
 						user.backpack.gold = 100
 						zone.set_player(user)
 						display.user = user
+						game.player = user
 						loop = False
 			else:
 				if i > 0:

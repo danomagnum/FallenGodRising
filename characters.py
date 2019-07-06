@@ -9,7 +9,7 @@ def gen_testuser():
 	battleuser = Fighter('Fighter Joe', 55)
 	battleuser2 = Wizard('MiniMage', 50)
 
-	user = Entity('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(), items.Potion(), items.Booster(), items.HealAll()], char='@',is_player=True)
+	user = Entity('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(self.game), items.Potion(self.game), items.Booster(self.game), items.HealAll(self.game)], char='@',is_player=True)
 
 	sys.stdout.silent = False
 	return user
@@ -17,7 +17,7 @@ def gen_testuser():
 
 class Fighter(Character):
 	def config(self):
-		self.moves = [moves.Strike(), moves.Buff()]
+		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
 		self.base_physical_strength = 10 
 		self.base_physical_defense = 10
 		self.base_special_strength = 10
@@ -30,7 +30,7 @@ class Fighter(Character):
 
 class Wizard(Character):
 	def config(self):
-		self.moves = [moves.Blast(), moves.Focus()]
+		self.moves = [moves.Blast(self.game), moves.Focus(self.game)]
 		self.base_physical_strength = 8 
 		self.base_physical_defense = 8
 		self.base_special_strength = 12
@@ -42,7 +42,7 @@ class Wizard(Character):
 
 class Cleric(Character):
 	def config(self):
-		self.moves = [moves.Strike(), moves.Heal()]
+		self.moves = [moves.Strike(self.game), moves.Heal(self.game)]
 		self.base_physical_strength = 8
 		self.base_physical_defense = 12
 		self.base_special_strength = 8
@@ -54,7 +54,7 @@ class Cleric(Character):
 
 class Knight(Character):
 	def config(self):
-		self.moves = [moves.Strike(), moves.Taunt()]
+		self.moves = [moves.Strike(self.game), moves.Taunt(self.game)]
 		self.base_physical_strength = 12
 		self.base_physical_defense = 12
 		self.base_special_strength = 8
@@ -66,7 +66,7 @@ class Knight(Character):
 
 class Paladin(Character):
 	def config(self):
-		self.moves = [moves.Strike(), moves.LightBlast()]
+		self.moves = [moves.Strike(self.game), moves.LightBlast(self.game)]
 		self.base_physical_strength = 12
 		self.base_physical_defense = 10
 		self.base_special_strength = 6

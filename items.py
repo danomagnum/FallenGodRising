@@ -2,7 +2,8 @@ from constants import *
 import effects
 
 class Item(object):
-	def __init__(self, name, target=TARGET_NONE, use=None):
+	def __init__(self, game, name=None, target=TARGET_NONE, use=None):
+		self.game = game
 		self.name = name
 		self.target_type = target
 		self.weight = 0
@@ -11,6 +12,16 @@ class Item(object):
 		self.helptext = ''
 		if use is not None:
 			self.use = use
+	
+		for base in self.__class__.__bases__:
+			try:
+				base.config(self)
+			except:
+				pass
+		self.config()
+
+	def config(self):
+		pass
 
 	def use(self, target = None):
 		pass
@@ -18,6 +29,8 @@ class Item(object):
 		return self.name
 
 class Equipment(Item):
+	def config(self):
+		pass
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		return initial
 	def physical_defense(self, initial):
@@ -42,7 +55,7 @@ class Equipment(Item):
 
 
 class ItemSlot(list):
-	def __init__(self, backpack, item):
+	def __init__(self, game, backpack, item):
 		self.name = item.name
 		self.backpack = backpack
 		list.__init__(self,[item])
@@ -72,7 +85,8 @@ class ItemSlot(list):
 		return '{} ({})'.format(self.name, len(self))
 
 class Backpack():
-	def __init__(self):
+	def __init__(self, game):
+		self.game = game
 		self.slots = {}
 		self.gold = 0
 
@@ -81,7 +95,7 @@ class Backpack():
 		if itemname in self.slots:
 			self.slots[itemname].add_item(item)
 		else:
-			self.slots[itemname] = ItemSlot(self, item)
+			self.slots[itemname] = ItemSlot(self.game, self, item)
 
 	def remove_slot(self, slot):
 		self.slots.pop(slot.name)
@@ -143,29 +157,51 @@ class Backpack():
 	
 
 class Potion(Item):
-	def __init__(self):
-		Item.__init__(self, 'Potion 1', SELF)
+	def config(self):
+		self.name = 'Potion 1'
+		self.target_type = SELF
+		self.weight = 1
+		self.value = 100
+		self.rarity = 0.5
+		self.helptext = 'Restores Some HP'
+	
 	def use(self, target):
 		target.heal(20)
 		print('{} used {}'.format(target.name,self.name))
 
 class HealAll(Item):
-	def __init__(self):
-		Item.__init__(self, 'Heal All 1', MULTI_SELF)
+	def config(self):
+		self.name = 'Heal All'
+		self.target_type = MULTI_SELF
+		self.weight = 1
+		self.value = 500
+		self.rarity = 0.1
+		self.helptext = 'Clear All Status'
+
 	def use(self, target):
 		target.heal(20)
 		print('{} used {}'.format(target.name,self.name))
 
 
 class Booster(Item):
-	def __init__(self):
-		Item.__init__(self, 'Roids 1', SELF)
+	def config(self):
+		self.name = 'Booster'
+		self.target_type = SELF
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.3
+		self.helptext = 'Increases Physical Strength'
+
 	def use(self, target):
 		target.status.append(effects.StatMod(1.15, PHYSTR))
 		print('{} used {}'.format(target.name,self.name))
 
 
 class Key(Item):
-	def __init__(self):
-		Item.__init__(self, 'Key', TARGET_NONE)
+	def config(self):
+		self.name = 'Key'
+		self.weight = 0
+		self.value = 100
+		self.rarity = 0.5
+		self.helptext = 'Opens a generic door'
 

@@ -16,13 +16,13 @@ RUN = 3
 
 
 class AI(object):
-	def __init__(self, combatants, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
+	def __init__(self, game, combatants, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name
 		self.combatants = combatants
 		self.combatant = combatants[0]
 		self.defeated_text = defeated_text
 
-		self.backpack = items.Backpack()
+		self.backpack = items.Backpack(self.game)
 		if item_list is not None:
 			for item in item_list:
 				self.backpack.store(item)
@@ -61,14 +61,15 @@ class AI(object):
 
 
 class Random_AI(AI):
-	def __init__(self, combatants,  name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
+	def __init__(self, game, combatants,  name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
+		self.game = game
 		self.name = name
 		self.combatants = combatants
 		self.combatant = combatants[0]
 		self.defeated_text = defeated_text
 
 
-		self.backpack = items.Backpack()
+		self.backpack = items.Backpack(self.game)
 		if item_list is not None:
 			for item in item_list:
 				self.backpack.store(item)

@@ -4,6 +4,7 @@ TODO:
 	NPCs
 	Global game data variables (dict on the player class?)
 	Warp between zones
+	make items initialize with config routine
 
 WISHLIST:
 	if an entity hits a locked door, it should look for the key.
