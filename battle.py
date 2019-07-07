@@ -142,9 +142,16 @@ def Battle(game, user, enemy_ai):
 				if user_move is not None:
 					target = user_move.default_target
 					if target == main.SELF:
-						user_target = [user.combatant]
-						user_is_attacking = True
-						selection_needed = False
+
+						selected_target = game.display.menu(user.get_available(), selected=user.combatant)
+						if selected_target is not None:
+							user_target = [selected_target]
+							user_is_attacking = True
+							selection_needed = False
+
+						#user_target = [user.combatant]
+						#user_is_attacking = True
+						#selection_needed = False
 					elif target == main.ENEMY:
 						if len(enemy_ai.get_available()) > 1:
 							selected_target = game.display.menu(enemy_ai.get_available(), selected=selected_target)

@@ -157,9 +157,9 @@ class Move(object):
 						damage = min(-1,damage)
 
 					#print( 'damage: {}, low: {}, high: {}, hp: {}'.format(damage, low, high, target.hp))
-					target.hp -= damage
+					target.hp -= int(damage)
 
-					print('{} used move {} on {} for {}'.format(user.name,self.name, targets[0].name, damage))
+					print('{} used move {} on {} for {}'.format(user.name,self.name, targets[0].name, int(damage)))
 					#print(target.hp)
 
 				self.effect(target)
@@ -578,7 +578,6 @@ class Character(object):
 		self._exp = 0
 		self.elements = [elements.Normal]
 		self.status = []
-		self.movepool = {}
 		self.equipment = Equipment(game)
 		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
@@ -599,7 +598,6 @@ class Character(object):
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 10
-		self.movepool = {}
 		self.physical = True
 	
 	def tick(self):
@@ -621,12 +619,24 @@ class Character(object):
 		if self.initialized:
 			print('{} leveled up from {} to {}'.format(self.name, self._level, value))
 		if value > self._level:
-			for lvl in range(self._level, value + 1):
+			for lvl in range(self._level + 1, value + 1):
 				self._level = lvl
 				self._exp = self.exp_at_level(self.level)
 				self.levelup()
-				self.levelup_movepool()
+				level_method = 'level_{:02}'.format(lvl)
+				try:
+					method = getattr(self, level_method)
+				except:
+					method = None
+				if method is not None:
+					method()
 		self.full_heal()
+	
+	def add_move(self, move):
+		m = move(self.game)
+		if self.initialized:
+			print('{} Gained The Skill {}'.format(self.name, m.name))
+		self.moves.append(m)
 
 	@property
 	def exp(self):
@@ -754,13 +764,6 @@ class Character(object):
 
 	def levelup(self): # override this with sub classes to do fancy things
 		pass
-
-	def levelup_movepool(self): # override this with sub classes to do fancy things
-		if self.level in self.movepool:
-			newmove = self.movepool[self.level]()
-			self.moves.appendd(newmove)
-			if self.initialized:
-				print('{} Gained a New Move: {}.'.format(self.name, newmove.name))
 
 	def revive(self):
 		if self.hp <= 0:
