@@ -3,16 +3,7 @@ import sys
 import items
 import elements
 import moves
-
-def gen_testuser():
-	sys.stdout.silent = True
-	battleuser = Fighter('Fighter Joe', 55)
-	battleuser2 = Wizard('MiniMage', 50)
-
-	user = Entity('playercharacter', combatants=[battleuser, battleuser2], item_list=[items.Potion(self.game), items.Potion(self.game), items.Booster(self.game), items.HealAll(self.game)], char='@',is_player=True)
-
-	sys.stdout.silent = False
-	return user
+import random
 
 
 class Fighter(Character):
@@ -25,8 +16,14 @@ class Fighter(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
-		#self.movepool = {2: moves.}
 
+	def level_03(self):
+		if self.elements[0] in moves.typed_blasts:
+			preferred_move = moves.typed_strikes.index(self.element)
+			if (random.random() * self.luck) > 50:
+				self.add_move(preferred_move)
+				return
+		self.add_move(random.choice(moves.typed_strikes))
 
 class Wizard(Character):
 	def config(self):
@@ -38,7 +35,6 @@ class Wizard(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
-		self.movepool = {}
 
 class Cleric(Character):
 	def config(self):
@@ -50,7 +46,6 @@ class Cleric(Character):
 		self.base_speed = 80
 		self.base_hp = 120
 		self.base_luck = 100
-		self.movepool = {}
 
 class Knight(Character):
 	def config(self):
@@ -62,7 +57,6 @@ class Knight(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
-		self.movepool = {}
 
 class Paladin(Character):
 	def config(self):
@@ -74,11 +68,10 @@ class Paladin(Character):
 		self.base_speed = 100
 		self.base_hp = 110
 		self.base_luck = 100
-		self.movepool = {}
 
 class Rogue(Character):
 	def config(self):
-		self.moves = []
+		self.moves = [moves.Strike(self.game), moves.Poison(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
 		self.base_special_strength = 80
@@ -86,11 +79,10 @@ class Rogue(Character):
 		self.base_speed = 120
 		self.base_hp = 80
 		self.base_luck = 120
-		self.movepool = {}
 
 class Dragoon(Character):
 	def config(self):
-		self.moves = []
+		self.moves = [moves.Strike(self.game), moves.Smoke(self.game)]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 80
 		self.base_special_strength = 100
@@ -98,11 +90,10 @@ class Dragoon(Character):
 		self.base_speed = 120
 		self.base_hp = 120
 		self.base_luck = 100
-		self.movepool = {}
 
 class Juggernaut(Character):
 	def config(self):
-		self.moves = []
+		self.moves = [moves.Strike(self.game)]
 		self.base_physical_strength = 140
 		self.base_physical_defense = 140
 		self.base_special_strength = 60
@@ -110,11 +101,10 @@ class Juggernaut(Character):
 		self.base_speed = 60
 		self.base_hp = 140
 		self.base_luck = 100
-		self.movepool = {}
 
 class Battlemage(Character):
 	def config(self):
-		self.moves = []
+		self.moves = [moves.Blast(self.game), moves.Protect(self.game)]
 		self.base_physical_strength = 80
 		self.base_physical_defense = 120
 		self.base_special_strength = 100
@@ -122,11 +112,10 @@ class Battlemage(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
-		self.movepool = {}
 
 class Nightblade(Character):
 	def config(self):
-		self.moves = []
+		self.moves = [moves.Strike(self.game), moves.Blast(self.game)]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 80
 		self.base_special_strength = 120
@@ -134,11 +123,10 @@ class Nightblade(Character):
 		self.base_speed = 100
 		self.base_hp = 80
 		self.base_luck = 100
-		self.movepool = {}
 
 class Witchhunter(Character):
 	def config(self):
-		self.moves = []
+		self.moves = [moves.Strike(self.game), moves.Haste(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
 		self.base_special_strength = 60
@@ -146,5 +134,4 @@ class Witchhunter(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
-		self.movepool = {}
 

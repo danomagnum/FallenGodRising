@@ -8,11 +8,10 @@ from constants import *
 
 class Strike(main.Move):
 	def config(self):
-		self.name = 'Pound'
+		self.name = 'Strike'
 		self.max_mp = 20.0
 		self.accuracy = 0.9
 		self.physical = (True, True)
-
 
 class FireStrike(Strike):
 	def config(self):
@@ -50,7 +49,7 @@ class DarkStrike(Strike):
 		self.name = 'Dark Strike'
 		self.elements = [elements.Dark]
 
-
+typed_strikes = [FireStrike, WaterStrike, EarthStrike, WindStrike, LightStrike, DarkStrike]
 
 class Buff(main.Move):
 	def config(self):
@@ -146,9 +145,27 @@ class Poison(main.Move):
 		# for starters, poison majorly 5% of the time.  Once the move is more used, poison major 50%
 		major_range = scale(self.uses, 0, 1000, 0.05, 0.5)
 		if randval < major_range:
+			print('{} has major poisoning'.format(target.name))
 			target.status.append(effects.Poison_Major())
 		elif randval < minor_range:
+			print('{} has minor poisoning'.format(target.name))
 			target.status.append(effects.Poison_Minor())
+
+
+class Cure(main.Move):
+	def config(self):
+		self.name = 'Cure'
+		self.max_mp = 2.0
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = SELF
+		self.physical = (False, False)
+
+	def effect(self, target):
+		if len(target.status) > 0:
+			to_remove = random.choice(target.status)
+			target.status.remove(to_remove)
+
 
 class Blast(main.Move):
 	def config(self):
@@ -194,3 +211,4 @@ class DarkBlast(Blast):
 		self.elements = [elements.Dark]
 
 
+typed_blasts = [FireBlast, WaterBlast, EarthBlast, ElectricBlast, WindBlast, LightBlast, DarkBlast]

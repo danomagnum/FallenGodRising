@@ -50,6 +50,7 @@ class StatMod(Status):
 		self.multiplier = multiplier
 		self.stat = stat
 		self.name = '{} {}%'.format(stat,self.multiplier)
+
 	def physical_strength(self, initial):
 		if self.stat == PHYSTR:
 			return initial * self.multiplier
@@ -105,14 +106,15 @@ class Poison_Minor(Status):
 	def __init__(self):
 		self.name = 'Minor Poison'
 	def pre_turn(self, effected):
-		print('{} was effected by {}'.format(effected.name,self.name))
-		effected.hp -= max(1, effected.hp / 10)
+		damage = max(1, effected.hp / 6)
+		print('{} was effected by {} for {}'.format(effected.name,self.name, damage))
+		effected.hp -= damage
 
 class Poison_Major(Status):
 	def __init__(self):
 		self.name = 'Major Poison'
 	def pre_turn(self, effected):
-		print('{} was effected by {}'.format(effected.name,self.name))
-		effected.hp -= max(1, effected.hp / 6)
-
+		damage = max(1, effected.hp / 3)
+		print('{} was effected by {} by {}'.format(effected.name,self.name, damage))
+		effected.hp -= damage
 

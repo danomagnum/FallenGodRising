@@ -436,15 +436,15 @@ class Display(object):
 
 
 		#physical
-		box.addstr(4, 1, "P. Atk.: {}".format(combatant.physical_strength), curses.color_pair(11))
-		box.addstr(5, 1, "P. Def.: {}".format(combatant.physical_defense), curses.color_pair(11))
+		box.addstr(4, 1, "P. Atk.: {}".format(int(combatant.physical_strength)), curses.color_pair(11))
+		box.addstr(5, 1, "P. Def.: {}".format(int(combatant.physical_defense)), curses.color_pair(11))
 
 		#special
-		box.addstr(6, 1, "S. Atk: {}".format(combatant.special_strength), curses.color_pair(11))
-		box.addstr(7, 1, "S. Def: {}".format(combatant.special_defense), curses.color_pair(11))
+		box.addstr(6, 1, "S. Atk: {}".format(int(combatant.special_strength)), curses.color_pair(11))
+		box.addstr(7, 1, "S. Def: {}".format(int(combatant.special_defense)), curses.color_pair(11))
 
 		#speed
-		box.addstr(8, 1, "Speed: {}".format(combatant.speed), curses.color_pair(11))
+		box.addstr(8, 1, "Speed: {}".format(int(combatant.speed)), curses.color_pair(11))
 
 		#elements
 		element_list = ' '.join([str(element) for element in combatant.elements])
@@ -496,7 +496,7 @@ class Display(object):
 		self.storeinfobox.addstr(0, 1, item.name)
 		if backpack is not None:
 			self.storeinfobox.addstr(1, 1, 'In Backpack: {}'.format(backpack.qty(item.name)))
-		self.storeinfobox.addstr(2, 1, 'Cost: {}'.format(item.cost()))
+		self.storeinfobox.addstr(2, 1, 'Cost: {} ({} in backpack)     '.format(item.cost(), self.game.player.backpack.gold))
 		self.storeinfobox.addstr(3, 1, 'Desc: {}'.format(item.helptext()))
 		self.storeinfobox.refresh()
 

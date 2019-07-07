@@ -23,17 +23,18 @@ class Shop(Entity):
 		#self.enabled = False
 		if entity.is_player:
 			shopping = True
-			zonemode = zone.display.mode
+			zonemode = self.game.display.mode
 
 			if len(self.backpack) > 0:
-				zone.display.mode = SHOP
+				self.game.display.mode = SHOP
 			else:
 				print('Shop is empty')
 			def update_info_box(choice):
-				zone.display.display_item_stats(choice, entity.backpack)
+				self.game.display.display_item_stats(choice, entity.backpack)
 			while shopping:
 				if len(self.backpack) > 0:
-					selected_item = graphics_interface.menu(zone.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
+					update_info_box(self.backpack.show()[0])
+					selected_item = graphics_interface.menu(self.game.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
 					if selected_item is not None:
 						if entity.backpack.gold >= selected_item.cost():
 							entity.backpack.gold -= selected_item.cost()
