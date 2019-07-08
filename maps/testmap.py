@@ -111,25 +111,37 @@ def genzone(game):
 	maps = []
 	for file in files:
 		maps.append(maptools.readmap(file))
+	
+	maps = []
+
+	for i in range(5):
+		map = maptools.drunkard_walk()
+		maptools.add_entry(map, UP)
+		maptools.add_entry(map, DOWN)
+		maptools.add_entry(map, LEFT)
+		maptools.add_entry(map, RIGHT)
+		map = maptools.showmap(map)
+		maps.append(map)
+
 
 	# Create zone
 	zone = overworld.Zone(ZONENAME, game, maps=maps)
 
 	# Populate zone with entities
-	maptools.Positional_Map_Insert(zone, MyShop, 1)
-	maptools.Random_Map_Insert(zone, RatPack)
-	maptools.Random_Map_Insert(zone, RatPack)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, PackRat)
-	maptools.Random_Map_Insert(zone, PackRat)
+	#maptools.Positional_Map_Insert(zone, MyShop, 1)
+	#maptools.Random_Map_Insert(zone, RatPack)
+	#maptools.Random_Map_Insert(zone, RatPack)
+	#maptools.Random_Map_Insert(zone, Rat)
+	#maptools.Random_Map_Insert(zone, Rat)
+	#maptools.Random_Map_Insert(zone, Rat)
+	#maptools.Random_Map_Insert(zone, Rat)
+	#maptools.Random_Map_Insert(zone, PackRat)
+	#maptools.Random_Map_Insert(zone, PackRat)
 	#maptools.Random_Map_Insert(zone, SeeTest)
-	maptools.Random_Map_Insert(zone, KeyChest)
-	maptools.Random_Map_Insert(zone, Door1)
-	maptools.Random_Map_Insert(zone, Door2)
-	maptools.Stair_Handler(zone)
+	#maptools.Random_Map_Insert(zone, KeyChest)
+	#maptools.Random_Map_Insert(zone, Door1)
+	#maptools.Random_Map_Insert(zone, Door2)
+	#maptools.Stair_Handler(zone)
 
 	# add zone to game
 	game.add_zone(zone)

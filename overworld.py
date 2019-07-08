@@ -86,6 +86,12 @@ class Zone(object):
 
 		self.redraw = []
 
+	def exit(self, entity, direction):
+		#TODO: get this working so you can walk out the boundaries of a zone into a new "level"
+		if entity.is_player:
+			pass
+		
+
 	def change_level(self, level):
 		if level < 0:
 			print("Can't go below level 0")
@@ -152,24 +158,58 @@ class Zone(object):
 		# get rid of any entities that were disabled
 		self.entities = [e for e in self.entities if e.enabled] 
 
-	def find_empty_position(self, level=None):
-		if level == None:
-			level = self.level
-		while True:
-			y = random.randint(0, len(self.maps[level]) - 1)
-			x = random.randint(0, len(self.maps[level][y]) - 1)
-			if self.maps[level][y][x] == WALKABLE:
-				return (x, y)
+	def find_empty_position(self, level=None, position=None):
+		if position is None:
+			if level == None:
+				level = self.level
+			while True:
+				y = random.randint(0, len(self.maps[level]) - 1)
+				x = random.randint(0, len(self.maps[level][y]) - 1)
+				if self.maps[level][y][x] == WALKABLE:
+					return (x, y)
+		elif position == UP:
+			y = 0
+			while True:
+				x = random.randint(0, len(self.maps[level][y]) - 1)
+				if self.maps[level][y][x] == WALKABLE:
+					return (x, y)
+		elif position == DOWN:
+			y = len(self.maps[level]) - 1
+			while True:
+				x = random.randint(0, len(self.maps[level][y]) - 1)
+				if self.maps[level][y][x] == WALKABLE:
+					return (x, y)
+		elif position == LEFT:
+			x = 0
+			while True:
+				y = random.randint(0, len(self.maps[level]) - 1)
+				if self.maps[level][y][x] == WALKABLE:
+					return (x, y)
+		elif position == RIGHT:
+			while True:
+				y = random.randint(0, len(self.maps[level]) - 1)
+				x = len(self.maps[level][y]) - 1
+				if self.maps[level][y][x] == WALKABLE:
+					return (x, y)
 
 	def check_pos(self, x, y):
 		for e in self.entities:
 			if (e.x == x) and (e.y == y):
 				return [ENTITY, e]
+		if x < 0:
+			return [LEFT, None]
+		if y < 0:
+			return [UP, None]
+		if y >= len(self.map):
+			return [DOWN, None]
+		if x >= len(self.map[y]):
+			return [RIGHT, None]
+
 		if (self.player.x == x) and (self.player.y == y):
 			return [PLAYER, self.player]
-		if len(self.map) > y and len(self.map[y]) > x:
-			if self.map[y][x] != WALKABLE:
-				return [WALL, None]
+
+		if self.map[y][x] != WALKABLE:
+			return [WALL, None]
 		return [EMPTY, None]
 
 	def LOS_check(self, x0, y0, x1, y1):

@@ -852,6 +852,14 @@ class Entity(object):
 			if walk_over == WALKABLE:
 				self.x = test_x
 				self.y = test_y
+		elif at_pos[0] == UP:
+			zone.exit(self, UP)
+		elif at_pos[0] == DOWN:
+			zone.exit(self, DOWN)
+		elif at_pos[0] == LEFT:
+			zone.exit(self, LEFT)
+		elif at_pos[0] == RIGHT:
+			zone.exit(self, RIGHT)
 
 	def calcDistGraph(self, zone):
 		self.dist_map = [[-1 for x in range(zone.width)] for x in range(zone.height)]
