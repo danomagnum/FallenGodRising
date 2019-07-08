@@ -19,12 +19,14 @@ def Positional_Map_Insert(zone, entity, id, level=0, replace=True):
 	result = map_search(zone, id, level)
 	if result[0] is not None:
 		e1 = entity(zone.game, x=result[0], y=result[1])
-		zone.add_entity(e1)
-		if replace:
-			line0 = zone.maps[level][e1.y][:e1.x]
-			line1 = zone.maps[level][e1.y][e1.x + 1:]
-			zone.maps[level][e1.y] = line0 + '.' + line1
-			#zone.maps[level][e1.y][e1.x] = '.'
+		if e1.x is not None:
+			if e1.y is not None:
+				zone.add_entity(e1)
+				if replace:
+					line0 = zone.maps[level][e1.y][:e1.x]
+					line1 = zone.maps[level][e1.y][e1.x + 1:]
+					zone.maps[level][e1.y] = line0 + '.' + line1
+					#zone.maps[level][e1.y][e1.x] = '.'
 
 def Stair_Handler(zone, dir=0):
 	levels = len(zone.maps)
@@ -90,18 +92,10 @@ def map_gen(height, width, rooms, minroomsize = 4):
 
 	return tiles
 
-def showmap(tiles, printout = False):
+def showmap(map, printout = False):
 	lines = []
-	for x in tiles:
-		line = ''
-		for y in x:
-			if y == 0:
-				line += ' '
-			elif y  == 1:
-				line += WALKABLE
-			elif y == 2:
-				line += '#'
-
+	for y in map:
+		line = ''.join(y)
 		lines.append(line)
 		if printout:
 			print(line)
@@ -145,5 +139,85 @@ def drunkard_walk(xmax = 30, ymax = 30, percentage = 0.3):
 				x = x1
 				y = y1
 	return map
+
+def add_entry(map, entry_dir, tries = 2):
+	xmax = len(map[0]) - 1
+	ymax = len(map) - 1
+
+	dirs = [(0, 1), (1, 0),(-1, 0),(0, -1)]
+	for trial in range(tries):
+		if entry_dir == UP:
+			y = 0
+			x = random.choice(range(1, xmax))
+			print 'setting new xy start at {}, {}'.format(x, y)
+		elif entry_dir == DOWN:
+			y = ymax
+			x = random.choice(range(1, xmax))
+			print 'setting new xy start at {}, {}'.format(x, y)
+		elif entry_dir == LEFT:
+			y = random.choice(range(1,ymax))
+			x = 0
+			print 'setting new xy start at {}, {}'.format(x, y)
+		elif entry_dir == RIGHT:
+			y = random.choice(range(1,ymax))
+			x = xmax
+			print 'setting new xy start at {}, {}'.format(x, y)
+
+
+		while map[y][x] != '.':
+			if map[y][x] == '#':
+				#print 'writing to {}, {}'.format(x, y)
+				map[y][x] = '!'
+			dir = random.choice(dirs)
+
+			x1 = x + dir[0]
+			y1 = y + dir[1]
+
+			if x1 < (xmax) and x1 > 0:
+				if y1 < (ymax) and y1 > 0:
+					x = x1
+					y = y1
+	if entry_dir == UP:
+		for x in range(xmax):
+			map[0][x] = map[1][x]
+	elif entry_dir == DOWN:
+		for x in range(xmax):
+			map[ymax][x] = map[ymax - 1][x]
+	elif entry_dir == LEFT:
+		for y in range(ymax):
+			map[y][0] = map[y][1]
+	elif entry_dir == RIGHT:
+		for y in range(ymax):
+			map[y][xmax] = map[y][xmax - 1]
+
+	for y in range(ymax + 1):
+		for x in range(xmax + 1):
+			if map[y][x] == '!':
+				map[y][x] = '.'
+
+	map[0][0] = '#'
+	map[0][xmax] = '#'
+	map[ymax][0] = '#'
+	map[ymax][xmax] = '#'
+
+	return map
+
+
+def noise_prune(map):
+	xmax = len(map[0]) - 1
+	ymax = len(map) - 1
+
+	def isfloor(coord):
+		if map[coord[1]][coord[0]] == '.':
+			return True
+		else:
+			return False
+
+	for y in range(ymax):
+		for x in range(xmax):
+			check = [ (x, y-1), (x, y+1), (x-1, y), (x+1, y)]
+			check = __builtins__.map(isfloor, check)
+			if all(check):
+				map[y][x] = '.'
 
 

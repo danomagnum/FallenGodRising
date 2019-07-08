@@ -363,7 +363,11 @@ class Display(object):
 		for e in entity_list:
 			if (e.x, e.y) not in drawn:
 				#print e.y, e.x, e.char
-				self.mappad.addch(e.y, e.x, e.char)
+				#self.mappad.addch(e.y, e.x, e.char)
+				try:
+					self.mappad.addch(e.y, e.x, e.char)
+				except:
+					print ('{} {} {}'.format(e.y, e.x, e.char))
 				drawn.add((e.x, e.y))
 
 		if self.game.player is not None:
