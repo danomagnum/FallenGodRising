@@ -87,9 +87,39 @@ class Zone(object):
 		self.redraw = []
 
 	def exit(self, entity, direction):
-		#TODO: get this working so you can walk out the boundaries of a zone into a new "level"
+		if direction == UP:
+			newlevel = self.level + 1
+			if newlevel >= len(self.maps):
+				return
+			else:
+				newx, newy = self.find_empty_position(level=newlevel, position=DOWN)
+		elif direction == DOWN:
+			newlevel = self.level - 1
+			if newlevel < 0:
+				return
+			else:
+				newx, newy = self.find_empty_position(level=newlevel, position=UP)
+		elif direction == LEFT:
+			newlevel = self.level - 1
+			if newlevel < 0:
+				return
+			else:
+				newx, newy = self.find_empty_position(level=newlevel, position=RIGHT)
+		elif direction == RIGHT:
+			newlevel = self.level + 1
+			if newlevel >= len(self.maps):
+				return
+			else:
+				newx, newy = self.find_empty_position(level=newlevel, position=LEFT)
+
+
+		entity.x = newx
+		entity.y = newy
 		if entity.is_player:
-			pass
+			self.change_level(newlevel)
+		else:
+			self.remove_entity(entity)
+			self.add_entity(entity, newlevel)
 		
 
 	def change_level(self, level):
