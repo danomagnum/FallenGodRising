@@ -68,6 +68,7 @@ class Zone(object):
 			self.maps = maps
 			self.levels = len(maps)
 
+		self.grid_width = 1
 		self.level = 0
 		self.map = self.maps[self.level]
 
@@ -85,16 +86,20 @@ class Zone(object):
 		self.height = len(self.map)
 
 		self.redraw = []
+		self.config()
+
+	def config():
+		pass
 
 	def exit(self, entity, direction):
 		if direction == UP:
-			newlevel = self.level + 1
+			newlevel = self.level + self.grid_width
 			if newlevel >= len(self.maps):
 				return
 			else:
 				newx, newy = self.find_empty_position(level=newlevel, position=DOWN)
 		elif direction == DOWN:
-			newlevel = self.level - 1
+			newlevel = self.level - self.grid_width
 			if newlevel < 0:
 				return
 			else:
