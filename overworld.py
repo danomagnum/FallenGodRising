@@ -88,7 +88,7 @@ class Zone(object):
 		self.redraw = []
 		self.config()
 
-	def config():
+	def config(self):
 		pass
 
 	def exit(self, entity, direction):

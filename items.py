@@ -28,7 +28,7 @@ class Item(object):
 	def __str__(self):
 		return self.name
 
-class Equipment(Item):
+class Gear(Item):
 	def config(self):
 		pass
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines

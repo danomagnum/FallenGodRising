@@ -10,6 +10,7 @@ from constants import *
 NEWDIST = True
 DAMAGE_CALC = 1
 
+
 class GameOver(Exception):
 	pass
 
@@ -103,10 +104,21 @@ class Move(object):
 		target_coefficient = 1.1 / len(targets)
 
 		for target in targets:
+			# figure out if the move hits.
 			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
 
 			if hit_chance * user.luck > random.random():
-				if self.power != 0:
+
+
+				# calculate whether it is a critical hit:
+				crit_metric = CRIT_RATE * (user.luck / target.luck) * (user.speed / target.speed)
+				if random.random() < crit_metric:
+					crit_factor = 2 # crit
+					print('Crit!')
+				else:
+					crit_factor = 1
+
+				if self.power != 0: # zero power moves are status only
 					if self.physical[0]:
 						attack_str = user.physical_strength
 					else:
@@ -117,16 +129,17 @@ class Move(object):
 						attack_def = target.special_defense
 
 					if DAMAGE_CALC == 0:
-						damage = ((user.level/100.0 ) * attack_str/attack_def * self.power + 2) * target_coefficient
+						damage = ((user.level/100.0 ) * attack_str/(attack_def/crit_factor) * self.power + 2) * target_coefficient
 					elif DAMAGE_CALC == 1:
 						hp_ratio = (target.virtual_hp / 6.0) # virtual hp is the health of a neutrally 
-						strdef_ratio = attack_str / attack_def
+						strdef_ratio = attack_str / (attack_def / crit_factor)
 						power_ratio = self.power / 10.0
 						level_factor1 =  utility.clamp((1 + (user.level - target.level) / 10), 0.9, 4)
 						level_factor1 = math.sqrt(level_factor1)
 
 						damage = hp_ratio * strdef_ratio * power_ratio * level_factor1
 
+					# Do elemental effects
 					for atk_element in self.elements:
 						for target_element in target.elements:
 							damage *= atk_element.effectiveness(target_element)
@@ -142,6 +155,8 @@ class Move(object):
 					else:
 						damage -= ((-damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
 
+
+					# final damage randomization and adjustment based on luck
 					if NEWDIST:
 						# Using the triangle distribution now so the mean can be off-center
 						low = damage - (damage/8.0)
@@ -156,11 +171,10 @@ class Move(object):
 					else:
 						damage = min(-1,damage)
 
-					#print( 'damage: {}, low: {}, high: {}, hp: {}'.format(damage, low, high, target.hp))
+					#apply the damage
 					target.hp -= int(damage)
 
 					print('{} used move {} on {} for {}'.format(user.name,self.name, targets[0].name, int(damage)))
-					#print(target.hp)
 
 				self.effect(target)
 			else:
@@ -309,261 +323,60 @@ class Equipment(object):
 			return_items.append(self.Token)
 			self.Token = None
 		return return_items
+	
+	def all_items(self):
+		items = [self.Head, self.Body, self.Legs, self.Hands, self.Right, self.Left, self.Token]
+		return [item for item in items if item is not None]
 
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
-		if self.Head is not None:
-			initial = self.Head.physical_strength(initial)
-		if self.Body is not None:
-			initial = self.Body.physical_strength(initial)
-		if self.Legs is not None:
-			initial = self.Legs.physical_strength(initial)
-		if self.Hands is not None:
-			initial = self.Hands.physical_strength(initial)
-		if self.Right is not None:
-			initial = self.Right.physical_strength(initial)
-		if self.Hands is not None:
-			initial = self.Hands.physical_strength(initial)
-		if self.Left is not None:
-			initial = self.Left.physical_strength(initial)
-		if self.Hands is not None:
-			initial = self.Hands.physical_strength(initial)
-		if self.Left is not None:
-			initial = self.Left.physical_strength(initial)
-		if self.Right is not None:
-			initial = self.Right.physical_strength(initial)
-		if self.Token is not None:
-			initial = self.Token.physical_strength(initial)
+		for item in self.all_items():
+			initial = item.physical_strength(initial)
 		return initial
 
 	def physical_defense(self, initial):
-		if self.Head is not None:
-			initial = self.Head.physical_defense(initial)
-		if self.Body is not None:
-			initial = self.Body.physical_defense(initial)
-		if self.Legs is not None:
-			initial = self.Legs.physical_defense(initial)
-		if self.Hands is not None:
-			initial = self.Hands.physical_defense(initial)
-		if self.Right is not None:
-			initial = self.Right.physical_defense(initial)
-		if self.Hands is not None:
-			initial = self.Hands.physical_defense(initial)
-		if self.Left is not None:
-			initial = self.Left.physical_defense(initial)
-		if self.Hands is not None:
-			initial = self.Hands.physical_defense(initial)
-		if self.Left is not None:
-			initial = self.Left.physical_defense(initial)
-		if self.Right is not None:
-			initial = self.Right.physical_defense(initial)
-		if self.Token is not None:
-			initial = self.Token.physical_defense(initial)
+		for item in self.all_items():
+			initial = item.physical_defense(initial)
 		return initial
 
 	def special_strength(self, initial):
-		if self.Head is not None:
-			initial = self.Head.special_strength(initial)
-		if self.Body is not None:
-			initial = self.Body.special_strength(initial)
-		if self.Legs is not None:
-			initial = self.Legs.special_strength(initial)
-		if self.Hands is not None:
-			initial = self.Hands.special_strength(initial)
-		if self.Right is not None:
-			initial = self.Right.special_strength(initial)
-		if self.Hands is not None:
-			initial = self.Hands.special_strength(initial)
-		if self.Left is not None:
-			initial = self.Left.special_strength(initial)
-		if self.Hands is not None:
-			initial = self.Hands.special_strength(initial)
-		if self.Left is not None:
-			initial = self.Left.special_strength(initial)
-		if self.Right is not None:
-			initial = self.Right.special_strength(initial)
-		if self.Token is not None:
-			initial = self.Token.special_strength(initial)
+		for item in self.all_items():
+			initial = item.special_strength(initial)
 		return initial
 
 	def special_defense(self, initial):
-		if self.Head is not None:
-			initial = self.Head.special_defense(initial)
-		if self.Body is not None:
-			initial = self.Body.special_defense(initial)
-		if self.Legs is not None:
-			initial = self.Legs.special_defense(initial)
-		if self.Hands is not None:
-			initial = self.Hands.special_defense(initial)
-		if self.Right is not None:
-			initial = self.Right.special_defense(initial)
-		if self.Hands is not None:
-			initial = self.Hands.special_defense(initial)
-		if self.Left is not None:
-			initial = self.Left.special_defense(initial)
-		if self.Hands is not None:
-			initial = self.Hands.special_defense(initial)
-		if self.Left is not None:
-			initial = self.Left.special_defense(initial)
-		if self.Right is not None:
-			initial = self.Right.special_defense(initial)
-		if self.Token is not None:
-			initial = self.Token.special_defense(initial)
+		for item in self.all_items():
+			initial = item.special_defense(initial)
 		return initial
-
-
+		
 	def speed(self, initial):
-		if self.Head is not None:
-			initial = self.Head.speed(initial)
-		if self.Body is not None:
-			initial = self.Body.speed(initial)
-		if self.Legs is not None:
-			initial = self.Legs.speed(initial)
-		if self.Hands is not None:
-			initial = self.Hands.speed(initial)
-		if self.Right is not None:
-			initial = self.Right.speed(initial)
-		if self.Hands is not None:
-			initial = self.Hands.speed(initial)
-		if self.Left is not None:
-			initial = self.Left.speed(initial)
-		if self.Hands is not None:
-			initial = self.Hands.speed(initial)
-		if self.Left is not None:
-			initial = self.Left.speed(initial)
-		if self.Right is not None:
-			initial = self.Right.speed(initial)
-		if self.Token is not None:
-			initial = self.Token.speed(initial)
+		for item in self.all_items():
+			initial = item.speed(initial)
 		return initial
-
 
 	def hp(self, initial):
-		if self.Head is not None:
-			initial = self.Head.hp(initial)
-		if self.Body is not None:
-			initial = self.Body.hp(initial)
-		if self.Legs is not None:
-			initial = self.Legs.hp(initial)
-		if self.Hands is not None:
-			initial = self.Hands.hp(initial)
-		if self.Right is not None:
-			initial = self.Right.hp(initial)
-		if self.Hands is not None:
-			initial = self.Hands.hp(initial)
-		if self.Left is not None:
-			initial = self.Left.hp(initial)
-		if self.Hands is not None:
-			initial = self.Hands.hp(initial)
-		if self.Left is not None:
-			initial = self.Left.hp(initial)
-		if self.Right is not None:
-			initial = self.Right.hp(initial)
-		if self.Token is not None:
-			initial = self.Token.hp(initial)
+		for item in self.all_items():
+			initial = item.hp(initial)
 		return initial
 
-
 	def max_hp(self, initial):
-		if self.Head is not None:
-			initial = self.Head.max_hp(initial)
-		if self.Body is not None:
-			initial = self.Body.max_hp(initial)
-		if self.Legs is not None:
-			initial = self.Legs.max_hp(initial)
-		if self.Hands is not None:
-			initial = self.Hands.max_hp(initial)
-		if self.Right is not None:
-			initial = self.Right.max_hp(initial)
-		if self.Hands is not None:
-			initial = self.Hands.max_hp(initial)
-		if self.Left is not None:
-			initial = self.Left.max_hp(initial)
-		if self.Hands is not None:
-			initial = self.Hands.max_hp(initial)
-		if self.Left is not None:
-			initial = self.Left.max_hp(initial)
-		if self.Right is not None:
-			initial = self.Right.max_hp(initial)
-		if self.Token is not None:
-			initial = self.Token.max_hp(initial)
+		for item in self.all_items():
+			initial = item.max_hp(initial)
 		return initial
 
 	def evasion(self, initial):
-		if self.Head is not None:
-			initial = self.Head.evasion(initial)
-		if self.Body is not None:
-			initial = self.Body.evasion(initial)
-		if self.Legs is not None:
-			initial = self.Legs.evasion(initial)
-		if self.Hands is not None:
-			initial = self.Hands.evasion(initial)
-		if self.Right is not None:
-			initial = self.Right.evasion(initial)
-		if self.Hands is not None:
-			initial = self.Hands.evasion(initial)
-		if self.Left is not None:
-			initial = self.Left.evasion(initial)
-		if self.Hands is not None:
-			initial = self.Hands.evasion(initial)
-		if self.Left is not None:
-			initial = self.Left.evasion(initial)
-		if self.Right is not None:
-			initial = self.Right.evasion(initial)
-		if self.Token is not None:
-			initial = self.Token.evasion(initial)
+		for item in self.all_items():
+			initial = item.evasion(initial)
 		return initial
 
 	def accuracy(self, initial):
-		if self.Head is not None:
-			initial = self.Head.accuracy(initial)
-		if self.Body is not None:
-			initial = self.Body.accuracy(initial)
-		if self.Legs is not None:
-			initial = self.Legs.accuracy(initial)
-		if self.Hands is not None:
-			initial = self.Hands.accuracy(initial)
-		if self.Right is not None:
-			initial = self.Right.accuracy(initial)
-		if self.Hands is not None:
-			initial = self.Hands.accuracy(initial)
-		if self.Left is not None:
-			initial = self.Left.accuracy(initial)
-		if self.Hands is not None:
-			initial = self.Hands.accuracy(initial)
-		if self.Left is not None:
-			initial = self.Left.accuracy(initial)
-		if self.Right is not None:
-			initial = self.Right.accuracy(initial)
-		if self.Token is not None:
-			initial = self.Token.accuracy(initial)
+		for item in self.all_items():
+			initial = item.accuracy(initial)
 		return initial
 
 	def luck(self, initial):
-		if self.Head is not None:
-			initial = self.Head.luck(initial)
-		if self.Body is not None:
-			initial = self.Body.luck(initial)
-		if self.Legs is not None:
-			initial = self.Legs.luck(initial)
-		if self.Hands is not None:
-			initial = self.Hands.luck(initial)
-		if self.Right is not None:
-			initial = self.Right.luck(initial)
-		if self.Hands is not None:
-			initial = self.Hands.luck(initial)
-		if self.Left is not None:
-			initial = self.Left.luck(initial)
-		if self.Hands is not None:
-			initial = self.Hands.luck(initial)
-		if self.Left is not None:
-			initial = self.Left.luck(initial)
-		if self.Right is not None:
-			initial = self.Right.luck(initial)
-		if self.Token is not None:
-			initial = self.Token.luck(initial)
+		for item in self.all_items():
+			initial = item.luck(initial)
 		return initial
-
-
 
 class Character(object):
 	def __init__(self, game,  name=None, level=1):
@@ -908,11 +721,21 @@ class Entity(object):
 	def toward_entity(self, entity):
 		y = self.y
 		x = self.x
+		up = -1
+		down = -1
+		left = -1
+		right = -1
 		if entity.dist_map:
-			up = entity.dist_map[y - 1][x]
-			down = entity.dist_map[y + 1][x]
-			left = entity.dist_map[y][x - 1]
-			right = entity.dist_map[y][x + 1]
+			ymax = len(entity.dist_map) - 1
+			xmax = len(entity.dist_map[0]) - 1
+			if y > 0:
+				up = entity.dist_map[y - 1][x]
+			if y < ymax:
+				down = entity.dist_map[y + 1][x]
+			if x > 0:
+				left = entity.dist_map[y][x - 1]
+			if x < xmax:
+				right = entity.dist_map[y][x + 1]
 
 			options = [up, down, left, right]
 
