@@ -1,19 +1,27 @@
+class Biome(object):
+	def __init__(self, name):
+		self.name = name
+		self.modifiers = {}
+	
 class Element(object):
-	def __init__(self, name, nominal = 1.0, bonus=1.5):
+	def __init__(self, name, nominal = 1.0):
 		self.name = name
 		self.nominal_modifier = nominal
-		self.special_modifiers = {}
-		self.bonus = bonus
+		self.modifiers = {}
 
-	def effectiveness(self, defending_element):
-		return self.special_modifiers[defending_element] if (defending_element in self.special_modifiers) else self.nominal_modifier
+	def effectiveness(self, defending_element, biome = None):
+		biome_mod = 1.0
+		if biome is not None:
+			biome_mod = biome.modifiers.get(self, 1.0)
+		return biome_mod * self.modifiers.get(defending_element, self.nominal_modifier)
 
 	def __str__(self):
 		return self.name
 
 
-#base definitions
+#base element definitions
 Normal = Element('Normal')
+
 Fire = Element('Fire')
 Water = Element('Water')
 Earth = Element('Earth')
@@ -23,34 +31,75 @@ Wind = Element('Wind')
 Light = Element('Light')
 Dark = Element('Dark')
 
-#interactions
-Fire.special_modifiers[Water] = 0.5
-Fire.special_modifiers[Wind] = 1.5
-Fire.special_modifiers[Fire] = 0.75
+# base biome definitions
+Sea = Biome('Sea')
+Desert = Biome('Desert')
+Marsh = Biome('Marsh')
+Forest = Biome('Forest')
+Plains = Biome('Plains')
+Mountains = Biome('Mountains')
 
-Water.special_modifiers[Fire] = 2.0
-Water.special_modifiers[Earth] = 1.5
-Water.special_modifiers[Electric] = 0.5
-Water.special_modifiers[Water] = 0.75
+Sky = Biome('Sky')
+Underground = Biome('Underground')
 
-Earth.special_modifiers[Water] = 1.5
-Earth.special_modifiers[Electric] = 2
-Earth.special_modifiers[Earth] = 0.75
+#element interactions
+Fire.modifiers[Water] = 0.5
+Fire.modifiers[Wind] = 1.5
+Fire.modifiers[Fire] = 0.75
 
-Electric.special_modifiers[Water] = 2.0
-Electric.special_modifiers[Earth] = 0.5
-Electric.special_modifiers[Electric] = 0.75
+Water.modifiers[Fire] = 2.0
+Water.modifiers[Earth] = 1.5
+Water.modifiers[Electric] = 0.5
+Water.modifiers[Water] = 0.75
 
-Wind.special_modifiers[Fire] = 1.5
-Wind.special_modifiers[Earth] = 1.5
-Wind.special_modifiers[Wind] = 0.75
+Earth.modifiers[Water] = 1.5
+Earth.modifiers[Electric] = 2
+Earth.modifiers[Earth] = 0.75
 
-Light.special_modifiers[Dark] = 1.5
-Light.special_modifiers[Light] = 0.5
-Light.special_modifiers[Normal] = 2.0
+Electric.modifiers[Water] = 2.0
+Electric.modifiers[Earth] = 0.5
+Electric.modifiers[Electric] = 0.75
 
-Dark.special_modifiers[Light] = 1.5
-Dark.special_modifiers[Dark] = 0.5
-Dark.special_modifiers[Normal] = 2.0
+Wind.modifiers[Fire] = 1.5
+Wind.modifiers[Earth] = 1.5
+Wind.modifiers[Wind] = 0.75
+
+Light.modifiers[Dark] = 1.5
+Light.modifiers[Light] = 0.5
+Light.modifiers[Normal] = 2.0
+
+Dark.modifiers[Light] = 1.5
+Dark.modifiers[Dark] = 0.5
+Dark.modifiers[Normal] = 2.0
 
 
+# base biome interactions.
+# each element has one "strong" biome.
+# Light and Dark are slightly nerfed in all "normal" biomes.
+# and majorly nerfed in opposing biomes
+
+Desert.modifiers[Fire] = 1.5
+Marsh.modifiers[Water] = 1.5
+Forest.modifiers[Earth] = 1.5
+Plains.modifiers[Electric] = 1.5
+Mountains.modifiers[Wind] = 1.5
+
+Sky.modifiers[Light] = 1.5
+Desert.modifiers[Light] = 0.8
+Marsh.modifiers[Light] = 0.8
+Forest.modifiers[Light] = 0.8
+Plains.modifiers[Light] = 0.8
+Mountains.modifiers[Light] = 0.8
+Underground.modifiers[Light] = 0.4
+
+Underground.modifiers[Dark] = 1.5
+Desert.modifiers[Dark] = 0.8
+Marsh.modifiers[Dark] = 0.8
+Forest.modifiers[Dark] = 0.8
+Plains.modifiers[Dar] = 0.8
+Mountains.modifiers[Dark] = 0.8
+Sky.modifiers[Dark] = 0.4
+
+
+elements = [Normal, Fire, Water, Earth, Electric, Wind, Light, Dark]
+biomes = [Sea, Marsh, Plains, Desert, Forest, Mountains, Sky, Underground]
