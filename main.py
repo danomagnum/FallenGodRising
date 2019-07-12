@@ -16,11 +16,22 @@ class GameOver(Exception):
 
 class Game(object):
 	def __init__(self):
+		self.overworld = None
+		self.biome_map = None
+		self.overworld_x = 0
+		self.overworld_y = 0
+
 		self.zone = None
 		self.zones = {}
 		self.display = None
 		self.player = None
 		self.game_vars = {}
+
+	def biome(self):
+		if self.zone == self.overworld:
+			return elements.biomes[self.biome_map[self.overworld_y][self.overworld[x]]]
+		else:
+			return zone.biome()
 
 	def add_zone(self, zone):
 		if zone.name not in self.zones:

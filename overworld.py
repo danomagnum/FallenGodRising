@@ -87,6 +87,10 @@ class Zone(object):
 
 		self.redraw = []
 		self.config()
+		self.biome_map = None
+
+	def biome(self):
+		return self.biome_map
 
 	def config(self):
 		pass

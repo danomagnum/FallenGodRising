@@ -1,4 +1,5 @@
 from elements import *
+import random
 from constants import *
 
 class Status(object):
@@ -7,7 +8,17 @@ class Status(object):
 			self.name = 'Status'
 		else:
 			self.name = name
-		self.expired = False
+		self.life = 0
+		self.max_life = 0
+		for base in self.__class__.__bases__:
+			try:
+				base.config(self)
+			except:
+				pass
+
+		self.config()
+	def config(self, effected):
+		pass
 	def pre_battle(self, effected):
 		pass
 	def pre_turn(self, effected):
@@ -21,9 +32,21 @@ class Status(object):
 	def post_turn(self, effected):
 		pass
 	def post_battle(self, effected): # remove yourself at the end of a battle if needed
-		effected.status.remove(self)
-	def tick(self, effected): # for persistant effects
 		pass
+	def termination_check(self, effected):
+		termination_roll = random.random() * self.life
+		if self.max_life > 0:
+			if termination_roll > self.max_life:
+				return True
+		return False
+
+	# todo: actually call this
+	def tick(self, effected): # for persistant effects
+		self.life += 1
+		if self.termination_check(effected):
+			print('{} is no longer {}'.format(effected.name, self.name))
+			effected.status.remove(self)
+
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		return initial
 	def physical_defense(self, initial):
@@ -46,7 +69,7 @@ class Status(object):
 		return initial
 
 class StatMod(Status):
-	def __init__(self, multiplier, stat):
+	def config(self, multiplier, stat):
 		self.multiplier = multiplier
 		self.stat = stat
 		self.name = '{} {}%'.format(stat,self.multiplier)
@@ -103,7 +126,7 @@ class StatMod(Status):
 			return initial
 
 class Poison_Minor(Status):
-	def __init__(self):
+	def config(self):
 		self.name = 'Minor Poison'
 	def pre_turn(self, effected):
 		damage = max(1, effected.hp / 6)
@@ -111,7 +134,7 @@ class Poison_Minor(Status):
 		effected.hp -= damage
 
 class Poison_Major(Status):
-	def __init__(self):
+	def config(self):
 		self.name = 'Major Poison'
 	def pre_turn(self, effected):
 		damage = max(1, effected.hp / 3)
