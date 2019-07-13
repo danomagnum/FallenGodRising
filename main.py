@@ -10,6 +10,8 @@ from constants import *
 NEWDIST = True
 DAMAGE_CALC = 1
 
+MOVE_REGEN_TICKS = 1000
+
 
 class GameOver(Exception):
 	pass
@@ -95,6 +97,8 @@ class Move(object):
 				base.config(self)
 			except:
 				pass
+
+		self.ticks = 0
 
 		self.config()
 		self.mp = self.max_mp
@@ -197,6 +201,14 @@ class Move(object):
 		string += self.name + ' '
 		string += '( ' + str(int(self.mp)) + '/' + str(int(self.max_mp)) + ' )'
 		return string
+	def tick(self, user):
+		tick_rate = MOVE_REGEN_TICKS * self.max_mp
+		self.tick += 1
+		if self.tick > tick_rate:
+			self.tick = 0
+			if self.mp < self.max_mp:
+				self.mp += 1
+		
 
 
 class Equipment(object):
@@ -428,6 +440,8 @@ class Character(object):
 		pass
 
 	def subtick(self):
+		for move in self.moves:
+			move.tick(self)
 		for stat in self.status:
 			stat.tick(self)
 
