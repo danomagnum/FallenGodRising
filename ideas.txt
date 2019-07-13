@@ -13,3 +13,4 @@ Done:
 	Shops
 	Global game data variables (dict on the player class?)
 	make items initialize with config routine
+	moves should "tick" to regenerate (or not depending on the move)
