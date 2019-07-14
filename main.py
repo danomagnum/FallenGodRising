@@ -92,7 +92,8 @@ class Move(object):
 	
 		self.helptext = ''
 
-		utility.call_all_configs(self)
+		utility.call_all('config', self)
+		#utility.call_all_configs(self)
 
 		self.ticks = 0
 		self.mp = self.max_mp
@@ -421,7 +422,8 @@ class Character(object):
 		self.moves = []
 		self._level = 1
 
-		utility.call_all_configs(self)
+		utility.call_all('config', self)
+		#utility.call_all_configs(self)
 
 		self.level = level
 		self.full_heal()
@@ -652,7 +654,8 @@ class Entity(object):
 		self.is_player = is_player
 		self.helptext = ''
 		
-		utility.call_all_configs(self)
+		#utility.call_all_configs(self)
+		utility.call_all('config', self)
 
 		if self.is_player:
 			self.priority = 10

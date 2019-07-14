@@ -87,7 +87,8 @@ class Zone(object):
 		self.height = len(self.map)
 
 		self.redraw = []
-		utility.call_all_configs(self)
+		#utility.call_all_configs(self)
+		utility.call_all('config', self)
 		self.biome_map = None
 
 	def biome(self):
