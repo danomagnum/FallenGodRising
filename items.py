@@ -2,6 +2,7 @@ from constants import *
 import effects
 import elements
 import utility
+import inspect
 
 class Item(object):
 	def __init__(self, game, name=None, target=TARGET_NONE, use=None):
@@ -17,7 +18,8 @@ class Item(object):
 		if use is not None:
 			self.use = use
 	
-		utility.call_all_configs(self)
+		#utility.call_all_configs(self)
+		utility.call_all('config', self)
 
 	@property
 	def name(self):
@@ -81,9 +83,11 @@ class Gear(Item):
 		return damage
 	def attack(self, damage, wearer, defender):
 		return damage
+
 	def elements(self, element_list):
 		#element_list is a list containing all elements. Return a new list of all
 		#elements with this item considered
+		#TODO: split this into attack_elements and defense_elements
 		return element_list
 
 	def tick(self, wearer):
@@ -245,9 +249,64 @@ class Key(Item):
 		self.rarity = 0.5
 		self.helptext = 'Opens a generic door'
 
-class FireMod(Gear):
+
 	def config(self):
 		self.prefixes.append('Fire')
+	def elements(self, element_list):
+		if elements.Fire not in element_list:
+			element_list.append(elements.Fire)
+		return element_list
+
+class WaterMod(Gear):
+	def config(self):
+		self.prefixes.append('Water')
+	def elements(self, element_list):
+		if elements.Water not in element_list:
+			element_list.append(elements.Water)
+		return element_list
+
+class EarthMod(Gear):
+	def config(self):
+		self.prefixes.append('Earth')
+	def elements(self, element_list):
+		if elements.Earth not in element_list:
+			element_list.append(elements.Earth)
+		return element_list
+
+class ElectricMod(Gear):
+	def config(self):
+		self.prefixes.append('Electric')
+	def elements(self, element_list):
+		if elements.Electric not in element_list:
+			element_list.append(elements.Electric)
+		return element_list
+
+class WindMod(Gear):
+	def config(self):
+		self.prefixes.append('Wind')
+	def elements(self, element_list):
+		if elements.Wind not in element_list:
+			element_list.append(elements.Wind)
+		return element_list
+
+
+class LightMod(Gear):
+	def config(self):
+		self.prefixes.append('Light')
+	def elements(self, element_list):
+		if elements.Light not in element_list:
+			element_list.append(elements.Light)
+		return element_list
+
+class DarkMod(Gear):
+	def config(self):
+		self.prefixes.append('Dark')
+	def elements(self, element_list):
+		if elements.Dark not in element_list:
+			element_list.append(elements.Dark)
+		return element_list
+
+
 
 class Sword(Gear):
 	def config(self):
@@ -260,7 +319,32 @@ class Sword(Gear):
 		return initial + 10
 
 class FireSword(FireMod, Sword):
-	def elements(self, element_list):
-		if elements.Fire not in element_list:
-			element_list.append(elements.Fire)
-		return element_list
+	pass
+
+gear_mods = [FireMod, WaterMod, EarthMod, ElectricMod, WindMod, LightMod, DarkMod]
+
+def add_item_mod(instance, mod):
+
+	mro = list(inspect.getmro(instance.__class__))
+	calls = set()
+	for m in mro:
+		try:
+			call = m.config
+			calls.add(call)
+		except:
+			pass
+
+	class NewClass(instance.__class__, mod):
+		pass
+	instance.__class__ = NewClass
+
+	try:
+		if mod.config not in calls:
+			mod.config(instance)
+	except:
+		pass
+	return instance
+
+def gen_thunder_sword(game):
+	test_thunder_sword = add_item_mod(Sword(game), ElectricMod)
+	return test_thunder_sword

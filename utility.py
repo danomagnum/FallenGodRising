@@ -1,16 +1,57 @@
 import inspect
 
-def call_all_configs(instance):
+def call_all_recursive(value, method, instance):
+	#get a higherarcy list of all base classes
 	mro = list(inspect.getmro(instance.__class__))
+
+	#go through the base classes and check if they have a config method.	
+	#if they do, add them to the set.  The set keeps any classes that inherited
+	#the config method from a base class from running a config twice.
 	calls = set()
 	for m in mro:
 		try:
-			call = m.config
+			call = getattr(m, method)
 			calls.add(call)
 		except:
 			pass
+	#change the set to a list
+	calls = list(calls)
+	#so the order can be reversed and they can be called from
+	# the mose base to the most top-level.  So top-level takes precidence
+	# if any of the same values are set
+	calls.reverse()
+
+	# finally call them all
+	for call in calls:
+		value = call(instance, value)
+	return value
+
+def call_all(method, instance):
+	#get a higherarcy list of all base classes
+	mro = list(inspect.getmro(instance.__class__))
+
+	#go through the base classes and check if they have a config method.	
+	#if they do, add them to the set.  The set keeps any classes that inherited
+	#the config method from a base class from running a config twice.
+	calls = set()
+	for m in mro:
+		try:
+			call = getattr(m, method)
+			calls.add(call)
+		except:
+			pass
+	#change the set to a list
+	calls = list(calls)
+	#so the order can be reversed and they can be called from
+	# the mose base to the most top-level.  So top-level takes precidence
+	# if any of the same values are set
+	calls.reverse()
+
+	# finally call them all
 	for call in calls:
 		call(instance)
+
+
 
 def clamp(val, minimum, maximum):
 	return min(maximum, max(val, minimum))

@@ -456,12 +456,12 @@ class Display(object):
 
 		box.addstr(4, col2pos, "Head: {}".format(combatant.equipment.Head), curses.color_pair(11))
 		box.addstr(5, col2pos, "Body: {}".format(combatant.equipment.Body), curses.color_pair(11))
-		box.addstr(6, col2pos, "Body: {}".format(combatant.equipment.Legs), curses.color_pair(11))
+		box.addstr(6, col2pos, "Legs: {}".format(combatant.equipment.Legs), curses.color_pair(11))
 		if combatant.equipment.Hands is None:
-			box.addstr(7, col2pos, "Body: {}".format(combatant.equipment.Left), curses.color_pair(11))
-			box.addstr(8, col2pos, "Body: {}".format(combatant.equipment.Right), curses.color_pair(11))
+			box.addstr(7, col2pos, "Left: {}".format(combatant.equipment.Left), curses.color_pair(11))
+			box.addstr(8, col2pos, "Right: {}".format(combatant.equipment.Right), curses.color_pair(11))
 		else:
-			box.addstr(7, col2pos, "Body: {}".format(combatant.equipment.Hands), curses.color_pair(11))
+			box.addstr(7, col2pos, "Hands: {}".format(combatant.equipment.Hands), curses.color_pair(11))
 
 		box.addstr(9, col2pos, "Token: {}".format(combatant.equipment.Token), curses.color_pair(11))
 

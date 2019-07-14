@@ -11,7 +11,8 @@ class Status(object):
 			self.name = name
 		self.life = 0
 		self.max_life = 0
-		utility.call_all_configs(self)
+		#utility.call_all_configs(self)
+		utility.call_all('config', self)
 
 		self.config()
 	def config(self, effected):

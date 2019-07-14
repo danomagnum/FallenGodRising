@@ -69,7 +69,7 @@ try:
 					player_party[i] = player_choice
 					i += 1
 					if i == graphics_interface.MAX_COMBATANTS:
-						user = main.Entity('playercharacter', game, combatants=player_party, item_list=[items.Potion(game), items.Potion(game), items.Booster(game), items.HealAll(game)], char='@',is_player=True)
+						user = main.Entity('playercharacter', game, combatants=player_party, item_list=[items.Potion(game), items.Potion(game), items.Booster(game), items.HealAll(game), items.add_item_mod(items.gen_thunder_sword(game), items.FireMod)], char='@',is_player=True)
 						#user.combatants = player_party
 						user.x, user.y = zone.find_empty_position()
 						user.backpack.gold = 100
