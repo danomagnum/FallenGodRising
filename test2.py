@@ -15,6 +15,7 @@ import entities
 import elements
 from constants import *
 
+import random
 import maps.testmap
 
 try:
@@ -50,7 +51,7 @@ try:
 				display.show_combatant_stats(choice, display.start_menus[(i * 3) + 2])
 
 			update_confirm_box(player_characters[0])
-			player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters, clear=False, callback_on_change=update_confirm_box)
+			player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters,selected=random.choice(player_characters) ,clear=False, callback_on_change=update_confirm_box)
 
 			if player_choice is not None:
 				player_elements = [elements.Normal, elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
@@ -59,7 +60,7 @@ try:
 					player_choice.elements.append(choice)
 					display.show_combatant_stats(player_choice, display.start_menus[(i * 3) + 2])
 
-				element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, clear=False, callback_on_change=update_confirm_box)
+				element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, selected=random.choice(player_elements), clear=False, callback_on_change=update_confirm_box)
 
 				#confirm_choices = ['Accept', 'Cancel', 'Randomize']
 				#confirm_choice = graphics_interface.menu(display.start_menus[(i * 3) + 2], confirm_choices, clear=False)
