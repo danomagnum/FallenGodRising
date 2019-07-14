@@ -52,7 +52,7 @@ class Gear(Item):
 	def use(self, target):
 		return_items = target.equipment.equip(self)
 		for item in return_items:
-			self.game.player.backpack.store(return_items)
+			self.game.player.backpack.store(item)
 			print('{} unequipped {}'.format(target.name,item.name))
 		print('{} equipped {}'.format(target.name,self.name))
 
@@ -256,6 +256,15 @@ class Key(Item):
 		if elements.Fire not in element_list:
 			element_list.append(elements.Fire)
 		return element_list
+
+class FireMod(Gear):
+	def config(self):
+		self.prefixes.append('Fire')
+	def elements(self, element_list):
+		if elements.Fire not in element_list:
+			element_list.append(elements.Fire)
+		return element_list
+
 
 class WaterMod(Gear):
 	def config(self):

@@ -170,21 +170,17 @@ class Display(object):
 		YMAX, XMAX = self.screen.getmaxyx()
 
 
-		self.combatantboxsize = [5, int(XMAX/MAX_COMBATANTS)]
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
-		self.msgboxsize = [6, int(XMAX)]
-		self.charboxsize = ((YMAX  - self.msgboxsize[0]) / MAX_COMBATANTS, 40)
+		self.charboxsize = (YMAX / MAX_COMBATANTS, 40)
+		self.msgboxsize = [6, int(XMAX - self.charboxsize[1])]
 		self.charboxes = []
 		self.nmeboxes = []
-		#self.mybox = []
 		for i in range(MAX_COMBATANTS):
-			#self.nmebox.append(curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],0,self.combatantboxsize[1]*i))
-			#self.mybox.append(curses.newwin(self.combatantboxsize[0],self.combatantboxsize[1],YMAX-(self.combatantboxsize[0] + 5),self.combatantboxsize[1]*i))
 			charbox = curses.newwin(self.charboxsize[0],self.charboxsize[1],self.charboxsize[0]*i,0) 
 			nmebox = curses.newwin(self.charboxsize[0],self.charboxsize[1],self.charboxsize[0]*i,XMAX - self.charboxsize[1]) 
 			self.nmeboxes.append(nmebox)
 			self.charboxes.append(charbox)
-		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
+		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
 
 		self.user = user
 		self.enemy = enemy
@@ -201,7 +197,7 @@ class Display(object):
 			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i))
 			#self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],YMAX-(self.statboxsize[0] + 5),self.statboxsize[1]*i))
 
-		self.startmenusize = ((YMAX - 1 - self.msgboxsize[0]) / MAX_COMBATANTS, (XMAX - 1) / MAX_COMBATANTS)
+		self.startmenusize = ((YMAX) / MAX_COMBATANTS, (XMAX - 1) / MAX_COMBATANTS)
 		self.start_menus = []
 		for i in range(MAX_COMBATANTS):
 			classbox = curses.newwin(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*0)
@@ -304,7 +300,6 @@ class Display(object):
 		self.screen.refresh()
 		for i in range(MAX_COMBATANTS):
 			if i < len(self.user.combatants):
-				#self.show_combatant(self.game.player.combatants[i], self.charboxes[i])
 				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
 				#self.mybox[i].box()
 				#self.mybox[i].refresh()
@@ -319,33 +314,19 @@ class Display(object):
 		self.msgbox.overlay(self.screen)
 		self.screen.refresh()
 
-	def show_combatant(self, combatant, box, hideexp=False):
-		box.clear()
-		box.box()
-		height, width = box.getmaxyx()
-		box.addstr(0, 1, combatant.name)
-		box.addstr(1, 1, progress_bar(combatant.hp, combatant.max_hp, width - 2), curses.color_pair(1))
-		box.addstr(2, 1, str(int(math.ceil(combatant.hp))) + ' / ' + str(int(math.ceil(combatant.max_hp))), curses.color_pair(11))
-		if not hideexp:
-			box.addstr(3, 1, progress_bar(combatant.exp - combatant.exp_at_level(combatant.level), combatant.exp_at_level(combatant.level + 1) - combatant.exp_at_level(combatant.level), self.combatantboxsize[1] - 2), curses.color_pair(4))
-		if (combatant == self.user.combatant) or (combatant == self.enemy.combatant):
-			box.addstr(4, 1, 'Active')
-		box.refresh()
-
 	def menu(self, options, cols = 1, selected = None):
 		#window = curses.newwin(4, 40, 20, 10)
 		YMAX, XMAX = self.screen.getmaxyx()
-		window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
+		#window = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],0)
+		window = self.msgbox
 		return menu(window, options, cols, selected)
 
 	def refresh_combatant(self):
 		for i in range(MAX_COMBATANTS):
 			if i < len(self.user.combatants):
-				#self.show_combatant(self.user.combatants[i], self.mybox[i])
-				#self.show_combatant(self.game.player.combatants[i], self.charboxes[i])
 				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
 			if i < len(self.enemy.combatants):
-				self.show_combatant(self.enemy.combatants[i], self.nmeboxes[i])
+				self.show_combatant_stats(self.enemy.combatants[i], self.nmeboxes[i])
 		self.show_messages()
 
 	##################################
@@ -454,16 +435,28 @@ class Display(object):
 		element_list = ' '.join([str(element) for element in combatant.elements])
 		box.addstr(9, 1, "Elements: {}".format(element_list), curses.color_pair(11))
 
-		box.addstr(4, col2pos, "Head: {}".format(combatant.equipment.Head), curses.color_pair(11))
-		box.addstr(5, col2pos, "Body: {}".format(combatant.equipment.Body), curses.color_pair(11))
-		box.addstr(6, col2pos, "Legs: {}".format(combatant.equipment.Legs), curses.color_pair(11))
+		box.addstr(10, 1, "Head: {}".format(combatant.equipment.Head), curses.color_pair(11))
+		box.addstr(11, 1, "Body: {}".format(combatant.equipment.Body), curses.color_pair(11))
+		box.addstr(12, 1, "Legs: {}".format(combatant.equipment.Legs), curses.color_pair(11))
+		box.addstr(13, 1, "Token: {}".format(combatant.equipment.Token), curses.color_pair(11))
 		if combatant.equipment.Hands is None:
-			box.addstr(7, col2pos, "Left: {}".format(combatant.equipment.Left), curses.color_pair(11))
-			box.addstr(8, col2pos, "Right: {}".format(combatant.equipment.Right), curses.color_pair(11))
+			box.addstr(14, 1, "Left: {}".format(combatant.equipment.Left), curses.color_pair(11))
+			box.addstr(15, 1, "Right: {}".format(combatant.equipment.Right), curses.color_pair(11))
 		else:
-			box.addstr(7, col2pos, "Hands: {}".format(combatant.equipment.Hands), curses.color_pair(11))
+			box.addstr(14, 1, "Hands: {}".format(combatant.equipment.Hands), curses.color_pair(11))
 
-		box.addstr(9, col2pos, "Token: {}".format(combatant.equipment.Token), curses.color_pair(11))
+
+
+		#box.addstr(4, col2pos, "Head: {}".format(combatant.equipment.Head), curses.color_pair(11))
+		#box.addstr(5, col2pos, "Body: {}".format(combatant.equipment.Body), curses.color_pair(11))
+		#box.addstr(6, col2pos, "Legs: {}".format(combatant.equipment.Legs), curses.color_pair(11))
+		#if combatant.equipment.Hands is None:
+			#box.addstr(7, col2pos, "Left: {}".format(combatant.equipment.Left), curses.color_pair(11))
+			#box.addstr(8, col2pos, "Right: {}".format(combatant.equipment.Right), curses.color_pair(11))
+		#else:
+			#box.addstr(7, col2pos, "Hands: {}".format(combatant.equipment.Hands), curses.color_pair(11))
+#
+		#box.addstr(9, col2pos, "Token: {}".format(combatant.equipment.Token), curses.color_pair(11))
 
 		box.refresh()
 
