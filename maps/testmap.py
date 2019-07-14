@@ -70,6 +70,14 @@ class KeyChest(entities.Treasure):
 		self.backpack.store(items.Key(self.game))
 		self.char = 'k'
 
+class SwordChest(entities.Treasure):
+	# example basic enemy that gives an item when killed
+	def config(self):
+		self.name = 'Sword Chest'
+		self.backpack.store(items.FireSword(self.game))
+		self.backpack.store(items.Sword(self.game))
+		self.char = '/'
+
 class Door1(entities.Door):
 	pass
 class Door2(entities.Door):
@@ -137,8 +145,8 @@ def genzone(game):
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, PackRat)
 	maptools.Random_Map_Insert(zone, PackRat)
-	maptools.Random_Map_Insert(zone, SeeTest)
-	#maptools.Random_Map_Insert(zone, KeyChest)
+	#maptools.Random_Map_Insert(zone, SeeTest)
+	maptools.Random_Map_Insert(zone, SwordChest)
 	#maptools.Random_Map_Insert(zone, Door1)
 	#maptools.Random_Map_Insert(zone, Door2)
 	#maptools.Stair_Handler(zone)

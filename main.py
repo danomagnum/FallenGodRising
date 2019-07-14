@@ -92,15 +92,9 @@ class Move(object):
 	
 		self.helptext = ''
 
-		for base in self.__class__.__bases__:
-			try:
-				base.config(self)
-			except:
-				pass
+		utility.call_all_configs(self)
 
 		self.ticks = 0
-
-		self.config()
 		self.mp = self.max_mp
 
 	def config(self):
@@ -162,6 +156,7 @@ class Move(object):
 							if user_element == atk_element:
 								damage *= atk_element.bonus
 
+
 					self.uses += 1
 
 					# This makes athe attacks do more damage as you've got more experience using them
@@ -170,6 +165,11 @@ class Move(object):
 					else:
 						damage -= ((-damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
 
+					#use the attacker and defender item attack and defend checks.
+					for item in user.equipment.all_items():
+						damage = item.attack(damage, user, target)
+					for item in target.equipment.all_items():
+						damage = item.attack(damage, target, user)
 
 					# final damage randomization and adjustment based on luck
 					if NEWDIST:
@@ -203,9 +203,9 @@ class Move(object):
 		return string
 	def tick(self, user):
 		tick_rate = MOVE_REGEN_TICKS * self.max_mp
-		self.tick += 1
-		if self.tick > tick_rate:
-			self.tick = 0
+		self.ticks += 1
+		if self.ticks > tick_rate:
+			self.ticks = 0
 			if self.mp < self.max_mp:
 				self.mp += 1
 		
@@ -412,18 +412,32 @@ class Character(object):
 			self.name = name
 		self._hp = 1
 		self._exp = 0
-		self.elements = [elements.Normal]
+		self._elements = [elements.Normal]
 		self.status = []
 		self.equipment = Equipment(game)
 		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.helptext = ''
-		self.config()
+		self.moves = []
 		self._level = 1
+
+		utility.call_all_configs(self)
+
 		self.level = level
 		self.full_heal()
 		self._exp = self.exp_at_level(self.level)
 		self.initialized = True
+
+	@property
+	def elements(self):
+		e_list = self._elements
+		for item in self.equipment.all_items():
+			e_list = item.elements(e_list)
+		return e_list
+
+	@elements.setter
+	def elements(self, value):
+		self._elements = value
 
 	def config(self):
 		self.moves = []
@@ -440,6 +454,9 @@ class Character(object):
 		pass
 
 	def subtick(self):
+		for item in self.equipment.all_items():
+			item.subtick(self)
+			item.tick(self)
 		for move in self.moves:
 			move.tick(self)
 		for stat in self.status:
@@ -635,16 +652,12 @@ class Entity(object):
 		self.is_player = is_player
 		self.helptext = ''
 		
-		for base in self.__class__.__bases__:
-			try:
-				base.config(self)
-			except:
-				pass
+		utility.call_all_configs()
+
 		if self.is_player:
 			self.priority = 10
 		else:
 			self.priority = 100
-		self.config()
 
 	def config(self):
 		pass

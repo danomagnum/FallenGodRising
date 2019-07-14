@@ -1,6 +1,7 @@
 import random
 from main import Entity
 from constants import *
+import utility
 
 
 def map_gen(height, width, rooms, minroomsize = 4):
@@ -86,7 +87,7 @@ class Zone(object):
 		self.height = len(self.map)
 
 		self.redraw = []
-		self.config()
+		utility.call_all_configs(self)
 		self.biome_map = None
 
 	def biome(self):
