@@ -8,6 +8,7 @@ class Element(object):
 		self.name = name
 		self.nominal_modifier = nominal
 		self.modifiers = {}
+		self.bonus = 2.0
 
 	def effectiveness(self, defending_element, biome = None):
 		biome_mod = 1.0
@@ -96,7 +97,7 @@ Underground.modifiers[Dark] = 1.5
 Desert.modifiers[Dark] = 0.8
 Marsh.modifiers[Dark] = 0.8
 Forest.modifiers[Dark] = 0.8
-Plains.modifiers[Dar] = 0.8
+Plains.modifiers[Dark] = 0.8
 Mountains.modifiers[Dark] = 0.8
 Sky.modifiers[Dark] = 0.4
 

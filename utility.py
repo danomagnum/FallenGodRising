@@ -1,3 +1,17 @@
+import inspect
+
+def call_all_configs(instance):
+	mro = list(inspect.getmro(instance.__class__))
+	calls = set()
+	for m in mro:
+		try:
+			call = m.config
+			calls.add(call)
+		except:
+			pass
+	for call in calls:
+		call(instance)
+
 def clamp(val, minimum, maximum):
 	return min(maximum, max(val, minimum))
 

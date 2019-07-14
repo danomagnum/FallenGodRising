@@ -118,6 +118,7 @@ try:
 
 				elif choice == 'Items':
 					item_slot_used = display.menu(user.backpack.show(), cols=2)
+					item_target = None
 					if item_slot_used is not None:
 						item_target_type = item_slot_used.target_type
 						if item_target_type == SELF:
@@ -125,7 +126,7 @@ try:
 						elif item_target_type == MULTI_SELF:
 							item_target = user.combatants
 						elif item_target_type in EQUIPPABLE:
-							pass
+							item_target = [display.menu(user.combatants, cols=2)]
 						else:
 							print("Can't Use that now")
 						if item_target is not None:

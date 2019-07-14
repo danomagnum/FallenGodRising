@@ -1,6 +1,7 @@
 from elements import *
 import random
 from constants import *
+import utility
 
 class Status(object):
 	def __init__(self, name=None):
@@ -10,11 +11,7 @@ class Status(object):
 			self.name = name
 		self.life = 0
 		self.max_life = 0
-		for base in self.__class__.__bases__:
-			try:
-				base.config(self)
-			except:
-				pass
+		utility.call_all_configs(self)
 
 		self.config()
 	def config(self, effected):

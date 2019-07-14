@@ -14,7 +14,6 @@ SWITCH = 1
 ITEM = 2
 RUN = 3
 
-
 class AI(object):
 	def __init__(self, game, combatants, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
 		self.name = name

@@ -1,10 +1,14 @@
 from constants import *
 import effects
+import elements
+import utility
 
 class Item(object):
 	def __init__(self, game, name=None, target=TARGET_NONE, use=None):
 		self.game = game
-		self.name = name
+		self.prefixes = []
+		self.suffixes = []
+		self._name = name
 		self.target_type = target
 		self.weight = 0
 		self.value = 0
@@ -13,12 +17,21 @@ class Item(object):
 		if use is not None:
 			self.use = use
 	
-		for base in self.__class__.__bases__:
-			try:
-				base.config(self)
-			except:
-				pass
-		self.config()
+		utility.call_all_configs(self)
+
+	@property
+	def name(self):
+		namestr = ''
+		namestr = ' '.join(self.prefixes)
+		if namestr != '':
+			namestr += ' '
+		namestr += self._name
+		namestr += ' '.join(self.suffixes)
+		return namestr
+
+	@name.setter
+	def name(self, value):
+		self._name = value
 
 	def config(self):
 		pass
@@ -29,8 +42,21 @@ class Item(object):
 		return self.name
 
 class Gear(Item):
+
+	def __init__(self, game, name=None, target=TARGET_NONE, use=None):
+		self.status = []
+		Item.__init__(self, game, name, target=TARGET_NONE, use=None)
+
+	def use(self, target):
+		return_items = target.equipment.equip(self)
+		for item in return_items:
+			self.game.player.backpack.store(return_items)
+			print('{} unequipped {}'.format(target.name,item.name))
+		print('{} equipped {}'.format(target.name,self.name))
+
 	def config(self):
 		pass
+
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		return initial
 	def physical_defense(self, initial):
@@ -51,6 +77,20 @@ class Gear(Item):
 		return initial
 	def luck(self, initial):
 		return initial
+	def defend(self, damage, wearer, attacker):
+		return damage
+	def attack(self, damage, wearer, defender):
+		return damage
+	def elements(self, element_list):
+		#element_list is a list containing all elements. Return a new list of all
+		#elements with this item considered
+		return element_list
+
+	def tick(self, wearer):
+		pass
+	def subtick(self, wearer):
+		for stat in self.status:
+			stat.tick(wearer)
 
 
 
@@ -205,3 +245,22 @@ class Key(Item):
 		self.rarity = 0.5
 		self.helptext = 'Opens a generic door'
 
+class FireMod(Gear):
+	def config(self):
+		self.prefixes.append('Fire')
+
+class Sword(Gear):
+	def config(self):
+		self.name = 'Sword'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_LEFT
+	def physical_strength(self, initial):
+		return initial + 10
+
+class FireSword(FireMod, Sword):
+	def elements(self, element_list):
+		if elements.Fire not in element_list:
+			element_list.append(elements.Fire)
+		return element_list
