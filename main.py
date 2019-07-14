@@ -652,7 +652,7 @@ class Entity(object):
 		self.is_player = is_player
 		self.helptext = ''
 		
-		utility.call_all_configs()
+		utility.call_all_configs(self)
 
 		if self.is_player:
 			self.priority = 10
