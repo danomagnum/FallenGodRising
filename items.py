@@ -5,7 +5,7 @@ import utility
 import inspect
 
 class Item(object):
-	def __init__(self, game, name=None, target=TARGET_NONE, use=None):
+	def __init__(self, game, level=1, name=None, target=TARGET_NONE, use=None):
 		self.game = game
 		self.prefixes = []
 		self.suffixes = []
@@ -20,6 +20,7 @@ class Item(object):
 	
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
+		self.level = level
 
 	@property
 	def name(self):
@@ -257,6 +258,8 @@ class Key(Item):
 			element_list.append(elements.Fire)
 		return element_list
 
+#Start elemental gear mods
+
 class FireMod(Gear):
 	def config(self):
 		self.prefixes.append('Fire')
@@ -315,22 +318,174 @@ class DarkMod(Gear):
 			element_list.append(elements.Dark)
 		return element_list
 
+elemental_gear_mods = [FireMod, WaterMod, EarthMod, ElectricMod, WindMod, LightMod, DarkMod]
 
+#Start general gear mods
 
-class Sword(Gear):
+class Crude(Gear):
 	def config(self):
-		self.name = 'Sword'
-		self.weight = 1
-		self.value = 300
-		self.rarity = 0.2
-		self.target_type = EQUIP_LEFT
+		self.prefixes.append('Crude')
+		self.level -= 2
+class Lesser(Gear):
+	def config(self):
+		self.prefixes.append('Lesser')
+		self.level -= 1
+class Greater(Gear):
+	def config(self):
+		self.prefixes.append('Greater')
+		self.level += 1
+class Exceptional(Gear):
+	def config(self):
+		self.prefixes.append('Exceptional')
+		self.level += 2
+
+general_gear_mods = [Crude, Lesser, Greater, Exceptional]
+
+# Start base gear mods
+
+class Bronze(self):
+	self.previxes.append('Bronze')
+	self.level += 5
+class Iron(self):
+	self.previxes.append('Iron')
+	self.level += 10
+class Steel(self):
+	self.previxes.append('Steel')
+	self.level += 15
+class Mithrill(self):
+	self.previxes.append('Mithrill')
+	self.level += 20
+class Admantium(self):
+	self.previxes.append('Admantium')
+	self.level += 25
+
+base_gear_mods = [Bronze, Iron, Steel, Mithrill, Admantium]
+# Start Special gear mods
+
+class OfWarrior(Gear):
+	def config(self):
+		self.suffixes.append('of the warrior')
+
 	def physical_strength(self, initial):
-		return initial + 10
+		return initial * 1.1
 
-class FireSword(FireMod, Sword):
-	pass
+class OfRock(Gear):
+	def config(self):
+		self.suffixes.append('of the rock')
 
-gear_mods = [FireMod, WaterMod, EarthMod, ElectricMod, WindMod, LightMod, DarkMod]
+	def physical_defense(self, initial):
+		return initial * 1.1
+
+class OfWizard(Gear):
+	def config(self):
+		self.suffixes.append('of the wizard')
+
+	def special_strength(self, initial):
+		return initial * 1.1
+
+class OfDevotion(Gear):
+	def config(self):
+		self.suffixes.append('of devotion')
+
+	def special_strength(self, initial):
+		return initial * 1.1
+
+class OfVigor(Gear):
+	def config(self):
+		self.suffixes.append('of vigor')
+
+	def speed(self, initial):
+		return initial * 1.1
+
+class OfRobustness(Gear):
+	def config(self):
+		self.suffixes.append('of robustness')
+
+	def max_hp(self, initial):
+		return initial * 1.1
+
+class OfMystique(Gear):
+	def config(self):
+		self.suffixes.append('of mystique')
+
+	def evasion(self, initial):
+		return initial * 1.1
+
+class OfFalcon(Gear):
+	def config(self):
+		self.suffixes.append('of the falcon')
+
+	def accuracy(self, initial):
+		return initial * 1.1
+
+class OfGambler(Gear):
+	def config(self):
+		self.suffixes.append('of the gambler')
+
+	def luck(self, initial):
+		return initial * 1.1
+
+class OfSorrow(Gear):
+	def config(self):
+		self.suffixes.append('of sorrow')
+	def physical_strength(self, initial): # passive stat boosts take effect on these routines
+		return initial * 0.9
+	def physical_defense(self, initial):
+		return initial * 0.9
+	def special_strength(self, initial):
+		return initial * 0.9
+	def special_defense(self, initial):
+		return initial * 0.9
+	def speed(self, initial):
+		return initial * 0.9
+	def hp(self, initial):
+		return initial * 0.9
+	def max_hp(self, initial):
+		return initial * 0.9
+	def evasion(self, initial):
+		return initial * 0.9
+	def accuracy(self, initial):
+		return initial * 0.9
+	def luck(self, initial):
+		return initial * 0.9
+
+class OfChaos(Gear):# this returns a "random" stat by actually returning the last stat info was pulled for
+	def config(self):
+		self.suffixes.append('of chaos')
+		self.last_initial = 1
+	def physical_strength(self, initial): # passive stat boosts take effect on these routines
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def physical_defense(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def special_strength(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def special_defense(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def speed(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def hp(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def max_hp(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def evasion(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def accuracy(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+	def luck(self, initial):
+		initial, self.last_initial = self.last_initial, initial
+		return initial
+
+
+special_gear_mods = [OfWarrior, OfRock, OfWizard, OfDevotion, OfVigor, OfRobustness, OfMystique, OfFalcon, OfGambler, OfSorrow, OfChaos]
 
 def add_item_mod(instance, mod):
 
@@ -357,3 +512,14 @@ def add_item_mod(instance, mod):
 def gen_thunder_sword(game):
 	test_thunder_sword = add_item_mod(Sword(game), ElectricMod)
 	return test_thunder_sword
+
+class Sword(Gear):
+	def config(self):
+		self.name = 'Sword'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_LEFT
+	def physical_strength(self, initial):
+		return initial + 10
+
