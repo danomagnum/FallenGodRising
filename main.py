@@ -354,52 +354,52 @@ class Equipment(object):
 
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		for item in self.all_items():
-			initial = item.physical_strength(initial)
+			initial = call_all_recursive(initial, 'physical_strength', item)
 		return initial
 
 	def physical_defense(self, initial):
 		for item in self.all_items():
-			initial = item.physical_defense(initial)
+			initial = call_all_recursive(initial, 'physical_defense', item)
 		return initial
 
 	def special_strength(self, initial):
 		for item in self.all_items():
-			initial = item.special_strength(initial)
+			initial = call_all_recursive(initial, 'special_strength', item)
 		return initial
 
 	def special_defense(self, initial):
 		for item in self.all_items():
-			initial = item.special_defense(initial)
+			initial = call_all_recursive(initial, 'special_defense', item)
 		return initial
 		
 	def speed(self, initial):
 		for item in self.all_items():
-			initial = item.speed(initial)
+			initial = call_all_recursive(initial, 'speed', item)
 		return initial
 
 	def hp(self, initial):
 		for item in self.all_items():
-			initial = item.hp(initial)
+			initial = call_all_recursive(initial, 'hp', item)
 		return initial
 
 	def max_hp(self, initial):
 		for item in self.all_items():
-			initial = item.max_hp(initial)
+			initial = call_all_recursive(initial, 'max_hp', item)
 		return initial
 
 	def evasion(self, initial):
 		for item in self.all_items():
-			initial = item.evasion(initial)
+			initial = call_all_recursive(initial, 'evasion', item)
 		return initial
 
 	def accuracy(self, initial):
 		for item in self.all_items():
-			initial = item.accuracy(initial)
+			initial = call_all_recursive(initial, 'accuracy', item)
 		return initial
 
 	def luck(self, initial):
 		for item in self.all_items():
-			initial = item.luck(initial)
+			initial = call_all_recursive(initial, 'luck', item)
 		return initial
 
 class Character(object):
