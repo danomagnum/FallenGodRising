@@ -29,6 +29,8 @@ class Item(object):
 		if namestr != '':
 			namestr += ' '
 		namestr += self._name
+		if self.suffixes != []:
+			namestr += ' '
 		namestr += ' '.join(self.suffixes)
 		return namestr
 
