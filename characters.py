@@ -126,6 +126,7 @@ class Nightblade(Character):
 
 class Witchhunter(Character):
 	def config(self):
+		print 'witchhunter'
 		self.moves = [moves.Strike(self.game), moves.Haste(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
