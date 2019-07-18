@@ -46,9 +46,9 @@ class Item(object):
 
 class Gear(Item):
 
-	def __init__(self, game, name=None, target=TARGET_NONE, use=None):
+	def __init__(self, game, level=1, name=None, target=TARGET_NONE, use=None):
 		self.status = []
-		Item.__init__(self, game, name, target=TARGET_NONE, use=None)
+		Item.__init__(self, game, level,  name, target=TARGET_NONE, use=None)
 
 	def use(self, target):
 		return_items = target.equipment.equip(self)
@@ -343,21 +343,26 @@ general_gear_mods = [Crude, Lesser, Greater, Exceptional]
 
 # Start base gear mods
 
-class Bronze(self):
-	self.previxes.append('Bronze')
-	self.level += 5
-class Iron(self):
-	self.previxes.append('Iron')
-	self.level += 10
-class Steel(self):
-	self.previxes.append('Steel')
-	self.level += 15
-class Mithrill(self):
-	self.previxes.append('Mithrill')
-	self.level += 20
-class Admantium(self):
-	self.previxes.append('Admantium')
-	self.level += 25
+class Bronze(Gear):
+	def config(self):
+		self.previxes.append('Bronze')
+		self.level += 5
+class Iron(Gear):
+	def config(self):
+		self.previxes.append('Iron')
+		self.level += 10
+class Steel(Gear):
+	def config(self):
+		self.previxes.append('Steel')
+		self.level += 15
+class Mithrill(Gear):
+	def config(self):
+		self.previxes.append('Mithrill')
+		self.level += 20
+class Admantium(Gear):
+	def config(self):
+		self.previxes.append('Admantium')
+		self.level += 25
 
 base_gear_mods = [Bronze, Iron, Steel, Mithrill, Admantium]
 # Start Special gear mods
@@ -521,5 +526,45 @@ class Sword(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
 	def physical_strength(self, initial):
-		return initial + 10
+		return initial + self.level
+
+class Helm(Gear):
+	def config(self):
+		self.name = 'Helm'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_HEAD
+	def physical_defense(self, initial):
+		return initial + (self.level / 5.0)
+
+class Mail(Gear):
+	def config(self):
+		self.name = 'Mail'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_BODY
+	def physical_defense(self, initial):
+		return initial + (sel.level / 4.0)
+
+class Plate(Gear):
+	def config(self):
+		self.name = 'Plate'
+		self.weight = 2
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_BODY
+	def physical_defense(self, initial):
+		return initial + (sel.level / 3.0)
+
+class Shield(Gear):
+	def config(self):
+		self.name = 'Shield'
+		self.weight = 2
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_RIGHT
+	def physical_defense(self, initial):
+		return initial + (sel.level / 5.0)
 

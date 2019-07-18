@@ -3,6 +3,7 @@ import math
 import utility
 import items
 import elements
+import characters
 import battle
 import keys
 from constants import *
@@ -217,7 +218,6 @@ class Equipment(object):
 		self.game = game
 		self.Head = None
 		self.Body = None
-		self.Legs = None
 		self.Left = None
 		self.Right = None
 		self.Hands = None
@@ -234,10 +234,6 @@ class Equipment(object):
 			if self.Body is not None:
 				return_items.append(self.Body)
 			self.Body = item
-		elif item.target_type == EQUIP_LEGS:
-			if self.Legs is not None:
-				return_items.append(self.Legs)
-			self.Legs = item
 		elif item.target_type == EQUIP_RIGHT:
 			if self.Hands is not None:
 				return_items.append(self.Hands)
@@ -278,10 +274,6 @@ class Equipment(object):
 			if self.Body is not None:
 				return_items.append(self.Body)
 				self.Body = None
-		elif target == EQUIP_LEGS:
-			if self.Legs is not None:
-				return_items.append(self.Legs)
-				self.Legs = None
 		elif target == EQUIP_RIGHT:
 			if self.Hands is not None:
 				return_items.append(self.Hands)
@@ -319,9 +311,6 @@ class Equipment(object):
 		if self.Body is not None:
 			return_items.append(self.Body)
 			self.Body = None
-		if self.Legs is not None:
-			return_items.append(self.Legs)
-			self.Legs = None
 		if self.Hands is not None:
 			return_items.append(self.Hands)
 			self.Hands = None
@@ -349,57 +338,57 @@ class Equipment(object):
 		return return_items
 	
 	def all_items(self):
-		items = [self.Head, self.Body, self.Legs, self.Hands, self.Right, self.Left, self.Token]
+		items = [self.Head, self.Body, self.Hands, self.Right, self.Left, self.Token]
 		return [item for item in items if item is not None]
 
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'physical_strength', item)
+			initial = utility.call_all_recursive(initial, 'physical_strength', item)
 		return initial
 
 	def physical_defense(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'physical_defense', item)
+			initial = utility.call_all_recursive(initial, 'physical_defense', item)
 		return initial
 
 	def special_strength(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'special_strength', item)
+			initial = utility.call_all_recursive(initial, 'special_strength', item)
 		return initial
 
 	def special_defense(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'special_defense', item)
+			initial = utility.call_all_recursive(initial, 'special_defense', item)
 		return initial
 		
 	def speed(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'speed', item)
+			initial = utility.call_all_recursive(initial, 'speed', item)
 		return initial
 
 	def hp(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'hp', item)
+			initial = utility.call_all_recursive(initial, 'hp', item)
 		return initial
 
 	def max_hp(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'max_hp', item)
+			initial = utility.call_all_recursive(initial, 'max_hp', item)
 		return initial
 
 	def evasion(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'evasion', item)
+			initial = utility.call_all_recursive(initial, 'evasion', item)
 		return initial
 
 	def accuracy(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'accuracy', item)
+			initial = utility.call_all_recursive(initial, 'accuracy', item)
 		return initial
 
 	def luck(self, initial):
 		for item in self.all_items():
-			initial = call_all_recursive(initial, 'luck', item)
+			initial = utility.call_all_recursive(initial, 'luck', item)
 		return initial
 
 class Character(object):
@@ -796,3 +785,12 @@ class Entity(object):
 		return None
 
 
+def debug_stuff(game):
+	player_party = [characters.Fighter(game), characters.Wizard(game), characters.Cleric(game)]
+	user = Entity('playercharacter', game, combatants=player_party, item_list=[items.Potion(game), items.Potion(game), items.Booster(game), items.HealAll(game), items.add_item_mod(items.gen_thunder_sword(game), items.FireMod)], char='@',is_player=True)
+	#user.combatants = player_party
+	user.x, user.y = zone.find_empty_position()
+	user.backpack.gold = 100
+	zone.set_player(user)
+	display.user = user
+	game.player = user

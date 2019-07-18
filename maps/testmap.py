@@ -12,6 +12,7 @@ ZONENAME = 'test'
 #####################
 class LittleRat(main.Character):
 	def config(self):
+		print 'havemoves'
 		self.moves = [moves.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.status = []
@@ -74,8 +75,12 @@ class SwordChest(entities.Treasure):
 	# example basic enemy that gives an item when killed
 	def config(self):
 		self.name = 'Sword Chest'
-		self.backpack.store(items.FireSword(self.game))
-		self.backpack.store(items.Sword(self.game))
+		#self.backpack.store(items.FireSword(self.game))
+		item = items.Sword(self.game)
+		items.add_item_mod(item, random.choice(items.general_gear_mods))
+		items.add_item_mod(item, random.choice(items.base_gear_mods))
+		items.add_item_mod(item, random.choice(items.special_gear_mods))
+		self.backpack.store(item)
 		self.char = '/'
 
 class Door1(entities.Door):
@@ -137,14 +142,14 @@ def genzone(game):
 
 	# Populate zone with entities
 	#maptools.Positional_Map_Insert(zone, MyShop, 1)
-	maptools.Random_Map_Insert(zone, RatPack)
-	maptools.Random_Map_Insert(zone, RatPack)
+	#maptools.Random_Map_Insert(zone, RatPack)
+	#maptools.Random_Map_Insert(zone, RatPack)
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, PackRat)
-	maptools.Random_Map_Insert(zone, PackRat)
+	#maptools.Random_Map_Insert(zone, PackRat)
+	#maptools.Random_Map_Insert(zone, PackRat)
 	#maptools.Random_Map_Insert(zone, SeeTest)
 	maptools.Random_Map_Insert(zone, SwordChest)
 	#maptools.Random_Map_Insert(zone, Door1)
