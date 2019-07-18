@@ -20,6 +20,7 @@ def call_all_recursive(value, method, instance):
 	# the mose base to the most top-level.  So top-level takes precidence
 	# if any of the same values are set
 	calls.reverse()
+	#TODO: figure out why this only works sometimes
 
 	# finally call them all
 	for call in calls:
