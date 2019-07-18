@@ -7,20 +7,20 @@ def call_all_recursive(value, method, instance):
 	#go through the base classes and check if they have a config method.	
 	#if they do, add them to the set.  The set keeps any classes that inherited
 	#the config method from a base class from running a config twice.
-	calls = set()
+	calls = []
+	call_set = set()
 	for m in mro:
 		try:
 			call = getattr(m, method)
-			calls.add(call)
+			if call not in call_set:
+				calls.append(call)
+			call_set.add(call)
 		except:
 			pass
-	#change the set to a list
-	calls = list(calls)
 	#so the order can be reversed and they can be called from
 	# the mose base to the most top-level.  So top-level takes precidence
 	# if any of the same values are set
 	calls.reverse()
-	#TODO: figure out why this only works sometimes
 
 	# finally call them all
 	for call in calls:
@@ -34,11 +34,14 @@ def call_all(method, instance):
 	#go through the base classes and check if they have a config method.	
 	#if they do, add them to the set.  The set keeps any classes that inherited
 	#the config method from a base class from running a config twice.
-	calls = set()
+	calls = []
+	call_set = set()
 	for m in mro:
 		try:
 			call = getattr(m, method)
-			calls.add(call)
+			if call not in call_set:
+				calls.append(call)
+			call_set.add(call)
 		except:
 			pass
 	#change the set to a list
@@ -53,6 +56,25 @@ def call_all(method, instance):
 	for call in calls:
 		call(instance)
 
+def list_calls(method, instance):
+	#get a higherarcy list of all base classes
+	mro = list(inspect.getmro(instance.__class__))
+
+	#go through the base classes and check if they have a config method.	
+	#if they do, add them to the set.  The set keeps any classes that inherited
+	#the config method from a base class from running a config twice.
+	calls = []
+	call_set = set()
+	for m in mro:
+		try:
+			call = getattr(m, method)
+			if call not in call_set:
+				calls.append(call)
+			call_set.add(call)
+		except:
+			pass
+	#change the set to a list
+	return calls
 
 
 def clamp(val, minimum, maximum):

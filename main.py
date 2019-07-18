@@ -431,6 +431,7 @@ class Character(object):
 		self._elements = value
 
 	def config(self):
+		print 'base'
 		self.moves = []
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
