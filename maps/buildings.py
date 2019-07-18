@@ -137,7 +137,7 @@ class Wall(object):
 			self.door = random.choice(list(self.pts))
 			if self.door[0] == self.x0 and self.door[1] == self.y0:
 				self.door = None
-			elif self.door[0] == self.x0 and self.door[1] == self.y1:
+			elif self.door[0] == self.x1 and self.door[1] == self.y1:
 				self.door = None
 			else:
 				tries = 0
@@ -153,7 +153,6 @@ class Room(object):
 		walls_by_length = sorted(self.walls, key=lambda wall: wall.length())
 		longest = walls_by_length[-1]
 		search = True
-		nodoors = 0
 		while search:
 			divx, divy = longest.divide()
 			new_wall_1 = Wall(longest.x0, longest.y0, divx, divy, longest.nodoor)
@@ -161,9 +160,6 @@ class Room(object):
 			if new_wall_1.length() >= MINWALL:
 				if new_wall_2.length() >= MINWALL:
 					search = False
-
-		if longest.nodoor:
-			nodoors += 1
 
 		self.walls.remove(longest)
 		search = True
@@ -191,16 +187,35 @@ class Room(object):
 		self.walls.remove(purgewall)
 		
 		if purgewall.nodoor:
-			nodoors += 1
-		self.walls.append(Wall(purgewall.x0, purgewall.y0, final_pt[0], final_pt[1], purgewall.nodoor))
-		self.walls.append(Wall(final_pt[0], final_pt[1], purgewall.x1, purgewall.y1, purgewall.nodoor))
-		self.walls.append(new_wall_1)
-		self.walls.append(new_wall_2)
-		if nodoors > 1:
-			final_nodoor = False
+			if longest.nodoor:
+				final_nodoor = False
+			else:
+				final_nodoor = False
+				if random.choice((True, False)):
+					# both walls need doors
+					new_wall_1.hasdoor = True
+					new_wall_2.hasdoor = True
+				else:
+					if random.choice((True, False)):
+						#First wall has door
+						new_wall_1.hasdoor = True
+						new_wall_2.hasdoor = False
+					else:
+						new_wall_1.hasdoor = False
+						new_wall_2.hasdoor = True
+
 		else:
 			final_nodoor = True
 
+
+		# new walls to replace the purged wall
+		self.walls.append(Wall(purgewall.x0, purgewall.y0, final_pt[0], final_pt[1], purgewall.nodoor))
+		self.walls.append(Wall(final_pt[0], final_pt[1], purgewall.x1, purgewall.y1, purgewall.nodoor))
+		# new walls to replace the long wall
+		self.walls.append(new_wall_1)
+		self.walls.append(new_wall_2)
+
+		#new intermediate wall
 		self.walls.append(Wall(divx, divy, final_pt[0], final_pt[1], final_nodoor))
 
 	def draw(self, map):

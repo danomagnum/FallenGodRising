@@ -46,6 +46,7 @@ def call_all(method, instance):
 	# the mose base to the most top-level.  So top-level takes precidence
 	# if any of the same values are set
 	calls.reverse()
+	# For some reason this is't working right
 
 	# finally call them all
 	for call in calls:

@@ -5,7 +5,6 @@ import effects
 from utility import clamp, scale
 from constants import *
 
-
 class Strike(main.Move):
 	def config(self):
 		self.name = 'Strike'
