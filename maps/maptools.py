@@ -149,19 +149,19 @@ def add_entry(map, entry_dir, tries = 2):
 		if entry_dir == UP:
 			y = 0
 			x = random.choice(range(1, xmax))
-			print 'setting new xy start at {}, {}'.format(x, y)
+			#print 'setting new xy start at {}, {}'.format(x, y)
 		elif entry_dir == DOWN:
 			y = ymax
 			x = random.choice(range(1, xmax))
-			print 'setting new xy start at {}, {}'.format(x, y)
+			#print 'setting new xy start at {}, {}'.format(x, y)
 		elif entry_dir == LEFT:
 			y = random.choice(range(1,ymax))
 			x = 0
-			print 'setting new xy start at {}, {}'.format(x, y)
+			#print 'setting new xy start at {}, {}'.format(x, y)
 		elif entry_dir == RIGHT:
 			y = random.choice(range(1,ymax))
 			x = xmax
-			print 'setting new xy start at {}, {}'.format(x, y)
+			#print 'setting new xy start at {}, {}'.format(x, y)
 
 
 		while map[y][x] != '.':
