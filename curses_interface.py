@@ -84,7 +84,8 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 
 	loop = True
 	while loop:
-		window.clear()
+		#window.clear()
+		window.erase()
 		window.box()
 		count = 0
 		col = 0
@@ -149,7 +150,8 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 		window.refresh()
 
 	if clear:
-		window.clear()
+		#window.clear()
+		window.erase()
 	window.refresh()
 	try:
 		curses.curs_set(old_cursor)
@@ -231,6 +233,7 @@ class Display(object):
 	def mode(self, value):
 		self._mode = value
 		self.clear()
+		#self.erase()
 		self.refresh_full()
 
 	##################################
@@ -255,24 +258,29 @@ class Display(object):
 
 
 	def clear(self):
-		self.mapbox.clear()
+		#self.mapbox.clear()
+		self.mapbox.erase()
 		self.mapbox.refresh()
 		for box in self.nmeboxes:
-			box.clear()
+			#box.clear()
+			box.erase()
 			box.refresh()
 		#for box in self.mybox:
 			#box.clear()
 			#box.refresh()
 		for box in self.statbox:
-			box.clear()
+			#box.clear()
+			box.erase()
 			box.refresh()
-		self.msgbox.clear()
+		#self.msgbox.clear()
+		self.msgbox.erase()
 		self.msgbox.refresh()
 		self.screen.refresh()
 		
 	def show_messages(self):
 		msgs = sys.stdout.readlines()
-		self.msgbox.clear()
+		#self.msgbox.clear()
+		self.msgbox.erase()
 		self.msgbox.box()
 		for i in range(len(msgs)):
 			self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, msgs[i])
@@ -287,12 +295,14 @@ class Display(object):
 		self.enemy = None
 		self.mode = MAP
 		self.clear()
+		#self.erase()
 		self.refresh_full
 	def start_battle(self, user, enemy):
 		self.user = user
 		self.enemy = enemy
 		self.mode = COMBAT
 		self.clear()
+		#self.erase()
 		self.refresh_full
 
 	def refresh_full_combat(self):
@@ -359,7 +369,7 @@ class Display(object):
 		if self.zone is None:
 			return
 		self.update_pad()
-		self.screen.refresh()
+		#self.screen.refresh()
 		self.mapbox.box()
 		self.mapbox.refresh()
 		self.mapbox.overlay(self.screen)
@@ -405,7 +415,8 @@ class Display(object):
 
 	def show_combatant_stats(self, combatant, box):
 		col2pos = 20
-		box.clear()
+		#box.clear()
+		box.erase()
 		box.box()
 		height, width = box.getmaxyx()
 		
