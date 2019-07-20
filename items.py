@@ -4,6 +4,7 @@ import effects
 import elements
 import utility
 import inspect
+import moves
 
 class Item(object):
 	def __init__(self, game, level=1, name=None, target=TARGET_NONE, use=None):
@@ -48,7 +49,6 @@ class Item(object):
 		return self.name
 
 class Gear(Item):
-
 	def __init__(self, game, level=1, name=None, target=TARGET_NONE, use=None):
 		self.status = []
 		Item.__init__(self, game, level,  name, target=TARGET_NONE, use=None)
@@ -202,8 +202,6 @@ class Backpack():
 
 	
 
-	
-
 class Potion(Item):
 	def config(self):
 		self.name = 'Potion 1'
@@ -252,7 +250,6 @@ class Key(Item):
 		self.value = 100
 		self.rarity = 0.5
 		self.helptext = 'Opens a generic door'
-
 
 	def config(self):
 		self.prefixes.append('Fire')
@@ -551,7 +548,7 @@ class Mail(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 	def physical_defense(self, initial):
-		return initial + (sel.level / 4.0)
+		return initial + (self.level / 4.0)
 
 class Plate(Gear):
 	def config(self):
@@ -561,9 +558,9 @@ class Plate(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 	def physical_defense(self, initial):
-		return initial + (sel.level / 3.0)
+		return initial + (self.level / 3.0)
 	def special_defense(self, initial):
-		return initial - (sel.level / 6.0)
+		return initial - (self.level / 6.0)
 
 class Shield(Gear):
 	def config(self):
@@ -573,7 +570,7 @@ class Shield(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_RIGHT
 	def physical_defense(self, initial):
-		return initial + (sel.level / 5.0)
+		return initial + (self.level / 5.0)
 
 gear_list = {EQUIP_HEAD:[Helm],
              EQUIP_BODY: [Plate, Mail],
@@ -627,3 +624,18 @@ def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
 	if random.random() * luck_ratio > 0.99:
 		add_item_mod(gear, special_mod)
 	return gear
+
+
+class MoveScroll(Item):
+	def __init__(self, game, move):
+		self.move = move
+		name = 'Scroll of'
+		m = move(game)
+		level = 1
+		Item.__init__(self, game, level,  name, target=SELF, use=None)
+		self.suffixes.append(m.name)
+
+def gen_movescroll(game):
+	move = random.choice(moves.all_moves)
+	return MoveScroll(game, move)
+		
