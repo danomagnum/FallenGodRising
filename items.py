@@ -7,7 +7,7 @@ import inspect
 import moves
 
 class Item(object):
-	def __init__(self, game, level=1, name=None, target=TARGET_NONE, use=None):
+	def __init__(self, game, level=1, name=None, target=TARGET_NONE, uses=None):
 		self.game = game
 		self.prefixes = []
 		self.suffixes = []
@@ -17,8 +17,8 @@ class Item(object):
 		self.value = 0
 		self.rarity = 0.5
 		self.helptext = ''
-		if use is not None:
-			self.use = use
+		if uses is not None:
+			self.uses = uses
 	
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
@@ -49,9 +49,9 @@ class Item(object):
 		return self.name
 
 class Gear(Item):
-	def __init__(self, game, level=1, name=None, target=TARGET_NONE, use=None):
+	def __init__(self, game, level=1, name=None, target=TARGET_NONE, uses=None):
 		self.status = []
-		Item.__init__(self, game, level,  name, target=TARGET_NONE, use=None)
+		Item.__init__(self, game, level,  name, target=TARGET_NONE, uses=None)
 
 	def use(self, target):
 		return_items = target.equipment.equip(self)
@@ -242,6 +242,7 @@ class Booster(Item):
 		target.status.append(effects.StatMod(1.15, PHYSTR))
 		print('{} used {}'.format(target.name,self.name))
 
+base_items = [Potion, Booster, HealAll]
 
 class Key(Item):
 	def config(self):
@@ -628,14 +629,25 @@ def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
 
 class MoveScroll(Item):
 	def __init__(self, game, move):
-		self.move = move
+		self.move = move(game)
 		name = 'Scroll of'
-		m = move(game)
 		level = 1
-		Item.__init__(self, game, level,  name, target=SELF, use=None)
-		self.suffixes.append(m.name)
+		Item.__init__(self, game, level,  name, target=SELF, uses=None)
+		self.suffixes.append(self.move.name)
+
+	def use(self, target):
+		target_moves = [move.name for move in target.moves]
+		if self.move.name not in target_moves:
+			target.moves.append(self.move)
+			print('{} learned {}'.format(target.name,self.move.name))
+		else:
+			print('{} already knows {}'.format(target.name,self.move.name))
 
 def gen_movescroll(game):
 	move = random.choice(moves.all_moves)
 	return MoveScroll(game, move)
 		
+def gen_base_item(game):
+	item = random.choice(base_items)
+	return item(game)
+	

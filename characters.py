@@ -46,7 +46,6 @@ class Character(object):
 		self._elements = value
 
 	def config(self):
-		print 'base'
 		self.moves = []
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
@@ -353,7 +352,6 @@ class Nightblade(Character):
 
 class Witchhunter(Character):
 	def config(self):
-		print 'witchhunter'
 		self.moves = [moves.Strike(self.game), moves.Haste(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100

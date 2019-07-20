@@ -70,7 +70,10 @@ try:
 					player_party[i] = player_choice
 					i += 1
 					if i == graphics_interface.MAX_COMBATANTS:
-						user = main.Entity('playercharacter', game, combatants=player_party, item_list=[items.Potion(game), items.Potion(game), items.Booster(game), items.HealAll(game), items.add_item_mod(items.gen_thunder_sword(game), items.FireMod)], char='@',is_player=True)
+						item_list = [items.gen_base_item(game) for x in range(4)]
+						item_list += [items.gen_gear(game, level=1) for x in range(4)]
+						item_list += [items.gen_movescroll(game) for x in range(4)]
+						user = main.Entity('playercharacter', game, combatants=player_party, item_list=item_list, char='@',is_player=True)
 						#user.combatants = player_party
 						user.x, user.y = zone.find_empty_position()
 						user.backpack.gold = 100

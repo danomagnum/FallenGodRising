@@ -12,7 +12,6 @@ ZONENAME = 'test'
 #####################
 class LittleRat(characters.Character):
 	def config(self):
-		print 'havemoves'
 		self.moves = [moves.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.status = []
