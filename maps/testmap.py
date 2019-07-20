@@ -10,7 +10,7 @@ ZONENAME = 'test'
 # The characters subclasses are how you create enemies.
 # You can used "canned" ones or create your own.
 #####################
-class LittleRat(main.Character):
+class LittleRat(characters.Character):
 	def config(self):
 		print 'havemoves'
 		self.moves = [moves.Strike(self.game)]

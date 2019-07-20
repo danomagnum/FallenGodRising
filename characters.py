@@ -1,9 +1,236 @@
-from main import Character, Entity
+import main
 import sys
 import items
 import elements
 import moves
 import random
+import utility
+
+class Character(object):
+	def __init__(self, game,  name=None, level=1):
+		self.game = game
+		self.initialized = False
+		if name is None:
+			#self.name = 'MissingNo'
+			self.name = self.__class__.__name__
+		else:
+			self.name = name
+		self._hp = 1
+		self._exp = 0
+		self._elements = [elements.Normal]
+		self.status = []
+		self.equipment = main.Equipment(game)
+		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
+		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+		self.helptext = ''
+		self.moves = []
+		self._level = 1
+
+		utility.call_all('config', self)
+		#utility.call_all_configs(self)
+
+		self.level = level
+		self.full_heal()
+		self._exp = self.exp_at_level(self.level)
+		self.initialized = True
+
+	@property
+	def elements(self):
+		e_list = self._elements
+		for item in self.equipment.all_items():
+			e_list = item.elements(e_list)
+		return e_list
+
+	@elements.setter
+	def elements(self, value):
+		self._elements = value
+
+	def config(self):
+		print 'base'
+		self.moves = []
+		self.base_physical_strength = 10
+		self.base_physical_defense = 10
+		self.base_special_strength = 10
+		self.base_special_defense = 10
+		self.base_speed = 10
+		self.base_hp = 10
+		self.base_luck = 10
+		self.physical = True
+	
+	def tick(self):
+		pass
+
+	def subtick(self):
+		for item in self.equipment.all_items():
+			item.subtick(self)
+			item.tick(self)
+		for move in self.moves:
+			move.tick(self)
+		for stat in self.status:
+			stat.tick(self)
+
+	def __str__(self):
+		return self.name
+
+	@property
+	def level(self):
+		return self._level
+
+	@level.setter
+	def level(self, value):
+		if self.initialized:
+			print('{} leveled up from {} to {}'.format(self.name, self._level, value))
+		if value > self._level:
+			for lvl in range(self._level + 1, value + 1):
+				self._level = lvl
+				self._exp = self.exp_at_level(self.level)
+				self.levelup()
+				level_method = 'level_{:02}'.format(lvl)
+				try:
+					method = getattr(self, level_method)
+				except:
+					method = None
+				if method is not None:
+					method()
+		self.full_heal()
+	
+	def add_move(self, move):
+		m = move(self.game)
+		if self.initialized:
+			print('{} Gained The Skill {}'.format(self.name, m.name))
+		self.moves.append(m)
+
+	@property
+	def exp(self):
+		return self._exp
+
+	@exp.setter
+	def exp(self, value):
+		self._exp = value
+		check_level = True
+		while check_level:
+			if self._exp > self.exp_at_level(self.level + 1):
+				self.level += 1
+			else:
+				check_level = False
+
+	@property
+	def exp_value(self):
+		val = self.physical_strength + self.physical_defense
+		val += self.special_strength + self.special_defense
+		val += self.speed + self.max_hp
+		val *= self.level / 6
+		return int(val)
+
+	def exp_at_level(self, level):
+		return (level ) ** 3
+
+	def exp_progress(self):
+		return (float(self.exp) - float(self.exp_at_level(self.level)) ) / float(self.exp_at_level(self.level + 1))
+	@property
+	def physical_strength(self):
+		stat = (self.base_physical_strength + self.coefficients[0]) * 3 * self.level / 100.0 + 5
+		for status in self.status:
+			stat = status.physical_strength(stat)
+		stat = self.equipment.physical_strength(stat)
+		return utility.clamp(stat, 1, 3* self.base_physical_strength)
+	@property
+	def physical_defense(self):
+		stat = (self.base_physical_defense + self.coefficients[1]) * 3 * self.level / 100.0 + 5
+		for status in self.status:
+			stat = status.physical_defense(stat)
+		stat = self.equipment.physical_defense(stat)
+		return utility.clamp(stat, 1, 3* self.base_physical_defense)
+	@property
+	def special_strength(self):
+		stat = (self.base_special_strength + self.coefficients[2]) * 3 * self.level / 100.0 + 5
+		for status in self.status:
+			stat = status.special_strength(stat)
+		stat = self.equipment.special_strength(stat)
+		return utility.clamp(stat, 1, 3* self.base_special_strength)
+	@property
+	def special_defense(self):
+		stat = (self.base_special_defense + self.coefficients[3]) * 3 * self.level / 100.0 + 5
+		for status in self.status:
+			stat = status.special_defense(stat)
+		stat = self.equipment.special_defense(stat)
+		return utility.clamp(stat, 1, 3* self.base_special_defense)
+
+	@property
+	def speed(self):
+		stat = (self.base_speed + self.coefficients[4]) * 3 * self.level / 100.0 + 5
+		for status in self.status:
+			stat = status.speed(stat)
+		stat = self.equipment.speed(stat)
+		return utility.clamp(stat, 1, 3* self.base_speed)
+
+	@property
+	def hp(self):
+		stat = self._hp
+		for status in self.status:
+			stat = status.hp(stat)
+		stat = self.equipment.hp(stat)
+		return  min(max(0,stat), self.max_hp)
+	
+	@property
+	def luck(self):
+		stat = (self.base_luck + 40) / 50.0 # One point of luck is a 2% change. Will need balanced.
+		for status in self.status:
+			stat = status.luck(stat)
+		stat = self.equipment.luck(stat)
+		return utility.clamp(stat, 1, 3* self.base_speed)
+
+	@hp.setter
+	def hp(self, value):
+		self._hp = min(max(0,value), self.max_hp)
+
+	def heal(self, amount):
+		if self.hp > 0:
+			self._hp = min(max(0,self._hp + amount), self.max_hp)
+
+	@property
+	def max_hp(self):
+		stat = int((self.base_hp + self.coefficients[5]) * 10 * self.level / 100.0 + 5)
+		for status in self.status:
+			stat = status.max_hp(stat)
+		stat = self.equipment.max_hp(stat)
+		return stat
+
+	@property
+	def virtual_hp(self):
+		stat = int((100 + self.coefficients[5]) * 10 * self.level / 100.0 + 5)
+		return stat
+
+
+	@property
+	def evasion(self):
+		stat = 1.0
+		for status in self.status:
+			stat = status.evasion(stat)
+		stat = self.equipment.evasion(stat)
+		return stat
+
+	@property
+	def accuracy(self):
+		stat = 1.0
+		for status in self.status:
+			stat = status.accuracy(stat)
+		stat = self.equipment.accuracy(stat)
+		return stat
+
+	def full_heal(self):
+		for move in self.moves:
+			move.mp = move.max_mp
+		if self.hp > 0:
+			self.hp = self.max_hp
+
+	def levelup(self): # override this with sub classes to do fancy things
+		pass
+
+	def revive(self):
+		if self.hp <= 0:
+			self.hp = 1
+
 
 
 class Fighter(Character):
