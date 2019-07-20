@@ -210,23 +210,52 @@ class Zone(object):
 					return (x, y)
 		elif position == UP:
 			y = 0
-			while True:
-				x = random.randint(0, len(self.maps[level][y]) - 1)
-				if self.maps[level][y][x] == WALKABLE:
-					return (x, y)
+			options = []
+			for cell_x in range(len(self.maps[level][y])):
+				if self.maps[level][y][cell_x] == WALKABLE:
+					options.append((cell_x, y))
+			if len(options) > 0:
+				return random.choice(options)
+			else:
+				print('Could not find a valid position Up')
 		elif position == DOWN:
 			y = len(self.maps[level]) - 1
-			while True:
-				x = random.randint(0, len(self.maps[level][y]) - 1)
-				if self.maps[level][y][x] == WALKABLE:
-					return (x, y)
+			options = []
+			for cell_x in range(len(self.maps[level][y])):
+				if self.maps[level][y][cell_x] == WALKABLE:
+					options.append((cell_x, y))
+			if len(options) > 0:
+				return random.choice(options)
+			else:
+				print('Could not find a valid position Down')
 		elif position == LEFT:
 			x = 0
-			while True:
-				y = random.randint(0, len(self.maps[level]) - 1)
-				if self.maps[level][y][x] == WALKABLE:
-					return (x, y)
+			options = []
+			
+			for cell_y in range(len(self.maps[level])):
+				if self.maps[level][cell_y][0] == WALKABLE:
+					options.append((x, cell_y))
+
+			if len(options) > 0:
+				return random.choice(options)
+			else:
+				print('Could not find a valid position Left')
+
 		elif position == RIGHT:
+			options = []
+			for cell_y in range(len(self.maps[level])):
+				cell_x = len(self.maps[level][cell_y]) - 1
+				if self.maps[level][cell_y][cell_x] == WALKABLE:
+					options.append((cell_x, cell_y))
+
+			if len(options) > 0:
+				return random.choice(options)
+			else:
+				print('Could not find a valid position Right')
+
+
+
+
 			while True:
 				y = random.randint(0, len(self.maps[level]) - 1)
 				x = len(self.maps[level][y]) - 1
