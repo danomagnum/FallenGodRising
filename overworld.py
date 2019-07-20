@@ -261,6 +261,8 @@ class Zone(object):
 				x = len(self.maps[level][y]) - 1
 				if self.maps[level][y][x] == WALKABLE:
 					return (x, y)
+		print('Could not find a valid point')
+		return (0, 0)
 
 	def check_pos(self, x, y):
 		for e in self.entities:

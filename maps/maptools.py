@@ -216,7 +216,8 @@ def noise_prune(map):
 	for y in range(ymax):
 		for x in range(xmax):
 			check = [ (x, y-1), (x, y+1), (x-1, y), (x+1, y)]
-			check = __builtins__.map(isfloor, check)
+			check = __builtins__['map'](isfloor, check)
+			#check = __builtins__.map(isfloor, check)
 			if all(check):
 				map[y][x] = '.'
 
@@ -324,7 +325,7 @@ def maze(width, height, clear_percent = 0.99):
 						if subtestx > 0 and subtestx < width - 1:
 							if subtesty > 0 and subtesty < height - 1:
 								map[testy][testx].right = 0
-								map[subtesty][subtestx].leeft = 0
+								map[subtesty][subtestx].left = 0
 								if not map[testy][testx].visited:
 									cleared += 1
 

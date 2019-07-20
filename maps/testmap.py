@@ -129,6 +129,7 @@ def genzone(game):
 	x = 0
 	maxentries = 0
 	start = 0
+	valid_positions = []
 	for maze_y in maze:
 		for maze_x in maze_y:
 			map = maptools.drunkard_walk()
@@ -147,8 +148,12 @@ def genzone(game):
 			if not maze_x.right:
 				maptools.add_entry(map, RIGHT)
 				entries += 1
+			maptools.noise_prune(map)
 			map = maptools.showmap(map)
 			maps.append(map)
+
+			if entries > 0:
+				valid_positions.append((x, y))
 
 			if entries > maxentries:
 				maxentries = entries
@@ -156,12 +161,10 @@ def genzone(game):
 			x += 1
 		y += 1
 	
-
-
 	# Create zone
 	zone = overworld.Zone(ZONENAME, game, maps=maps)
 	zone.grid_width = 16
-	zone.level = start
+	zone.change_level(start)
 
 	# Populate zone with entities
 	#maptools.Positional_Map_Insert(zone, MyShop, 1)
