@@ -1,3 +1,4 @@
+import random
 import inspect
 
 def call_all_recursive(value, method, instance):
@@ -93,3 +94,6 @@ def scale(value, in_min, in_max, out_min, out_max, clamp_output = True):
 	
 	else:
 		raise Exception('Divide By Zero In Scale.')
+
+
+def select_by_level(level, options, levels):

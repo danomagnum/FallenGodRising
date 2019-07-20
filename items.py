@@ -1,4 +1,5 @@
 from constants import *
+import random
 import effects
 import elements
 import utility
@@ -342,31 +343,33 @@ class Exceptional(Gear):
 		self.level += 2
 
 general_gear_mods = [Crude, Lesser, Greater, Exceptional]
+general_gear_mod_levels = [(Crude, -2), (Lesser, -1),(None, 0), (Greater, 1), (Exceptional, 2)]
 
 # Start base gear mods
 
 class Bronze(Gear):
 	def config(self):
-		self.previxes.append('Bronze')
+		self.prefixes.append('Bronze')
 		self.level += 5
 class Iron(Gear):
 	def config(self):
-		self.previxes.append('Iron')
+		self.prefixes.append('Iron')
 		self.level += 10
 class Steel(Gear):
 	def config(self):
-		self.previxes.append('Steel')
+		self.prefixes.append('Steel')
 		self.level += 15
 class Mithrill(Gear):
 	def config(self):
-		self.previxes.append('Mithrill')
+		self.prefixes.append('Mithrill')
 		self.level += 20
 class Admantium(Gear):
 	def config(self):
-		self.previxes.append('Admantium')
+		self.prefixes.append('Admantium')
 		self.level += 25
 
 base_gear_mods = [Bronze, Iron, Steel, Mithrill, Admantium]
+base_gear_mod_levels = [(None, 0),(Bronze, 5), (Iron, 10),(Steel, 15),(Mithrill, 20),(Admantium, 25)]
 # Start Special gear mods
 
 class OfWarrior(Gear):
@@ -559,6 +562,8 @@ class Plate(Gear):
 		self.target_type = EQUIP_BODY
 	def physical_defense(self, initial):
 		return initial + (sel.level / 3.0)
+	def special_defense(self, initial):
+		return initial - (sel.level / 6.0)
 
 class Shield(Gear):
 	def config(self):
@@ -570,3 +575,55 @@ class Shield(Gear):
 	def physical_defense(self, initial):
 		return initial + (sel.level / 5.0)
 
+gear_list = {EQUIP_HEAD:[Helm],
+             EQUIP_BODY: [Plate, Mail],
+	     EQUIP_RIGHT: [Shield],
+	     EQUIP_LEFT: [Sword],
+	     EQUIP_HANDS: [],
+	     EQUIP_TOKEN: []}
+
+def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
+	all_gear = []
+	for sublist in gear_list.values():
+		for item in sublist:
+			all_gear.append(item)
+	if equip_position is None:
+		gear = random.choice(all_gear)
+	else:
+		gear = random.choice(gear_list[equip_position])
+
+	gear = gear(game)
+
+	rand_val = random.random()
+
+	delta_levels = [(tup[0], rand_val /abs(tup[1] - level)) for tup in base_gear_mod_levels]
+	delta_levels.sort(key=lambda x:-x[1])
+	selected = None
+	for tlevel in delta_levels:
+		selected = tlevel[0]
+		if random.random() / luck_ratio < 0.8:
+			break
+
+	if selected is not None:
+		add_item_mod(gear, selected)
+	
+	rand_val = random.random()
+	level_error = level - gear.level
+	delta_levels = [(tup[0], abs(level_error - tup[1])) for tup in general_gear_mod_levels]
+	delta_levels.sort(key=lambda x:x[1])
+	for level in delta_levels:
+		selected = level[0]
+		if random.random() / luck_ratio < 0.3:
+			break
+
+	if selected is not None:
+		add_item_mod(gear, selected)
+
+	elemental_mod = random.choice(elemental_gear_mods)
+	if random.random() * luck_ratio > 0.80:
+		add_item_mod(gear, elemental_mod)
+
+	special_mod= random.choice(special_gear_mods)
+	if random.random() * luck_ratio > 0.99:
+		add_item_mod(gear, special_mod)
+	return gear
