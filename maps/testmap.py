@@ -3,7 +3,6 @@ from constants import *
 import random
 import maps.maptools as maptools
 import os
-
 ZONENAME = 'test'
 
 #####################
@@ -125,19 +124,44 @@ def genzone(game):
 		maps.append(maptools.readmap(file))
 	
 	maps = []
+	maze = maptools.maze(16, 16)
+	y = 0
+	x = 0
+	maxentries = 0
+	start = 0
+	for maze_y in maze:
+		for maze_x in maze_y:
+			map = maptools.drunkard_walk()
+			#up and down are swapped because of the zone map list goes from bottom to top but the 
+			#maze y order is top to bottom
+			entries = 0
+			if not maze_x.up:
+				maptools.add_entry(map, DOWN)
+				entries += 1
+			if not maze_x.down:
+				maptools.add_entry(map, UP)
+				entries += 1
+			if not maze_x.left:
+				maptools.add_entry(map, LEFT)
+				entries += 1
+			if not maze_x.right:
+				maptools.add_entry(map, RIGHT)
+				entries += 1
+			map = maptools.showmap(map)
+			maps.append(map)
 
-	for i in range(5):
-		map = maptools.drunkard_walk()
-		maptools.add_entry(map, UP)
-		maptools.add_entry(map, DOWN)
-		maptools.add_entry(map, LEFT)
-		maptools.add_entry(map, RIGHT)
-		map = maptools.showmap(map)
-		maps.append(map)
+			if entries > maxentries:
+				maxentries = entries
+				start = y * 16 + x
+			x += 1
+		y += 1
+	
 
 
 	# Create zone
 	zone = overworld.Zone(ZONENAME, game, maps=maps)
+	zone.grid_width = 16
+	zone.level = start
 
 	# Populate zone with entities
 	#maptools.Positional_Map_Insert(zone, MyShop, 1)

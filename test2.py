@@ -17,12 +17,27 @@ from constants import *
 
 import random
 import maps.testmap
+WRITEMAP = True
 
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		game = main.Game()
 		zone = maps.testmap.genzone(game)
+		if WRITEMAP:
+			file = open('mapout.txt', 'w')
+			for y in range(15, -1, -1):
+				for mapline in range(30):
+					megaline = ''
+					for x in range(16):
+						mapid = y * 16 + x
+						map = zone.maps[mapid]
+						megaline += zone.maps[mapid][mapline]
+					file.write(megaline)
+					file.write('\n')
+
+			file.close()
+
 
 		#user = characters.gen_testuser()
 		#user.x, user.y = zone.find_empty_position()
