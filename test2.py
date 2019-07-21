@@ -27,7 +27,7 @@ try:
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
 			for y in range(15, -1, -1):
-				for mapline in range(30):
+				for mapline in range(len(zone.maps[0])):
 					megaline = ''
 					for x in range(16):
 						mapid = y * 16 + x
@@ -155,6 +155,18 @@ try:
 								item_used.use(t)
 
 
+			elif key == ord('k'):
+				#up
+				zone.exit(game.player, UP)
+			elif key == ord('j'):
+				zone.exit(game.player, DOWN)
+				#down
+			elif key == ord('h'):
+				zone.exit(game.player, LEFT)
+				#left
+			elif key == ord('l'):
+				zone.exit(game.player, RIGHT)
+				#right
 			##########################
 			# Player did nothing
 			##########################

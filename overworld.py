@@ -1,4 +1,6 @@
-import random
+#!/usr/bin/python
+#coding: utf-8 
+
 from main import Entity
 from constants import *
 import utility
@@ -143,7 +145,7 @@ class Zone(object):
 			self.level_entities[self.level] = self.entities
 			self.level = level
 			self.map = self.maps[self.level]
-			print(len(self.level_entities), level)
+			#print(len(self.level_entities), level)
 			self.entities = self.level_entities[level]
 			#self.width = len(self.map[0])
 
@@ -253,14 +255,11 @@ class Zone(object):
 			else:
 				print('Could not find a valid position Right')
 
-
-
-
-			while True:
-				y = random.randint(0, len(self.maps[level]) - 1)
-				x = len(self.maps[level][y]) - 1
-				if self.maps[level][y][x] == WALKABLE:
-					return (x, y)
+			#while True:
+				#y = random.randint(0, len(self.maps[level]) - 1)
+				#x = len(self.maps[level][y]) - 1
+				#if self.maps[level][y][x] == WALKABLE:
+					#return (x, y)
 		print('Could not find a valid point')
 		return (0, 0)
 
@@ -312,3 +311,36 @@ class Zone(object):
 				y += sy		
 		visibilities = [self.check_pos(pt[0], pt[1])[0] for pt in pts]
 		return not (WALL in visibilities)
+
+def overworld_gen(maze):
+	#dict key=(up, down, left, right)
+	# 0 = open 1 = closed
+	dir_char = {(1, 1, 1, 1): ' ',
+		    (0, 1, 1, 1): '╨',
+	            (1, 0, 1, 1): '╥',
+		    (1, 1, 0, 1): '╡',
+		    (1, 1, 1, 0): '╞',
+
+		    (0, 0, 1, 1): '║',
+		    (0, 1, 0, 1): '╝',
+		    (0, 1, 1, 0): '╚',
+		    (1, 0, 0, 1): '╗',
+		    (1, 0, 1, 0): '╔',
+		    (1, 1, 0, 0): '═',
+
+		    (0, 0, 0, 1): '╣',
+		    (0, 0, 1, 0): '╠',
+		    (0, 1, 0, 0): '╩',
+		    (1, 0, 0, 0): '╦',
+
+		    (0, 0, 0, 0): '╬'}
+
+	output = []
+	for y in maze:
+		line = ''
+		for x in y:
+			line += dir_char[(x.up, x.down, x.left, x.right)]
+		print line
+		output.append(line)
+	return output
+

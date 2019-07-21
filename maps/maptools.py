@@ -3,7 +3,9 @@ import entities
 import random
 from constants import *
 
-def Random_Map_Insert(zone, entity, level=0):
+def Random_Map_Insert(zone, entity, level=None):
+	if level is None:
+		level = zone.level
 	pos = zone.find_empty_position(level)
 	e1 = entity(zone.game, x=pos[0], y=pos[1])
 	zone.add_entity(e1)

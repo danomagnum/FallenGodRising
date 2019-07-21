@@ -10,9 +10,11 @@ from constants import *
 class Move(object):
 	def __init__(self,game, name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
 		self.game = game
+		self.prefixes = []
+		self.suffixes = []
 		if name is None:
 			name = 'MISSINGNAME'
-		self.name = name
+		self._name = name
 		if mp is None:
 			mp = 10.0
 		self.max_mp = mp
@@ -38,6 +40,22 @@ class Move(object):
 
 		self.ticks = 0
 		self.mp = self.max_mp
+
+	@property
+	def name(self):
+		namestr = ''
+		namestr = ' '.join(self.prefixes)
+		if namestr != '':
+			namestr += ' '
+		namestr += self._name
+		if self.suffixes != []:
+			namestr += ' '
+		namestr += ' '.join(self.suffixes)
+		return namestr
+
+	@name.setter
+	def name(self, value):
+		self._name = value
 
 	def config(self):
 		pass
@@ -151,9 +169,52 @@ class Move(object):
 			if self.mp < self.max_mp:
 				self.mp += 1
 		
+class FireMove(Move):
+	def config(self):
+		self.prefixes.append('Fire')
+		if elements.Fire not in self.elements:
+			self.elements.append(elements.Fire)
+class WaterMove(Move):
+	def config(self):
+		self.prefixes.append('Water')
+		if elements.Water not in self.elements:
+			self.elements.append(elements.Water)
+class EarthMove(Move):
+	def config(self):
+		self.prefixes.append('Earth')
+		if elements.Earth not in self.elements:
+			self.elements.append(elements.Earth)
+class ElectricMove(Move):
+	def config(self):
+		self.prefixes.append('Electric')
+		if elements.Electric not in self.elements:
+			self.elements.append(elements.Electric)
+class WindMove(Move):
+	def config(self):
+		self.prefixes.append('Wind')
+		if elements.Wind not in self.elements:
+			self.elements.append(elements.Wind)
+class LightMove(Move):
+	def config(self):
+		self.prefixes.append('Light')
+		if elements.Light not in self.elements:
+			self.elements.append(elements.Light)
+class DarkMove(Move):
+	def config(self):
+		self.prefixes.append('Dark')
+		if elements.Dark not in self.elements:
+			self.elements.append(elements.Dark)
 
-
-
+def mod_move(move, mod):
+	class TypedMove(move, mod):
+		pass
+	return TypedMove
+def gen_Typed_Moves(move):
+	typed_moves = []
+	type_mods = [FireMove, WaterMove, EarthMove, ElectricMove, WindMove, LightMove, DarkMove]
+	for mod in type_mods:
+		typed_moves.append(mod_move(move, mod))
+	return typed_moves
 
 class Strike(Move):
 	def config(self):
@@ -162,43 +223,8 @@ class Strike(Move):
 		self.accuracy = 0.9
 		self.physical = (True, True)
 
-class FireStrike(Strike):
-	def config(self):
-		self.name = 'Fire Strike'
-		self.elements = [elements.Fire]
-
-
-class WaterStrike(Strike):
-	def config(self):
-		self.name = 'Water Strike'
-		self.elements = [elements.Water]
-
-class EarthStrike(Strike):
-	def config(self):
-		self.name = 'Earth Strike'
-		self.elements = [elements.Earth]
-
-class ElectricStrike(Strike):
-	def config(self):
-		self.name = 'Electric Strike'
-		self.elements = [elements.Electric]
-
-class WindStrike(Strike):
-	def config(self):
-		self.name = 'Wind Strike'
-		self.elements = [elements.Wind]
-
-class LightStrike(Strike):
-	def config(self):
-		self.name = 'Light Strike'
-		self.elements = [elements.Light]
-
-class DarkStrike(Strike):
-	def config(self):
-		self.name = 'Dark Strike'
-		self.elements = [elements.Dark]
-
-typed_strikes = [FireStrike, WaterStrike, EarthStrike, WindStrike, LightStrike, DarkStrike]
+#typed_strikes = [FireStrike, WaterStrike, EarthStrike, WindStrike, LightStrike, DarkStrike]
+typed_strikes = gen_Typed_Moves(Strike)
 
 class Buff(Move):
 	def config(self):
@@ -315,7 +341,6 @@ class Cure(Move):
 			to_remove = random.choice(target.status)
 			target.status.remove(to_remove)
 
-
 class Blast(Move):
 	def config(self):
 		self.name = 'Blast'
@@ -323,43 +348,8 @@ class Blast(Move):
 		self.accuracy = 0.9
 		self.physical = (False, False)
 
-class FireBlast(Blast):
-	def config(self):
-		self.name = 'Fire Blast'
-		self.elements = [elements.Fire]
 
-
-class WaterBlast(Blast):
-	def config(self):
-		self.name = 'Water Blast'
-		self.elements = [elements.Water]
-
-class EarthBlast(Blast):
-	def config(self):
-		self.name = 'Earth Blast'
-		self.elements = [elements.Earth]
-
-class ElectricBlast(Blast):
-	def config(self):
-		self.name = 'Electric Blast'
-		self.elements = [elements.Electric]
-
-class WindBlast(Blast):
-	def config(self):
-		self.name = 'Wind Blast'
-		self.elements = [elements.Wind]
-
-class LightBlast(Blast):
-	def config(self):
-		self.name = 'Light Blast'
-		self.elements = [elements.Light]
-
-class DarkBlast(Blast):
-	def config(self):
-		self.name = 'Dark Blast'
-		self.elements = [elements.Dark]
-
-
-typed_blasts = [FireBlast, WaterBlast, EarthBlast, ElectricBlast, WindBlast, LightBlast, DarkBlast]
+#typed_blasts = [FireBlast, WaterBlast, EarthBlast, ElectricBlast, WindBlast, LightBlast, DarkBlast]
+typed_blasts = gen_Typed_Moves(Blast)
 
 all_moves = typed_strikes + typed_blasts + [Strike, Blast]

@@ -286,7 +286,8 @@ class Knight(Character):
 
 class Paladin(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.LightBlast(self.game)]
+		#self.moves = [moves.Strike(self.game), moves.LightBlast(self.game)]
+		self.moves = [moves.Strike(self.game), moves.mod_move(moves.Blast, moves.LightMove)(self.game)]
 		self.base_physical_strength = 110
 		self.base_physical_defense = 110
 		self.base_special_strength = 50
