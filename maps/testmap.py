@@ -116,16 +116,25 @@ class TestZone(overworld.Zone):
 		gen_level = 1
 		if self.game.player is not None:
 			gen_level = self.game.player.level
+
 		if visit_no < 2:
-			gear = items.gen_gear(self.game, gen_level)
-			maptools.Random_Map_Insert(self, entities.Treasure(self.game, [gear,]))
-			maptools.Random_Map_Insert(self, Rat)
-			maptools.Random_Map_Insert(self, Rat)
-			maptools.Random_Map_Insert(self, Rat)
-			maptools.Random_Map_Insert(self, Rat)
+			#if I only want to populate on the first visit
+			item_count = random.randint(0,2)
+			for i in range(item_count):
+				chance = random.random()
+				if chance < 0.05:
+					newitem = items.gen_gear(self.game, gen_level)
+				elif chance < 0.3:
+					newitem = items.gen_movescroll(self.game)
+				else:
+					newitem = items.gen_base_item(self.game)
+				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
+			mob_count = random.randint(0, 10)
+			for m in range(mob_count):
+				maptools.Random_Map_Insert(self, Rat)
 
 	def level_023(self):
-		print('Made it to level 23!')
+		pass # this is another way to do something special on specific levels.
 
 #####################
 # populate the zone with entities

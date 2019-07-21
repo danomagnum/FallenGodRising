@@ -60,6 +60,8 @@ class Game(object):
 		else:
 			return False
 	
+	def debug(self, command):
+		exec(command)
 
 class Equipment(object):
 	def __init__(self, game):
