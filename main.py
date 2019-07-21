@@ -244,6 +244,7 @@ class Entity(object):
 		self.game = game
 		if name is None:
 			name = ''
+		self._level = 1
 		self.name = name
 		self.dist_map = None
 		if combatants is None:
@@ -274,7 +275,12 @@ class Entity(object):
 			self.priority = 10
 		else:
 			self.priority = 100
-
+	@property
+	def level(self):
+		l = self._level
+		for c in self.combatants:
+			l = max(l, c.level)
+		return l
 	def config(self):
 		pass
 

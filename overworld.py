@@ -4,6 +4,7 @@
 from main import Entity
 from constants import *
 import utility
+import random
 
 
 def map_gen(height, width, rooms, minroomsize = 4):
@@ -78,6 +79,7 @@ class Zone(object):
 		self.player = None
 		self.level_entities = [[] for level in range(self.levels)]
 		self.entities = self.level_entities[self.level]
+		self.level_visits = [0 for level in range(self.levels)]
 
 		self.game = game
 
@@ -148,12 +150,28 @@ class Zone(object):
 			#print(len(self.level_entities), level)
 			self.entities = self.level_entities[level]
 			#self.width = len(self.map[0])
+			self.level_visits[level] += 1
+
+			self.level_populate(level, self.level_visits[level])
+
+			level_method = 'level_{:03}'.format(level)
+			try:
+				method = getattr(self, level_method)
+			except:
+				method = None
+
+			if method is not None:
+				method()
+
 
 			self.width = 0
 			for line in self.map:
 				w = len(line)
 				self.width = max(w, self.width)
 			self.height = len(self.map)
+
+	def level_populate(self, level, visit_no):
+		pass
 
 	def add_entity(self, entity, level=None):
 		if entity == self.player:
