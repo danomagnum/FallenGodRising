@@ -1,4 +1,5 @@
 import curses
+import curses.textpad
 import sys
 import os
 import time
@@ -224,6 +225,13 @@ class Display(object):
 		#self.storebox
 		#self.storeinfobox
 		#self.charboxes
+
+	def text_entry(self):
+		YMAX, XMAX = self.screen.getmaxyx()
+		w = curses.newwin(1,XMAX,1,1) 
+		t = curses.textpad.Textbox(w)
+		t.edit()
+		return t.gather()
 
 	@property
 	def mode(self):

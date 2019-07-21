@@ -170,9 +170,14 @@ try:
 			##########################
 			# Player did nothing
 			##########################
-			elif key in keys.SELECT:
+			elif key == ord('`'):
 				#print(game.display.mapbox.getmaxyx())
-				game.player.combatants[0].level += 1
+				#game.player.combatants[0].level += 1
+				console = display.text_entry()
+				try:
+					game.debug(console)
+				except Exception as e:
+					print(e.message)
 			zone.tick()
 			display.show_messages()
 			display.refresh_full()
