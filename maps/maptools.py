@@ -4,11 +4,19 @@ import random
 from constants import *
 
 def Random_Map_Insert(zone, entity, level=None):
+	try:
+		entity = entity(zone.game)
+	except:
+		pass
+
 	if level is None:
 		level = zone.level
+
 	pos = zone.find_empty_position(level)
-	e1 = entity(zone.game, x=pos[0], y=pos[1])
-	zone.add_entity(e1)
+	#e1 = entity(zone.game, x=pos[0], y=pos[1])
+	entity.x = pos[0]
+	entity.y = pos[1]
+	zone.add_entity(entity)
 
 def map_search(zone, id, level=0):
 	for y in range(len(zone.maps[level]) - 2):

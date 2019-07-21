@@ -594,8 +594,8 @@ def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
 
 	rand_val = random.random()
 
-	delta_levels = [(tup[0], rand_val /abs(tup[1] - level)) for tup in base_gear_mod_levels]
-	delta_levels.sort(key=lambda x:-x[1])
+	delta_levels = [(tup[0], abs(tup[1] - level)) for tup in base_gear_mod_levels]
+	delta_levels.sort(key=lambda x:x[1])
 	selected = None
 	for tlevel in delta_levels:
 		selected = tlevel[0]

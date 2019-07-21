@@ -62,24 +62,24 @@ class SeeTest(entities.BasicAI1):
 		self.standby_delay = 10
 
 
-class KeyChest(entities.Treasure):
-	# example basic enemy that gives an item when killed
-	def config(self):
-		self.name = 'Key Chest'
-		self.backpack.store(items.Key(self.game))
-		self.char = 'k'
+#class KeyChest(entities.Treasure):
+	## example basic enemy that gives an item when killed
+	#def config(self):
+		#self.name = 'Key Chest'
+		#self.backpack.store(items.Key(self.game))
+		#self.char = 'k'
 
-class SwordChest(entities.Treasure):
-	# example basic enemy that gives an item when killed
-	def config(self):
-		self.name = 'Sword Chest'
-		#self.backpack.store(items.FireSword(self.game))
-		item = items.Sword(self.game)
-		items.add_item_mod(item, random.choice(items.general_gear_mods))
-		items.add_item_mod(item, random.choice(items.base_gear_mods))
-		items.add_item_mod(item, random.choice(items.special_gear_mods))
-		self.backpack.store(item)
-		self.char = '/'
+#class SwordChest(entities.Treasure):
+	## example basic enemy that gives an item when killed
+	#def config(self):
+		#self.name = 'Sword Chest'
+		##self.backpack.store(items.FireSword(self.game))
+		#item = items.Sword(self.game)
+		#items.add_item_mod(item, random.choice(items.general_gear_mods))
+		#items.add_item_mod(item, random.choice(items.base_gear_mods))
+		#items.add_item_mod(item, random.choice(items.special_gear_mods))
+		#self.backpack.store(item)
+		#self.char = '/'
 
 class Door1(entities.Door):
 	pass
@@ -111,6 +111,21 @@ for i in os.listdir(path):
 			files.append(os.path.join(path, i))
 		
 
+class TestZone(overworld.Zone):
+	def level_populate(self, level, visit_no):
+		gen_level = 1
+		if self.game.player is not None:
+			gen_level = self.game.player.level
+		if visit_no < 2:
+			gear = items.gen_gear(self.game, gen_level)
+			maptools.Random_Map_Insert(self, entities.Treasure(self.game, [gear,]))
+			maptools.Random_Map_Insert(self, Rat)
+			maptools.Random_Map_Insert(self, Rat)
+			maptools.Random_Map_Insert(self, Rat)
+			maptools.Random_Map_Insert(self, Rat)
+
+	def level_023(self):
+		print('Made it to level 23!')
 
 #####################
 # populate the zone with entities
@@ -162,7 +177,8 @@ def genzone(game):
 		y += 1
 	
 	# Create zone
-	zone = overworld.Zone(ZONENAME, game, maps=maps)
+	zone = TestZone(ZONENAME, game, maps=maps)
+	#zone = overworld.Zone(ZONENAME, game, maps=maps)
 	zone.grid_width = 16
 	zone.change_level(start)
 
@@ -177,7 +193,7 @@ def genzone(game):
 	#maptools.Random_Map_Insert(zone, PackRat)
 	#maptools.Random_Map_Insert(zone, PackRat)
 	#maptools.Random_Map_Insert(zone, SeeTest)
-	maptools.Random_Map_Insert(zone, SwordChest)
+	#maptools.Random_Map_Insert(zone, SwordChest)
 	#maptools.Random_Map_Insert(zone, Door1)
 	#maptools.Random_Map_Insert(zone, Door2)
 	#maptools.Stair_Handler(zone)
