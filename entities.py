@@ -9,8 +9,7 @@ class Battler(Entity):
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
-			my_ai = self.AI(self.game, self.combatants)
-			result = battle.Battle(self.game, entity, my_ai)
+			result = battle.Battle(self.game, entity, self)
 			if result == USER:
 				self.enabled = False
 				entity.backpack.absorb(self.backpack, message = True)
@@ -101,6 +100,7 @@ class TowardWalker(Entity):
 class BasicAI1(Entity):
 	STANDBY = 1
 	AGRESSIVE = 2
+	FLEE = 3
 
 	def config(self):
 		self.state = self.STANDBY
@@ -108,22 +108,40 @@ class BasicAI1(Entity):
 		self.standby_counter = 0
 		self.configured = 1
 
+	def collide(self, entity, zone):
+		#self.enabled = False
+		if entity.is_player == True: #Is the player if no AI
+			result = battle.Battle(self.game, entity, self)
+			if result == USER:
+				self.enabled = False
+				entity.backpack.absorb(self.backpack, message = True)
+
 	def tick(self, zone):
 		#print('walking towards from {},{}'.format(self.x, self.y))
 		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
-			self.state = self.AGRESSIVE
 			self.standby_counter = 0
 		else:
 			self.standby_counter += 1
-			if self.standby_counter > self.standby_delay:
-				self.state = self.STANDBY
 
-		if self.state == self.AGRESSIVE:
+		if self.state == self.STANDBY:
+			if self.standby_counter < 1:
+				self.state = self.AGRESSIVE
+		elif self.state == self.AGRESSIVE:
 			#dir = zone.toward_player(self.x, self.y)
 			dir = self.toward_entity(self.game.player)
 			if dir is not None:
 				self.move(zone, dir)
 
+			if self.standby_counter > self.standby_delay:
+				self.state = self.STANDBY
+		elif self.state == self.FLEE:
+			#dir = zone.toward_player(self.x, self.y)
+			dir = self.flee_entity(self.game.player)
+			if dir is not None:
+				self.move(zone, dir)
+
+			if self.standby_counter < 1:
+				self.state = self.STANDBY
 
 class NPC(Entity):
 	def config(self):

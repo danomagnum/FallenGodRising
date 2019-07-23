@@ -209,6 +209,7 @@ def mod_move(move, mod):
 	class TypedMove(move, mod):
 		pass
 	return TypedMove
+
 def gen_Typed_Moves(move):
 	typed_moves = []
 	type_mods = [FireMove, WaterMove, EarthMove, ElectricMove, WindMove, LightMove, DarkMove]
@@ -305,6 +306,22 @@ class Heal(Move):
 		self.power = -10
 		self.default_target = SELF
 		self.physical = (False, False)
+
+class Pierce(Move):
+	def config(self):
+		self.prefixes.append('Piercing')
+
+	def effect(self, target):
+		randval = random.random()
+		# for starters, effect 20% of the time.  Once the move is more used, effect 95%
+		prob = utility.scale(self.uses, 0, 1000, 0.2, 0.95)
+		if target.game.get_var('effect_override'):
+			print 'overriden'
+			prob = 1.0
+		if randval < prob:
+			print('{} has been wounded'.format(target.name))
+			target.status.append(effects.Bleeding())
+
 
 class Poison(Move):
 	def config(self):

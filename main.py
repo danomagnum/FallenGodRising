@@ -48,7 +48,7 @@ class Game(object):
 			print('Zone {} does not exist'.format(zonename))
 
 	def get_var(self, variable):
-		self.game_vars.get(variable, 0)
+		return self.game_vars.get(variable, 0)
 
 	def set_var(self, variable, value):
 		self.game_vars[variable] = value
@@ -244,6 +244,7 @@ class Equipment(object):
 class Entity(object):
 	def __init__(self,game, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
 		self.game = game
+		self.defeated_text = None
 		if name is None:
 			name = ''
 		self._level = 1
@@ -273,10 +274,51 @@ class Entity(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 
+		if self.combatant is None:
+			if len(self.combatants) > 0:
+				self.combatant = self.combatants[0]
+
 		if self.is_player:
 			self.priority = 10
 		else:
 			self.priority = 100
+		if self.defeated_text is None:
+			self.defeated_text = '{} was defeated'.format(self.name)
+
+
+	def attack(self, enemy_ai):
+		move = random.choice(self.combatant.moves)
+		enemy = random.choice(enemy_ai.combatants)
+		target = [self.combatant, enemy][move.default_target]
+		return [move, [target]]
+
+	def change(self, enemy):
+		standby = self.get_standby()
+		available = self.get_available()
+		if standby:
+			self.combatant = random.choice(standby)
+			return self.combatant
+		elif available:
+			self.combatant = random.choice(available)
+			return self.combatant
+		else:
+			return None
+	
+	def action(self, enemy_ai):
+		if self.get_standby():
+			return random.choice([ATTACK, SWITCH])
+		else:
+			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+		return action
+	
+	def get_available(self):
+		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
+	
+	def get_standby(self):
+		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
+
+
+
 	@property
 	def level(self):
 		l = self._level
@@ -380,6 +422,7 @@ class Entity(object):
 							i = i + 1
 							checked.add(pt)
 
+
 	def toward_entity(self, entity):
 		y = self.y
 		x = self.x
@@ -413,6 +456,42 @@ class Entity(object):
 				elif left==minval:
 					return LEFT
 				elif right==minval:
+					return RIGHT
+		return None
+
+	def flee_entity(self, entity):
+		y = self.y
+		x = self.x
+		up = -1
+		down = -1
+		left = -1
+		right = -1
+		if entity.dist_map:
+			ymax = len(entity.dist_map) - 1
+			xmax = len(entity.dist_map[0]) - 1
+			if y > 0:
+				up = entity.dist_map[y - 1][x]
+			if y < ymax:
+				down = entity.dist_map[y + 1][x]
+			if x > 0:
+				left = entity.dist_map[y][x - 1]
+			if x < xmax:
+				right = entity.dist_map[y][x + 1]
+
+			options = [up, down, left, right]
+
+			options = [opt for opt in options if opt >= 0]
+
+			if options:
+				maxval = max(options)
+
+				if up == maxval:
+					return UP
+				elif down == maxval:
+					return DOWN 
+				elif left==maxval:
+					return LEFT
+				elif right==maxval:
 					return RIGHT
 		return None
 

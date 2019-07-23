@@ -9,21 +9,20 @@ import curses_interface as graphics_interface
 #import pygcurses_interface as graphics_interface
 import time
 import items
-import overworld
 import keys
 import entities
 import elements
 from constants import *
 
 import random
-import maps.testmap
+import maps.overworld
 WRITEMAP = True
 
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		game = main.Game()
-		zone = maps.testmap.genzone(game)
+		zone = maps.overworld.genzone(game)
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
 			for y in range(15, -1, -1):
@@ -59,7 +58,7 @@ try:
 		while loop:
 			if i >= graphics_interface.MAX_COMBATANTS:
 				i = 0
-			player_characters = [characters.Fighter(game), characters.Wizard(game), characters.Cleric(game), characters.Knight(game), characters.Paladin(game), characters.Rogue(game), characters.Dragoon(game), characters.Juggernaut(game), characters.Battlemage(game), characters.Nightblade(game), characters.Witchhunter(game)]
+			player_characters = [characters.Fighter(game), characters.Wizard(game), characters.Cleric(game), characters.Knight(game), characters.Paladin(game), characters.Rogue(game), characters.Dragoon(game), characters.Juggernaut(game), characters.Battlemage(game), characters.Nightblade(game), characters.Witchhunter(game), characters.Debug(game)]
 
 
 			def update_confirm_box(choice):
