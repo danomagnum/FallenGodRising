@@ -178,7 +178,7 @@ class Display(object):
 
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.charboxsize = (YMAX / MAX_COMBATANTS, 40)
-		self.msgboxsize = [6, int(XMAX - self.charboxsize[1])]
+		self.msgboxsize = [8, int(XMAX - self.charboxsize[1])]
 		self.charboxes = []
 		self.nmeboxes = []
 		for i in range(MAX_COMBATANTS):
@@ -348,7 +348,7 @@ class Display(object):
 				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
 			if i < len(self.enemy.combatants):
 				self.show_combatant_stats(self.enemy.combatants[i], self.nmeboxes[i])
-		self.show_messages()
+		#self.show_messages()
 
 	##################################
 	##### Map Draw Routines
