@@ -1,3 +1,5 @@
+USE_BIOME = False
+
 class Biome(object):
 	def __init__(self, name):
 		self.name = name
@@ -12,8 +14,9 @@ class Element(object):
 
 	def effectiveness(self, defending_element, biome = None):
 		biome_mod = 1.0
-		if biome is not None:
-			biome_mod = biome.modifiers.get(self, 1.0)
+		if USE_BIOME:
+			if biome is not None:
+				biome_mod = biome.modifiers.get(self, 1.0)
 		return biome_mod * self.modifiers.get(defending_element, self.nominal_modifier)
 
 	def __str__(self):
@@ -42,6 +45,9 @@ Mountains = Biome('Mountains')
 
 Sky = Biome('Sky')
 Underground = Biome('Underground')
+
+#element bonus
+Normal.bonus = 1.05
 
 #element interactions
 Fire.modifiers[Water] = 0.5

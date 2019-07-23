@@ -329,6 +329,7 @@ def Battle(game, user, enemy_ai):
 				winner = ENEMY
 				raise main.GameOver()
 
+		game.display.show_messages()
 		game.display.refresh_combatant()
 		game.get_confirm()
 
