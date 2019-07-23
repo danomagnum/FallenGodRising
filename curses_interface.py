@@ -1,4 +1,5 @@
 import curses
+#import libtcod_curses
 import curses.textpad
 import sys
 import os
@@ -10,6 +11,8 @@ import keys
 from constants import *
 
 import stdoutCatcher
+
+#curses = libtcod_curses.Curses()
 #from StringIO import StringIO
 
 import characters

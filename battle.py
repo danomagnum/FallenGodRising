@@ -9,23 +9,7 @@ from constants import *
 
 DEBUG = True
 
-ATTACK = 0
-SWITCH = 1
-ITEM = 2
-RUN = 3
-
 class AI(object):
-	def __init__(self, game, combatants, name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
-		self.name = name
-		self.combatants = combatants
-		self.combatant = combatants[0]
-		self.defeated_text = defeated_text
-
-		self.backpack = items.Backpack(self.game)
-		if item_list is not None:
-			for item in item_list:
-				self.backpack.store(item)
-
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
 		enemy = random.choice(enemy_ai.combatants)
@@ -46,9 +30,9 @@ class AI(object):
 	
 	def action(self, enemy_ai):
 		if self.get_standby():
-			action = random.choice([ATTACK, SWITCH, ATTACK, ATTACK, ATTACK, ATTACK])
+			return random.choice([ATTACK, SWITCH])
 		else:
-			action = random.choice([ATTACK, ATTACK])
+			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
 		return action
 	
 	def get_available(self):
@@ -58,21 +42,7 @@ class AI(object):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
 
 
-
 class Random_AI(AI):
-	def __init__(self, game, combatants,  name='AI', item_list=None, defeated_text='Oh Snap! I lost!'):
-		self.game = game
-		self.name = name
-		self.combatants = combatants
-		self.combatant = combatants[0]
-		self.defeated_text = defeated_text
-
-
-		self.backpack = items.Backpack(self.game)
-		if item_list is not None:
-			for item in item_list:
-				self.backpack.store(item)
-
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
 		enemy = random.choice(enemy_ai.combatants)
@@ -93,9 +63,48 @@ class Random_AI(AI):
 	
 	def action(self, enemy):
 		if self.get_standby():
+			action = random.choice([ATTACK, SWITCH, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+			return action
+		else:
+			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+			return action
+
+
+class Skiddish_AI(AI):
+	def attack(self, enemy_ai):
+		move = random.choice(self.combatant.moves)
+		enemy = random.choice(enemy_ai.combatants)
+		target = [self.combatant, enemy][move.default_target]
+		return [move, [target]]
+
+	def change(self, enemy):
+		standby = self.get_standby()
+		available = self.get_available()
+		if standby:
+			self.combatant = random.choice(standby)
+			return self.combatant
+		elif available:
+			self.combatant = random.choice(available)
+			return self.combatant
+		else:
+			return None
+	
+	def action(self, enemy):
+		health = 1
+		maxhealth = 1
+		for c in self.combatants:
+			health += c.hp
+			maxhealth += c.max_hp
+		run_chance = float(health) / float(maxhealth)
+		if random.random() > run_chance:
+			self.state = self.FLEE
+			return RUN
+		if self.get_standby():
 			return random.choice([ATTACK, SWITCH])
 		else:
 			return random.choice([ATTACK, ATTACK])
+
+
 
 def Battle(game, user, enemy_ai):
 	game.display.start_battle(user, enemy_ai)
@@ -220,6 +229,7 @@ def Battle(game, user, enemy_ai):
 			enemy_move = None
 			enemy_target = None
 			enemy_is_attacking = False
+			enemy_ai.running = True
 			running = True
 			print('Enemy Is Running')
 			battle_continue = False

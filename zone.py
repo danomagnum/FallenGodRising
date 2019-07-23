@@ -143,7 +143,10 @@ class Zone(object):
 		elif level > (len(self.maps) - 1):
 			print("Can't go past end of zone")
 		else:
-			print("Level {}".format(level))
+			if self.grid_width > 1:
+				print("{} ({}, {})".format(self.name, int(level / self.grid_width), int(level % self.grid_width)))
+			else:
+				print("{} Level {}".format(self.name, level))
 			self.level_entities[self.level] = self.entities
 			self.level = level
 			self.map = self.maps[self.level]

@@ -15,7 +15,7 @@ class Status(object):
 		utility.call_all('config', self)
 
 		self.config()
-	def config(self, effected):
+	def config(self):
 		pass
 	def pre_battle(self, effected):
 		pass
@@ -67,10 +67,12 @@ class Status(object):
 		return initial
 
 class StatMod(Status):
-	def config(self, multiplier, stat):
+	def __init__(self, multiplier, stat, name=None):
 		self.multiplier = multiplier
 		self.stat = stat
-		self.name = '{} {}%'.format(stat,self.multiplier)
+		Status.__init__(self, name=name)
+	def config(self):
+		self.name = '{} {}%'.format(self.stat,self.multiplier)
 
 	def physical_strength(self, initial):
 		if self.stat == PHYSTR:
@@ -122,7 +124,6 @@ class StatMod(Status):
 			return initial * self.multiplier
 		else:
 			return initial
-
 class Poison_Minor(Status):
 	def config(self):
 		self.name = 'Minor Poison'
@@ -138,4 +139,14 @@ class Poison_Major(Status):
 		damage = max(1, effected.hp / 3)
 		print('{} was effected by {} by {}'.format(effected.name,self.name, damage))
 		effected.hp -= damage
+
+class Bleeding(Status):
+	def config(self):
+		self.name = 'Bleeding'
+		self.max_life = 5
+	def post_turn(self, effected):
+		damage = max(1, effected.hp / 20)
+		print('{} was effected by {} for {}'.format(effected.name,self.name, damage))
+		effected.hp -= damage
+
 

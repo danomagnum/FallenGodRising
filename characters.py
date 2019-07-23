@@ -362,3 +362,15 @@ class Witchhunter(Character):
 		self.base_hp = 100
 		self.base_luck = 100
 
+
+class Debug(Character):
+	def config(self):
+		self.moves = [moves.Strike(self.game), moves.Haste(self.game), moves.mod_move(moves.Strike, moves.Pierce)(self.game)]
+		self.base_physical_strength = 100
+		self.base_physical_defense = 100
+		self.base_special_strength = 60
+		self.base_special_defense = 140
+		self.base_speed = 100
+		self.base_hp = 100
+		self.base_luck = 100
+

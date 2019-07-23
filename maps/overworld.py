@@ -1,4 +1,4 @@
-import main, battle, characters, overworld, entities, moves, elements, items
+import main, battle, characters, zone, entities, moves, elements, items
 from constants import *
 import random
 import maps.maptools as maptools
@@ -111,7 +111,7 @@ for i in os.listdir(path):
 			files.append(os.path.join(path, i))
 		
 
-class TestZone(overworld.Zone):
+class TestZone(zone.Zone):
 	def level_populate(self, level, visit_no):
 		gen_level = 1
 		if self.game.player is not None:
@@ -187,7 +187,6 @@ def genzone(game):
 	
 	# Create zone
 	zone = TestZone(ZONENAME, game, maps=maps)
-	#zone = overworld.Zone(ZONENAME, game, maps=maps)
 	zone.grid_width = 16
 	zone.change_level(start)
 
