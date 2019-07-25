@@ -295,7 +295,7 @@ def maze(width, height, clear_percent = 0.99):
 		if x < width - 1:
 			if not map[y][x + 1].visited:
 				opts.append(RIGHT)
-		print('({}, {}) / {}'.format(x, y, len(opts)))
+		#print('({}, {}) / {}'.format(x, y, len(opts)))
 		if len(opts) > 0:
 			dir = random.choice(opts)
 		else:
