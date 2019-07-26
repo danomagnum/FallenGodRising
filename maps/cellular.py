@@ -1,13 +1,18 @@
 import random
+from drunkard import add_entry2
 
 UP = 1
 DOWN = 2
 LEFT = 3
 RIGHT = 4
 
-def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 6):
+def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
 	map = [['#' for x in range(xmax)] for y in range(ymax)]
+	if entries is None:
+		entries = []
 	x, y = (int(xmax / 2), int(ymax/2))
+
+	entry_count = len(entries)
 
 	total_cells = xmax * ymax
 	removals = int(total_cells * percentage)
@@ -51,7 +56,7 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 6):
 	def isfloor(m, x, y):
 		return map[y][x] == '.'
 
-	for gen in range(gens):
+	for gen in range(gens - entry_count):
 		nextmap = [[map[y][x] for x in range(xmax)] for y in range(ymax)]
 		lastpass = gen == gens - 1
 
@@ -73,8 +78,8 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 6):
 							nextmap[y][x] = random.choice(('.', '#'))
 						if len(w1s) < 5:
 							nextmap[y][x] = '.'
-						if len(n2) < 24:
-							nextmap[y][x] = '#'
+						#if len(n2) < 24:
+						#	nextmap[y][x] = '#'
 
 
 				else:
@@ -82,7 +87,20 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 6):
 						nextmap[y][x] = '#'
 					if len(w2s) > 18:
 						nextmap[y][x] = '#'
-					if len(n2) < 24:
+					#if len(n2) < 24:
+						#nextmap[y][x] = '#'
+				
+				if UP not in entries:
+					if y < 2:
+						nextmap[y][x] = '#'
+				if DOWN not in entries:
+					if y > ymax - 3:
+						nextmap[y][x] = '#'
+				if LEFT not in entries:
+					if x < 2:
+						nextmap[y][x] = '#'
+				if RIGHT not in entries:
+					if x > xmax - 3:
 						nextmap[y][x] = '#'
 
 		map = nextmap
@@ -182,11 +200,12 @@ def showmap(map, printout = False):
 
 
 if __name__ == '__main__':
-	map = cellular()
-	#add_entry2(map, UP)
-	#add_entry2(map, DOWN)
-	#add_entry2(map, LEFT)
-	#add_entry2(map, RIGHT)
+	map = cellular(gens=7, entries = [UP])
+	#map = cellular(gens=7, entries = [UP, RIGHT, LEFT, DOWN])
+	#add_entry2(map, UP, 3)
+	#add_entry2(map, DOWN, 3)
+	#add_entry2(map, LEFT, 3)
+	#add_entry2(map, RIGHT, 3)
 	#noise_prune(map)
 	map = showmap(map)
 	for line in map:
