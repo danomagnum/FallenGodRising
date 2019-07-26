@@ -20,8 +20,7 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 6):
 
 		map[ysel][xsel] = '.'
 
-	for line in showmap(map):
-		print line
+	showmap(map, True)
 
 	def neighbors(x, y, diags=True):
 		if diags:
@@ -47,23 +46,47 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 6):
 					neighbor_cells.append(cell)
 		return neighbor_cells
 
-	def iswall(x, y):
+	def iswall(m, x, y):
 		return map[y][x] == '#'
-	def isfloor(x, y):
+	def isfloor(m, x, y):
 		return map[y][x] == '.'
 
 	for gen in range(gens):
+		nextmap = [[map[y][x] for x in range(xmax)] for y in range(ymax)]
+		lastpass = gen == gens - 1
+
 		for y in range(ymax):
 			for x in range(xmax):
 				n1= neighbors(x, y)
 				n2= neighbors2(x, y)
-				w1s = [w for w in n1 if iswall(w[0], w[1])]
-				w2s = [w for w in n2 if iswall(w[0], w[1])]
+				w1s = [w for w in n1 if iswall(map, w[0], w[1])]
+				w2s = [w for w in n2 if iswall(map, w[0], w[1])]
 
-				if len(w1s) >= 5 or len(w2s) <= 7:
-					map[y][x] = '#'
+				if map[y][x] == '#':
+					if lastpass:
+						if len(w1s) < 8:
+							nextmap[y][x] = '.'
+						if len(n2) < 24:
+							nextmap[y][x] = '#'
+					else:
+						if len(w1s) < 6:
+							nextmap[y][x] = random.choice(('.', '#'))
+						if len(w1s) < 5:
+							nextmap[y][x] = '.'
+						if len(n2) < 24:
+							nextmap[y][x] = '#'
+
+
 				else:
-					map[y][x] = '.'
+					if len(w1s) > 7:
+						nextmap[y][x] = '#'
+					if len(w2s) > 18:
+						nextmap[y][x] = '#'
+					if len(n2) < 24:
+						nextmap[y][x] = '#'
+
+		map = nextmap
+		showmap(map, True)
 		
 	return map
 
