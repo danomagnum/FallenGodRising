@@ -12,6 +12,9 @@ from constants import *
 
 import stdoutCatcher
 
+import locale
+locale.setlocale(locale.LC_ALL, '')
+
 #curses = libtcod_curses.Curses()
 #from StringIO import StringIO
 
@@ -177,7 +180,7 @@ class Display(object):
 
 
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
-		self.charboxsize = (YMAX / MAX_COMBATANTS, 40)
+		self.charboxsize = (int(YMAX / MAX_COMBATANTS), 40)
 		self.msgboxsize = [8, int(XMAX - self.charboxsize[1])]
 		self.charboxes = []
 		self.nmeboxes = []
@@ -203,7 +206,7 @@ class Display(object):
 			self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i))
 			#self.statbox.append(curses.newwin(self.statboxsize[0],self.statboxsize[1],YMAX-(self.statboxsize[0] + 5),self.statboxsize[1]*i))
 
-		self.startmenusize = ((YMAX) / MAX_COMBATANTS, (XMAX - 1) / MAX_COMBATANTS)
+		self.startmenusize = (int((YMAX) / MAX_COMBATANTS), int((XMAX - 1) / MAX_COMBATANTS))
 		self.start_menus = []
 		for i in range(MAX_COMBATANTS):
 			classbox = curses.newwin(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*0)
@@ -213,7 +216,7 @@ class Display(object):
 			self.start_menus.append(elementbox)
 			self.start_menus.append(confirmbox)
 
-		self.storemenusize = ((YMAX - 1 - self.msgboxsize[0]), (XMAX -1) / 3)
+		self.storemenusize = ((YMAX - 1 - self.msgboxsize[0]), int((XMAX -1) / 3))
 		self.storebox = curses.newwin(self.storemenusize[0], self.storemenusize[1],0,0)
 		self.storeinfobox = curses.newwin(self.storemenusize[0], self.storemenusize[1],0,self.storemenusize[1])
 		#self.charboxes = []

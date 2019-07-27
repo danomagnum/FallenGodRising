@@ -367,3 +367,11 @@ def maze(width, height, clear_percent = 0.99):
 
 	return map
 
+def swap_char(map, old_char, new_chars):
+	ymax = len(map)
+	xmax = len(map[0])
+	for y in range(ymax):
+		for x in range(xmax):
+			if map[y][x] == old_char:
+				map[y][x] = random.choice(new_chars)
+

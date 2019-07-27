@@ -316,7 +316,6 @@ class Pierce(Move):
 		# for starters, effect 20% of the time.  Once the move is more used, effect 95%
 		prob = utility.scale(self.uses, 0, 1000, 0.2, 0.95)
 		if target.game.get_var('effect_override'):
-			print 'overriden'
 			prob = 1.0
 		if randval < prob:
 			print('{} has been wounded'.format(target.name))
