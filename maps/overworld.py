@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#coding: utf-8 
+
 import main, battle, characters, zone, entities, moves, elements, items
 from constants import *
 import random
@@ -173,6 +176,11 @@ def genzone(game):
 				maptools.add_entry(map, RIGHT)
 				entries += 1
 			maptools.noise_prune(map)
+			#maptools.swap_char(map, '#', '♠♣') # forest
+			maptools.swap_char(map, '#', '▲⏶') # Mountains
+			
+			
+			#maptools.swap_char(map, '#', '♠♣♧♤')
 			map = maptools.showmap(map)
 			maps.append(map)
 

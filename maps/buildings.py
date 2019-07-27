@@ -313,9 +313,114 @@ def building_octagon(xmax = 30, ymax = 30):
 	room.drop_wall()
 	room.drop_wall()
 	room.draw(map)
+	dmap = calcDistGraph((0, 0), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] > 0:
+				map[y][x] = ' '
+
+	return map
+
+def building_twobox(xmax = 30, ymax = 30):
+	map = [['.' for x in range(xmax)] for y in range(ymax)]
+	walls = []
+	wall0 = Wall(0, 0, 20, 0, True)
+	wall1 = Wall(20, 0, 20, 10, True)
+	wall2 = Wall(20, 10, 29, 10, True)
+	wall3 = Wall(29, 10, 29, 29, True)
+	wall4 = Wall(29, 29, 10, 29, True)
+	wall5 = Wall(10, 29, 10, 20, True)
+	wall6 = Wall(10, 20, 0, 20, True)
+	wall7 = Wall(0, 20, 0, 0, True)
+
+	room = Room([wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7])
+	room.divide()
+	room.divide()
+	room.divide()
+	room.divide()
+	room.divide()
+	room.door_gen()
+	room.drop_wall()
+	room.drop_wall()
+	room.draw(map)
+	dmap = calcDistGraph((29, 0), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] > 0:
+				map[y][x] = ' '
+	dmap = calcDistGraph((0, 29), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] > 0:
+				map[y][x] = ' '
+
 	return map
 
 
+def building_tee(xmax = 30, ymax = 30):
+	map = [['.' for x in range(xmax)] for y in range(ymax)]
+	walls = []
+	wall0 = Wall(0, 0, 29, 0, True)
+	wall1 = Wall(29, 0, 29, 15, True)
+	wall2 = Wall(29, 15, 20, 15, True)
+	wall3 = Wall(20, 15, 20, 29, True)
+	wall4 = Wall(20, 29, 10, 29, True)
+	wall5 = Wall(10, 29, 10, 20, True)
+	wall6 = Wall(10, 20, 0, 20, True)
+	wall7 = Wall(0, 20, 0, 0, True)
+
+	room = Room([wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7])
+	room.divide()
+	room.divide()
+	room.divide()
+	room.divide()
+	room.divide()
+	room.door_gen()
+	room.drop_wall()
+	room.drop_wall()
+	room.draw(map)
+	dmap = calcDistGraph((29, 29), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] > 0:
+				map[y][x] = ' '
+	dmap = calcDistGraph((0, 29), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] > 0:
+				map[y][x] = ' '
+
+	return map
+
+
+
+def add_stairs(map, up=True, down=True):
+	ymax = len(map)
+	xmax =len(map[0])
+	dmap = None
+	if up:
+		search = True
+		while search:
+			y = random.randint(0, ymax - 1)
+			x = random.randint(0, xmax - 1)
+			if map[y][x] == '.':
+				map[y][x] = '<'
+				search = False
+		xup = x
+		yup = y
+		dmap = calcDistGraph((xup, yup), map)
+	if down:
+		search = True
+		while search:
+			y = random.randint(0, ymax - 1)
+			x = random.randint(0, xmax - 1)
+			if map[y][x] == '.':
+				if dmap is not None:
+					if dmap[y][x] > 0:
+						map[y][x] = '>'
+						search = False
+		xdown = x
+		ydown = y
 
 def showmap(map, printout = False):
 	lines = []
@@ -326,9 +431,56 @@ def showmap(map, printout = False):
 			print(line)
 	return lines
 
+def calcDistGraph(pt, map):
+	height = len(map)
+	width = len(map[0])
+	dist_map = [[-1 for x in range(width)] for x in range(height)]
+	x0 = pt[0]
+	y0 = pt[1]
+	d = 0
+	dist_map[y0][x0] = d
+	checked = set()
+	checked.add((x0,y0))
+	to_check = [(x0,y0)]
+	checking = []
+	i = 0
+	while len(to_check) > 0:
+		checking = to_check[:]
+		to_check = []
+		for point in checking:
+			d = dist_map[point[1]][point[0]]
+			pts = []
+			if point[1] > 0:
+				up = (point[0], point[1] - 1)
+				pts.append(up)
+			if point[1] < height - 1:
+				down = (point[0], point[1] + 1)
+				pts.append(down)
+			if point[0] > 0:
+				left = (point[0] - 1, point[1])
+				pts.append(left)
+			if point[0] < width - 1:
+				right = (point[0] + 1, point[1])
+				pts.append(right)
+
+			d = d + 1
+			for pt in pts:
+				if pt not in checked:
+					if map[pt[1]][pt[0]] != '#':
+						if (dist_map[pt[1]][pt[0]] > d) or (dist_map[pt[1]][pt[0]] < 0):
+							dist_map[pt[1]][pt[0]] = d
+							to_check.append(pt)
+						i = i + 1
+						checked.add(pt)
+	return dist_map
+
+
 
 if __name__ == '__main__':
-	map = building_gen()
+	#map = building_octagon()
+	#map = building_twobox()
+	map = building_tee()
+	add_stairs(map)
 
 	map = showmap(map)
 	for line in map:

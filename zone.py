@@ -186,7 +186,6 @@ class Zone(object):
 		if level > self.levels:
 			return
 		if entity in self.level_entities[level]:
-			print 'in list already'
 			return
 		self.level_entities[level].append(entity)
 		self.entities = self.level_entities[self.level]
@@ -361,7 +360,7 @@ def overworld_gen(maze):
 		line = ''
 		for x in y:
 			line += dir_char[(x.up, x.down, x.left, x.right)]
-		print line
+		print(line)
 		output.append(line)
 	return output
 
