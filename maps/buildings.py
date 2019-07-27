@@ -12,6 +12,29 @@ WALL = 10
 CLEAR = 9
 DOOR = 8
 
+def dist(pt0, pt1):
+	dx = pt0[0] - pt1[0]
+	dy = pt0[1] - pt1[1]
+	return math.sqrt(dx**2 + dy**2)
+
+def err_dist(pt0, pt1, test):
+	dx0 = pt0[0] - test[0]
+	dy0 = pt0[1] - test[1]
+
+	dx1 = pt1[0] - test[0]
+	dy1 = pt1[1] - test[1]
+
+	dx = pt0[0] - pt1[0]
+	dy = pt0[1] - pt1[1]
+
+	l0p = math.sqrt(dx0**2 + dy0**2)
+	l1p = math.sqrt(dx1**2 + dy1**2)
+	l = math.sqrt(dx**2 + dy**2)
+
+	dl = l - l0p - l1p
+
+	return dl
+
 def floodFill(map, x, y, floodmap = None):
 	# The recursive algorithm. Starting at x and y, changes any adjacent
 	# characters that match oldChar to newChar.
@@ -95,21 +118,26 @@ class Wall(object):
 		return len
 
 	def divide(self):
-		if self.x0 > self.x1:
-			by_x = -1
-		else:
-			by_x = 1
-		if self.y0 > self.y1:
-			by_y = -1
-		else:
-			by_y = 1
-		xsel = random.choice(range(self.x0, self.x1 + by_x, by_x))
-		ysel = random.choice(range(self.y0, self.y1 + by_y, by_y))
+		return random.choice(list(self.pts))
 
-		return (xsel, ysel)
 
 	def ison(self, pt):
+		if (int(pt[0]), int(pt[1])) in self.pts:
+			return True
+		for mypt in self.pts:
+			if dist(mypt, pt) < 1.0:
+				print pt
+			#if err_dist((self.x0, self.y0), (self.x1, self.y1), pt) < 1.0:
+				return True
+		return False
+		
 		return (int(pt[0]), int(pt[1])) in self.pts
+
+	def nearest(self, pt):
+		pts_with_dist = [(mypt, dist(pt, mypt)) for mypt in self.pts]
+		pts_with_dist.sort(key=lambda x: x[1])
+		return pts_with_dist[0][0]
+
 	def draw(self, map, wall='#', door='+'):
 		for pt in self.pts:
 			try:
@@ -149,17 +177,37 @@ class Room(object):
 			self.walls = []
 		else:
 			self.walls = walls
+	def walls_by_length(self):
+		return sorted(self.walls, key=lambda wall: wall.length())
+			
+	def drop_wall(self, bylen=True):
+		if bylen:
+			for wall in self.walls_by_length():
+				if not wall.nodoor:
+					self.walls.remove(wall)
+					return
+		else:
+			for i in range(len(self.walls)):
+				wall = random.choice(self.walls)
+				if not wall.nodoor:
+					self.walls.remove(wall)
+					return
+
 	def divide(self):
-		walls_by_length = sorted(self.walls, key=lambda wall: wall.length())
-		longest = walls_by_length[-1]
+		walls_by_length = self.walls_by_length()
+		trigger_len = walls_by_length[-1].length() - 3
+		longest_walls = [w for w in walls_by_length if w.length() >= trigger_len ]
+		longest = random.choice(longest_walls)
 		search = True
-		while search:
+		search_time = 10
+		while search_time > 0:
+			search_time -= 1
 			divx, divy = longest.divide()
 			new_wall_1 = Wall(longest.x0, longest.y0, divx, divy, longest.nodoor)
 			new_wall_2 = Wall(divx, divy, longest.x1, longest.y1, longest.nodoor)
 			if new_wall_1.length() >= MINWALL:
 				if new_wall_2.length() >= MINWALL:
-					search = False
+					search_time = 0
 
 		self.walls.remove(longest)
 		search = True
@@ -176,11 +224,11 @@ class Room(object):
 
 			for wall in self.walls:
 				if wall.ison(tp0):
-					final_pt = tp0
+					final_pt = wall.nearest(tp0)
 					search = False
 					purgewall = wall
 				if wall.ison(tp1):
-					final_pt = tp1
+					final_pt = wall.nearest(tp1)
 					search = False
 					purgewall = wall
 
@@ -240,8 +288,34 @@ def building_gen(xmax = 30, ymax = 30):
 	room.divide()
 	room.divide()
 	room.door_gen()
+	room.drop_wall()
 	room.draw(map)
 	return map
+
+def building_octagon(xmax = 30, ymax = 30):
+	map = [['.' for x in range(xmax)] for y in range(ymax)]
+	walls = []
+	wall0 = Wall(9, 3, 20, 3, True)
+	wall1 = Wall(20, 3, 26, 9, True)
+	wall2 = Wall(26, 9, 26, 20, True)
+	wall3 = Wall(26, 20, 20, 26, True)
+	wall4 = Wall(20, 26, 9, 26, True)
+	wall5 = Wall(9, 26, 3, 20, True)
+	wall6 = Wall(3, 20, 3, 9, True)
+	wall7 = Wall(3, 9, 9, 3, True)
+	room = Room([wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7])
+	room.divide()
+	room.divide()
+	room.divide()
+	room.divide()
+	room.divide()
+	room.door_gen()
+	room.drop_wall()
+	room.drop_wall()
+	room.draw(map)
+	return map
+
+
 
 def showmap(map, printout = False):
 	lines = []
