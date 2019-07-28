@@ -141,6 +141,12 @@ class TestZone(zone.Zone):
 	def level_023(self):
 		pass # this is another way to do something special on specific levels.
 
+	def exit(self, entity, direction):
+		zone.Zone.exit(self, entity, direction)
+		self.game.overworld_x = self.overworld_x
+		self.game.overworld_y = self.overworld_y
+		
+
 #####################
 # populate the zone with entities
 #####################
@@ -189,13 +195,17 @@ def genzone(game):
 				elif biome == 1:
 					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Marsh
 				elif biome == 2:
-					pass # Desert
+					pass # Plains
 				elif biome == 3:
-					maptools.swap_char(map, '#', '♠♣') # forest
+					pass # desert
 				elif biome == 4:
-					pass # plains
+					maptools.swap_char(map, '#', '♠♣') # forest
 				elif biome == 5:
 					maptools.swap_char(map, '#', '▲⏶') # Mountains
+				elif biome == 6:
+					pass # sky
+				elif biome == 7:
+					pass # underground
 			map = maptools.showmap(map)
 			maps.append(map)
 
@@ -232,4 +242,4 @@ def genzone(game):
 	# add zone to game
 	game.add_zone(zone)
 
-	return zone
+	return zone, biome_map, maze
