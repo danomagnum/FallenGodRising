@@ -5,7 +5,9 @@ import main, battle, characters, zone, entities, moves, elements, items
 from constants import *
 import random
 import maps.maptools as maptools
+import maps.perlin as perlin
 import os
+import sys
 ZONENAME = 'Overworld'
 
 #####################
@@ -149,6 +151,9 @@ def genzone(game):
 	maps = []
 	for file in files:
 		maps.append(maptools.readmap(file))
+
+	
+	biome_map = perlin.gen_overworld(16, 16)
 	
 	maps = []
 	maze = maptools.maze(16, 16)
@@ -158,6 +163,7 @@ def genzone(game):
 	start = 0
 	valid_positions = []
 	for maze_y in maze:
+		x = 0
 		for maze_x in maze_y:
 			map = maptools.drunkard_walk()
 			#up and down are swapped because of the zone map list goes from bottom to top but the 
@@ -176,11 +182,20 @@ def genzone(game):
 				maptools.add_entry(map, RIGHT)
 				entries += 1
 			maptools.noise_prune(map)
-			#maptools.swap_char(map, '#', '♠♣') # forest
-			maptools.swap_char(map, '#', '▲⏶') # Mountains
-			
-			
-			#maptools.swap_char(map, '#', '♠♣♧♤')
+			biome = biome_map[y][x]
+			if sys.version_info.major >= 3:
+				if biome == 0:
+					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Sea
+				elif biome == 1:
+					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Marsh
+				elif biome == 2:
+					pass # Desert
+				elif biome == 3:
+					maptools.swap_char(map, '#', '♠♣') # forest
+				elif biome == 4:
+					pass # plains
+				elif biome == 5:
+					maptools.swap_char(map, '#', '▲⏶') # Mountains
 			map = maptools.showmap(map)
 			maps.append(map)
 
