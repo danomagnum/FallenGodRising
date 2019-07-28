@@ -22,7 +22,10 @@ try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		game = main.Game()
-		zone = maps.overworld.genzone(game)
+		zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
+		game.biome_map = biome_map
+		game.overworld_minimap = overworld_minimap
+		game.overworld = zone
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
 			for y in range(15, -1, -1):

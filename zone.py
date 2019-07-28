@@ -75,6 +75,8 @@ class Zone(object):
 		self.grid_width = 1
 		self.level = 0
 		self.map = self.maps[self.level]
+		self.overworld_x = 0
+		self.overworld_y = 0
 
 		self.player = None
 		self.level_entities = [[] for level in range(self.levels)]
@@ -130,6 +132,12 @@ class Zone(object):
 
 		entity.x = newx
 		entity.y = newy
+
+
+		if self.game.overworld is self:
+			self.game.overworld_y = int(newlevel % self.grid_width)
+			self.game.overworld_x = int(newlevel / self.grid_width)
+
 		if entity.is_player:
 			self.change_level(newlevel)
 		else:
@@ -143,10 +151,14 @@ class Zone(object):
 		elif level > (len(self.maps) - 1):
 			print("Can't go past end of zone")
 		else:
+			x = int(level / self.grid_width)
+			y = int(level % self.grid_width)
 			if self.grid_width > 1:
-				print("{} ({}, {})".format(self.name, int(level / self.grid_width), int(level % self.grid_width)))
+				if self.game is not None:
+					print("{} ({}, {}) / ({}, {}) {}".format(self.name, x, y, self.game.overworld_x, self.game.overworld_y, str(self.game.biome())))
 			else:
-				print("{} Level {}".format(self.name, level))
+				if self.game is not None:
+					print("{} Level {} / {}".format(self.name, level, self.game.biome()))
 			self.level_entities[self.level] = self.entities
 			self.level = level
 			self.map = self.maps[self.level]

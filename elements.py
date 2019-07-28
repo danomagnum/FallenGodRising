@@ -1,9 +1,11 @@
-USE_BIOME = False
+USE_BIOME = True
 
 class Biome(object):
 	def __init__(self, name):
 		self.name = name
 		self.modifiers = {}
+	def __str__(self):
+		return str(self.name)
 	
 class Element(object):
 	def __init__(self, name, nominal = 1.0):

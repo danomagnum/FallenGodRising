@@ -17,6 +17,7 @@ class Game(object):
 		self.biome_map = None
 		self.overworld_x = 0
 		self.overworld_y = 0
+		self.overworld_minimap = None
 
 		self.zone = None
 		self.zones = {}
@@ -26,7 +27,12 @@ class Game(object):
 
 	def biome(self):
 		if self.zone == self.overworld:
-			return elements.biomes[self.biome_map[self.overworld_y][self.overworld[x]]]
+			if self.biome_map is not None:
+				#TODO: fix this
+				return elements.biomes[self.biome_map[self.overworld_x][self.overworld_y]]
+				#return elements.biomes[self.biome_map[self.overworld_y][self.overworld_x]]
+			else:
+				return ''
 		else:
 			return zone.biome()
 
