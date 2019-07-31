@@ -111,7 +111,7 @@ class Move(object):
 					# Do elemental effects
 					for atk_element in self.elements:
 						for target_element in target.elements:
-							damage *= atk_element.effectiveness(target_element)
+							damage *= atk_element.effectiveness(target_element, self.game.biome())
 						for user_element in user.elements:
 							if user_element == atk_element:
 								damage *= atk_element.bonus

@@ -141,10 +141,10 @@ class TestZone(zone.Zone):
 	def level_023(self):
 		pass # this is another way to do something special on specific levels.
 
-	def exit(self, entity, direction):
-		zone.Zone.exit(self, entity, direction)
-		self.game.overworld_x = self.overworld_x
-		self.game.overworld_y = self.overworld_y
+	#def exit(self, entity, direction):
+		#zone.Zone.exit(self, entity, direction)
+		#self.game.overworld_x = self.overworld_x
+		#self.game.overworld_y = self.overworld_y
 		
 
 #####################

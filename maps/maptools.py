@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#coding: utf-8 
 import main
 import entities
 import random
@@ -258,6 +260,31 @@ class Cell(object):
 			output[1][2] = '#'
 			output[2][2] = '#'
 		return output
+	def __str__(self):
+
+		dir_char = {(1, 1, 1, 1): ' ',
+			    (0, 1, 1, 1): '╨',
+			    (1, 0, 1, 1): '╥',
+			    (1, 1, 0, 1): '╡',
+			    (1, 1, 1, 0): '╞',
+
+			    (0, 0, 1, 1): '║',
+			    (0, 1, 0, 1): '╝',
+			    (0, 1, 1, 0): '╚',
+			    (1, 0, 0, 1): '╗',
+			    (1, 0, 1, 0): '╔',
+			    (1, 1, 0, 0): '═',
+
+			    (0, 0, 0, 1): '╣',
+			    (0, 0, 1, 0): '╠',
+			    (0, 1, 0, 0): '╩',
+			    (1, 0, 0, 0): '╦',
+
+			    (0, 0, 0, 0): '╬'}
+
+		return dir_char[(self.down, self.up, self.left, self.right)] #these are correct for showing the minimap.
+		#return dir_char[(self.up, self.down, self.left, self.right)] #these are correct in general
+
 
 
 def maze(width, height, clear_percent = 0.99):

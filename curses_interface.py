@@ -191,10 +191,12 @@ class Display(object):
 			self.charboxes.append(charbox)
 		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
 
+		self.overworldbox = curses.newwin(self.charboxsize[0],self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
+
 		self.user = user
 		self.enemy = enemy
 
-		self.mapbox = curses.newwin(YMAX - self.msgboxsize[0], XMAX - self.charboxsize[1] - 1, 0, self.charboxsize[1])
+		self.mapbox = curses.newwin(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
 
 		self.change_zone(zone)
 
@@ -387,6 +389,11 @@ class Display(object):
 		self.mapbox.box()
 		self.mapbox.refresh()
 		self.mapbox.overlay(self.screen)
+		self.overworldbox.erase()
+		self.overworldbox.box()
+		self.show_overworld()
+		self.overworldbox.refresh()
+		self.overworldbox.overlay(self.screen)
 		y0, x0 = self.mapbox.getbegyx()
 		ya, xa = self.mapbox.getmaxyx()
 		self.mappad.refresh(self.y, self.x, y0 + 1, x0 + 1, y0+ya - 2, x0+xa - 2)
@@ -398,7 +405,23 @@ class Display(object):
 		self.msgbox.box()
 		self.msgbox.refresh()
 		self.msgbox.overlay(self.screen)
-	
+
+	def show_overworld(self):
+		y = 1
+		for line in self.game.overworld_minimap:
+			x = 1
+			for cell in line:
+				self.overworldbox.addstr(17 - y, x, str(cell))
+				x += 1
+			y += 1
+		x0 = 16 - self.game.overworld_x
+		y0 = self.game.overworld_y + 1
+		self.overworldbox.addch(x0, y0, '@')
+		try:
+			self.overworldbox.addstr(1, 17, str(self.game.biome()))
+		except:
+			pass
+
 	def change_zone(self, zone):
 		self.zone = zone
 		if zone is not None:
