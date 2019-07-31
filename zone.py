@@ -75,8 +75,8 @@ class Zone(object):
 		self.grid_width = 1
 		self.level = 0
 		self.map = self.maps[self.level]
-		self.overworld_x = 0
-		self.overworld_y = 0
+		#self.overworld_x = 0
+		#self.overworld_y = 0
 
 		self.player = None
 		self.level_entities = [[] for level in range(self.levels)]
@@ -96,6 +96,10 @@ class Zone(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.biome_map = None
+		self.inject()
+
+	def inject(self):
+		pass
 
 	def biome(self):
 		return self.biome_map
@@ -134,7 +138,7 @@ class Zone(object):
 		entity.y = newy
 
 
-		if self.game.overworld is self:
+		if self.game.overworld == self:
 			self.game.overworld_y = int(newlevel % self.grid_width)
 			self.game.overworld_x = int(newlevel / self.grid_width)
 

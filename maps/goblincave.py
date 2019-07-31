@@ -136,6 +136,10 @@ class TestZone(overworld.Zone):
 	def level_023(self):
 		pass # this is another way to do something special on specific levels.
 
+	def inject(self):
+		#self.game.overworld
+		pass
+
 #####################
 # populate the zone with entities
 #####################
