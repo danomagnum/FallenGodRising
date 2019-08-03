@@ -16,13 +16,15 @@ from constants import *
 
 import random
 import maps.overworld
-WRITEMAP = True
+import maps.goblincave
+WRITEMAP = False
 
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		game = main.Game()
 		zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
+		zone = maps.goblincave.genzone(game)
 		game.biome_map = biome_map
 		game.overworld_minimap = overworld_minimap
 		game.overworld = zone

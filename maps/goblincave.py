@@ -1,27 +1,25 @@
-import main, battle, characters, overworld, entities, moves, elements, items
+import main, battle, characters, zone, entities, moves, elements, items
 from constants import *
 import random
 import maps.maptools as maptools
+import maps.cellular
 import os
-ZONENAME = 'Overworld'
+import mobs
+ZONENAME = 'GoblinCave'
+
+class WarpIn(entities.ZoneWarp):
+	def config(self):
+		self.char = '>'
+		self.new_x = None
+		self.new_y = None
+		self.new_zone = None
+#entities.DownStaris()
+#entities.UpStairs()
 
 #####################
 # The characters subclasses are how you create enemies.
 # You can used "canned" ones or create your own.
 #####################
-class LittleRat(characters.Character):
-	def config(self):
-		self.moves = [moves.Strike(self.game)]
-		self.elements = [elements.Normal]
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-		self.base_physical_strength = 50
-		self.base_physical_defense = 50
-		self.base_special_strength = 50
-		self.base_special_defense = 50
-		self.base_speed = 50
-		self.base_hp = 50
-		self.base_luck = 100
 
 #####################
 # The entities subclasses are items that will appear in the world.
@@ -30,70 +28,22 @@ class LittleRat(characters.Character):
 # assigning combatants
 #####################
 #class Rat(entities.RandWalker, entities.Battler):
-class Rat( battle.Skiddish_AI,entities.BasicAI1):
+class MonoGoblin(battle.Random_AI,entities.BasicAI1):
 	# example basic enemy
 	def config(self):
-		self.name = 'Rat'
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.char = 'r'
+		self.name = 'MonoGoblin'
+		self.combatants.append(mobs.Goblin(self.game, level=1))
+		self.char = 'g'
 
-class PackRat(entities.TowardWalker, entities.Battler):
-	# example basic enemy that gives an item when killed
+class MonoGoblin(battle.Random_AI,entities.BasicAI1):
+	# example basic enemy
 	def config(self):
-		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.backpack.store(items.Potion(self.game))
-		self.char = 'F'
-		self.AI = battle.Random_AI
-
-class RatPack(entities.RandWalker, entities.Battler):
-	def config(self):
-		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.char = 'R'
-		self.AI = battle.Random_AI
-
-class SeeTest(entities.BasicAI1):
-	def config(self):
-		self.name = 'See Test'
-		self.char = 'S'
-		self.standby_delay = 10
+		self.name = 'MonoGoblin'
+		self.combatants.append(mobs.Goblin(self.game, level=1))
+		self.char = 'g'
 
 
-#class KeyChest(entities.Treasure):
-	## example basic enemy that gives an item when killed
-	#def config(self):
-		#self.name = 'Key Chest'
-		#self.backpack.store(items.Key(self.game))
-		#self.char = 'k'
 
-#class SwordChest(entities.Treasure):
-	## example basic enemy that gives an item when killed
-	#def config(self):
-		#self.name = 'Sword Chest'
-		##self.backpack.store(items.FireSword(self.game))
-		#item = items.Sword(self.game)
-		#items.add_item_mod(item, random.choice(items.general_gear_mods))
-		#items.add_item_mod(item, random.choice(items.base_gear_mods))
-		#items.add_item_mod(item, random.choice(items.special_gear_mods))
-		#self.backpack.store(item)
-		#self.char = '/'
-
-class Door1(entities.Door):
-	pass
-class Door2(entities.Door):
-	def key(self):
-		self.lock='Key'
-
-class MyShop(entities.Shop):
-	def config(self):
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
 
 #####################
 # load the map file(s)
@@ -111,7 +61,7 @@ for i in os.listdir(path):
 			files.append(os.path.join(path, i))
 		
 
-class TestZone(overworld.Zone):
+class ThisZone(zone.Zone):
 	def level_populate(self, level, visit_no):
 		gen_level = 1
 		if self.game.player is not None:
@@ -129,16 +79,13 @@ class TestZone(overworld.Zone):
 				else:
 					newitem = items.gen_base_item(self.game)
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
-			mob_count = random.randint(0, 10)
+			mob_count = random.randint(0, 6)
 			for m in range(mob_count):
-				maptools.Random_Map_Insert(self, Rat)
+				moblist = random.choice([[mobs.Goblin], [mobs.Goblin, mobs.Goblin], [mobs.Goblin, mobs.Hobgoblin], [mobs.Goblin, mobs.Goblin, mobs.Hobgoblin]])
+				maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, level, moblist, 'goblin')(self.game))
 
 	def level_023(self):
 		pass # this is another way to do something special on specific levels.
-
-	def inject(self):
-		#self.game.overworld
-		pass
 
 #####################
 # populate the zone with entities
@@ -147,69 +94,20 @@ class TestZone(overworld.Zone):
 def genzone(game):
 
 	# generate maps
-	maps = []
-	for file in files:
-		maps.append(maptools.readmap(file))
-	
-	maps = []
-	maze = maptools.maze(16, 16)
-	y = 0
-	x = 0
-	maxentries = 0
-	start = 0
-	valid_positions = []
-	for maze_y in maze:
-		for maze_x in maze_y:
-			map = maptools.drunkard_walk()
-			#up and down are swapped because of the zone map list goes from bottom to top but the 
-			#maze y order is top to bottom
-			entries = 0
-			if not maze_x.up:
-				maptools.add_entry(map, DOWN)
-				entries += 1
-			if not maze_x.down:
-				maptools.add_entry(map, UP)
-				entries += 1
-			if not maze_x.left:
-				maptools.add_entry(map, LEFT)
-				entries += 1
-			if not maze_x.right:
-				maptools.add_entry(map, RIGHT)
-				entries += 1
-			maptools.noise_prune(map)
-			map = maptools.showmap(map)
-			maps.append(map)
+	map_list = []
 
-			if entries > 0:
-				valid_positions.append((x, y))
-
-			if entries > maxentries:
-				maxentries = entries
-				start = y * 16 + x
-			x += 1
-		y += 1
-	
-	# Create zone
-	zone = TestZone(ZONENAME, game, maps=maps)
-	#zone = overworld.Zone(ZONENAME, game, maps=maps)
+	for l in range(10):
+		l = maps.cellular.gen_cellular(gens=4)
+		maptools.add_stairs(l)
+		map_list.append(maptools.flatten(l))
+	#maze = maptools.maze(16, 16)
+		# Create zone
+	zone = ThisZone(ZONENAME, game, maps=map_list)
 	zone.grid_width = 16
-	zone.change_level(start)
+	zone.change_level(0)
 
 	# Populate zone with entities
-	#maptools.Positional_Map_Insert(zone, MyShop, 1)
-	#maptools.Random_Map_Insert(zone, RatPack)
-	#maptools.Random_Map_Insert(zone, RatPack)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	#maptools.Random_Map_Insert(zone, PackRat)
-	#maptools.Random_Map_Insert(zone, PackRat)
-	#maptools.Random_Map_Insert(zone, SeeTest)
-	#maptools.Random_Map_Insert(zone, SwordChest)
-	#maptools.Random_Map_Insert(zone, Door1)
-	#maptools.Random_Map_Insert(zone, Door2)
-	#maptools.Stair_Handler(zone)
+	maptools.Stair_Handler(zone)
 
 	# add zone to game
 	game.add_zone(zone)

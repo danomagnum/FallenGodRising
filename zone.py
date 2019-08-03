@@ -96,10 +96,6 @@ class Zone(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.biome_map = None
-		self.inject()
-
-	def inject(self):
-		pass
 
 	def biome(self):
 		return self.biome_map

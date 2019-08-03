@@ -206,7 +206,7 @@ def genzone(game):
 					pass # sky
 				elif biome == 7:
 					pass # underground
-			map = maptools.showmap(map)
+			map = maptools.flatten(map)
 			maps.append(map)
 
 			if entries > 0:
