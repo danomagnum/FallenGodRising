@@ -39,7 +39,15 @@ class Move(object):
 		#utility.call_all_configs(self)
 
 		self.ticks = 0
-		self.mp = self.max_mp
+		self._mp = self.max_mp
+
+	@property
+	def mp(self):
+		return self._mp
+	
+	@mp.setter
+	def mp(self, value):
+		self._mp = utility.clamp(value, 0, self.max_mp)
 
 	@property
 	def name(self):

@@ -155,7 +155,7 @@ class Backpack():
 		return self.slots[name].take()
 
 	def show(self):
-		return self.slots.values()
+		return list(self.slots.values())
 	
 	def empty(self):
 		self.slots = {}

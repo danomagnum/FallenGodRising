@@ -131,11 +131,12 @@ try:
 				#Menu
 				choice = display.menu(['Battlers', 'Quests', 'Transport', 'Save', 'Options', 'Items'], 4)
 				if choice == 'Battlers':
-					display.mode=graphics_interface.STATS
-					display.refresh_full()
-					key = display.mapbox.getch()
-					display.mode=graphics_interface.MAP
-					display.refresh_full()
+					#display.mode=graphics_interface.STATS
+					#display.refresh_full()
+					#key = display.mapbox.getch()
+					#display.mode=graphics_interface.MAP
+					#display.refresh_full()
+					pass
 				elif choice == 'Quests':
 					pass
 

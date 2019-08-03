@@ -474,6 +474,10 @@ def add_stairs(map, up=True, down=True):
 					if dmap[y][x] > 0:
 						map[y][x] = '>'
 						search = False
+				else:
+					map[y][x] = '>'
+					search = False
+
 		xdown = x
 		ydown = y
 
