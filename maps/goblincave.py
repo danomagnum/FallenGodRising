@@ -97,13 +97,21 @@ def genzone(game):
 	map_list = []
 
 	for l in range(10):
-		l = maps.cellular.gen_cellular(gens=4)
-		maptools.add_stairs(l)
-		map_list.append(maptools.flatten(l))
+		lev = maps.cellular.gen_cellular(gens=4)
+		if l == 0:
+			#maptools.add_stairs(lev, down=False)
+			#maptools.add_stairs(lev, up=False)
+			#maptools.add_stairs(lev)
+			maptools.add_stairs(lev, up=False)
+		elif l == 9:
+			maptools.add_stairs(lev, down=False)
+		else:
+			maptools.add_stairs(lev)
+		map_list.append(maptools.flatten(lev))
 	#maze = maptools.maze(16, 16)
 		# Create zone
 	zone = ThisZone(ZONENAME, game, maps=map_list)
-	zone.grid_width = 16
+	#zone.grid_width = 16
 	zone.change_level(0)
 
 	# Populate zone with entities

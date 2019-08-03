@@ -91,7 +91,7 @@ class Character(object):
 					method = None
 				if method is not None:
 					method()
-		self.full_heal()
+		self.partial_heal()
 	
 	def add_move(self, move):
 		m = move(self.game)
@@ -181,7 +181,7 @@ class Character(object):
 
 	@hp.setter
 	def hp(self, value):
-		self._hp = min(max(0,value), self.max_hp)
+		self._hp = utility.clamp(value, 0, self.max_hp)
 
 	def heal(self, amount):
 		if self.hp > 0:
@@ -222,6 +222,14 @@ class Character(object):
 			move.mp = move.max_mp
 		if self.hp > 0:
 			self.hp = self.max_hp
+
+	def partial_heal(self):
+		for move in self.moves:
+			move.mp += int(move.max_mp / 5)
+		if self.hp > 0:
+			self.hp += int(self.max_hp / 5)
+
+
 
 	def levelup(self): # override this with sub classes to do fancy things
 		pass
