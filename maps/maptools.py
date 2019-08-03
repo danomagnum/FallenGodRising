@@ -104,7 +104,7 @@ def map_gen(height, width, rooms, minroomsize = 4):
 
 	return tiles
 
-def showmap(map, printout = False):
+def flatten(map, printout = False):
 	lines = []
 	for y in map:
 		line = ''.join(y)
@@ -401,4 +401,80 @@ def swap_char(map, old_char, new_chars):
 		for x in range(xmax):
 			if map[y][x] == old_char:
 				map[y][x] = random.choice(new_chars)
+
+
+def calcDistGraph(pt, map):
+	height = len(map)
+	width = len(map[0])
+	dist_map = [[-1 for x in range(width)] for x in range(height)]
+	x0 = pt[0]
+	y0 = pt[1]
+	d = 0
+	dist_map[y0][x0] = d
+	checked = set()
+	checked.add((x0,y0))
+	to_check = [(x0,y0)]
+	checking = []
+	i = 0
+	while len(to_check) > 0:
+		checking = to_check[:]
+		to_check = []
+		for point in checking:
+			d = dist_map[point[1]][point[0]]
+			pts = []
+			if point[1] > 0:
+				up = (point[0], point[1] - 1)
+				pts.append(up)
+			if point[1] < height - 1:
+				down = (point[0], point[1] + 1)
+				pts.append(down)
+			if point[0] > 0:
+				left = (point[0] - 1, point[1])
+				pts.append(left)
+			if point[0] < width - 1:
+				right = (point[0] + 1, point[1])
+				pts.append(right)
+
+			d = d + 1
+			for pt in pts:
+				if pt not in checked:
+					if map[pt[1]][pt[0]] != '#':
+						if (dist_map[pt[1]][pt[0]] > d) or (dist_map[pt[1]][pt[0]] < 0):
+							dist_map[pt[1]][pt[0]] = d
+							to_check.append(pt)
+						i = i + 1
+						checked.add(pt)
+	return dist_map
+
+
+
+
+def add_stairs(map, up=True, down=True):
+	ymax = len(map)
+	xmax =len(map[0])
+	dmap = None
+	if up:
+		search = True
+		while search:
+			y = random.randint(0, ymax - 1)
+			x = random.randint(0, xmax - 1)
+			if map[y][x] == '.':
+				map[y][x] = '<'
+				search = False
+		xup = x
+		yup = y
+		dmap = calcDistGraph((xup, yup), map)
+	if down:
+		search = True
+		while search:
+			y = random.randint(0, ymax - 1)
+			x = random.randint(0, xmax - 1)
+			if map[y][x] == '.':
+				if dmap is not None:
+					if dmap[y][x] > 0:
+						map[y][x] = '>'
+						search = False
+		xdown = x
+		ydown = y
+
 

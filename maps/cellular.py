@@ -1,12 +1,11 @@
 import random
-from drunkard import add_entry2
 
 UP = 1
 DOWN = 2
 LEFT = 3
 RIGHT = 4
 
-def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
+def gen_cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
 	map = [['#' for x in range(xmax)] for y in range(ymax)]
 	if entries is None:
 		entries = []
@@ -16,7 +15,6 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
 
 	total_cells = xmax * ymax
 	removals = int(total_cells * percentage)
-	print removals
 
 	for r in range(removals):
 
@@ -25,7 +23,6 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
 
 		map[ysel][xsel] = '.'
 
-	showmap(map, True)
 
 	def neighbors(x, y, diags=True):
 		if diags:
@@ -104,7 +101,6 @@ def cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
 						nextmap[y][x] = '#'
 
 		map = nextmap
-		showmap(map, True)
 		
 	return map
 
@@ -117,24 +113,19 @@ def add_entry2(map, entry_dir, tries = 2):
 		if entry_dir == UP:
 			y = 0
 			x = random.choice(range(1, xmax))
-			print 'setting new xy start at {}, {}'.format(x, y)
 		elif entry_dir == DOWN:
 			y = ymax
 			x = random.choice(range(1, xmax))
-			print 'setting new xy start at {}, {}'.format(x, y)
 		elif entry_dir == LEFT:
 			y = random.choice(range(1,ymax))
 			x = 0
-			print 'setting new xy start at {}, {}'.format(x, y)
 		elif entry_dir == RIGHT:
 			y = random.choice(range(1,ymax))
 			x = xmax
-			print 'setting new xy start at {}, {}'.format(x, y)
 
 
 		while map[y][x] != '.':
 			if map[y][x] == '#':
-				#print 'writing to {}, {}'.format(x, y)
 				map[y][x] = '!'
 			dir = random.choice(dirs)
 
@@ -188,7 +179,7 @@ def noise_prune(map_data):
 				map_data[y][x] = '.'
 
 
-def showmap(map, printout = False):
+def flatten(map, printout = False):
 	lines = []
 	for y in map:
 		line = ''.join(y)
@@ -200,13 +191,14 @@ def showmap(map, printout = False):
 
 
 if __name__ == '__main__':
-	map = cellular(gens=7, entries = [UP])
-	#map = cellular(gens=7, entries = [UP, RIGHT, LEFT, DOWN])
+	map = gen_cellular(gens=7)
+	#map = gen_cellular(gens=7, entries = [UP])
+	#map = gen_cellular(gens=7, entries = [UP, RIGHT, LEFT, DOWN])
 	#add_entry2(map, UP, 3)
 	#add_entry2(map, DOWN, 3)
 	#add_entry2(map, LEFT, 3)
 	#add_entry2(map, RIGHT, 3)
 	#noise_prune(map)
-	map = showmap(map)
+	map = flatten(map)
 	for line in map:
-		print line
+		print(line)

@@ -181,7 +181,7 @@ class Display(object):
 
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.charboxsize = (int(YMAX / MAX_COMBATANTS), 40)
-		self.msgboxsize = [8, int(XMAX - self.charboxsize[1])]
+		self.msgboxsize = [8, int(XMAX - 2*self.charboxsize[1])]
 		self.charboxes = []
 		self.nmeboxes = []
 		for i in range(MAX_COMBATANTS):

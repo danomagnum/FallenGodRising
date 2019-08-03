@@ -34,7 +34,7 @@ class Game(object):
 			else:
 				return ''
 		else:
-			return zone.biome()
+			return self.zone.biome()
 
 	def add_zone(self, zone):
 		if zone.name not in self.zones:
