@@ -96,5 +96,28 @@ def scale(value, in_min, in_max, out_min, out_max, clamp_output = True):
 		raise Exception('Divide By Zero In Scale.')
 
 
-def select_by_level(level, options, levels):
-	pass
+def select_by_level(level, options):
+	weighted = []
+	weight_total = 0
+	for opt in options:
+		weight_denom = 1 + (opt[0] - level)**2
+		if level < opt[0]:
+			weight_num = 1.0
+		else:
+			weight_num = 1.2
+		weight = weight_num / weight_denom
+		w = (opt[1], weight)
+		weight_total += weight
+		weighted.append(w)
+	weighted.sort(key=lambda x:-x[1])
+
+	rand_val = random.uniform(0, weight_total)
+
+	for option in weighted:
+		rand_val -= option[1]
+		if rand_val < 0:
+			break
+
+
+	return option[0]
+	

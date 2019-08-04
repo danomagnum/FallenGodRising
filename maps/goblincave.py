@@ -5,6 +5,7 @@ import maps.maptools as maptools
 import maps.cellular
 import os
 import mobs
+import utility
 ZONENAME = 'GoblinCave'
 
 class WarpIn(entities.ZoneWarp):
@@ -80,8 +81,12 @@ class ThisZone(zone.Zone):
 					newitem = items.gen_base_item(self.game)
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
 			mob_count = random.randint(0, 6)
+			mobchoices = [(1, [mobs.Goblin]),
+			              (3, [mobs.Goblin, mobs.Goblin]),
+				      (5, [mobs.Goblin, mobs.Hobgoblin]),
+				      (7, [mobs.Goblin, mobs.Goblin, mobs.Hobgoblin])]
 			for m in range(mob_count):
-				moblist = random.choice([[mobs.Goblin], [mobs.Goblin, mobs.Goblin], [mobs.Goblin, mobs.Hobgoblin], [mobs.Goblin, mobs.Goblin, mobs.Hobgoblin]])
+				moblist = utility.select_by_level(level, mobchoices)
 				maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, level, moblist, 'goblin')(self.game))
 
 	def level_023(self):
