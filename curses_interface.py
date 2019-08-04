@@ -171,7 +171,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 MAX_COMBATANTS = 3
 
 class Display(object):
-	def __init__(self, game, user=None, enemy=None):
+	def __init__(self, game=None, user=None, enemy=None):
 		self.game = game
 		self.screen = screen
 		self.screen.keypad(1)
@@ -198,7 +198,8 @@ class Display(object):
 
 		self.mapbox = curses.newwin(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
 
-		self.change_zone(self.game.zone)
+		#self.change_zone(self.game.zone)
+		self.zone = None
 
 		self.x = 0
 		self.y = 0
@@ -444,6 +445,7 @@ class Display(object):
 				self.show_combatant_stats(self.user.combatants[i],self.statbox[i])
 				#self.statbox[i].refresh()
 				self.statbox[i].overlay(self.screen)
+
 		self.msgbox.box()
 		self.msgbox.refresh()
 		self.msgbox.overlay(self.screen)
@@ -518,9 +520,10 @@ class Display(object):
 			box.box()
 			box.refresh()
 
-		self.msgbox.box()
-		self.msgbox.refresh()
-		self.msgbox.overlay(self.screen)
+
+		#self.msgbox.box()
+		#self.msgbox.refresh()
+		#self.msgbox.overlay(self.screen)
 		self.screen.refresh()
 
 	##################################
@@ -543,6 +546,23 @@ class Display(object):
 		self.storeinfobox.addstr(2, 1, 'Cost: {} ({} in backpack)     '.format(item.cost(), self.game.player.backpack.gold))
 		self.storeinfobox.addstr(3, 1, 'Desc: {}'.format(item.helptext()))
 		self.storeinfobox.refresh()
+
+	def splash_screen(self):
+		with open('Splash.txt') as f:
+			splash_data = f.readlines()
+		height, width = self.screen.getmaxyx()
+		#width = len(splash_data[1])
+		splashbox = curses.newwin(height,width,0,0) 
+
+		for y, line in enumerate(splash_data):
+			splashbox.addstr(y + 1, 1, line)
+
+		splashbox.addstr(y+5, 1, 'Please Wait, Generating Overworld...')
+
+		splashbox.box()
+		splashbox.refresh()
+		splashbox.overlay(self.screen)
+		screen.refresh()
 
 #TODO: work this into the object
 def shutdown():
