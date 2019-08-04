@@ -3,8 +3,12 @@
 
 from main import Entity
 from constants import *
+import items
 import utility
 import random
+import mobs
+import entities
+import maps.maptools as maptools
 
 
 def map_gen(height, width, rooms, minroomsize = 4):
@@ -96,6 +100,8 @@ class Zone(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.biome_map = None
+	def check_clear(self):
+		return all([e.passive for e in self.entities])
 
 	def biome(self):
 		return self.biome_map
@@ -372,4 +378,28 @@ def overworld_gen(maze):
 		print(line)
 		output.append(line)
 	return output
+
+class LinearZone(Zone):
+	def level_populate(self, level, visit_no):
+		gen_level = 1
+		if self.game.player is not None:
+			gen_level = self.game.player.level
+
+		if visit_no < 2:
+			#if I only want to populate on the first visit
+			item_count = random.randint(0,2)
+			for i in range(item_count):
+				chance = random.random()
+				if chance < 0.05:
+					newitem = items.gen_gear(self.game, gen_level)
+				elif chance < 0.3:
+					newitem = items.gen_movescroll(self.game)
+				else:
+					newitem = items.gen_base_item(self.game)
+				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
+			mob_count = random.randint(0, 6)
+			for m in range(mob_count):
+				moblist = utility.select_by_level(level, self.mobchoices)
+				maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], level, moblist[3:], moblist[2])(self.game))
+
 
