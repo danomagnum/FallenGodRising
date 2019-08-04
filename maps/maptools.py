@@ -482,3 +482,5 @@ def add_stairs(map, up=True, down=True):
 		ydown = y
 
 
+def overworld_inject(game, zone):
+	pass
