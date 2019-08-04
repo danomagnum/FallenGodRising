@@ -23,6 +23,11 @@ WRITEMAP = False
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
+		display = graphics_interface.Display()
+
+		display.splash_screen()
+
+
 		game = main.Game()
 		zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
 		zone2 = maps.goblincave.genzone(game)
@@ -50,8 +55,9 @@ try:
 		#user = characters.gen_testuser()
 		#user.x, user.y = zone.find_empty_position()
 
-		display = graphics_interface.Display(game)
+		display.game = game
 		game.display = display
+		display.change_zone(game.zone)
 		#zone.display = display
 
 		#zone.set_player(user)
