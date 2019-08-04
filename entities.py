@@ -18,6 +18,7 @@ class Shop(Entity):
 	def config(self):
 		self.name = 'Shop'
 		self.char = '$'
+		self.passive = True
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player:
@@ -51,6 +52,7 @@ class Door(Entity):
 		self.name = 'Door'
 		self.char = '+'
 		self.key()
+		self.passive = True
 	def key(self):
 		self.lock = None
 	def collide(self, entity, zone):
@@ -79,6 +81,9 @@ class Treasure(Entity):
 		Entity.__init__(self, game, name=None, combatants = None, item_list=None, x=0, y=0, char='?', AI=None, is_player = False)
 		for i in item_list:
 			self.backpack.store(i)
+
+	def config(self):
+		self.passive = True
 
 	def collide(self, entity, zone):
 		self.enabled = False
@@ -147,6 +152,7 @@ class NPC(Entity):
 	def config(self):
 		self.name = 'NPC'
 		self.char = 'N'
+		self.passive = True
 	def collide(self, entity, zone):
 		if entity.is_player:
 			return self.NPC(zone)
@@ -160,6 +166,7 @@ class UpStairs(Entity):
 		self.char = '<'
 		self.new_x = None
 		self.new_y = None
+		self.passive = True
 
 	def collide(self, entity, zone):
 		if self.new_x is not None:
@@ -177,6 +184,7 @@ class DownStairs(Entity):
 		self.char = '>'
 		self.new_x = None
 		self.new_y = None
+		self.passive = True
 
 	def collide(self, entity, zone):
 		if self.new_x is not None:
@@ -195,8 +203,10 @@ class ZoneWarp(Entity):
 		self.new_y = None
 		self.new_zone = None
 		self.new_level = None
+		self.passive = True
 
 	def collide(self, entity, zone):
-		if self.new_zone is not None:
-			self.game.change_zone(self.new_zone, self.new_x, self.new_y, self.new_level)
+		if entity.is_player:
+			if self.new_zone is not None:
+				self.game.change_zone(self.new_zone, self.new_x, self.new_y, self.new_level)
 

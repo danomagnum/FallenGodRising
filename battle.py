@@ -12,7 +12,7 @@ DEBUG = True
 class AI(object):
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
-		enemy = random.choice(enemy_ai.combatants)
+		enemy = random.choice(enemy_ai.get_available())
 		target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 
@@ -45,7 +45,7 @@ class AI(object):
 class Random_AI(AI):
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
-		enemy = random.choice(enemy_ai.combatants)
+		enemy = random.choice(enemy_ai.get_available())
 		target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 
@@ -73,7 +73,7 @@ class Random_AI(AI):
 class Skiddish_AI(AI):
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
-		enemy = random.choice(enemy_ai.combatants)
+		enemy = random.choice(enemy_ai.get_available())
 		target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 

@@ -133,7 +133,7 @@ try:
 			##########################
 			elif key == ord('m'):
 				#Menu
-				choice = display.menu(['Battlers', 'Quests', 'Transport', 'Save', 'Options', 'Items'], 4)
+				choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items'], 4)
 				if choice == 'Battlers':
 					#display.mode=graphics_interface.STATS
 					#display.refresh_full()
@@ -143,7 +143,16 @@ try:
 					pass
 				elif choice == 'Quests':
 					pass
-
+				elif choice == 'Fast Travel':
+					if game.zone.check_clear():
+						selected_zone = display.menu(list(game.fast_travel), cols=2)
+						if selected_zone == game.zone.name:
+							z = game.zones[selected_zone]
+							newx, newy = z.find_empty_position()
+							if selected_zone is not None:
+								game.change_zone(selected_zone, newx, newy)
+					else:
+						print('Cannot Fast Travel Until Zone Is Clear')
 				elif choice == 'Items':
 					item_slot_used = display.menu(user.backpack.show(), cols=2)
 					item_target = None

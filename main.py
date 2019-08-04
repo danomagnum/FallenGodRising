@@ -24,6 +24,8 @@ class Game(object):
 		self.display = None
 		self.player = None
 		self.game_vars = {}
+		self.fast_travel = set()
+		self.fast_travel.add('Overworld')
 
 	def biome(self):
 		if self.zone == self.overworld:
@@ -52,6 +54,7 @@ class Game(object):
 			if newlevel is not None:
 				self.zone.change_level(newlevel)
 			self.display.change_zone(self.zone)
+			self.fast_travel.add(zonename)
 
 		else:
 			print('Zone {} does not exist'.format(zonename))
@@ -279,6 +282,8 @@ class Entity(object):
 
 		self.is_player = is_player
 		self.helptext = ''
+
+		self.passive = False
 		
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
