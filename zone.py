@@ -78,7 +78,7 @@ class Zone(object):
 		#self.overworld_x = 0
 		#self.overworld_y = 0
 
-		self.player = None
+		#self.player = None
 		self.level_entities = [[] for level in range(self.levels)]
 		self.entities = self.level_entities[self.level]
 		self.level_visits = [0 for level in range(self.levels)]
@@ -189,7 +189,7 @@ class Zone(object):
 		pass
 
 	def add_entity(self, entity, level=None):
-		if entity == self.player:
+		if entity == self.game.player:
 			return
 		if level is None:
 			level = self.level
@@ -203,7 +203,7 @@ class Zone(object):
 		self.entities = self.level_entities[self.level]
 
 	def remove_entity(self, entity, level=None):
-		if entity == self.player:
+		if entity == self.game.player:
 			return
 		if level is None:
 			level = self.level
@@ -215,13 +215,10 @@ class Zone(object):
 			self.level_entities[level].remove(entity)
 			self.entities = self.level_entities[self.level]
 
-	def set_player(self, entity):
-		self.player = entity
-	
 	def tick(self):
-		if self.player is not None:
-			self.redraw.append([self.player.x, self.player.y])
-			self.player.tick(zone=self)
+		if self.game.player is not None:
+			self.redraw.append([self.game.player.x, self.game.player.y])
+			self.game.player.tick(zone=self)
 		for e in self.entities:
 			# first we will mark the positions of the entities as needing redrawn.  This will
 			# make sure the map is redrawn if they move or are removed.  If they haven't moved,
@@ -308,8 +305,8 @@ class Zone(object):
 		if x >= len(self.map[y]):
 			return [RIGHT, None]
 
-		if (self.player.x == x) and (self.player.y == y):
-			return [PLAYER, self.player]
+		if (self.game.player.x == x) and (self.game.player.y == y):
+			return [PLAYER, self.game.player]
 
 		if self.map[y][x] != WALKABLE:
 			return [WALL, None]

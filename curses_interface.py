@@ -171,7 +171,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 MAX_COMBATANTS = 3
 
 class Display(object):
-	def __init__(self, game, user=None, enemy=None, zone=None):
+	def __init__(self, game, user=None, enemy=None):
 		self.game = game
 		self.screen = screen
 		self.screen.keypad(1)
@@ -198,7 +198,7 @@ class Display(object):
 
 		self.mapbox = curses.newwin(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
 
-		self.change_zone(zone)
+		self.change_zone(self.game.zone)
 
 		self.x = 0
 		self.y = 0
