@@ -42,13 +42,16 @@ class Game(object):
 		if self.zone is None:
 			self.zone = zone
 
-	def change_zone(self, zonename, newx = None, newy = None):
+	def change_zone(self, zonename, newx = None, newy = None, newlevel=None):
 		if zonename in self.zones:
 			self.zone = self.zones[zonename]
 			if newx is not None:
 				self.player.x = newx
 			if newy is not None:
 				self.player.y = newy
+			if newlevel is not None:
+				self.zone.change_level(newlevel)
+			self.display.change_zone(self.zone)
 
 		else:
 			print('Zone {} does not exist'.format(zonename))

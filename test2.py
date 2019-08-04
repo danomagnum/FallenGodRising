@@ -17,6 +17,7 @@ from constants import *
 import random
 import maps.overworld
 import maps.goblincave
+import maps.maptools
 WRITEMAP = False
 
 try:
@@ -24,10 +25,13 @@ try:
 		graphics_interface.initialize()
 		game = main.Game()
 		zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
-		zone = maps.goblincave.genzone(game)
+		zone2 = maps.goblincave.genzone(game)
 		game.biome_map = biome_map
 		game.overworld_minimap = overworld_minimap
 		game.overworld = zone
+
+		maps.maptools.overworld_inject(game, zone2)
+
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
 			for y in range(15, -1, -1):
@@ -46,7 +50,7 @@ try:
 		#user = characters.gen_testuser()
 		#user.x, user.y = zone.find_empty_position()
 
-		display = graphics_interface.Display(game, zone=zone)
+		display = graphics_interface.Display(game)
 		game.display = display
 		#zone.display = display
 
@@ -96,7 +100,7 @@ try:
 						#user.combatants = player_party
 						user.x, user.y = zone.find_empty_position()
 						user.backpack.gold = 100
-						zone.set_player(user)
+						#zone.set_player(user)
 						display.user = user
 						game.player = user
 						loop = False
@@ -116,13 +120,13 @@ try:
 			# Player movement
 			##########################
 			if key in keys.UP:
-				user.move(zone, UP)
+				user.move(game.zone, UP)
 			elif key in keys.DOWN:
-				user.move(zone, DOWN)
+				user.move(game.zone, DOWN)
 			elif key in keys.LEFT:
-				user.move(zone, LEFT)
+				user.move(game.zone, LEFT)
 			elif key in keys.RIGHT:
-				user.move(zone, RIGHT)
+				user.move(game.zone, RIGHT)
 
 			##########################
 			# Player menu
@@ -162,15 +166,15 @@ try:
 
 			elif key == ord('k'):
 				#up
-				zone.exit(game.player, UP)
+				game.zone.exit(game.player, UP)
 			elif key == ord('j'):
-				zone.exit(game.player, DOWN)
+				game.zone.exit(game.player, DOWN)
 				#down
 			elif key == ord('h'):
-				zone.exit(game.player, LEFT)
+				game.zone.exit(game.player, LEFT)
 				#left
 			elif key == ord('l'):
-				zone.exit(game.player, RIGHT)
+				game.zone.exit(game.player, RIGHT)
 				#right
 			##########################
 			# Player did nothing
@@ -183,7 +187,7 @@ try:
 					game.debug(console)
 				except Exception as e:
 					print(e.message)
-			zone.tick()
+			game.zone.tick()
 			display.show_messages()
 			display.refresh_full()
 

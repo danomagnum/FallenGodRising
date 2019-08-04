@@ -482,5 +482,36 @@ def add_stairs(map, up=True, down=True):
 		ydown = y
 
 
-def overworld_inject(game, zone):
-	pass
+def overworld_inject(game, zone, entry_level = 0):
+	ov_ht = len(game.overworld_minimap) - 1
+	ov_wd = len(game.overworld_minimap[0]) - 1
+	search = True
+	while search:
+		y = random.randint(0, ov_wd)
+		x = random.randint(0, ov_ht)
+		cell = game.overworld_minimap[y][x]
+		if any([cell.up, cell.down, cell.left, cell.right]):
+			ov_x = x
+			ov_y = y
+			search = False
+	ov_level = ov_x + ov_y * game.overworld.grid_width
+	ov_x2, ov_y2 = game.overworld.find_empty_position(level=ov_level)
+
+	z_x, z_y = zone.find_empty_position(level=entry_level)
+	z_entity = entities.ZoneWarp(game)
+	z_entity.x = z_x
+	z_entity.y = z_y
+	z_entity.new_x = ov_x2
+	z_entity.new_y = ov_y2
+	z_entity.new_zone = 'Overworld'
+	zone.add_entity(z_entity, entry_level)
+
+	ov_entity = entities.ZoneWarp(game)
+	ov_entity.x = ov_x2
+	ov_entity.y = ov_y2
+	ov_entity.new_x = z_x
+	ov_entity.new_y = z_y
+	ov_entity.new_zone = zone.name
+	game.overworld.add_entity(ov_entity, ov_level)
+
+	print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))

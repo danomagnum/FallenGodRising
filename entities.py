@@ -194,8 +194,9 @@ class ZoneWarp(Entity):
 		self.new_x = None
 		self.new_y = None
 		self.new_zone = None
+		self.new_level = None
 
 	def collide(self, entity, zone):
 		if self.new_zone is not None:
-			self.game.change_zone(self.new_zone, self.new_x, self.new_y)
+			self.game.change_zone(self.new_zone, self.new_x, self.new_y, self.new_level)
 
