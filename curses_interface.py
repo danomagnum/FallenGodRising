@@ -331,6 +331,10 @@ class Display(object):
 				#self.mybox[i].box()
 				#self.mybox[i].refresh()
 				#self.mybox[i].overlay(self.screen)
+			else:
+				self.charboxes[i].erase()
+				self.charboxes[i].box()
+				self.charboxes[i].refresh()
 			if i < len(self.enemy.combatants):
 				self.nmeboxes[i].box()
 				self.nmeboxes[i].refresh()
@@ -352,6 +356,10 @@ class Display(object):
 		for i in range(MAX_COMBATANTS):
 			if i < len(self.user.combatants):
 				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
+			else:
+				self.charboxes[i].erase()
+				self.charboxes[i].box()
+				self.charboxes[i].refresh()
 			if i < len(self.enemy.combatants):
 				self.show_combatant_stats(self.enemy.combatants[i], self.nmeboxes[i])
 		#self.show_messages()
@@ -401,7 +409,12 @@ class Display(object):
 
 		if self.game.player is not None:
 			for i in range(MAX_COMBATANTS):
-				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
+				if i < len(self.game.player.combatants):
+					self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
+				else:
+					self.charboxes[i].erase()
+					self.charboxes[i].box()
+					self.charboxes[i].refresh()
 
 		self.msgbox.box()
 		self.msgbox.refresh()
@@ -557,6 +570,7 @@ class Display(object):
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
 
+		splashbox.addstr(height - 2, 1, 'Version 0.1')
 		splashbox.addstr(y+5, 1, 'Please Wait, Generating Overworld...')
 
 		splashbox.box()

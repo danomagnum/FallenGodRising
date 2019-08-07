@@ -305,6 +305,15 @@ class Entity(object):
 		enemy = random.choice(enemy_ai.combatants)
 		target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
+	
+	def purge_dead(self):
+		newcombatants = []
+		for c in self.combatants:
+			if c.hp > 0:
+				newcombatants.append(c)
+			else:
+				pass
+		self.combatants = newcombatants
 
 	def change(self, enemy):
 		standby = self.get_standby()

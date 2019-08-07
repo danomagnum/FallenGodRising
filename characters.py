@@ -163,6 +163,9 @@ class Character(object):
 		stat = self.equipment.speed(stat)
 		return utility.clamp(stat, 1, 3* self.base_speed)
 
+	def raw_hp(self):
+		return self._hp
+
 	@property
 	def hp(self):
 		stat = self._hp

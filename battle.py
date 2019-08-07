@@ -142,8 +142,14 @@ def Battle(game, user, enemy_ai):
 		selection_needed = True
 		user_is_attacking = False
 		user_target = enemy_ai.combatant
+		annex = None
+		print('vu: {}, ve: {}'.format(len(valid_users), len(valid_enemies)))
+		if len(valid_users) < 3 and len(valid_enemies) == 1:
+			choices = ['Attack', 'Change', 'Items', 'Run', 'Annex']
+		else:
+			choices = ['Attack', 'Change', 'Items', 'Run']
 		while selection_needed:
-			first_choice = game.display.menu(['Attack', 'Change', 'Items', 'Run'], cols=2, selected=first_choice)
+			first_choice = game.display.menu(choices, cols=2, selected=first_choice)
 			if first_choice == 'Attack':
 				#first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
 				user_move = game.display.menu(user.combatant.moves, cols=2, selected=user_move)
@@ -206,6 +212,20 @@ def Battle(game, user, enemy_ai):
 						for t in item_target:
 							item_used.use(t)
 				game.display.refresh_combatant()
+			elif first_choice == 'Annex':
+				selection_needed = False
+
+				annex_candidate = valid_enemies[0]
+				hp_ratio = annex_candidate.hp / annex_candidate.max_hp
+				chance = 1.0 - hp_ratio
+				if random.random() < chance:
+					annex = annex_candidate
+					winner = USER
+					battle_continue = False
+					print('Annexed {}'.format(annex.name))
+				else:
+					print('The Annex Was Unsuccessful')
+
 			elif first_choice == 'Run':
 				running = True
 				selection_needed = False
@@ -255,33 +275,37 @@ def Battle(game, user, enemy_ai):
 			second_move = user_move
 			second_is_attacking = user_is_attacking
 
-		#first attack
-		if first_is_attacking:
-			for status in first.status:
-				status.pre_attack(first)
-			game.display.refresh_combatant()
+		if annex is None:
+			#first attack
+			if first_is_attacking:
+				for status in first.status:
+					status.pre_attack(first)
+				game.display.refresh_combatant()
 
-			first_move.attack(first, first_target)
-			game.display.refresh_combatant()
+				first_move.attack(first, first_target)
+				game.display.refresh_combatant()
 
-			for status in first.status:
-				status.post_attack(first)
-			game.display.refresh_combatant()
+				for status in first.status:
+					status.post_attack(first)
+				game.display.refresh_combatant()
 
-		#second attack, assuming they did not die
-		if second_is_attacking and second.hp > 0:
-			for status in second.status:
-				status.pre_attack(second)
-			game.display.refresh_combatant()
+			#second attack, assuming they did not die
+			if second_is_attacking and second.hp > 0:
+				for status in second.status:
+					status.pre_attack(second)
+				game.display.refresh_combatant()
 
-			second_move.attack(second, second_target)
-			game.display.refresh_combatant()
+				second_move.attack(second, second_target)
+				game.display.refresh_combatant()
 
-			for status in second.status:
-				status.post_attack(second)
+				for status in second.status:
+					status.post_attack(second)
 
-			game.display.refresh_combatant()
-	
+				game.display.refresh_combatant()
+		else:
+			game.player.combatants.append(annex)
+			print('Annex: {}'.format(str(annex)))
+		
 		# make sure all post-turn status take place
 		for combatant in all_combatants:
 			for status in combatant.status:
@@ -345,5 +369,8 @@ def Battle(game, user, enemy_ai):
 	game.display.show_messages()
 
 	game.display.end_battle()
+
+	user.purge_dead()
+
 	return winner
 
