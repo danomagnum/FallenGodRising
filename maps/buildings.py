@@ -126,7 +126,6 @@ class Wall(object):
 			return True
 		for mypt in self.pts:
 			if dist(mypt, pt) < 1.0:
-				print pt
 			#if err_dist((self.x0, self.y0), (self.x1, self.y1), pt) < 1.0:
 				return True
 		return False
@@ -484,4 +483,4 @@ if __name__ == '__main__':
 
 	map = showmap(map)
 	for line in map:
-		print line
+		print(line)

@@ -33,12 +33,23 @@ def Positional_Map_Insert(zone, entity, id, level=0, replace=True):
 		e1 = entity(zone.game, x=result[0], y=result[1])
 		if e1.x is not None:
 			if e1.y is not None:
-				zone.add_entity(e1)
+				zone.add_entity(e1, level)
 				if replace:
 					line0 = zone.maps[level][e1.y][:e1.x]
 					line1 = zone.maps[level][e1.y][e1.x + 1:]
 					zone.maps[level][e1.y] = line0 + '.' + line1
 					#zone.maps[level][e1.y][e1.x] = '.'
+		return True
+	else:
+		return False
+
+def Door_Handler(zone):
+	levels = len(zone.maps)
+	doors = 0
+	for level in range(levels):
+		while Positional_Map_Insert(zone, entities.Door, '+', level):
+			doors += 1
+	zone.doors_added = doors
 
 def Stair_Handler(zone, dir=0):
 	levels = len(zone.maps)

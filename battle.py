@@ -111,6 +111,7 @@ def Battle(game, user, enemy_ai):
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
 	all_combatants = valid_users + valid_enemies
+	annex_tries = 0
 	#display = display(user, enemy_ai)
 
 	battle_continue = True
@@ -213,18 +214,21 @@ def Battle(game, user, enemy_ai):
 							item_used.use(t)
 				game.display.refresh_combatant()
 			elif first_choice == 'Annex':
+				annex_tries += 1
 				selection_needed = False
 
 				annex_candidate = valid_enemies[0]
-				hp_ratio = annex_candidate.hp / annex_candidate.max_hp
-				chance = 1.0 - hp_ratio
+				hp_ratio = 1.0 - (annex_candidate.hp / annex_candidate.max_hp) ** 0.5 # square root to make weakening further get more and more advantageous
+				attempt_ratio = 1.0 - utility.clamp(annex_tries / 100.0, 1.0, 0.3) # the more your try, the harder it gets
+
+				chance = hp_ratio * attempt_ratio
 				if random.random() < chance:
 					annex = annex_candidate
 					winner = USER
 					battle_continue = False
 					print('Annexed {}'.format(annex.name))
 				else:
-					print('The Annex Was Unsuccessful')
+					print('Annex Attempt {} Was Unsuccessful.'.format(annex_tries))
 
 			elif first_choice == 'Run':
 				running = True
