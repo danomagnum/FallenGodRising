@@ -17,6 +17,7 @@ from constants import *
 import random
 import maps.overworld
 import maps.goblincave
+import maps.wizardtower
 import maps.maptools
 WRITEMAP = False
 
@@ -31,11 +32,13 @@ try:
 		game = main.Game()
 		zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
 		zone2 = maps.goblincave.genzone(game)
+		zone3 = maps.wizardtower.genzone(game)
 		game.biome_map = biome_map
 		game.overworld_minimap = overworld_minimap
 		game.overworld = zone
 
 		maps.maptools.overworld_inject(game, zone2)
+		maps.maptools.overworld_inject(game, zone3)
 
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
