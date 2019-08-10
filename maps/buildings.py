@@ -291,9 +291,8 @@ def building_gen(xmax = 30, ymax = 30):
 	room.draw(map)
 	return map
 
-def building_octagon(xmax = 30, ymax = 30):
+def building_octagon(xmax = 30, ymax = 30, outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
-	walls = []
 	wall0 = Wall(9, 3, 20, 3, True)
 	wall1 = Wall(20, 3, 26, 9, True)
 	wall2 = Wall(26, 9, 26, 20, True)
@@ -302,7 +301,10 @@ def building_octagon(xmax = 30, ymax = 30):
 	wall5 = Wall(9, 26, 3, 20, True)
 	wall6 = Wall(3, 20, 3, 9, True)
 	wall7 = Wall(3, 9, 9, 3, True)
-	room = Room([wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7])
+	walls = [wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+	if outside_door:
+		random.choice(walls).nodoor=False
+	room = Room(walls)
 	room.divide()
 	room.divide()
 	room.divide()
@@ -320,9 +322,9 @@ def building_octagon(xmax = 30, ymax = 30):
 
 	return map
 
-def building_twobox(xmax = 30, ymax = 30):
+def building_twobox(xmax = 30, ymax = 30, outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
-	walls = []
+
 	wall0 = Wall(0, 0, 20, 0, True)
 	wall1 = Wall(20, 0, 20, 10, True)
 	wall2 = Wall(20, 10, 29, 10, True)
@@ -332,7 +334,11 @@ def building_twobox(xmax = 30, ymax = 30):
 	wall6 = Wall(10, 20, 0, 20, True)
 	wall7 = Wall(0, 20, 0, 0, True)
 
-	room = Room([wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7])
+	walls = [wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+	if outside_door:
+		random.choice(walls).nodoor=False
+	room = Room(walls)
+
 	room.divide()
 	room.divide()
 	room.divide()
@@ -356,9 +362,8 @@ def building_twobox(xmax = 30, ymax = 30):
 	return map
 
 
-def building_tee(xmax = 30, ymax = 30):
+def building_tee(xmax = 30, ymax = 30, outside_door = False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
-	walls = []
 	wall0 = Wall(0, 0, 29, 0, True)
 	wall1 = Wall(29, 0, 29, 15, True)
 	wall2 = Wall(29, 15, 20, 15, True)
@@ -368,7 +373,11 @@ def building_tee(xmax = 30, ymax = 30):
 	wall6 = Wall(10, 20, 0, 20, True)
 	wall7 = Wall(0, 20, 0, 0, True)
 
-	room = Room([wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7])
+	walls = [wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+	if outside_door:
+		random.choice(walls).nodoor=False
+	room = Room(walls)
+
 	room.divide()
 	room.divide()
 	room.divide()
@@ -430,7 +439,7 @@ def showmap(map, printout = False):
 			print(line)
 	return lines
 
-def calcDistGraph(pt, map):
+def calcDistGraph(pt, map, throughdoors = False):
 	height = len(map)
 	width = len(map[0])
 	dist_map = [[-1 for x in range(width)] for x in range(height)]
@@ -443,6 +452,12 @@ def calcDistGraph(pt, map):
 	to_check = [(x0,y0)]
 	checking = []
 	i = 0
+
+	if throughdoors:
+		invalid = ['#']
+	else:
+		invalid = ['#', '+']
+
 	while len(to_check) > 0:
 		checking = to_check[:]
 		to_check = []
@@ -465,7 +480,7 @@ def calcDistGraph(pt, map):
 			d = d + 1
 			for pt in pts:
 				if pt not in checked:
-					if map[pt[1]][pt[0]] != '#':
+					if map[pt[1]][pt[0]] not in invalid:
 						if (dist_map[pt[1]][pt[0]] > d) or (dist_map[pt[1]][pt[0]] < 0):
 							dist_map[pt[1]][pt[0]] = d
 							to_check.append(pt)
@@ -476,9 +491,9 @@ def calcDistGraph(pt, map):
 
 
 if __name__ == '__main__':
-	#map = building_octagon()
-	#map = building_twobox()
-	map = building_tee()
+	map = building_octagon(outside_door=True)
+	#map = building_twobox(outside_door=True)
+	#map = building_tee(outside_door = True)
 	add_stairs(map)
 
 	map = showmap(map)
