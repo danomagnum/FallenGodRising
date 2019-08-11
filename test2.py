@@ -19,6 +19,7 @@ import maps.overworld
 import maps.goblincave
 import maps.wizardtower
 import maps.maptools
+import maps.buildings
 WRITEMAP = False
 
 try:
@@ -37,8 +38,8 @@ try:
 		game.overworld_minimap = overworld_minimap
 		game.overworld = zone
 
-		maps.maptools.overworld_inject(game, zone2)
-		maps.maptools.overworld_inject(game, zone3)
+		maps.maptools.overworld_inject(game, zone2, newchar='g')
+		maps.maptools.overworld_inject(game, zone3, newchar='w', mask=maps.buildings.building_octagon(outside_door=True))
 
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
@@ -155,11 +156,14 @@ try:
 				elif choice == 'Fast Travel':
 					if game.zone.check_clear():
 						selected_zone = display.menu(list(game.fast_travel), cols=2)
-						if selected_zone == game.zone.name:
+						if selected_zone != game.zone.name:
+							print('Fast Traveling To {}'.format(selected_zone))
 							z = game.zones[selected_zone]
 							newx, newy = z.find_empty_position()
 							if selected_zone is not None:
 								game.change_zone(selected_zone, newx, newy)
+						else:
+							print('Already in zone {}'.format(selected_zone))
 					else:
 						print('Cannot Fast Travel Until Zone Is Clear')
 				elif choice == 'Items':

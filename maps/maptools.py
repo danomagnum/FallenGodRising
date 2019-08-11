@@ -255,6 +255,7 @@ class Cell(object):
 		self.y = y
 		self.map = None
 		self.visited = False
+		self.char = None
 
 	def box(self):
 		output = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']]
@@ -272,6 +273,9 @@ class Cell(object):
 			output[2][2] = '#'
 		return output
 	def __str__(self):
+
+		if self.char is not None:
+			return self.char
 
 		dir_char = {(1, 1, 1, 1): ' ',
 			    (0, 1, 1, 1): '╨',
@@ -493,7 +497,7 @@ def add_stairs(map, up=True, down=True):
 		ydown = y
 
 
-def overworld_inject(game, zone, entry_level = 0):
+def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 	ov_ht = len(game.overworld_minimap) - 1
 	ov_wd = len(game.overworld_minimap[0]) - 1
 	search = True
@@ -505,7 +509,12 @@ def overworld_inject(game, zone, entry_level = 0):
 			ov_x = x
 			ov_y = y
 			search = False
+	cell.char = newchar
 	ov_level = ov_x + ov_y * game.overworld.grid_width
+	if mask is not None:
+		new_ow_map = empty_zone_with_mask(cell, mask)
+		game.overworld.maps[ov_level] = new_ow_map
+
 	ov_x2, ov_y2 = game.overworld.find_empty_position(level=ov_level)
 
 	z_x, z_y = zone.find_empty_position(level=entry_level)
@@ -526,3 +535,30 @@ def overworld_inject(game, zone, entry_level = 0):
 	game.overworld.add_entity(ov_entity, ov_level)
 
 	print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
+
+
+def empty_zone_with_mask(cell, mask):
+	xmax = len(mask[0]) - 1
+	ymax = len(mask) - 1
+	map = [['.' for x in range(xmax + 1)] for y in range(ymax + 1)]
+	if cell.down:
+		for x, c in enumerate(map[0]):
+			map[0][x] = '#'
+
+	if cell.up:
+		for x, c in enumerate(map[ymax]):
+			map[ymax][x] = '#'
+
+	if cell.left:
+		for y, line in enumerate(map):
+			map[y][0] = '#'
+
+	if cell.right:
+		for y, line in enumerate(map):
+			map[y][xmax] = '#'
+	
+	for y, line in enumerate(map):
+		for x, char in enumerate(line):
+			if mask[y][x] != ' ':
+				map[y][x] = mask[y][x]
+	return flatten(map)
