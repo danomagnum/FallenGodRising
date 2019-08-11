@@ -1,7 +1,7 @@
 import random
 import math
 
-MINWALL = 5
+MINWALL = 3
 
 UP = 1
 DOWN = 2
@@ -199,16 +199,18 @@ class Room(object):
 		longest = random.choice(longest_walls)
 		search = True
 		search_time = 10
-		while search_time > 0:
+		for attempt in range(10):
 			search_time -= 1
 			divx, divy = longest.divide()
 			new_wall_1 = Wall(longest.x0, longest.y0, divx, divy, longest.nodoor)
 			new_wall_2 = Wall(divx, divy, longest.x1, longest.y1, longest.nodoor)
 			if new_wall_1.length() >= MINWALL:
 				if new_wall_2.length() >= MINWALL:
-					search_time = 0
+					print('l1:{}, l2:{}'.format(new_wall_1.length(), new_wall_2.length()))
+					break
+		else:
+			return
 
-		self.walls.remove(longest)
 		search = True
 		tp0 = [divx, divy]
 		tp1 = [divx, divy]
@@ -222,16 +224,17 @@ class Room(object):
 
 
 			for wall in self.walls:
-				if wall.ison(tp0):
-					final_pt = wall.nearest(tp0)
-					search = False
-					purgewall = wall
-				if wall.ison(tp1):
-					final_pt = wall.nearest(tp1)
-					search = False
-					purgewall = wall
+				if wall is not longest:
+					if wall.ison(tp0):
+						final_pt = wall.nearest(tp0)
+						search = False
+						purgewall = wall
+					if wall.ison(tp1):
+						final_pt = wall.nearest(tp1)
+						search = False
+						purgewall = wall
 
-		self.walls.remove(purgewall)
+
 		
 		if purgewall.nodoor:
 			if longest.nodoor:
@@ -254,16 +257,28 @@ class Room(object):
 		else:
 			final_nodoor = True
 
+		new_pwall1 = Wall(purgewall.x0, purgewall.y0, final_pt[0], final_pt[1], purgewall.nodoor)
+		new_pwall2 = Wall(final_pt[0], final_pt[1], purgewall.x1, purgewall.y1, purgewall.nodoor)
+
+		if new_pwall1.length() < MINWALL:
+			print('new wall too short')
+			return
+		if new_pwall2.length() < MINWALL:
+			print('new wall too short')
+			return
 
 		# new walls to replace the purged wall
-		self.walls.append(Wall(purgewall.x0, purgewall.y0, final_pt[0], final_pt[1], purgewall.nodoor))
-		self.walls.append(Wall(final_pt[0], final_pt[1], purgewall.x1, purgewall.y1, purgewall.nodoor))
+		self.walls.append(new_pwall1)
+		self.walls.append(new_pwall2)
 		# new walls to replace the long wall
 		self.walls.append(new_wall_1)
 		self.walls.append(new_wall_2)
 
 		#new intermediate wall
 		self.walls.append(Wall(divx, divy, final_pt[0], final_pt[1], final_nodoor))
+
+		self.walls.remove(longest)
+		self.walls.remove(purgewall)
 
 	def draw(self, map):
 		for wall in self.walls:
@@ -272,130 +287,212 @@ class Room(object):
 		for wall in self.walls:
 			wall.door_gen()
 
-
-def building_gen(xmax = 30, ymax = 30):
-	map = [['.' for x in range(xmax)] for y in range(ymax)]
+def walls_from_points(pt_list):
 	walls = []
-	wall0 = Wall(0, 0, xmax - 1, 0, True)
-	wall1 = Wall(0, 0, 0, ymax - 1, True)
-	wall2 = Wall(xmax - 1, 0, xmax - 1, ymax - 1, True)
-	wall3 = Wall(0, ymax - 1, xmax - 1, ymax - 1, True)
-	room = Room([wall0, wall1, wall2, wall3])
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
-	room.door_gen()
-	room.drop_wall()
-	room.draw(map)
-	return map
+	for i, pt in enumerate(pt_list[1:]):
+		wall = Wall(pt_list[i][0], pt_list[i][1], pt[0], pt[1], True)
+		walls.append(wall)
+	return walls
 
-def building_octagon(xmax = 30, ymax = 30, outside_door=False):
+
+
+def building_gen(xmax = 30, ymax = 30, divisions=5, padding=0, drops=0,outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
-	wall0 = Wall(9, 3, 20, 3, True)
-	wall1 = Wall(20, 3, 26, 9, True)
-	wall2 = Wall(26, 9, 26, 20, True)
-	wall3 = Wall(26, 20, 20, 26, True)
-	wall4 = Wall(20, 26, 9, 26, True)
-	wall5 = Wall(9, 26, 3, 20, True)
-	wall6 = Wall(3, 20, 3, 9, True)
-	wall7 = Wall(3, 9, 9, 3, True)
-	walls = [wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+
+	maxpad = padding + 1
+	ystop = ymax - maxpad
+	xstop = xmax - maxpad
+
+	pts = [(padding, padding),
+	       (xstop, padding),
+	       (xstop, ystop),
+	       (padding, ystop),
+	       (padding, padding)]
+
+	walls = walls_from_points(pts)
+
 	if outside_door:
 		random.choice(walls).nodoor=False
+
 	room = Room(walls)
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
+
+	for d in range(divisions):
+		room.divide()
 	room.door_gen()
-	room.drop_wall()
-	room.drop_wall()
+	for d in range(drops):
+		room.drop_wall()
+
 	room.draw(map)
 	dmap = calcDistGraph((0, 0), map)
 	for y in range(ymax):
 		for x in range(xmax):
-			if dmap[y][x] > 0:
+			if dmap[y][x] >= 0:
 				map[y][x] = ' '
+
+
+
 
 	return map
 
-def building_twobox(xmax = 30, ymax = 30, outside_door=False):
+def building_octagon(xmax = 30, ymax = 30,divisions=5,padding=0, drops=0, outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
 
-	wall0 = Wall(0, 0, 20, 0, True)
-	wall1 = Wall(20, 0, 20, 10, True)
-	wall2 = Wall(20, 10, 29, 10, True)
-	wall3 = Wall(29, 10, 29, 29, True)
-	wall4 = Wall(29, 29, 10, 29, True)
-	wall5 = Wall(10, 29, 10, 20, True)
-	wall6 = Wall(10, 20, 0, 20, True)
-	wall7 = Wall(0, 20, 0, 0, True)
+	maxpad = padding + 1
+	ystop = ymax - maxpad
+	xstop = xmax - maxpad
+	x0 = int(xmax / 3)
+	x1 = 2*x0
+	y0 = int(ymax / 3)
+	y1 = 2*y0
 
-	walls = [wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+
+	pts = [(x0, padding),
+	       (x1, padding),
+	       (xstop, y0),
+	       (xstop, y1),
+	       (x1, ystop),
+	       (x0, ystop),
+	       (padding, y1),
+	       (padding, y0),
+	       (x0, padding)]
+
+	walls = walls_from_points(pts)
+
+	if outside_door:
+		random.choice(walls).nodoor=False
+
+	room = Room(walls)
+
+	for d in range(divisions):
+		room.divide()
+
+	room.door_gen()
+	for d in range(drops):
+		room.drop_wall()
+
+	room.draw(map)
+
+	dmap = calcDistGraph((0, 0), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] >= 0:
+				map[y][x] = ' '
+
+	dmap = calcDistGraph((xmax - 1, 0), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] >= 0:
+				map[y][x] = ' '
+
+	dmap = calcDistGraph((xmax - 1, ymax - 1), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] >= 0:
+				map[y][x] = ' '
+
+	dmap = calcDistGraph((0, ymax - 1), map)
+	for y in range(ymax):
+		for x in range(xmax):
+			if dmap[y][x] >= 0:
+				map[y][x] = ' '
+
+
+
+
+
+	return map
+
+def building_twobox(xmax = 30, ymax = 30,padding=0,divisions=5,drops=0, outside_door=False):
+	map = [['.' for x in range(xmax)] for y in range(ymax)]
+	maxpad = padding + 1
+	ystop = ymax - maxpad
+	xstop = xmax - maxpad
+	xjog0 = int(xmax / 3)
+	xjog1 = 2*xjog0
+	yjog0 = int(ymax / 3)
+	yjog1 = 2*yjog0
+
+	pts = [(padding, padding),
+	       (xjog1, padding),
+	       (xjog1, yjog0),
+	       (xstop, yjog0),
+	       (xstop, ystop),
+	       (xjog0, ystop),
+	       (xjog0, yjog1),
+	       (padding, yjog1),
+	       (padding, padding)]
+
+	walls = walls_from_points(pts)
+	
 	if outside_door:
 		random.choice(walls).nodoor=False
 	room = Room(walls)
 
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
+	for d in range(divisions):
+		room.divide()
+
 	room.door_gen()
-	room.drop_wall()
-	room.drop_wall()
+	for d in range(drops):
+		room.drop_wall()
+
 	room.draw(map)
 	dmap = calcDistGraph((29, 0), map)
 	for y in range(ymax):
 		for x in range(xmax):
-			if dmap[y][x] > 0:
+			if dmap[y][x] >= 0:
 				map[y][x] = ' '
 	dmap = calcDistGraph((0, 29), map)
 	for y in range(ymax):
 		for x in range(xmax):
-			if dmap[y][x] > 0:
+			if dmap[y][x] >= 0:
 				map[y][x] = ' '
 
 	return map
 
 
-def building_tee(xmax = 30, ymax = 30, outside_door = False):
+def building_tee(xmax = 30, ymax = 30,divisions=5, padding=0, drops=0, outside_door = False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
-	wall0 = Wall(0, 0, 29, 0, True)
-	wall1 = Wall(29, 0, 29, 15, True)
-	wall2 = Wall(29, 15, 20, 15, True)
-	wall3 = Wall(20, 15, 20, 29, True)
-	wall4 = Wall(20, 29, 10, 29, True)
-	wall5 = Wall(10, 29, 10, 20, True)
-	wall6 = Wall(10, 20, 0, 20, True)
-	wall7 = Wall(0, 20, 0, 0, True)
 
-	walls = [wall0, wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+	maxpad = padding + 1
+	ystop = ymax - maxpad
+	xstop = xmax - maxpad
+	xjog0 = int(xmax / 3)
+	xjog1 = 2*xjog0
+	yjog0 = int(ymax / 2)
+
+
+	pts = [(padding, padding),
+	       (xstop, padding),
+	       (xstop, yjog0),
+	       (xjog1, yjog0),
+	       (xjog1, ystop),
+	       (xjog0, ystop),
+	       (xjog0, yjog0),
+	       (padding, yjog0),
+	       (padding, padding)]
+
+	walls = walls_from_points(pts)
+
 	if outside_door:
 		random.choice(walls).nodoor=False
 	room = Room(walls)
 
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
-	room.divide()
+	for d in range(divisions):
+		room.divide()
+
 	room.door_gen()
-	room.drop_wall()
-	room.drop_wall()
+	for d in range(drops):
+		room.drop_wall()
 	room.draw(map)
 	dmap = calcDistGraph((29, 29), map)
 	for y in range(ymax):
 		for x in range(xmax):
-			if dmap[y][x] > 0:
+			if dmap[y][x] >= 0:
 				map[y][x] = ' '
 	dmap = calcDistGraph((0, 29), map)
 	for y in range(ymax):
 		for x in range(xmax):
-			if dmap[y][x] > 0:
+			if dmap[y][x] >= 0:
 				map[y][x] = ' '
 
 	return map
@@ -407,30 +504,32 @@ def add_stairs(map, up=True, down=True):
 	xmax =len(map[0])
 	dmap = None
 	if up:
-		search = True
-		while search:
+		for attempt in range(30):
 			y = random.randint(0, ymax - 1)
 			x = random.randint(0, xmax - 1)
 			if map[y][x] == '.':
 				map[y][x] = '<'
-				search = False
+				break
+		else:
+			return
 		xup = x
 		yup = y
 		dmap = calcDistGraph((xup, yup), map)
 	if down:
-		search = True
-		while search:
+		for attempt in range(30):
 			y = random.randint(0, ymax - 1)
 			x = random.randint(0, xmax - 1)
 			if map[y][x] == '.':
 				if dmap is not None:
 					if dmap[y][x] > 0:
 						map[y][x] = '>'
-						search = False
+						break
+		else:
+			return
 		xdown = x
 		ydown = y
 
-def showmap(map, printout = False):
+def flatten(map, printout = False):
 	lines = []
 	for y in map:
 		line = ''.join(y)
@@ -491,11 +590,12 @@ def calcDistGraph(pt, map, throughdoors = False):
 
 
 if __name__ == '__main__':
-	map = building_octagon(outside_door=True)
+	map = building_octagon(outside_door=False)
 	#map = building_twobox(outside_door=True)
-	#map = building_tee(outside_door = True)
+	#map = building_tee(padding=5,outside_door = True)
+	#map = building_gen(padding=2)
 	add_stairs(map)
 
-	map = showmap(map)
+	map = flatten(map)
 	for line in map:
 		print(line)
