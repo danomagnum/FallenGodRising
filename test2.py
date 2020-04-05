@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#coding: utf-8 
 import sys
 
 sys.dont_write_bytecode = True
@@ -5,11 +7,12 @@ sys.dont_write_bytecode = True
 import characters
 import battle
 import main
-import curses_interface as graphics_interface
-#import pygcurses_interface as graphics_interface
+#import curses_interface as graphics_interface
+#import keys
+import bearlib_interface as graphics_interface
+import bearlibkeys as keys
 import time
 import items
-import keys
 import entities
 import elements
 from constants import *
@@ -20,6 +23,7 @@ import maps.goblincave
 import maps.wizardtower
 import maps.maptools
 import maps.buildings
+import maps.sewers
 WRITEMAP = False
 
 try:
@@ -32,14 +36,15 @@ try:
 
 		game = main.Game()
 		zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
-		zone2 = maps.goblincave.genzone(game)
-		zone3 = maps.wizardtower.genzone(game)
+
 		game.biome_map = biome_map
 		game.overworld_minimap = overworld_minimap
 		game.overworld = zone
 
-		maps.maptools.overworld_inject(game, zone2, newchar='g')
-		maps.maptools.overworld_inject(game, zone3, newchar='w', mask=maps.buildings.building_octagon(outside_door=True))
+		zone2 = maps.goblincave.genzone(game)
+		zone3 = maps.wizardtower.genzone(game)
+		zone4 = maps.sewers.genzone(game)
+
 
 		if WRITEMAP:
 			file = open('mapout.txt', 'w')
@@ -186,16 +191,16 @@ try:
 								item_used.use(t)
 
 
-			elif key == ord('k'):
+			elif key in keys.DEBUG_K:
 				#up
 				game.zone.exit(game.player, UP)
-			elif key == ord('j'):
+			elif key in keys.DEBUG_J:
 				game.zone.exit(game.player, DOWN)
 				#down
-			elif key == ord('h'):
+			elif key in keys.DEBUG_H:
 				game.zone.exit(game.player, LEFT)
 				#left
-			elif key == ord('l'):
+			elif key in keys.DEBUG_L:
 				game.zone.exit(game.player, RIGHT)
 				#right
 			##########################
@@ -209,7 +214,12 @@ try:
 					game.debug(console)
 				except Exception as e:
 					print(e.message)
-			game.zone.tick()
+			elif key in keys.EXIT:
+				break
+			try:
+				game.zone.tick()
+			except main.GameOver as e:
+				display.game_over()
 			display.show_messages()
 			display.refresh_full()
 

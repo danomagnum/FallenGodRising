@@ -257,6 +257,88 @@ class Cell(object):
 		self.visited = False
 		self.char = None
 
+	def close(self):
+		self.visited = False
+		self.up = 1
+		self.down = 1
+		self.left = 1
+		self.right = 1
+
+	def open(self, dir):
+		self.visited = True
+		width = len(self.map[0])
+		height = len(self.map)
+		if dir == UP:
+			if self.y > 0:
+				self.up = 0
+				if inbounds(self.x, self.y - 1, width, height):
+					self.map[self.y - 1][self.x].down = 0
+					self.map[self.y - 1][self.x].visited = True
+					return self.map[self.y - 1][self.x]
+		elif dir == DOWN:
+			if self.y < (height - 1):
+				self.down = 0
+				if inbounds(self.x, self.y + 1, width, height):
+					self.map[self.y + 1][self.x].up = 0
+					self.map[self.y + 1][self.x].visited = True
+					return self.map[self.y + 1][self.x]
+		elif dir == LEFT:
+			if self.x > 0:
+				self.left = 0
+				if inbounds(self.x - 1, self.y, width, height):
+					self.map[self.y][self.x - 1].right = 0
+					self.map[self.y][self.x - 1].visited = True
+					return self.map[self.y][self.x - 1]
+		elif dir == RIGHT:
+			if self.x < width - 1:
+				self.right = 0
+				if inbounds(self.x + 1, self.y, width, height):
+					self.map[self.y][self.x + 1].left = 0
+					self.map[self.y][self.x + 1].visited = True
+					return self.map[self.y][self.x + 1]
+		return None
+	
+	def grow(self):
+		width = len(self.map[0])
+		height = len(self.map)
+		if (self.y > 0) and (inbounds(self.x, self.y - 1, width, height)):
+			if self.map[self.y - 1][self.x].visited == False:
+				self.open(UP)
+				return self.map[self.y-1][self.x]
+		if (self.y < (height - 1)) and (inbounds(self.x, self.y + 1, width, height)):
+			if self.map[self.y + 1][self.x].visited:
+				self.open(DOWN)
+				return self.map[self.y+1][self.x]
+		if (self.x > 0) and inbounds(self.x - 1, self.y, width, height):
+			if self.map[self.y][self.x - 1].visited:
+				self.open(LEFT)
+				return self.map[self.y][self.x - 1]
+		if (self.x < width - 1) and inbounds(self.x + 1, self.y, width, height):
+			if self.map[self.y][self.x + 1].visited:
+				self.open(RIGHT)
+				return self.map[self.y][self.x + 1]
+		return None
+
+	def unvisited_neighbors(self):
+		width = len(self.map[0])
+		height = len(self.map)
+		count = 0
+		if inbounds(self.x, self.y - 1, width, height):
+			if self.map[self.y - 1][self.x].visited:
+				count += 1
+		if inbounds(self.x, self.y + 1, width, height):
+			if self.map[self.y + 1][self.x].visited:
+				count += 1
+		if inbounds(self.x - 1, self.y, width, height):
+			if self.map[self.y][self.x - 1].down:
+				count += 1
+		if inbounds(self.x + 1, self.y, width, height):
+			if self.map[self.y][self.x + 1].down:
+				count += 1
+
+		return count
+
+
 	def box(self):
 		output = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']]
 		if self.up:
@@ -297,12 +379,126 @@ class Cell(object):
 
 			    (0, 0, 0, 0): '╬'}
 
-		return dir_char[(self.down, self.up, self.left, self.right)] #these are correct for showing the minimap.
+		dir_char2= {(1, 1, 1, 1): ' ',
+			    (0, 1, 1, 1): '╵',
+			    (1, 0, 1, 1): '╷',
+			    (1, 1, 0, 1): '╴',
+			    (1, 1, 1, 0): '╶',
+
+			    (0, 0, 1, 1): '│',
+			    (0, 1, 0, 1): '┘',
+			    (0, 1, 1, 0): '└',
+			    (1, 0, 0, 1): '┐',
+			    (1, 0, 1, 0): '┌',
+			    (1, 1, 0, 0): '─',
+
+			    (0, 0, 0, 1): '┤',
+			    (0, 0, 1, 0): '├',
+			    (0, 1, 0, 0): '┴',
+			    (1, 0, 0, 0): '┬',
+
+			    (0, 0, 0, 0): '┼'}
+
+
+
+		return dir_char2[(self.down, self.up, self.left, self.right)] #these are correct for showing the minimap.
 		#return dir_char[(self.up, self.down, self.left, self.right)] #these are correct in general
 
+def inbounds(x,y,width,height):
+	if x >= 0 and x <= width - 1:
+		if y >= 0 and y <= height - 1:
+			return True
+	return False
+
+def inbound_padded(x,y,width,height):
+	if x > 0 and x < width - 1:
+		if y > 0 and y < height - 1:
+			return True
+	return False
+
+
+
+def maze2(width, height, clear_percent=0.99):
+	map = [[Cell(x, y) for x in range(width)] for y in range(height)]
+
+	#tell all the cells what map they are a part of
+	for row in map:
+		for cell in row:
+			cell.map = map
+
+
+	toclear = int(clear_percent * height * width)
+
+	cleared = 0
+
+	# block edges
+	for y in range(height):
+		for x in range(width):
+			if y == 0:
+				map[y][x].up = 1
+			if x == 0:
+				map[y][x].left = 1
+			if x == (width - 1):
+				map[y][x].right = 1
+			if y == (height - 1):
+				map[y][x].down = 1
+
+	# start right in the middle
+	# with a cell open on all sides
+	x = int(width / 2)
+	y = int(height / 2)
+
+	firstcell = map[y][x]
+
+	newtestcells = []
+	newtestcells.append(firstcell.open(UP))
+	newtestcells.append(firstcell.open(DOWN))
+	newtestcells.append(firstcell.open(LEFT))
+	newtestcells.append(firstcell.open(RIGHT))
+
+	cleared = 5
+
+
+	while cleared < toclear:
+		cleared += 1
+		testcells = newtestcells
+		newtestcells = []
+		if testcells == []:
+			# if we don't have a good cell to use, pick one that has an empty neighbor
+			# but is already visited.  This way they are for sure on the main path
+			while True:
+				x = random.randint(0,width - 1)
+				y = random.randint(0,height - 1)
+				c = map[y][x]
+				nextcell = c.grow()
+				if nextcell is not None:
+					testcells.append(nextcell)
+					break
+
+		for cell in testcells:
+			if cell is not None:
+				if cell.unvisited_neighbors > 0:
+					# there are cells next to this one we can investigate
+					# decide how many exits to poke holes for
+					exits = random.choice([1,1,2,2,2,2,2])
+					for exit in range(exits):
+						dir = random.choice([UP, DOWN, LEFT, RIGHT])
+						nextcell = cell.open(dir)
+						if nextcell is not None:
+							if not nextcell.visited:
+								newtestcells.append(nextcell)
+								cleared += 1
+
+	
+	return map
+		
 
 
 def maze(width, height, clear_percent = 0.99):
+	return maze2(width, height, clear_percent)
+
+
+def maze_original(width, height, clear_percent = 0.99):
 	map = [[Cell(x, y) for x in range(width)] for y in range(height)]
 	potential_cleared = width * height
 	cleared = 0
@@ -344,42 +540,37 @@ def maze(width, height, clear_percent = 0.99):
 			for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
 				testx = x + dx
 				testy = y + dy
-				if testx > 0 and testx < width - 1:
-					if testy > 0 and testy < height - 1:
-						subtestx = testx
-						subtesty = testy - 1
-						if subtestx > 0 and subtestx < width - 1:
-							if subtesty > 0 and subtesty < height - 1:
-								map[testy][testx].up = 0
-								map[subtesty][subtestx].down = 0
-								if not map[testy][testx].visited:
-									cleared += 1
+				if inbound_padded(testx, testy, width, height):
+					subtestx = testx
+					subtesty = testy - 1
+					if inbound_padded(subtestx, subtesty, width, height):
+						map[testy][testx].up = 0
+						map[subtesty][subtestx].down = 0
+						if not map[testy][testx].visited:
+							cleared += 1
 
-						subtestx = testx
-						subtesty = testy + 1
-						if subtestx > 0 and subtestx < width - 1:
-							if subtesty > 0 and subtesty < height - 1:
-								map[testy][testx].down = 0
-								map[subtesty][subtestx].up = 0
-								if not map[testy][testx].visited:
-									cleared += 1
+					subtestx = testx
+					subtesty = testy + 1
+					if inbound_padded(subtestx, subtesty, width, height):
+						map[testy][testx].down = 0
+						map[subtesty][subtestx].up = 0
+						if not map[testy][testx].visited:
+							cleared += 1
 
-						subtestx = testx + 1
-						subtesty = testy
-						if subtestx > 0 and subtestx < width - 1:
-							if subtesty > 0 and subtesty < height - 1:
-								map[testy][testx].left = 0
-								map[subtesty][subtestx].right = 0
-								if not map[testy][testx].visited:
-									cleared += 1
-						subtestx = testx - 1
-						subtesty = testy
-						if subtestx > 0 and subtestx < width - 1:
-							if subtesty > 0 and subtesty < height - 1:
-								map[testy][testx].right = 0
-								map[subtesty][subtestx].left = 0
-								if not map[testy][testx].visited:
-									cleared += 1
+					subtestx = testx + 1
+					subtesty = testy
+					if inbound_padded(subtestx, subtesty, width, height):
+						map[testy][testx].left = 0
+						map[subtesty][subtestx].right = 0
+						if not map[testy][testx].visited:
+							cleared += 1
+					subtestx = testx - 1
+					subtesty = testy
+					if inbound_padded(subtestx, subtesty, width, height):
+						map[testy][testx].right = 0
+						map[subtesty][subtestx].left = 0
+						if not map[testy][testx].visited:
+							cleared += 1
 
 			x = random.randint(0, width - 1)
 			y = random.randint(0, height - 1)
@@ -536,6 +727,26 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 
 	print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
 
+
+def empty_zone(cell, xmax=30, ymax=30):
+	map = [['.' for x in range(xmax + 1)] for y in range(ymax + 1)]
+	if cell.down:
+		for x, c in enumerate(map[0]):
+			map[0][x] = '#'
+
+	if cell.up:
+		for x, c in enumerate(map[ymax]):
+			map[ymax][x] = '#'
+
+	if cell.left:
+		for y, line in enumerate(map):
+			map[y][0] = '#'
+
+	if cell.right:
+		for y, line in enumerate(map):
+			map[y][xmax] = '#'
+
+	return flatten(map)
 
 def empty_zone_with_mask(cell, mask):
 	xmax = len(mask[0]) - 1

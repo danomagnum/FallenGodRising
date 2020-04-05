@@ -46,19 +46,24 @@ class curses_window(object):
 class curses_pad(curses_window):
 	pass
 
-class curses(object):
+class Curses(object):
+	COLOR_BLACK = (0, 0, 0);
+	COLOR_WHITE = (255, 255, 255);
+	COLOR_YELLOW = (0, 255, 255);
+	COLOR_RED = (255, 0, 0);
+	COLOR_BLUE = (0, 0, 255);
 	def initscr(self):
 		#gets screen ready to go
 
-		libtcod.console_set_custom_font('arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
-		libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'python/libtcod tutorial', False)
+		libtcod.console_set_custom_font('arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD, 0, 0)
+		libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'python/libtcod tutorial', False, None)
 		libtcod.sys_set_fps(LIMIT_FPS)
 		libtcod.console_set_default_foreground(0, libtcod.white)
 
 
 		#returns the main screen object
 		return self
-	def start_color():
+	def start_color(self):
 		pass # allows use of color?
 	def init_pair(self, index, color0, color1):
 		pass
@@ -79,6 +84,11 @@ class curses(object):
 		#supposed to invert all colors on the screen
 		#then turn them back
 		pass # returns nothing
-	def endwin():
+	def endwin(self):
 		#closes curses and goes back to a regular term
 		pass # returns nothing
+
+	def keypad(self, index):
+		pass
+	def getmaxyx(self):
+		return (self.height, self.width)

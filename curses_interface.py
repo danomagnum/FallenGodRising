@@ -1,5 +1,5 @@
 import curses
-#import libtcod_curses
+import libtcod_curses
 import curses.textpad
 import sys
 import os
@@ -182,6 +182,7 @@ class Display(object):
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.charboxsize = (int(YMAX / MAX_COMBATANTS), 40)
 		self.msgboxsize = [8, int(XMAX - 2*self.charboxsize[1])]
+		self.splashbox = None
 		self.charboxes = []
 		self.nmeboxes = []
 		for i in range(MAX_COMBATANTS):
@@ -381,13 +382,13 @@ class Display(object):
 				#print e.y, e.x, e.char
 				#self.mappad.addch(e.y, e.x, e.char)
 				try:
-					self.mappad.addch(e.y, e.x, e.char)
+					self.mappad.addch(e.y, e.x, e.char, curses.A_BOLD)
 				except:
 					print ('{} {} {}'.format(e.y, e.x, e.char))
 				drawn.add((e.x, e.y))
 
 		if self.game.player is not None:
-			self.mappad.addch(self.game.player.y, self.game.player.x, self.game.player.char)
+			self.mappad.addch(self.game.player.y, self.game.player.x, self.game.player.char, curses.A_STANDOUT)
 
 	def refresh_full_map(self):
 		#self.screen.clear()
@@ -565,7 +566,8 @@ class Display(object):
 			splash_data = f.readlines()
 		height, width = self.screen.getmaxyx()
 		#width = len(splash_data[1])
-		splashbox = curses.newwin(height,width,0,0) 
+		self.splashbox = curses.newwin(height,width,0,0) 
+		splashbox = self.splashbox
 
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
@@ -577,6 +579,29 @@ class Display(object):
 		splashbox.refresh()
 		splashbox.overlay(self.screen)
 		screen.refresh()
+
+	def update_generation_progress(self, percent):
+		splashbox = self.splashbox
+		splashbox.addstr(y+6, 1, str(percent))
+
+	def game_over(self):
+		with open('GameOver.txt') as f:
+			splash_data = f.readlines()
+		height, width = self.screen.getmaxyx()
+		#width = len(splash_data[1])
+		splashbox = curses.newwin(height,width,0,0) 
+
+		for y, line in enumerate(splash_data):
+			splashbox.addstr(y + 1, 1, line)
+
+		splashbox.addstr(y+5, 1, 'Press Ctrl+c to exit...')
+
+		splashbox.box()
+		splashbox.refresh()
+		splashbox.overlay(self.screen)
+		screen.refresh()
+
+
 
 #TODO: work this into the object
 def shutdown():
