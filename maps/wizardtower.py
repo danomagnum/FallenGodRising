@@ -60,4 +60,5 @@ def genzone(game):
 	# add zone to game
 	game.add_zone(zone)
 
+	maps.maptools.overworld_inject(game, zone, newchar='w', mask=maps.buildings.building_octagon(padding=5,outside_door=True))
 	return zone

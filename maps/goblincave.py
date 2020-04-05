@@ -55,4 +55,6 @@ def genzone(game):
 	# add zone to game
 	game.add_zone(zone)
 
+	maps.maptools.overworld_inject(game, zone, newchar='g')
+
 	return zone
