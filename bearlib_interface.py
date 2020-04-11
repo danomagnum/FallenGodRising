@@ -13,6 +13,7 @@ import math
 import sayings
 import bearlibkeys as keys
 from constants import *
+from version import *
 
 import stdoutCatcher
 
@@ -91,14 +92,13 @@ class Window(object):
 		terminal.clear_area(self.left, self.top, self.width, self.height)
 
 	def box(self):
-		#TODO: use actual box chars
 		char = '█'
 		for x in range(self.width):
 			terminal.printf(self.left + x, self.top, BOXCHARS[1])
 			terminal.printf(self.left + x, self.top + self.height, BOXCHARS[7])
 		for y in range(self.height):
 			terminal.printf(self.left, self.top + y, BOXCHARS[3])
-			terminal.printf(self.left + self.width, self.top + y + self.height, BOXCHARS[5])
+			terminal.printf(self.left + self.width, self.top + y, BOXCHARS[5])
 		terminal.printf(self.left, self.top, BOXCHARS[0])
 		terminal.printf(self.left + self.width, self.top, BOXCHARS[2])
 		terminal.printf(self.left, self.top + self.height, BOXCHARS[6])
@@ -266,6 +266,10 @@ class Display(object):
 		self.msgbox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
 
 		self.overworldbox = Window(self.charboxsize[0],self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
+
+		MENUHEIGHT = 10
+		MENUWIDTH = 20
+		self.menubox = Window(MENUHEIGHT,MENUWIDTH,YMAX / 2 - MENUHEIGHT,XMAX / 2 - MENUWIDTH) 
 
 		self.user = user
 		self.enemy = enemy
@@ -558,8 +562,7 @@ class Display(object):
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
 
-		splashbox.addstr(height - 2, 1, 'Version 0.1')
-		splashbox.addstr(y+5, 1, 'Please Wait, Generating Overworld...')
+		splashbox.addstr(height - 2, 1, 'Version' + version)
 
 		splashbox.box()
 		terminal.refresh()
