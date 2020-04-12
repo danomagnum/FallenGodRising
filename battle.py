@@ -130,6 +130,7 @@ def Battle(game, user, enemy_ai):
 	running = False
 
 	while battle_continue:
+		game.display.show_messages()
 		valid_users = user.get_available()
 		valid_enemies = enemy_ai.get_available()
 		all_combatants = valid_users + valid_enemies
@@ -151,15 +152,21 @@ def Battle(game, user, enemy_ai):
 		else:
 			choices = ['Attack', 'Change', 'Items', 'Run']
 		while selection_needed:
-			first_choice = game.display.menu(choices, cols=2, selected=first_choice)
+			#if the enemy died outside of active combat (from poison or something) this check will
+			# end the battle by "running" and the final checks will take care of the rest, dosing out
+			# exp and items like you won
+			if len(enemy_ai.get_available()) == 0:
+				first_choice = 'Run'
+			else:
+				first_choice = game.display.battlemenu(choices, cols=2, selected=first_choice)
 			if first_choice == 'Attack':
 				#first_choice = display.menu(['Attack', 'Change', 'Items'], cols=2)
-				user_move = game.display.menu(user.combatant.moves, cols=2, selected=user_move)
+				user_move = game.display.battlemenu(user.combatant.moves, cols=2, selected=user_move)
 				if user_move is not None:
 					target = user_move.default_target
 					if target == main.SELF:
 
-						selected_target = game.display.menu(user.get_available(), selected=user.combatant)
+						selected_target = game.display.battlemenu(user.get_available(), selected=user.combatant)
 						if selected_target is not None:
 							user_target = [selected_target]
 							user_is_attacking = True
@@ -170,7 +177,7 @@ def Battle(game, user, enemy_ai):
 						#selection_needed = False
 					elif target == main.ENEMY:
 						if len(enemy_ai.get_available()) > 1:
-							selected_target = game.display.menu(enemy_ai.get_available(), selected=selected_target)
+							selected_target = game.display.battlemenu(enemy_ai.get_available(), selected=selected_target)
 							if selected_target is not None:
 								user_target = [selected_target]
 								user_is_attacking = True
@@ -186,22 +193,26 @@ def Battle(game, user, enemy_ai):
 						selection_needed = False
 					elif target == main.MULTI_ENEMY:
 						user_target = enemy_ai.get_available()
+						user_is_attacking = True
+						selection_needed = False
 					elif target == main.MULTI_SELF:
 						user_target = user.get_available()
+						user_is_attacking = True
+						selection_needed = False
 			elif first_choice == 'Change':
 				if user.get_standby():
-					change_choice = game.display.menu(user.get_standby())
+					change_choice = game.display.battlemenu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
 						game.display.refresh_combatant()
 			elif first_choice == 'Items':
-				item_slot_used = game.display.menu(user.backpack.show(), cols=2)
+				item_slot_used = game.display.battlemenu(user.backpack.show(), cols=2)
 				if item_slot_used is not None:
 					item_target_type = item_slot_used.target_type
 					if item_target_type == SELF:
-						item_target = [game.display.menu(user.combatants, cols=2)]
+						item_target = [game.display.battlemenu(user.combatants, cols=2)]
 					elif item_target_type == ENEMY:
-						item_target = [game.display.menu(enemy_ai.combatants, cols=2)]
+						item_target = [game.display.battlemenu(enemy_ai.combatants, cols=2)]
 					elif item_target_type == MULTI_SELF:
 						item_target = user.combatants
 					elif item_target_type == MULTI_ENEMY:
@@ -345,7 +356,7 @@ def Battle(game, user, enemy_ai):
 			if user.get_standby():
 				need_choice = True
 				while need_choice:
-					change_choice = game.display.menu(user.get_standby())
+					change_choice = game.display.battlemenu(user.get_standby())
 					if change_choice is not None:
 						user.combatant = change_choice
 						print('changed to {}'.format(user.combatant))
@@ -360,7 +371,7 @@ def Battle(game, user, enemy_ai):
 
 		game.display.show_messages()
 		game.display.refresh_combatant()
-		game.get_confirm()
+		#game.get_confirm()
 
 		#time.sleep(1.0 / 60.0)
 

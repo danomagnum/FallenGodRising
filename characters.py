@@ -396,7 +396,12 @@ class Witchhunter(Character):
 
 class Debug(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Haste(self.game), moves.mod_move(moves.Strike, moves.Pierce)(self.game)]
+		self.moves = [moves.Strike(self.game),
+		              moves.Haste(self.game),
+		              moves.Wave(self.game),
+			      moves.mod_move(moves.Strike, moves.Piercing)(self.game),
+			      moves.mod_move(moves.Strike, moves.Poison)(self.game),
+			      moves.mod_move(moves.mod_move(moves.Strike, moves.Poison), moves.Piercing)(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
 		self.base_special_strength = 60

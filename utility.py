@@ -28,7 +28,7 @@ def call_all_recursive(value, method, instance):
 		value = call(instance, value)
 	return value
 
-def call_all(method, instance):
+def call_all(method, instance, *params):
 	#get a higherarcy list of all base classes
 	mro = list(inspect.getmro(instance.__class__))
 
@@ -55,7 +55,10 @@ def call_all(method, instance):
 
 	# finally call them all
 	for call in calls:
-		call(instance)
+		if params:
+			call(instance, *params)
+		else:
+			call(instance)
 
 def list_calls(method, instance):
 	#get a higherarcy list of all base classes
@@ -145,4 +148,18 @@ class Serializable(object):
 
 	def __setstate__(self, val):
 		self.__dict__.update(val)
+
+
+def add_class(original, addition):
+	if original.__name__ == 'Generated':
+		classes = list(original.__bases__)
+		if addition not in classes:
+			classes.append(addition)
+		classes = tuple(classes)
+		Generated = type('Generated', classes, {})
+		
+	else:
+		class Generated(original, addition):
+			pass
+	return Generated
 

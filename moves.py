@@ -36,7 +36,6 @@ class Move(utility.Serializable):
 		self.helptext = ''
 
 		utility.call_all('config', self)
-		#utility.call_all_configs(self)
 
 		self.ticks = 0
 		self._mp = self.max_mp
@@ -159,7 +158,8 @@ class Move(utility.Serializable):
 
 					print('{} used move {} on {} for {}'.format(user.name,self.name, targets[0].name, int(damage)))
 
-				self.effect(target)
+				utility.call_all('effect', self, target)
+				#self.effect(target)
 			else:
 				print('miss!')
 	def effect(self, target):
@@ -213,20 +213,6 @@ class DarkMove(Move):
 		self.prefixes.append('Dark')
 		if elements.Dark not in self.elements:
 			self.elements.append(elements.Dark)
-
-def mod_move(move, mod):
-	class Generated(move, mod):
-		pass
-	#TypedMove = type('TypedMove2', (move, mod), {})
-	return Generated
-
-def gen_Typed_Moves(move):
-	typed_moves = []
-	type_mods = [FireMove, WaterMove, EarthMove, ElectricMove, WindMove, LightMove, DarkMove]
-	for mod in type_mods:
-		typed_moves.append(mod_move(move, mod))
-	return typed_moves
-
 class Strike(Move):
 	def config(self):
 		self.name = 'Strike'
@@ -234,8 +220,15 @@ class Strike(Move):
 		self.accuracy = 0.9
 		self.physical = (True, True)
 
-#typed_strikes = [FireStrike, WaterStrike, EarthStrike, WindStrike, LightStrike, DarkStrike]
-typed_strikes = gen_Typed_Moves(Strike)
+class Rush(Move):
+	def config(self):
+		self.name = 'Rush'
+		self.max_mp = 15.0
+		self.accuracy = 0.9
+		self.physical = (True, True)
+		self.default_target = MULTI_ENEMY
+
+
 
 class Buff(Move):
 	def config(self):
@@ -308,6 +301,7 @@ class Haste(Move):
 	def effect(self, target):
 		target.status.append(effects.StatMod(1.15, SPEED))
 
+stat_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]
 
 class Heal(Move):
 	def config(self):
@@ -317,7 +311,7 @@ class Heal(Move):
 		self.default_target = SELF
 		self.physical = (False, False)
 
-class Pierce(Move):
+class Piercing(Move):
 	def config(self):
 		self.prefixes.append('Piercing')
 
@@ -325,19 +319,17 @@ class Pierce(Move):
 		randval = random.random()
 		# for starters, effect 20% of the time.  Once the move is more used, effect 95%
 		prob = utility.scale(self.uses, 0, 1000, 0.2, 0.95)
-		if target.game.get_var('effect_override'):
+		if self.game.get_var('effect_override'):
 			prob = 1.0
 		if randval < prob:
 			print('{} has been wounded'.format(target.name))
 			target.status.append(effects.Bleeding())
 
 
+#enemy-target move with poison effect
 class Poison(Move):
 	def config(self):
-		self.name = 'Poison'
-		self.power = 2.0
-		self.elements = [elements.Normal]
-		self.physical = (True, True)
+		self.prefixes.append('Poison')
 
 	def effect(self, target):
 		randval = random.random()
@@ -353,6 +345,7 @@ class Poison(Move):
 			target.status.append(effects.Poison_Minor())
 
 
+#self-target healing move
 class Cure(Move):
 	def config(self):
 		self.name = 'Cure'
@@ -367,6 +360,7 @@ class Cure(Move):
 			to_remove = random.choice(target.status)
 			target.status.remove(to_remove)
 
+#single snemy special move
 class Blast(Move):
 	def config(self):
 		self.name = 'Blast'
@@ -374,8 +368,30 @@ class Blast(Move):
 		self.accuracy = 0.9
 		self.physical = (False, False)
 
+#multi snemy special move
+class Wave(Move):
+	def config(self):
+		self.name = 'Wave'
+		self.max_mp = 15.0
+		self.accuracy = 0.9
+		self.physical = (False, False)
+		self.default_target = MULTI_ENEMY
 
-#typed_blasts = [FireBlast, WaterBlast, EarthBlast, ElectricBlast, WindBlast, LightBlast, DarkBlast]
+def mod_move(move, mod):
+	return utility.add_class(move, mod)
+
+def gen_Typed_Moves(move):
+	typed_moves = []
+	type_mods = [FireMove, WaterMove, EarthMove, ElectricMove, WindMove, LightMove, DarkMove, Poison, Piercing]
+	for mod in type_mods:
+		typed_moves.append(mod_move(move, mod))
+	return typed_moves
+
+
+
 typed_blasts = gen_Typed_Moves(Blast)
+typed_waves = gen_Typed_Moves(Wave)
+typed_strikes = gen_Typed_Moves(Strike)
+typed_rushes = gen_Typed_Moves(Rush)
 
-all_moves = typed_strikes + typed_blasts + [Strike, Blast]
+all_moves = typed_strikes + typed_blasts + typed_rushes + typed_waves + [Strike, Blast]

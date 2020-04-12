@@ -4,6 +4,8 @@ ENEMY = 1 # Any enemy
 ACTIVE = 2 # currently active enemy
 MULTI_SELF = 3 # All friendly
 MULTI_ENEMY = 4 # all enemies
+MULTI_ALL = 5 # everyone
+MULTI_ALL_BUT_SELF = 6 # everyone but user
 USER = SELF
 
 EQUIP_HEAD = 100
