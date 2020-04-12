@@ -61,6 +61,7 @@ try:
 							f = open(join(SAVEDIR, player_choice), 'r')
 							game = pickle.load(f)
 							display.game = game
+							game.display = display
 							display.change_zone(game.zone)
 							f.close()
 							break
@@ -187,7 +188,7 @@ try:
 			##########################
 			elif key in keys.MENUKEY:
 				#Menu
-				choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items'], 4)
+				choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items', 'Quit'], 4)
 				if choice == 'Battlers':
 					#display.mode=graphics_interface.STATS
 					#display.refresh_full()
@@ -228,7 +229,12 @@ try:
 							selection_needed = False
 							for t in item_target:
 								item_used.use(t)
+				elif choice == 'Quit':
+					game.save()
+					break
 
+				elif choice == 'Save':
+					game.save()
 
 			elif key in keys.DEBUG_K:
 				#up
@@ -255,13 +261,8 @@ try:
 					print(e.message)
 			elif key in keys.EXIT:
 
-				print('Saving...')
-				display.show_messages()
+				game.save()
 				time.sleep(1)
-				file = open(join(SAVEDIR, 'last.sav'), 'w')
-				pickle.dump(game, file)
-				file.close()
-
 				break
 
 			try:

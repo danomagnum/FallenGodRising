@@ -5,7 +5,10 @@ import items
 import elements
 import battle
 import keys
+import pickle
 from constants import *
+from os import listdir
+from os.path import isfile, join
 
 
 class GameOver(Exception):
@@ -26,6 +29,13 @@ class Game(object):
 		self.game_vars = {}
 		self.fast_travel = set()
 		self.fast_travel.add('Overworld')
+
+	def save(self, filename = 'last.sav'):
+		print('Saving...')
+		self.display.show_messages()
+		file = open(join(SAVEDIR, filename), 'w')
+		pickle.dump(self, file)
+		file.close()
 
 	def biome(self):
 		if self.zone == self.overworld:
@@ -55,6 +65,7 @@ class Game(object):
 				self.zone.change_level(newlevel)
 			self.display.change_zone(self.zone)
 			self.fast_travel.add(zonename)
+			print('Entering Zone {}'.format(zonename))
 
 		else:
 			print('Zone {} does not exist'.format(zonename))

@@ -178,7 +178,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 			if (yposition <= (ymax - 2)) and (yposition >= 1):
 				if count == selected:
 					selected_row = row
-					color = "green"
+					color = SELECTEDCOLOR
 				else:
 					color = "white"
 				window.addstr(yposition, xposition, str(option), color)
@@ -264,7 +264,7 @@ class Display(object):
 			self.charboxes.append(charbox)
 		self.msgbox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
 
-		self.overworldbox = Window(self.charboxsize[0],self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
+		self.overworldbox = Window(self.charboxsize[0] + 1,self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
 
 		MENUHEIGHT = 10
 		MENUWIDTH = 20
@@ -459,7 +459,7 @@ class Display(object):
 		y0 = self.game.overworld_y + 1
 		self.overworldbox.addch(x0, y0, '@')
 		try:
-			self.overworldbox.addstr(1, 17, str(self.game.biome()))
+			self.overworldbox.addstr(1, 17, 'Biome: {}'.format(str(self.game.biome())))
 		except:
 			pass
 
@@ -490,8 +490,12 @@ class Display(object):
 		height, width = box.getmaxyx()
 		
 		#Name
-		box.addstr(0, 1, '{}  (Level {})'.format(combatant.name, combatant.level))
+		color = "white"
+		if self.game.player is not None:
+			if combatant == self.game.player.combatant:
+				color = SELECTEDCOLOR
 
+		box.addstr(0, 1, '{}  (Level {})'.format(combatant.name, combatant.level), color)
 		#HP
 		box.addstr(1, 1, progress_bar(combatant.hp, combatant.max_hp, width - 2), None)
 		box.addstr(2, 1, 'HP: {} / {}'.format(int(math.ceil(combatant.hp)),int(math.ceil(combatant.max_hp))), None)
