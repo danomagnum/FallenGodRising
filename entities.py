@@ -3,6 +3,7 @@ import battle
 import random
 from constants import *
 import characters
+import sys
 #import curses_interface as graphics_interface
 import bearlib_interface as graphics_interface
 
