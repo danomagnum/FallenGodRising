@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #coding: utf-8 
 import sys
+import traceback
 
 sys.dont_write_bytecode = True
 
@@ -8,6 +9,13 @@ import characters
 import battle
 import main
 import random
+
+#import dill as pickle
+import pickle
+
+from os import listdir
+from os.path import isfile, join
+from version import *
 
 #import curses_interface as graphics_interface
 #import keys
@@ -35,6 +43,8 @@ try:
 		display = graphics_interface.Display()
 
 		display.splash_screen()
+		print('Version: ' + version)
+		display.show_messages()
 
 		loop = True
 		while loop:
@@ -42,6 +52,26 @@ try:
 			if player_choice == 'Quit':
 				graphics_interface.shutdown()
 				sys.exit(0)
+			elif player_choice == 'Resume':
+				onlyfiles = [f for f in listdir(SAVEDIR) if (isfile(join(SAVEDIR, f)) and (f[-3:] == 'sav'))]	
+				if onlyfiles:
+					player_choice = graphics_interface.menu(display.menubox, onlyfiles ,clear=False)
+					if player_choice is not None:
+						try:
+							f = open(join(SAVEDIR, player_choice), 'r')
+							game = pickle.load(f)
+							display.game = game
+							display.change_zone(game.zone)
+							f.close()
+							break
+						except Exception as e:
+							traceback.print_exc(file=sys.stderr)
+							print("Error loading" + player_choice)
+							display.show_messages()
+				else:
+					print('No Saves Detected')
+					display.show_messages()
+
 			elif player_choice == 'New Game':
 				print('Please Wait, Generating Overworld...')
 				display.show_messages()
@@ -71,16 +101,10 @@ try:
 
 					file.close()
 
-
-				#user = characters.gen_testuser()
-				#user.x, user.y = zone.find_empty_position()
-
 				display.game = game
 				game.display = display
 				display.change_zone(game.zone)
 				#zone.display = display
-
-				#zone.set_player(user)
 
 				loop = True
 				display.mode = graphics_interface.STARTMENU
@@ -119,9 +143,11 @@ try:
 							player_party[i] = player_choice
 							i += 1
 							if i == graphics_interface.MAX_COMBATANTS:
+								item_list = []
 								item_list = [items.gen_base_item(game) for x in range(4)]
 								item_list += [items.gen_gear(game, level=1) for x in range(4)]
 								item_list += [items.gen_movescroll(game) for x in range(4)]
+
 								user = main.Entity('playercharacter', game, combatants=player_party, item_list=item_list, char='@',is_player=True)
 								#user.combatants = player_party
 								user.x, user.y = zone.find_empty_position()
@@ -140,6 +166,7 @@ try:
 		# Main Game Loop
 		##########################
 		display.mode = graphics_interface.MAP
+		display.refresh_full()
 		loop = True
 		while loop:
 			key = display.mapbox.getch()
@@ -147,18 +174,18 @@ try:
 			# Player movement
 			##########################
 			if key in keys.UP:
-				user.move(game.zone, UP)
+				game.player.move(game.zone, UP)
 			elif key in keys.DOWN:
-				user.move(game.zone, DOWN)
+				game.player.move(game.zone, DOWN)
 			elif key in keys.LEFT:
-				user.move(game.zone, LEFT)
+				game.player.move(game.zone, LEFT)
 			elif key in keys.RIGHT:
-				user.move(game.zone, RIGHT)
+				game.player.move(game.zone, RIGHT)
 
 			##########################
 			# Player menu
 			##########################
-			elif key == ord('m'):
+			elif key in keys.MENUKEY:
 				#Menu
 				choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items'], 4)
 				if choice == 'Battlers':
@@ -184,16 +211,16 @@ try:
 					else:
 						print('Cannot Fast Travel Until Zone Is Clear')
 				elif choice == 'Items':
-					item_slot_used = display.menu(user.backpack.show(), cols=2)
+					item_slot_used = display.menu(game.player.backpack.show(), cols=2)
 					item_target = None
 					if item_slot_used is not None:
 						item_target_type = item_slot_used.target_type
 						if item_target_type == SELF:
-							item_target = [display.menu(user.combatants, cols=2)]
+							item_target = [display.menu(game.player.combatants, cols=2)]
 						elif item_target_type == MULTI_SELF:
-							item_target = user.combatants
+							item_target = game.player.combatants
 						elif item_target_type in EQUIPPABLE:
-							item_target = [display.menu(user.combatants, cols=2)]
+							item_target = [display.menu(game.player.combatants, cols=2)]
 						else:
 							print("Can't Use that now")
 						if item_target is not None:
@@ -227,7 +254,16 @@ try:
 				except Exception as e:
 					print(e.message)
 			elif key in keys.EXIT:
+
+				print('Saving...')
+				display.show_messages()
+				time.sleep(1)
+				file = open(join(SAVEDIR, 'last.sav'), 'w')
+				pickle.dump(game, file)
+				file.close()
+
 				break
+
 			try:
 				game.zone.tick()
 			except main.GameOver as e:
@@ -239,10 +275,8 @@ except Exception as e:
 	graphics_interface.shutdown()
 	raise
 
-
-
-time.sleep(3)
-
 graphics_interface.shutdown()
+
+
 
 sys.exit(0)

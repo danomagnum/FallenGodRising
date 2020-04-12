@@ -400,6 +400,6 @@ class LinearZone(Zone):
 			mob_count = random.randint(0, 6)
 			for m in range(mob_count):
 				moblist = utility.select_by_level(level, self.mobchoices)
-				maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], level, moblist[3:], moblist[2])(self.game))
+				maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], level, moblist[3:], moblist[2]))
 
 

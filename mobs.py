@@ -3,17 +3,18 @@ import characters
 import main
 import moves
 import elements
+import utility
+
 
 def party(game, battle_AI, world_AI, level, combatants, name, item_list = None):
-	class Generated_Entity(world_AI,battle_AI):
+	class Generated(world_AI,battle_AI, utility.Serializable):
 		# example basic enemy
 		def config(self):
 			self.name = name
 			for c in combatants:
 				self.combatants.append(c(game, level=level))
 			self.char = name[0]
-
-	return Generated_Entity
+	return Generated(game)
 
 class Rat(characters.Character):
 	def config(self):
