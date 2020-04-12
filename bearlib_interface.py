@@ -263,6 +263,7 @@ class Display(object):
 			self.nmeboxes.append(nmebox)
 			self.charboxes.append(charbox)
 		self.msgbox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
+		self.battlemenubox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-2*self.msgboxsize[0],self.charboxsize[1])
 
 		self.overworldbox = Window(self.charboxsize[0] + 1,self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
 
@@ -388,6 +389,9 @@ class Display(object):
 				self.nmeboxes[i].box()
 		self.refresh_combatant()
 		self.msgbox.box()
+	def battlemenu(self, options, cols=1, selected=None):
+		window = self.battlemenubox
+		return menu(window, options, cols, selected)
 
 	def menu(self, options, cols = 1, selected = None):
 		window = self.msgbox
@@ -418,11 +422,13 @@ class Display(object):
 		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)
 		for e in entity_list:
 			if (e.x, e.y) not in drawn:
-				try:
-					self.mapbox.addch(YRAT * e.y + 1,XRAT * e.x + 1, e.char, None, font="tiles")
-				except:
-					print ('{} {} {}'.format(e.y + 1, e.x + 1, e.char))
-				drawn.add((e.x + 1, e.y + 1))
+				if e.x is not None:
+					try:
+						self.mapbox.addch(YRAT * e.y + 1,XRAT * e.x + 1, e.char, None, font="tiles")
+					except:
+						print ('{} {} {}'.format(e.y + 1, e.x + 1, e.char))
+					drawn.add((e.x + 1, e.y + 1))
+
 
 		if self.game.player is not None:
 			self.mapbox.addch(YRAT * self.game.player.y + 1, XRAT * self.game.player.x + 1, self.game.player.char, None, font="tiles")

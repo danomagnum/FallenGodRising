@@ -191,6 +191,7 @@ class Display(object):
 			self.nmeboxes.append(nmebox)
 			self.charboxes.append(charbox)
 		self.msgbox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
+		self.battlemenubox   = curses.newwin(self.msgboxsize[0],self.msgboxsize[1],YMAX-2*self.msgboxsize[0],self.charboxsize[1])
 
 		self.overworldbox = curses.newwin(self.charboxsize[0],self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
 
@@ -199,6 +200,7 @@ class Display(object):
 		MENUHEIGHT = 10
 		MENUWIDTH = 20
 		self.menubox = curses.newwin(MENUHEIGHT,MENUWIDTH,YMAX / 2 - MENUHEIGHT,XMAX / 2 - MENUWIDTH) 
+
 
 		self.user = user
 		self.enemy = enemy
@@ -351,6 +353,10 @@ class Display(object):
 		self.msgbox.refresh()
 		self.msgbox.overlay(self.screen)
 		self.screen.refresh()
+
+	def battlemenu(self, options, cols=1, selected=None):
+		window = self.battlemenubox
+		return menu(window, options, cols, selected)
 
 	def menu(self, options, cols = 1, selected = None):
 		#window = curses.newwin(4, 40, 20, 10)

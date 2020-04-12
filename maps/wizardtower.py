@@ -46,6 +46,7 @@ def genzone(game):
 			maptools.add_stairs(lev, down=False)
 		else:
 			maptools.add_stairs(lev)
+		lev = maptools.flatten(lev)
 		map_list.append(maptools.flatten(lev))
 	#maze = maptools.maze(16, 16)
 		# Create zone

@@ -51,6 +51,13 @@ def Door_Handler(zone):
 			doors += 1
 	zone.doors_added = doors
 
+def Door_Handler_onelevel(zone, level):
+	doors = 0
+	while Positional_Map_Insert(zone, entities.Door, '+', level):
+		doors += 1
+
+
+
 def Stair_Handler(zone, dir=0):
 	levels = len(zone.maps)
 	if levels > 1:
@@ -704,6 +711,9 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 	if mask is not None:
 		new_ow_map = empty_zone_with_mask(cell, mask)
 		game.overworld.maps[ov_level] = new_ow_map
+	
+
+	#Door_Handler(zone)
 
 	ov_x2, ov_y2 = game.overworld.find_empty_position(level=ov_level)
 
@@ -722,7 +732,12 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 	ov_entity.new_x = z_x
 	ov_entity.new_y = z_y
 	ov_entity.new_zone = zone.name
+
+
 	game.overworld.add_entity(ov_entity, ov_level)
+
+
+	Door_Handler_onelevel(game.overworld, ov_level)
 
 	#print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
 
@@ -772,3 +787,14 @@ def empty_zone_with_mask(cell, mask):
 			if mask[y][x] != ' ':
 				map[y][x] = mask[y][x]
 	return flatten(map)
+
+def flatten(map, printout = False):
+	lines = []
+	for y in map:
+		line = ''.join(y)
+		lines.append(line)
+		if printout:
+			print(line)
+	return lines
+
+

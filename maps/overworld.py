@@ -189,7 +189,7 @@ def genzone(game):
 				entries += 1
 			maptools.noise_prune(map)
 			biome = biome_map[y][x]
-			if sys.version_info.major >= 3:
+			if sys.version_info.major >= 2:
 				if biome == 0:
 					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Sea
 				elif biome == 1:
