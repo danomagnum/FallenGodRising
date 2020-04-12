@@ -5,9 +5,11 @@ import elements
 import utility
 import inspect
 import moves
+import utility
+import sys
 
-class Item(object):
-	def __init__(self, game, level=1, name=None, target=TARGET_NONE, uses=None):
+class Item(utility.Serializable):
+	def __init__(self, game=None, level=1, name=None, target=TARGET_NONE, uses=None):
 		self.game = game
 		self.prefixes = []
 		self.suffixes = []
@@ -49,7 +51,7 @@ class Item(object):
 		return self.name
 
 class Gear(Item):
-	def __init__(self, game, level=1, name=None, target=TARGET_NONE, uses=None):
+	def __init__(self, game=None, level=1, name=None, target=TARGET_NONE, uses=None):
 		self.status = []
 		Item.__init__(self, game, level,  name, target=TARGET_NONE, uses=None)
 
@@ -103,7 +105,9 @@ class Gear(Item):
 
 
 class ItemSlot(list):
-	def __init__(self, game, backpack, item):
+	def __init__(self, game=None, backpack=None, item=None):
+		if backpack is None:
+			return
 		self.name = item.name
 		self.backpack = backpack
 		list.__init__(self,[item])
@@ -133,7 +137,7 @@ class ItemSlot(list):
 		return '{} ({})'.format(self.name, len(self))
 
 class Backpack():
-	def __init__(self, game):
+	def __init__(self, game=None):
 		self.game = game
 		self.slots = {}
 		self.gold = 0
@@ -506,9 +510,18 @@ def add_item_mod(instance, mod):
 		except:
 			pass
 
-	class NewClass(instance.__class__, mod):
-		pass
-	instance.__class__ = NewClass
+	if instance.__class__.__name__ == 'Generated':
+		classes = list(instance.__class__.__bases__)
+		if mod not in classes:
+			classes.append(mod)
+		classes = tuple(classes)
+		#sys.stderr.write(str(classes))
+		Generated = type('Generated', classes, {})
+		
+	else:
+		class Generated(instance.__class__, mod):
+			pass
+	instance.__class__ = Generated
 
 	try:
 		if mod.config not in calls:
@@ -628,7 +641,9 @@ def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
 
 
 class MoveScroll(Item):
-	def __init__(self, game, move):
+	def __init__(self, game=None, move=None):
+		if move is None:
+			return
 		self.move = move(game)
 		name = 'Scroll of'
 		level = 1

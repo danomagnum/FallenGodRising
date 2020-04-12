@@ -7,7 +7,7 @@ import utility
 import math
 from constants import *
 
-class Move(object):
+class Move(utility.Serializable):
 	def __init__(self,game, name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
 		self.game = game
 		self.prefixes = []
@@ -169,6 +169,7 @@ class Move(object):
 		string += self.name + ' '
 		string += '( ' + str(int(self.mp)) + '/' + str(int(self.max_mp)) + ' )'
 		return string
+
 	def tick(self, user):
 		tick_rate = MOVE_REGEN_TICKS * self.max_mp
 		self.ticks += 1
@@ -214,9 +215,10 @@ class DarkMove(Move):
 			self.elements.append(elements.Dark)
 
 def mod_move(move, mod):
-	class TypedMove(move, mod):
+	class Generated(move, mod):
 		pass
-	return TypedMove
+	#TypedMove = type('TypedMove2', (move, mod), {})
+	return Generated
 
 def gen_Typed_Moves(move):
 	typed_moves = []

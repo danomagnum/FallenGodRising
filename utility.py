@@ -5,9 +5,9 @@ def call_all_recursive(value, method, instance):
 	#get a higherarcy list of all base classes
 	mro = list(inspect.getmro(instance.__class__))
 
-	#go through the base classes and check if they have a config method.	
+	#go through the base classes and check if they have a method.	
 	#if they do, add them to the set.  The set keeps any classes that inherited
-	#the config method from a base class from running a config twice.
+	#the method from a base class from running a method twice.
 	calls = []
 	call_set = set()
 	for m in mro:
@@ -121,3 +121,28 @@ def select_by_level(level, options):
 
 	return option[0]
 	
+
+def serialize_multiobj(*classes):
+	def reduce(self):
+		return (serialize_multiobj, self.__class__.__bases__)
+	class_list = list(classes)
+
+	if Serializable not in classes:
+		class_list += [Serializable]
+
+	obj = type('Generated', tuple(class_list), {})
+	return obj.__new__(obj)
+
+class Serializable(object):
+	def __reduce__(self):
+		classes = list(self.__class__.__bases__)
+		if self.__class__.__name__ == 'Generated':
+			pass
+		else:
+			classes = [self.__class__] + classes
+
+		return (serialize_multiobj, tuple(classes), self.__dict__)
+
+	def __setstate__(self, val):
+		self.__dict__.update(val)
+

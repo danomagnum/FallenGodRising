@@ -533,7 +533,6 @@ def maze_original(width, height, clear_percent = 0.99):
 		if x < width - 1:
 			if not map[y][x + 1].visited:
 				opts.append(RIGHT)
-		#print('({}, {}) / {}'.format(x, y, len(opts)))
 		if len(opts) > 0:
 			dir = random.choice(opts)
 		else:
@@ -725,7 +724,7 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 	ov_entity.new_zone = zone.name
 	game.overworld.add_entity(ov_entity, ov_level)
 
-	print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
+	#print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
 
 
 def empty_zone(cell, xmax=30, ymax=30):

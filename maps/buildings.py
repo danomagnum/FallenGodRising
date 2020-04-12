@@ -142,7 +142,6 @@ class Wall(object):
 			try:
 				map[pt[1]][pt[0]] = wall
 			except:
-				#print('({}, {})'.format(pt[0], pt[1]))
 				pass
 		if self.door is not None:
 			map[self.door[1]][self.door[0]] = door
@@ -206,7 +205,6 @@ class Room(object):
 			new_wall_2 = Wall(divx, divy, longest.x1, longest.y1, longest.nodoor)
 			if new_wall_1.length() >= MINWALL:
 				if new_wall_2.length() >= MINWALL:
-					print('l1:{}, l2:{}'.format(new_wall_1.length(), new_wall_2.length()))
 					break
 		else:
 			return
@@ -261,10 +259,10 @@ class Room(object):
 		new_pwall2 = Wall(final_pt[0], final_pt[1], purgewall.x1, purgewall.y1, purgewall.nodoor)
 
 		if new_pwall1.length() < MINWALL:
-			print('new wall too short')
+			#print('new wall too short')
 			return
 		if new_pwall2.length() < MINWALL:
-			print('new wall too short')
+			#print('new wall too short')
 			return
 
 		# new walls to replace the purged wall

@@ -13,7 +13,6 @@ import math
 import sayings
 import bearlibkeys as keys
 from constants import *
-from version import *
 
 import stdoutCatcher
 
@@ -340,6 +339,7 @@ class Display(object):
 			self.refresh_full_startmenu()
 		elif self.mode == SHOP:
 			self.refresh_full_shop()
+
 		terminal.refresh()
 
 
@@ -445,6 +445,7 @@ class Display(object):
 					self.charboxes[i].box()
 
 		self.msgbox.box()
+		self.show_messages()
 
 	def show_overworld(self):
 		y = 1
@@ -561,8 +562,6 @@ class Display(object):
 
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
-
-		splashbox.addstr(height - 2, 1, 'Version' + version)
 
 		splashbox.box()
 		terminal.refresh()

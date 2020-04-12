@@ -8,7 +8,6 @@ import random
 import math
 import sayings
 import keys
-from version import *
 from constants import *
 
 import stdoutCatcher
@@ -578,8 +577,6 @@ class Display(object):
 
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
-
-		splashbox.addstr(height - 2, 1, 'Version ' + version)
 
 		splashbox.box()
 		splashbox.refresh()

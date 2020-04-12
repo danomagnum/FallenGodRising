@@ -25,7 +25,7 @@ class Character(object):
 		self.helptext = ''
 		self.moves = []
 		self._level = 1
-
+		self.stat_randomizer()
 		utility.call_all('config', self)
 		#utility.call_all_configs(self)
 
@@ -44,6 +44,20 @@ class Character(object):
 	@elements.setter
 	def elements(self, value):
 		self._elements = value
+
+	def stat_randomizer(self):
+		# when the entity is created, give it some variety in power
+		# nominally 1.0 +- 5%
+		BASE = 1.0
+		DEV = 0.05
+		self.mod_physical_strength = random.normalvariate(BASE, DEV)
+		self.mod_physical_defense = random.normalvariate(BASE, DEV)
+		self.mod_special_strength = random.normalvariate(BASE, DEV)
+		self.mod_special_defense = random.normalvariate(BASE, DEV)
+		self.mod_speed = random.normalvariate(BASE, DEV)
+		self.mod_hp = random.normalvariate(BASE, DEV)
+		self.mod_luck = random.normalvariate(BASE, DEV)
+
 
 	def config(self):
 		self.moves = []
@@ -64,6 +78,7 @@ class Character(object):
 			item.subtick(self)
 			item.tick(self)
 		for move in self.moves:
+			#sys.stderr.write(str(move))
 			move.tick(self)
 		for stat in self.status:
 			stat.tick(self)
@@ -132,6 +147,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.physical_strength(stat)
 		stat = self.equipment.physical_strength(stat)
+		stat = stat * self.mod_physical_strength
 		return utility.clamp(stat, 1, 3* self.base_physical_strength)
 	@property
 	def physical_defense(self):
@@ -139,6 +155,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.physical_defense(stat)
 		stat = self.equipment.physical_defense(stat)
+		stat = stat * self.mod_physical_defense
 		return utility.clamp(stat, 1, 3* self.base_physical_defense)
 	@property
 	def special_strength(self):
@@ -146,6 +163,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.special_strength(stat)
 		stat = self.equipment.special_strength(stat)
+		stat = stat * self.mod_special_strength
 		return utility.clamp(stat, 1, 3* self.base_special_strength)
 	@property
 	def special_defense(self):
@@ -153,6 +171,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.special_defense(stat)
 		stat = self.equipment.special_defense(stat)
+		stat = stat * self.mod_special_defense
 		return utility.clamp(stat, 1, 3* self.base_special_defense)
 
 	@property
@@ -161,6 +180,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.speed(stat)
 		stat = self.equipment.speed(stat)
+		stat = stat * self.mod_speed
 		return utility.clamp(stat, 1, 3* self.base_speed)
 
 	def raw_hp(self):
@@ -180,6 +200,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.luck(stat)
 		stat = self.equipment.luck(stat)
+		stat = stat * self.mod_luck
 		return utility.clamp(stat, 1, 3* self.base_speed)
 
 	@hp.setter
@@ -196,6 +217,7 @@ class Character(object):
 		for status in self.status:
 			stat = status.max_hp(stat)
 		stat = self.equipment.max_hp(stat)
+		stat = stat * self.mod_hp
 		return stat
 
 	@property
@@ -231,8 +253,6 @@ class Character(object):
 			move.mp += int(move.max_mp / 5)
 		if self.hp > 0:
 			self.hp += int(self.max_hp / 5)
-
-
 
 	def levelup(self): # override this with sub classes to do fancy things
 		pass

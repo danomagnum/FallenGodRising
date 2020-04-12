@@ -3,7 +3,8 @@ import battle
 import random
 from constants import *
 import characters
-import curses_interface as graphics_interface
+#import curses_interface as graphics_interface
+import bearlib_interface as graphics_interface
 
 class Battler(Entity):
 	def collide(self, entity, zone):
@@ -77,7 +78,7 @@ class RandWalker(Entity):
 			self.move(zone, random.choice([UP, DOWN, LEFT, RIGHT]))
 
 class Treasure(Entity):
-	def __init__(self,game, item_list = None):
+	def __init__(self,game = None, item_list = None):
 		Entity.__init__(self, game, name=None, combatants = None, item_list=None, x=0, y=0, char='?', AI=None, is_player = False)
 		for i in item_list:
 			self.backpack.store(i)

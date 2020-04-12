@@ -61,4 +61,4 @@ SWITCH = 1
 ITEM = 2
 RUN = 3
 
-
+SAVEDIR = 'saves'
