@@ -253,7 +253,7 @@ class Display(object):
 
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.charboxsize = (int(YMAX / MAX_COMBATANTS), 40)
-		self.msgboxsize = [8, int(XMAX - 2*self.charboxsize[1])]
+		self.msgboxsize = [12, int(XMAX - 2*self.charboxsize[1])]
 		self.splashbox = None
 		self.charboxes = []
 		self.nmeboxes = []
@@ -581,6 +581,7 @@ class Display(object):
 		splashbox.addstr(y+6, 1, str(percent))
 
 	def game_over(self):
+		terminal.clear()
 		with open('GameOver.txt') as f:
 			splash_data = f.readlines()
 		width, height = TERMSIZE
@@ -589,9 +590,9 @@ class Display(object):
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
 
-		splashbox.addstr(y+5, 1, 'Press Ctrl+c to exit...')
-
+		splashbox.addstr(y+5, 1, 'Press any key to exit...')
 		splashbox.box()
+
 
 
 

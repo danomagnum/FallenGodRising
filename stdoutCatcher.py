@@ -1,5 +1,5 @@
 MAX_MESSAGES = 100
-SHOW_AT_ONCE = 6
+SHOW_AT_ONCE = 10
 
 class ioCatcher(object):
 	#replace sys.stdout with this class and you can just use print wherever you want.

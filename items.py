@@ -381,6 +381,13 @@ class OfWarrior(Gear):
 	def physical_strength(self, initial):
 		return initial * 1.1
 
+class OfSquire(Gear):
+	def config(self):
+		self.suffixes.append('of the squire')
+
+	def physical_strength(self, initial):
+		return initial * 0.9
+
 class OfRock(Gear):
 	def config(self):
 		self.suffixes.append('of the rock')
@@ -394,6 +401,12 @@ class OfWizard(Gear):
 
 	def special_strength(self, initial):
 		return initial * 1.1
+class OfApprentice(Gear):
+	def config(self):
+		self.suffixes.append('of the apprentice')
+
+	def special_strength(self, initial):
+		return initial * 0.9
 
 class OfDevotion(Gear):
 	def config(self):
@@ -408,6 +421,13 @@ class OfVigor(Gear):
 
 	def speed(self, initial):
 		return initial * 1.1
+
+class OfSloth(Gear):
+	def config(self):
+		self.suffixes.append('of sloth')
+
+	def speed(self, initial):
+		return initial * 0.9
 
 class OfRobustness(Gear):
 	def config(self):
@@ -429,6 +449,13 @@ class OfFalcon(Gear):
 
 	def accuracy(self, initial):
 		return initial * 1.1
+
+class OfBlind(Gear):
+	def config(self):
+		self.suffixes.append('of the blind')
+
+	def accuracy(self, initial):
+		return initial * 0.9
 
 class OfGambler(Gear):
 	def config(self):
@@ -497,7 +524,7 @@ class OfChaos(Gear):# this returns a "random" stat by actually returning the las
 		return initial
 
 
-special_gear_mods = [OfWarrior, OfRock, OfWizard, OfDevotion, OfVigor, OfRobustness, OfMystique, OfFalcon, OfGambler, OfSorrow, OfChaos]
+special_gear_mods = [OfWarrior, OfSquire, OfRock, OfWizard, OfApprentice, OfDevotion, OfVigor, OfSloth, OfRobustness, OfMystique, OfFalcon, OfBlind, OfGambler, OfSorrow, OfChaos]
 
 def add_item_mod(instance, mod):
 
@@ -544,6 +571,62 @@ class Sword(Gear):
 	def physical_strength(self, initial):
 		return initial + self.level
 
+class GreatSword(Gear):
+	def config(self):
+		self.name = 'GreatSword'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_HANDS
+	def physical_strength(self, initial):
+		return initial + 2 * self.level
+
+class Axe(Gear):
+	def config(self):
+		self.name = 'Axe'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_LEFT
+	def physical_strength(self, initial):
+		return initial + self.level
+	def speed(self, initial):
+		return initial - self.level / 2
+
+class BattleAxe(Gear):
+	def config(self):
+		self.name = 'BattleAxe'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_HANDS
+	def physical_strength(self, initial):
+		return initial + 2 * self.level
+	def speed(self, initial):
+		return initial - self.level / 2
+
+class Wand(Gear):
+	def config(self):
+		self.name = 'Wand'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_LEFT
+	def special_strength(self, initial):
+		return initial + self.level
+
+class Staff(Gear):
+	def config(self):
+		self.name = 'Staff'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_HANDS
+	def special_strength(self, initial):
+		return initial + 2*self.level
+
+
+
 class Helm(Gear):
 	def config(self):
 		self.name = 'Helm'
@@ -552,6 +635,16 @@ class Helm(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HEAD
 	def physical_defense(self, initial):
+		return initial + (self.level / 5.0)
+
+class Hood(Gear):
+	def config(self):
+		self.name = 'Hood'
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_HEAD
+	def special_defense(self, initial):
 		return initial + (self.level / 5.0)
 
 class Mail(Gear):
@@ -563,6 +656,28 @@ class Mail(Gear):
 		self.target_type = EQUIP_BODY
 	def physical_defense(self, initial):
 		return initial + (self.level / 4.0)
+
+class Robe(Gear):
+	def config(self):
+		self.name = 'Robe'
+		self.weight = 2
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_BODY
+	def special_defense(self, initial):
+		return initial - (self.level / 4.0)
+
+class BattleRobe(Gear):
+	def config(self):
+		self.name = 'Robe'
+		self.weight = 2
+		self.value = 300
+		self.rarity = 0.2
+		self.target_type = EQUIP_BODY
+	def special_defense(self, initial):
+		return initial - (self.level / 3.0)
+	def physical_defense(self, initial):
+		return initial - (self.level / 6.0)
 
 class Plate(Gear):
 	def config(self):
@@ -586,12 +701,20 @@ class Shield(Gear):
 	def physical_defense(self, initial):
 		return initial + (self.level / 5.0)
 
+class Amulet(Gear):
+	def config(self):
+		self.name = 'Amulet'
+		self.weight = 0
+		self.value = 500
+		self.rarity = 0.1
+		self.target_type = EQUIP_TOKEN
+
 gear_list = {EQUIP_HEAD:[Helm],
-             EQUIP_BODY: [Plate, Mail],
+             EQUIP_BODY: [Plate, Mail, Robe, BattleRobe],
 	     EQUIP_RIGHT: [Shield],
-	     EQUIP_LEFT: [Sword],
-	     EQUIP_HANDS: [],
-	     EQUIP_TOKEN: []}
+	     EQUIP_LEFT: [Sword, Wand, Axe],
+	     EQUIP_HANDS: [GreatSword, Staff, BattleAxe],
+	     EQUIP_TOKEN: [Amulet]}
 
 def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
 	all_gear = []

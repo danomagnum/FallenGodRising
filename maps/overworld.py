@@ -60,32 +60,6 @@ class RatPack(entities.RandWalker, entities.Battler):
 		self.char = 'R'
 		self.AI = battle.Random_AI
 
-class SeeTest(entities.BasicAI1):
-	def config(self):
-		self.name = 'See Test'
-		self.char = 'S'
-		self.standby_delay = 10
-
-
-#class KeyChest(entities.Treasure):
-	## example basic enemy that gives an item when killed
-	#def config(self):
-		#self.name = 'Key Chest'
-		#self.backpack.store(items.Key(self.game))
-		#self.char = 'k'
-
-#class SwordChest(entities.Treasure):
-	## example basic enemy that gives an item when killed
-	#def config(self):
-		#self.name = 'Sword Chest'
-		##self.backpack.store(items.FireSword(self.game))
-		#item = items.Sword(self.game)
-		#items.add_item_mod(item, random.choice(items.general_gear_mods))
-		#items.add_item_mod(item, random.choice(items.base_gear_mods))
-		#items.add_item_mod(item, random.choice(items.special_gear_mods))
-		#self.backpack.store(item)
-		#self.char = '/'
-
 class Door1(entities.Door):
 	pass
 class Door2(entities.Door):
@@ -140,12 +114,7 @@ class TestZone(zone.Zone):
 
 	def level_023(self):
 		pass # this is another way to do something special on specific levels.
-
-	#def exit(self, entity, direction):
-		#zone.Zone.exit(self, entity, direction)
-		#self.game.overworld_x = self.overworld_x
-		#self.game.overworld_y = self.overworld_y
-		
+	
 
 #####################
 # populate the zone with entities
@@ -224,20 +193,12 @@ def genzone(game):
 	zone.change_level(start)
 
 	# Populate zone with entities
-	#maptools.Positional_Map_Insert(zone, MyShop, 1)
-	#maptools.Random_Map_Insert(zone, RatPack)
-	#maptools.Random_Map_Insert(zone, RatPack)
+	maptools.Random_Map_Insert(zone, RatPack)
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Random_Map_Insert(zone, Rat)
-	#maptools.Random_Map_Insert(zone, PackRat)
-	#maptools.Random_Map_Insert(zone, PackRat)
-	#maptools.Random_Map_Insert(zone, SeeTest)
-	#maptools.Random_Map_Insert(zone, SwordChest)
-	#maptools.Random_Map_Insert(zone, Door1)
-	#maptools.Random_Map_Insert(zone, Door2)
-	#maptools.Stair_Handler(zone)
+	maptools.Stair_Handler(zone)
 
 	# add zone to game
 	game.add_zone(zone)
