@@ -156,7 +156,7 @@ class Move(utility.Serializable):
 					#apply the damage
 					target.hp -= int(damage)
 
-					print('{} used move {} on {} for {}'.format(user.name,self.name, targets[0].name, int(damage)))
+					print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
 
 				utility.call_all('effect', self, target)
 				#self.effect(target)
@@ -223,7 +223,7 @@ class Strike(Move):
 class Rush(Move):
 	def config(self):
 		self.name = 'Rush'
-		self.max_mp = 15.0
+		self.max_mp = 10.0
 		self.accuracy = 0.9
 		self.physical = (True, True)
 		self.default_target = MULTI_ENEMY
@@ -372,10 +372,26 @@ class Blast(Move):
 class Wave(Move):
 	def config(self):
 		self.name = 'Wave'
-		self.max_mp = 15.0
+		self.max_mp = 10.0
 		self.accuracy = 0.9
 		self.physical = (False, False)
 		self.default_target = MULTI_ENEMY
+
+class SelfDestruct(Move):
+	def config(self):
+		self.name = 'Self Destruct'
+		self.max_mp = 1.0
+		self.accuracy = 0.9
+		self.physical = (True, True)
+		self.power = 50
+		self.default_target = MULTI_ALL
+
+	def attack(self, user, targets): # do whatever the attack needs to do
+		Move.attack(self, user, targets)
+		print('{} was obliterated'.format(user.name))
+		user.hp = 0
+
+
 
 def mod_move(move, mod):
 	return utility.add_class(move, mod)

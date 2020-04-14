@@ -146,7 +146,7 @@ def Battle(game, user, enemy_ai):
 		user_is_attacking = False
 		user_target = enemy_ai.combatant
 		annex = None
-		print('vu: {}, ve: {}'.format(len(valid_users), len(valid_enemies)))
+		#print('vu: {}, ve: {}'.format(len(valid_users), len(valid_enemies)))
 		if len(valid_users) < 3 and len(valid_enemies) == 1:
 			choices = ['Attack', 'Change', 'Items', 'Run', 'Annex']
 		else:
@@ -199,6 +199,10 @@ def Battle(game, user, enemy_ai):
 						user_target = user.get_available()
 						user_is_attacking = True
 						selection_needed = False
+					elif target == main.MULTI_ALL:
+						user_target = user.get_available() + enemy_ai.get_available()
+						user_is_attacking = True
+						selection_needed = False
 			elif first_choice == 'Change':
 				if user.get_standby():
 					change_choice = game.display.battlemenu(user.get_standby())
@@ -218,12 +222,14 @@ def Battle(game, user, enemy_ai):
 					elif item_target_type == MULTI_ENEMY:
 						item_target = enemy_ai.combatants
 					else:
+						item_target = None
 						print("Can't Use that now")
 					if item_target is not None:
 						item_used = item_slot_used.take()
 						selection_needed = False
 						for t in item_target:
 							item_used.use(t)
+				game.display.show_messages()
 				game.display.refresh_combatant()
 			elif first_choice == 'Annex':
 				annex_tries += 1
