@@ -218,9 +218,9 @@ try:
 						item_target = None
 						if item_slot_used is not None:
 							item_target_type = item_slot_used.target_type
-							if item_target_type == SELF:
+							if item_target_type == ALLY:
 								item_target = [display.menu(game.player.combatants, cols=2)]
-							elif item_target_type == MULTI_SELF:
+							elif item_target_type == MULTI_ALLY:
 								item_target = game.player.combatants
 							elif item_target_type in EQUIPPABLE:
 								item_target = [display.menu(game.player.combatants, cols=2)]

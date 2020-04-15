@@ -164,17 +164,20 @@ def Battle(game, user, enemy_ai):
 				user_move = game.display.battlemenu(user.combatant.moves, cols=2, selected=user_move)
 				if user_move is not None:
 					target = user_move.default_target
-					if target == main.SELF:
-
+					if target == main.ALLY:
 						selected_target = game.display.battlemenu(user.get_available(), selected=user.combatant)
 						if selected_target is not None:
 							user_target = [selected_target]
 							user_is_attacking = True
 							selection_needed = False
-
-						#user_target = [user.combatant]
-						#user_is_attacking = True
-						#selection_needed = False
+					if target == main.SELF:
+						selected_target = user.combatant
+					elif target == main.ANY:
+						selected_target = game.display.battlemenu(user.get_available() + enemy_ai.get_available(), selected=user.combatant)
+						if selected_target is not None:
+							user_target = [selected_target]
+							user_is_attacking = True
+							selection_needed = False
 					elif target == main.ENEMY:
 						if len(enemy_ai.get_available()) > 1:
 							selected_target = game.display.battlemenu(enemy_ai.get_available(), selected=selected_target)
@@ -195,7 +198,7 @@ def Battle(game, user, enemy_ai):
 						user_target = enemy_ai.get_available()
 						user_is_attacking = True
 						selection_needed = False
-					elif target == main.MULTI_SELF:
+					elif target == main.MULTI_ALLY:
 						user_target = user.get_available()
 						user_is_attacking = True
 						selection_needed = False
@@ -213,11 +216,13 @@ def Battle(game, user, enemy_ai):
 				item_slot_used = game.display.battlemenu(user.backpack.show(), cols=2)
 				if item_slot_used is not None:
 					item_target_type = item_slot_used.target_type
-					if item_target_type == SELF:
+					if item_target_type == ALLY:
 						item_target = [game.display.battlemenu(user.combatants, cols=2)]
+					elif item_target_type == SELF:
+						item_target = user.combatant
 					elif item_target_type == ENEMY:
 						item_target = [game.display.battlemenu(enemy_ai.combatants, cols=2)]
-					elif item_target_type == MULTI_SELF:
+					elif item_target_type == MULTI_ALLY:
 						item_target = user.combatants
 					elif item_target_type == MULTI_ENEMY:
 						item_target = enemy_ai.combatants

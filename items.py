@@ -209,7 +209,7 @@ class Backpack():
 class Potion(Item):
 	def config(self):
 		self.name = 'Potion 1'
-		self.target_type = SELF
+		self.target_type = ALLY
 		self.weight = 1
 		self.value = 100
 		self.rarity = 0.5
@@ -222,7 +222,7 @@ class Potion(Item):
 class HealAll(Item):
 	def config(self):
 		self.name = 'Heal All'
-		self.target_type = MULTI_SELF
+		self.target_type = MULTI_ALLY
 		self.weight = 1
 		self.value = 500
 		self.rarity = 0.1
@@ -236,7 +236,7 @@ class HealAll(Item):
 class Booster(Item):
 	def config(self):
 		self.name = 'Booster'
-		self.target_type = SELF
+		self.target_type = ALLY
 		self.weight = 1
 		self.value = 300
 		self.rarity = 0.3
@@ -770,7 +770,7 @@ class MoveScroll(Item):
 		self.move = move(game)
 		name = 'Scroll of'
 		level = 1
-		Item.__init__(self, game, level,  name, target=SELF, uses=None)
+		Item.__init__(self, game, level,  name, target=ALLY, uses=None)
 		self.suffixes.append(self.move.name)
 
 	def use(self, target):

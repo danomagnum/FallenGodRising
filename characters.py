@@ -400,6 +400,7 @@ class Debug(Character):
 		              moves.Haste(self.game),
 		              moves.Wave(self.game),
 		              moves.SelfDestruct(self.game),
+		              moves.Transfuse(self.game),
 			      moves.mod_move(moves.Strike, moves.Piercing)(self.game),
 			      moves.mod_move(moves.Strike, moves.Poison)(self.game),
 			      moves.mod_move(moves.mod_move(moves.Strike, moves.Poison), moves.Piercing)(self.game)]
