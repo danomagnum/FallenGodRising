@@ -82,6 +82,7 @@ class Move(utility.Serializable):
 		for target in targets:
 			# figure out if the move hits.
 			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
+			damage = 0
 
 			if hit_chance * user.luck > random.random():
 
@@ -158,12 +159,14 @@ class Move(utility.Serializable):
 
 					print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
 
-				utility.call_all('effect', self, target)
+				utility.call_all('effect', self, user, target, damage)
 				#self.effect(target)
 			else:
 				print('miss!')
-	def effect(self, target):
+
+	def effect(self, user, target, damage=0):
 		pass
+
 	def __str__(self):
 		string = ''
 		string += self.name + ' '
@@ -235,9 +238,9 @@ class Buff(Move):
 		self.name = 'Buff'
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(1.15, PHYSTR))
 
 class Taunt(Move):
@@ -247,7 +250,7 @@ class Taunt(Move):
 		self.power = 0
 		self.default_target = ENEMY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(0.85, PHYSTR))
 
 
@@ -256,9 +259,9 @@ class Focus(Move):
 		self.name = 'Focus'
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(1.15, SPCSTR))
 
 class Guard(Move):
@@ -266,9 +269,9 @@ class Guard(Move):
 		self.name = 'Guard'
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(1.15, PHYDEF))
 		
 class Protect(Move):
@@ -276,9 +279,9 @@ class Protect(Move):
 		self.name = 'Protect'
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(1.15, SPCDEF))
 
 class Smoke(Move):
@@ -286,9 +289,9 @@ class Smoke(Move):
 		self.name = 'Smoke'
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(1.15, EVASION))
 
 class Haste(Move):
@@ -296,9 +299,9 @@ class Haste(Move):
 		self.name = 'Haste'
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(1.15, SPEED))
 
 stat_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]
@@ -308,14 +311,26 @@ class Heal(Move):
 		self.name = 'Heal'
 		self.accuracy = 0.9
 		self.power = -10
-		self.default_target = SELF
+		self.default_target = ALLY
 		self.physical = (False, False)
+
+class Transfuse(Move):
+	def config(self):
+		self.name = 'Transfuse'
+		self.accuracy = 0.9
+		self.power = -10
+		self.default_target = ALLY
+		self.physical = (False, False)
+
+	def effect(self, user, target, damage=0):
+		user.hp -= damage
+
 
 class Piercing(Move):
 	def config(self):
 		self.prefixes.append('Piercing')
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		randval = random.random()
 		# for starters, effect 20% of the time.  Once the move is more used, effect 95%
 		prob = utility.scale(self.uses, 0, 1000, 0.2, 0.95)
@@ -331,7 +346,7 @@ class Poison(Move):
 	def config(self):
 		self.prefixes.append('Poison')
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		randval = random.random()
 		# for starters, poison minorly 20% of the time.  Once the move is more used, poison minorly 95%
 		minor_range = utility.scale(self.uses, 0, 1000, 0.2, 0.95)
@@ -344,6 +359,18 @@ class Poison(Move):
 			print('{} has minor poisoning'.format(target.name))
 			target.status.append(effects.Poison_Minor())
 
+class Absorb(Move):
+	def config(self):
+		self.prefixes.append('Absorbing')
+
+	def effect(self, user, target, damage=0):
+		high = damage/1.5
+		low = damage/3
+		mode = max(min(high, damage * user.luck), low)
+		regain = random.triangular(low, high, mode)
+		user.hp += regain
+		print("{} gained {} hp".format(user.name, regain))
+		
 
 #self-target healing move
 class Cure(Move):
@@ -352,10 +379,10 @@ class Cure(Move):
 		self.max_mp = 2.0
 		self.accuracy = 1
 		self.power = 0
-		self.default_target = SELF
+		self.default_target = ALLY
 		self.physical = (False, False)
 
-	def effect(self, target):
+	def effect(self, user, target, damage=0):
 		if len(target.status) > 0:
 			to_remove = random.choice(target.status)
 			target.status.remove(to_remove)
@@ -410,4 +437,8 @@ typed_waves = gen_Typed_Moves(Wave)
 typed_strikes = gen_Typed_Moves(Strike)
 typed_rushes = gen_Typed_Moves(Rush)
 
-all_moves = typed_strikes + typed_blasts + typed_rushes + typed_waves + [Strike, Blast]
+heal_moves = [Heal, Transfuse, Cure,]
+effect_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]
+basic_moves = [Strike, Blast, Rush, Wave, SelfDestruct]
+
+all_moves = typed_strikes + typed_blasts + typed_rushes + typed_waves + basic_moves + heal_moves

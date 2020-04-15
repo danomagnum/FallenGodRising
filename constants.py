@@ -1,10 +1,12 @@
 TARGET_NONE = -1
 SELF = 0 # User
 ENEMY = 1 # Any enemy
-ACTIVE = 2 # currently active enemy
-MULTI_SELF = 3 # All friendly
-MULTI_ENEMY = 4 # all enemies
-MULTI_ALL = 5 # everyone
+ANY = 2 #Any active anemy or user
+ALLY = 3
+ACTIVE = 4 # currently active enemy
+MULTI_ALLY = 5 # All friendly
+MULTI_ENEMY = 6 # all enemies
+MULTI_ALL = 7 # everyone
 USER = SELF
 
 EQUIP_HEAD = 100
