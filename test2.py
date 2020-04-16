@@ -58,7 +58,7 @@ try:
 					player_choice = graphics_interface.menu(display.menubox, onlyfiles ,clear=False)
 					if player_choice is not None:
 						try:
-							f = open(join(SAVEDIR, player_choice), 'r')
+							f = open(join(SAVEDIR, player_choice), 'rb')
 							game = pickle.load(f)
 							display.game = game
 							game.display = display
@@ -148,6 +148,9 @@ try:
 								item_list = [items.gen_base_item(game) for x in range(4)]
 								item_list += [items.gen_gear(game, level=1) for x in range(4)]
 								item_list += [items.gen_movescroll(game) for x in range(4)]
+								amulet = items.Amulet(game)
+								amulet = items.add_item_mod(amulet, items.OfRegen)
+								item_list.append(amulet)
 
 								user = main.Entity('playercharacter', game, combatants=player_party, item_list=item_list, char='@',is_player=True)
 								#user.combatants = player_party

@@ -33,7 +33,7 @@ class Game(object):
 	def save(self, filename = 'last.sav'):
 		print('Saving...')
 		self.display.show_messages()
-		file = open(join(SAVEDIR, filename), 'w')
+		file = open(join(SAVEDIR, filename), 'wb')
 		pickle.dump(self, file)
 		file.close()
 

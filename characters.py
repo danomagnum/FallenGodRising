@@ -73,15 +73,25 @@ class Character(object):
 	def tick(self):
 		pass
 
-	def subtick(self):
+	def battletick(self):
 		for item in self.equipment.all_items():
 			item.subtick(self)
 			item.tick(self)
 		for move in self.moves:
 			#sys.stderr.write(str(move))
 			move.tick(self)
+
+	def subtick(self):
+		for item in self.equipment.all_items():
+			utility.call_all('tick', item, self)
+			utility.call_all('subtick', item, self)
+		for move in self.moves:
+			#sys.stderr.write(str(move))
+			utility.call_all('tick', move, self)
+			#move.tick(self)
 		for stat in self.status:
-			stat.tick(self)
+			utility.call_all('tick', stat, self)
+			#stat.tick(self)
 
 	def __str__(self):
 		return self.name

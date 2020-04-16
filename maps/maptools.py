@@ -484,7 +484,7 @@ def maze2(width, height, clear_percent=0.99):
 
 		for cell in testcells:
 			if cell is not None:
-				if cell.unvisited_neighbors > 0:
+				if cell.unvisited_neighbors() > 0:
 					# there are cells next to this one we can investigate
 					# decide how many exits to poke holes for
 					exits = random.choice([1,1,2,2,2,2,2])
