@@ -380,9 +380,14 @@ def Battle(game, user, enemy_ai):
 				winner = ENEMY
 				raise main.GameOver()
 
-		game.display.show_messages()
 		game.display.refresh_combatant()
-		#game.get_confirm()
+
+		for c in user.get_available():
+			c.battletick()
+		for c in enemy_ai.get_available():
+			c.battletick()
+
+		game.display.show_messages()
 
 		#time.sleep(1.0 / 60.0)
 

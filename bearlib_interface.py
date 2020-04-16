@@ -88,20 +88,21 @@ class Window(object):
 		return(self.height, self.width)
 
 	def erase(self):
-		terminal.clear_area(self.left, self.top, self.width, self.height)
+		terminal.clear_area(int(self.left), int(self.top), int(self.width), int(self.height))
+		#terminal.clear_area(self.left, self.top, self.width, self.height)
 
 	def box(self):
 		char = '█'
 		for x in range(self.width):
-			terminal.printf(self.left + x, self.top, BOXCHARS[1])
-			terminal.printf(self.left + x, self.top + self.height, BOXCHARS[7])
+			terminal.printf(int(self.left + x),int(self.top), BOXCHARS[1])
+			terminal.printf(int(self.left + x), int(self.top + self.height), BOXCHARS[7])
 		for y in range(self.height):
-			terminal.printf(self.left, self.top + y, BOXCHARS[3])
-			terminal.printf(self.left + self.width, self.top + y, BOXCHARS[5])
-		terminal.printf(self.left, self.top, BOXCHARS[0])
-		terminal.printf(self.left + self.width, self.top, BOXCHARS[2])
-		terminal.printf(self.left, self.top + self.height, BOXCHARS[6])
-		terminal.printf(self.left + self.width, self.top + self.height, BOXCHARS[8])
+			terminal.printf(int(self.left), int(self.top + y), BOXCHARS[3])
+			terminal.printf(int(self.left + self.width), int(self.top + y), BOXCHARS[5])
+		terminal.printf(int(self.left), int(self.top), BOXCHARS[0])
+		terminal.printf(int(self.left + self.width), int(self.top), BOXCHARS[2])
+		terminal.printf(int(self.left), int(self.top + self.height), BOXCHARS[6])
+		terminal.printf(int(self.left + self.width), int(self.top + self.height), BOXCHARS[8])
 
 	def addstr(self, yposition, xposition, string, color = None, font=None):
 		#TODO: add color/bold/etc
@@ -109,11 +110,11 @@ class Window(object):
 			color = terminal.color_from_name(color)
 			terminal.color(color)
 		if font is None:
-			terminal.printf(self.left + xposition, self.top + yposition,string)
+			terminal.printf(int(self.left + xposition), int(self.top + yposition),string)
 		else:
 			prefix = "[font=" + font + "]"
 			postfix = "[/font]"
-			terminal.printf(self.left + xposition, self.top + yposition,prefix + string + postfix)
+			terminal.printf(int(self.left + xposition), int(self.top + yposition),prefix + string + postfix)
 		color = terminal.color_from_name("white")
 		terminal.color(color)
 
@@ -123,11 +124,11 @@ class Window(object):
 			color = terminal.color_from_name(color)
 			terminal.color(color)
 		if font is None:
-			terminal.printf(self.left + x, self.top + y,char)
+			terminal.printf(int(self.left + x), int(self.top + y),char)
 		else:
 			prefix = "[font=" + font + "]"
 			postfix = "[/font]"
-			terminal.printf(self.left + x, self.top + y,prefix + char + postfix)
+			terminal.printf(int(self.left + x), int(self.top + y),prefix + char + postfix)
 
 		#terminal.put(self.left + x, self.top + y, char)
 		color = terminal.color_from_name("white")

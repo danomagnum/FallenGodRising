@@ -53,6 +53,7 @@ class Item(utility.Serializable):
 class Gear(Item):
 	def __init__(self, game=None, level=1, name=None, target=TARGET_NONE, uses=None):
 		self.status = []
+		self.owner = None
 		Item.__init__(self, game, level,  name, target=TARGET_NONE, uses=None)
 
 	def use(self, target):
@@ -61,6 +62,7 @@ class Gear(Item):
 			self.game.player.backpack.store(item)
 			print('{} unequipped {}'.format(target.name,item.name))
 		print('{} equipped {}'.format(target.name,self.name))
+		self.owner = target
 
 	def config(self):
 		pass
@@ -523,8 +525,18 @@ class OfChaos(Gear):# this returns a "random" stat by actually returning the las
 		initial, self.last_initial = self.last_initial, initial
 		return initial
 
+class OfRegen(Gear):
+	def config(self):
+		self.suffixes.append('of survival')
+	
+	def tick(self, wearer):
+		if random.randint(0,100) < 20:
+			if wearer.hp < wearer.max_hp:
+				wearer.hp += 1
+				print('{} Recovered from {}'.format(wearer.name, self.name))
 
-special_gear_mods = [OfWarrior, OfSquire, OfRock, OfWizard, OfApprentice, OfDevotion, OfVigor, OfSloth, OfRobustness, OfMystique, OfFalcon, OfBlind, OfGambler, OfSorrow, OfChaos]
+
+special_gear_mods = [OfWarrior, OfSquire, OfRock, OfWizard, OfApprentice, OfDevotion, OfVigor, OfSloth, OfRobustness, OfMystique, OfFalcon, OfBlind, OfGambler, OfSorrow, OfChaos, OfRegen]
 
 def add_item_mod(instance, mod):
 
