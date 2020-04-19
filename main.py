@@ -31,12 +31,23 @@ class Game(object):
 		self.fast_travel.add('Overworld')
 		self.debug_history = []
 
+		self.progress_max = 1
+		self.progress_value = 0
+
 	def save(self, filename = 'last.sav'):
 		print('Saving...')
 		self.display.show_messages()
 		file = open(join(SAVEDIR, filename), 'wb')
 		pickle.dump(self, file)
 		file.close()
+	
+	def progress_reset(self, max):
+		self.progress_max = max
+		self.progress_value = 0
+
+	def progress(self):
+		self.progress_value += 1
+		self.display.loading_progress(self.progress_value, self.progress_max)
 
 	def biome(self):
 		if self.zone == self.overworld:
@@ -89,7 +100,7 @@ class Game(object):
 			self.debug_history = self.debug_history[1:]
 		self.debug_history.append(command)
 		if '=' in command:
-			return exec(command)
+			exec(command)
 		else:
 			return eval(command)
 

@@ -34,6 +34,7 @@ import maps.wizardtower
 import maps.maptools
 import maps.buildings
 import maps.sewers
+import maps.town
 
 WRITEMAP = False
 
@@ -81,9 +82,17 @@ try:
 						display.show_messages()
 
 				elif player_choice == 'New Game':
-					print('Please Wait, Generating Overworld...')
+					zone_count = 16*16 + 10 + 20 + 5*5 + 3
+					print('Please Wait, Generating World. ({} tasks)'.format(zone_count))
 					display.show_messages()
+
+
 					game = main.Game()
+
+					display.game = game
+					game.display = display
+
+					game.progress_reset(zone_count)
 					zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
 
 					game.biome_map = biome_map
@@ -93,6 +102,10 @@ try:
 					zone2 = maps.goblincave.genzone(game)
 					zone3 = maps.wizardtower.genzone(game)
 					zone4 = maps.sewers.genzone(game)
+
+					maps.town.genzone(game)
+					maps.town.genzone(game)
+					maps.town.genzone(game)
 
 
 					if WRITEMAP:
@@ -109,8 +122,6 @@ try:
 
 						file.close()
 
-					display.game = game
-					game.display = display
 					display.change_zone(game.zone)
 					#zone.display = display
 

@@ -10,6 +10,7 @@ import utility
 SPLITS = 8
 
 def genzone(game):
+	game.progress()
 
 	# generate maps
 

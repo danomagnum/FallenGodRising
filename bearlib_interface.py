@@ -647,7 +647,11 @@ class Display(object):
 		splashbox.addstr(y+5, 1, 'Press any key to exit...')
 		splashbox.box()
 		terminal.refresh()
-
+	
+	def loading_progress(self, current, max):
+		bar = progress_bar(current, max, TERMSIZE[0] - 2)
+		terminal.printf(int(1),int(TERMSIZE[1] - 1), bar)
+		terminal.refresh()
 
 
 
