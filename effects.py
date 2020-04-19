@@ -11,7 +11,6 @@ class Status(object):
 			self.name = name
 		self.life = 0
 		self.max_life = 0
-		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 
 		self.config()
@@ -65,6 +64,8 @@ class Status(object):
 		return initial
 	def luck(self, initial):
 		return initial
+	def __str__(self):
+		return self.name
 
 class StatMod(Status):
 	def __init__(self, multiplier, stat, name=None):
@@ -72,7 +73,7 @@ class StatMod(Status):
 		self.stat = stat
 		Status.__init__(self, name=name)
 	def config(self):
-		self.name = '{} {}%'.format(self.stat,self.multiplier)
+		self.name = '{} {}%'.format(self.stat,int(self.multiplier * 100))
 
 	def physical_strength(self, initial):
 		if self.stat == PHYSTR:

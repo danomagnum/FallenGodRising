@@ -567,6 +567,9 @@ class Display(object):
 		else:
 			box.addstr(13, 1, "Hands: {}".format(combatant.equipment.Hands), None)
 
+		stat_list = ' '.join([str(stat) for stat in combatant.status])
+		box.addstr(15, 1, "Status: {}".format(stat_list), None)
+
 
 
 
@@ -613,6 +616,23 @@ class Display(object):
 	def update_generation_progress(self, percent):
 		splashbox = self.splashbox
 		splashbox.addstr(y+6, 1, str(percent))
+
+
+	def show_txt(self, filename):
+		terminal.clear()
+		with open(filename) as f:
+			txt_data = f.readlines()
+		width, height = TERMSIZE
+		txtbox = Window(height,width,0,0) 
+
+		for y, line in enumerate(txt_data):
+			txtbox.addstr(y + 1, 1, line)
+
+		txtbox.addstr(y+5, 1, 'Press any key to exit...')
+		txtbox.box()
+		terminal.refresh()
+		terminal.read()
+
 
 	def game_over(self):
 		terminal.clear()
