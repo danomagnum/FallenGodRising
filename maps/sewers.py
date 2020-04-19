@@ -39,7 +39,8 @@ def genzone(game):
 	for maze_y in maze:
 		x = 0
 		for maze_x in maze_y:
-			map = maptools.empty_zone(maze_x)
+			game.progress()
+			map = maptools.empty_zone( maze_x, maptools.MAPSIZE[0], maptools.MAPSIZE[1])
 			map = maptools.flatten(map)
 			map_list.append(map)
 

@@ -32,7 +32,8 @@ def genzone(game):
 	map_list = []
 
 	for l in range(10):
-		lev = maps.cellular.gen_cellular(gens=4)
+		game.progress()
+		lev = maps.cellular.gen_cellular(maptools.MAPSIZE[0], maptools.MAPSIZE[1], gens=4)
 		if l == 0:
 			#maptools.add_stairs(lev, down=False)
 			#maptools.add_stairs(lev, up=False)

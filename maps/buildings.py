@@ -294,7 +294,7 @@ def walls_from_points(pt_list):
 
 
 
-def building_gen(xmax = 30, ymax = 30, divisions=5, padding=0, drops=0,outside_door=False):
+def building_gen(xmax, ymax, divisions=5, padding=0, drops=0,outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
 
 	maxpad = padding + 1
@@ -332,7 +332,7 @@ def building_gen(xmax = 30, ymax = 30, divisions=5, padding=0, drops=0,outside_d
 
 	return map
 
-def building_octagon(xmax = 30, ymax = 30,divisions=5,padding=0, drops=0, outside_door=False):
+def building_octagon(xmax, ymax,divisions=5,padding=0, drops=0, outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
 
 	maxpad = padding + 1
@@ -400,7 +400,7 @@ def building_octagon(xmax = 30, ymax = 30,divisions=5,padding=0, drops=0, outsid
 
 	return map
 
-def building_twobox(xmax = 30, ymax = 30,padding=0,divisions=5,drops=0, outside_door=False):
+def building_twobox(xmax, ymax,padding=0,divisions=5,drops=0, outside_door=False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
 	maxpad = padding + 1
 	ystop = ymax - maxpad
@@ -448,7 +448,7 @@ def building_twobox(xmax = 30, ymax = 30,padding=0,divisions=5,drops=0, outside_
 	return map
 
 
-def building_tee(xmax = 30, ymax = 30,divisions=5, padding=0, drops=0, outside_door = False):
+def building_tee(xmax, ymax,divisions=5, padding=0, drops=0, outside_door = False):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
 
 	maxpad = padding + 1
