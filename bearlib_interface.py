@@ -247,7 +247,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 MAX_COMBATANTS = 3
 
 class Display(object):
-	def __init__(self, game=None, user=None, enemy=None):
+	def __init__(self, game=None, enemy=None):
 
 		XMAX, YMAX = TERMSIZE
 
@@ -272,7 +272,6 @@ class Display(object):
 		MENUWIDTH = 20
 		self.menubox = Window(MENUHEIGHT,MENUWIDTH,YMAX / 2 - MENUHEIGHT,XMAX / 2 - MENUWIDTH) 
 
-		self.user = user
 		self.enemy = enemy
 
 		self.mapbox = Window(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
@@ -308,9 +307,44 @@ class Display(object):
 		#self.storeinfobox
 		#self.charboxes
 
-	def text_entry(self):
+	def getch(self):
+		return terminal.read()
+
+	def text_entry(self, win=None, string=None, history=None):
 		#TODO: text entry box
-		return ""
+		if win is None:
+			win = Window(2, TERMSIZE[0], 1, 1)
+		if string is None:
+			string = ''
+		history_position = 0
+
+		while True:
+			win.erase()
+			win.box()
+			printstring = string.replace('[', '[[')
+			printstring = printstring.replace(']', ']]')
+			terminal.printf(int(2),int(2), printstring)
+			terminal.refresh()
+			key = terminal.read()
+			if key in [terminal.TK_RETURN]:
+				return string
+			elif key in [terminal.TK_ESCAPE, terminal.TK_CLOSE]:
+				return None
+			elif key in [terminal.TK_BACKSPACE]:
+				if len(string) > 0:
+					string = string[:-1]
+			elif terminal.check(terminal.TK_CHAR):
+				string += chr(terminal.state(terminal.TK_CHAR))
+			elif history is not None:
+				if terminal.check(terminal.TK_UP):
+					if history_position < len(history):
+						history_position += 1
+						string = history[-history_position]
+				elif terminal.check(terminal.TK_DOWN):
+					if history_position > 1:
+						history_position -= 1
+						string = history[-history_position]
+		self.refresh_full()
 
 	@property
 	def mode(self):
@@ -367,13 +401,11 @@ class Display(object):
 	##################################
 
 	def end_battle(self):
-		self.user = None
 		self.enemy = None
 		self.mode = MAP
 		self.clear()
 		self.refresh_full
-	def start_battle(self, user, enemy):
-		self.user = user
+	def start_battle(self, enemy):
 		self.enemy = enemy
 		self.mode = COMBAT
 		self.clear()
@@ -381,7 +413,7 @@ class Display(object):
 
 	def refresh_full_combat(self):
 		for i in range(MAX_COMBATANTS):
-			if i < len(self.user.combatants):
+			if i < len(self.game.player.combatants):
 				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
 			else:
 				self.charboxes[i].erase()
@@ -400,7 +432,7 @@ class Display(object):
 
 	def refresh_combatant(self):
 		for i in range(MAX_COMBATANTS):
-			if i < len(self.user.combatants):
+			if i < len(self.game.player.combatants):
 				self.show_combatant_stats(self.game.player.combatants[i], self.charboxes[i])
 			else:
 				self.charboxes[i].erase()
@@ -486,7 +518,7 @@ class Display(object):
 		for i in range(MAX_COMBATANTS):
 			if i < len(self.game.player.combatants):
 				#self.statbox[i].box()
-				self.show_combatant_stats(self.user.combatants[i],self.statbox[i])
+				self.show_combatant_stats(self.game.player.combatants[i],self.statbox[i])
 
 		self.msgbox.box()
 
@@ -564,6 +596,7 @@ class Display(object):
 		self.storeinfobox.addstr(3, 1, 'Desc: {}'.format(item.helptext()))
 
 	def splash_screen(self):
+		terminal.clear()
 		with open('Splash.txt') as f:
 			splash_data = f.readlines()
 		width, height = TERMSIZE
@@ -593,6 +626,7 @@ class Display(object):
 
 		splashbox.addstr(y+5, 1, 'Press any key to exit...')
 		splashbox.box()
+		terminal.refresh()
 
 
 

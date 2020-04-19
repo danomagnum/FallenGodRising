@@ -108,7 +108,7 @@ class Skiddish_AI(AI):
 
 
 def Battle(game, user, enemy_ai):
-	game.display.start_battle(user, enemy_ai)
+	game.display.start_battle(enemy_ai)
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
 	all_combatants = valid_users + valid_enemies

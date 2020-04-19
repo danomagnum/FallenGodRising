@@ -29,6 +29,7 @@ class Game(object):
 		self.game_vars = {}
 		self.fast_travel = set()
 		self.fast_travel.add('Overworld')
+		self.debug_history = []
 
 	def save(self, filename = 'last.sav'):
 		print('Saving...')
@@ -84,7 +85,13 @@ class Game(object):
 			return False
 	
 	def debug(self, command):
-		exec(command)
+		if len(self.debug_history) > 20:
+			self.debug_history = self.debug_history[1:]
+		self.debug_history.append(command)
+		if '=' in command:
+			return exec(command)
+		else:
+			return eval(command)
 
 class Equipment(object):
 	def __init__(self, game):
@@ -137,6 +144,27 @@ class Equipment(object):
 			self.Token = item
 
 		return return_items
+
+	def unequip_by_instance(self, item):
+		if item == self.Head:
+			self.Head = None
+			return item
+		elif item == self.Body:
+			self.Body = None
+			return item
+		elif item == self.Hands:
+			self.Hand = None
+			return item
+		elif item == self.Left:
+			self.Left = None
+			return item
+		elif item == self.Right:
+			self.Right = None
+			return item
+		elif item == self.Token:
+			self.Token = None
+			return item
+
 	def unequip(self, target):
 		return_items = []
 		if target == EQUIP_HEAD:
@@ -176,6 +204,7 @@ class Equipment(object):
 				return_items.append(self.Token)
 				self.Token = None
 		return return_items
+
 	def purge(self, target):
 		return_items = []
 		if self.Head is not None:
