@@ -36,6 +36,7 @@ class Move(utility.Serializable):
 		self.helptext = ''
 
 		utility.call_all('config', self)
+		utility.call_all('postconfig', self)
 
 		self.ticks = 0
 		self._mp = self.max_mp
@@ -65,6 +66,8 @@ class Move(utility.Serializable):
 		self._name = value
 
 	def config(self):
+		pass
+	def postconfig(self):
 		pass
 
 	def attack(self, user, targets): # do whatever the attack needs to do
@@ -160,7 +163,6 @@ class Move(utility.Serializable):
 					print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
 
 				utility.call_all('effect', self, user, target, damage)
-				#self.effect(target)
 			else:
 				print('miss!')
 
@@ -216,6 +218,7 @@ class DarkMove(Move):
 		self.prefixes.append('Dark')
 		if elements.Dark not in self.elements:
 			self.elements.append(elements.Dark)
+
 class Strike(Move):
 	def config(self):
 		self.name = 'Strike'
@@ -339,6 +342,34 @@ class Piercing(Move):
 		if randval < prob:
 			print('{} has been wounded'.format(target.name))
 			target.status.append(effects.Bleeding())
+
+
+class Multi(Move):
+	def config(self):
+		self.prefixes.append('Multi')
+		self.multimove_inprogress = False
+	def postconfig(self):
+		self.max_mp = self.max_mp / 2
+
+	def effect(self, user, target, damage=0):
+		randval = random.random()
+		multimove = False
+		initial_multimove = not self.multimove_inprogress
+		#75% chance to get 2 moves.
+		#6% chance to get 3.
+		#0.48% chance to get 4 and so on
+		if not self.multimove_inprogress:
+			if randval < 0.75:
+				multimove = True
+		elif randval < 0.08:
+			multimove = True
+
+		if multimove:
+			self.multimove_inprogress = True
+			self.attack(user, [target])
+			self.mp += 1
+			if initial_multimove:
+				self.multimove_inprogress = False
 
 
 #enemy-target move with poison effect

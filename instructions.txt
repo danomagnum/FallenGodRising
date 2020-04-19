@@ -1,0 +1,27 @@
+Overworld:
+- Press M to open the menu
+- WASD or Arrow keys move
+- You can attack enemies, pickup items, and open doors by running into them
+
+Items:
+- Each character can be equipped with items you find around.
+- Use the 'Items' menu to equip and use items
+- Use the 'Battlers' menu to unequip items
+- You can use healing items any time (overworld or battle)
+- Equipment can only be changed in the overworld
+- Move scrolls can only be changed in the overworld
+
+Battle:
+- One combatant is active at a time - this is indicated by a highlighted name
+- Only the active combatant gets to attack, but you can change who is currently active
+without missing a turn.
+- When an enemy is defeated, all combatants get exp. but the active combatant gets a
+slightly higher percentage
+- Some moves attack a single enemy (blast, strike) Some attack multiple (wave, rush)
+- Some moves have a chance at applying status conditions.  Most of these end after the
+battle but not all.
+- You can run from a battle but the enemy will get a free strike on you.
+- Every move has its own MP pool.  When this is drained, you can still try to use the move
+but there is only a small chance you will be successfull
+- The more you use a move, the stronger it becomes
+- On levelup some HP and MP is restored along with a general stat boost
