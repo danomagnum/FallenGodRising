@@ -41,13 +41,14 @@ try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		display = graphics_interface.Display()
+		while True:
 
-		display.splash_screen()
-		print('Version: ' + version)
-		display.show_messages()
+			display.mode = MAP
+			display.splash_screen()
+			print('Version: ' + version)
+			display.show_messages()
 
-		loop = True
-		while loop:
+
 			player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Quit'] ,clear=False)
 			if player_choice == 'Quit':
 				graphics_interface.shutdown()
@@ -64,7 +65,7 @@ try:
 							game.display = display
 							display.change_zone(game.zone)
 							f.close()
-							break
+							#break
 						except Exception as e:
 							traceback.print_exc(file=sys.stderr)
 							print("Error loading" + player_choice)
@@ -163,125 +164,135 @@ try:
 					else:
 						if i > 0:
 							i -= 1
-				break
+				#break
 
 
-		##########################
-		# Main Game Loop
-		##########################
-		display.mode = graphics_interface.MAP
-		display.refresh_full()
-		loop = True
-		while loop:
-			key = display.mapbox.getch()
 			##########################
-			# Player movement
+			# Main Game Loop
 			##########################
-
-			try:
-				if key in keys.UP:
-					game.player.move(game.zone, UP)
-				elif key in keys.DOWN:
-					game.player.move(game.zone, DOWN)
-				elif key in keys.LEFT:
-					game.player.move(game.zone, LEFT)
-				elif key in keys.RIGHT:
-					game.player.move(game.zone, RIGHT)
-
+			display.mode = graphics_interface.MAP
+			display.refresh_full()
+			gameloop = True
+			while gameloop:
+				key = display.mapbox.getch()
 				##########################
-				# Player menu
+				# Player movement
 				##########################
-				elif key in keys.MENUKEY:
-					#Menu
-					choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items', 'Quit'], 4)
-					if choice == 'Battlers':
-						#display.mode=graphics_interface.STATS
-						#display.refresh_full()
-						#key = display.mapbox.getch()
-						#display.mode=graphics_interface.MAP
-						#display.refresh_full()
-						pass
-					elif choice == 'Quests':
-						pass
-					elif choice == 'Fast Travel':
-						if game.zone.check_clear():
-							selected_zone = display.menu(list(game.fast_travel), cols=2)
-							if selected_zone != game.zone.name:
-								print('Fast Traveling To {}'.format(selected_zone))
-								z = game.zones[selected_zone]
-								newx, newy = z.find_empty_position()
-								if selected_zone is not None:
-									game.change_zone(selected_zone, newx, newy)
+
+				try:
+					if key in keys.UP:
+						game.player.move(game.zone, UP)
+					elif key in keys.DOWN:
+						game.player.move(game.zone, DOWN)
+					elif key in keys.LEFT:
+						game.player.move(game.zone, LEFT)
+					elif key in keys.RIGHT:
+						game.player.move(game.zone, RIGHT)
+
+					##########################
+					# Player menu
+					##########################
+					elif key in keys.MENUKEY:
+						#Menu
+						choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items', 'Quit'], 4)
+						if choice == 'Battlers':
+							battler = display.menu(game.player.combatants)
+							if battler is not None:
+								item_target = display.menu(battler.equipment.all_items())
+								if item_target is not None:
+									unequipped = battler.equipment.unequip_by_instance(item_target)
+									if unequipped is not None:
+										game.player.backpack.store(unequipped)
+						elif choice == 'Quests':
+							pass
+						elif choice == 'Fast Travel':
+							if game.zone.check_clear():
+								selected_zone = display.menu(list(game.fast_travel), cols=2)
+								if selected_zone != game.zone.name:
+									print('Fast Traveling To {}'.format(selected_zone))
+									z = game.zones[selected_zone]
+									newx, newy = z.find_empty_position()
+									if selected_zone is not None:
+										game.change_zone(selected_zone, newx, newy)
+								else:
+									print('Already in zone {}'.format(selected_zone))
 							else:
-								print('Already in zone {}'.format(selected_zone))
-						else:
-							print('Cannot Fast Travel Until Zone Is Clear')
-					elif choice == 'Items':
-						item_slot_used = display.menu(game.player.backpack.show(), cols=2)
-						item_target = None
-						if item_slot_used is not None:
-							item_target_type = item_slot_used.target_type
-							if item_target_type == ALLY:
-								item_target = [display.menu(game.player.combatants, cols=2)]
-							elif item_target_type == MULTI_ALLY:
-								item_target = game.player.combatants
-							elif item_target_type in EQUIPPABLE:
-								item_target = [display.menu(game.player.combatants, cols=2)]
-							else:
-								print("Can't Use that now")
-							if item_target[0] is not None:
-								item_used = item_slot_used.take()
-								selection_needed = False
-								for t in item_target:
-									if t is not None:
-										item_used.use(t)
-					elif choice == 'Quit':
+								print('Cannot Fast Travel Until Zone Is Clear')
+						elif choice == 'Items':
+							item_slot_used = display.menu(game.player.backpack.show(), cols=2)
+							item_target = None
+							if item_slot_used is not None:
+								item_target_type = item_slot_used.target_type
+								if item_target_type == ALLY:
+									item_target = [display.menu(game.player.combatants, cols=2)]
+								elif item_target_type == MULTI_ALLY:
+									item_target = game.player.combatants
+								elif item_target_type in EQUIPPABLE:
+									item_target = [display.menu(game.player.combatants, cols=2)]
+								else:
+									print("Can't Use that now")
+								if item_target[0] is not None:
+									item_used = item_slot_used.take()
+									selection_needed = False
+									for t in item_target:
+										if t is not None:
+											item_used.use(t)
+						elif choice == 'Quit':
+							game.save()
+							break
+
+						elif choice == 'Save':
+							game.save()
+
+					elif key in keys.DEBUG_K:
+						#up
+						game.zone.exit(game.player, UP)
+					elif key in keys.DEBUG_J:
+						game.zone.exit(game.player, DOWN)
+						#down
+					elif key in keys.DEBUG_H:
+						game.zone.exit(game.player, LEFT)
+						#left
+					elif key in keys.DEBUG_L:
+						game.zone.exit(game.player, RIGHT)
+						#right
+					##########################
+					# Player did nothing
+					##########################
+					elif key in keys.DEBUGKEY:
+						#print(game.display.mapbox.getmaxyx())
+						#game.player.combatants[0].level += 1
+						while True:
+							input_command = display.text_entry(history=game.debug_history)
+							if input_command == '':
+								break
+							try:
+								output = game.debug(input_command)
+								if output is not None:
+									print(output)
+							except Exception as e:
+								#print(e.message)
+								print(sys.exc_info()[0])
+							display.show_messages()
+					elif key in keys.EXIT:
+
 						game.save()
+						time.sleep(1)
 						break
 
-					elif choice == 'Save':
-						game.save()
+					game.zone.tick()
 
-				elif key in keys.DEBUG_K:
-					#up
-					game.zone.exit(game.player, UP)
-				elif key in keys.DEBUG_J:
-					game.zone.exit(game.player, DOWN)
-					#down
-				elif key in keys.DEBUG_H:
-					game.zone.exit(game.player, LEFT)
-					#left
-				elif key in keys.DEBUG_L:
-					game.zone.exit(game.player, RIGHT)
-					#right
-				##########################
-				# Player did nothing
-				##########################
-				elif key == ord('`'):
-					#print(game.display.mapbox.getmaxyx())
-					#game.player.combatants[0].level += 1
-					console = display.text_entry()
-					try:
-						game.debug(console)
-					except Exception as e:
-						print(e.message)
-				elif key in keys.EXIT:
-
-					game.save()
-					time.sleep(1)
-					break
-
-				game.zone.tick()
-
-			except main.GameOver as e:
+				except main.GameOver as e:
+					display.show_messages()
+					#terminal.read()
+					display.getch()
+					display.game_over()
+					#TODO: delete save file
+					#terminal.read()
+					display.getch()
+					gameloop = False
 				display.show_messages()
-				terminal.read()
-				display.game_over()
-				#TODO: delete save file
-				terminal.read()
-				break
-			display.show_messages()
-			display.refresh_full()
+				display.refresh_full()
 
 except Exception as e:
 	graphics_interface.shutdown()
