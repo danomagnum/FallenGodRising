@@ -10,6 +10,8 @@ import os
 import sys
 ZONENAME = 'Overworld'
 
+USE_SYMBOLS = False
+
 #####################
 # The characters subclasses are how you create enemies.
 # You can used "canned" ones or create your own.
@@ -128,6 +130,7 @@ def genzone(game):
 		maps.append(maptools.readmap(file))
 
 	
+	#this defines the biomes
 	biome_map = perlin.gen_overworld(16, 16)
 	
 	maps = []
@@ -140,7 +143,8 @@ def genzone(game):
 	for maze_y in maze:
 		x = 0
 		for maze_x in maze_y:
-			map = maptools.drunkard_walk()
+			game.progress()
+			map = maptools.drunkard_walk(maptools.MAPSIZE[0], maptools.MAPSIZE[1])
 			#up and down are swapped because of the zone map list goes from bottom to top but the 
 			#maze y order is top to bottom
 			entries = 0
@@ -158,7 +162,7 @@ def genzone(game):
 				entries += 1
 			maptools.noise_prune(map)
 			biome = biome_map[y][x]
-			if sys.version_info.major >= 3:
+			if (sys.version_info.major >= 3) and USE_SYMBOLS:
 				if biome == 0:
 					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Sea
 				elif biome == 1:

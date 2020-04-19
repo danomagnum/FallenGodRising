@@ -5,6 +5,9 @@ import entities
 import random
 from constants import *
 
+#MAPSIZE = [48, 36]
+MAPSIZE = [60, 36]
+
 def Random_Map_Insert(zone, entity, level=None):
 	try:
 		entity = entity(zone.game)
@@ -147,7 +150,7 @@ def readmap(filename):
 def debug_map():
 	showmap(mt.map_gen(70, 40, 20, 8))
 
-def drunkard_walk(xmax = 30, ymax = 30, percentage = 0.3):
+def drunkard_walk(xmax, ymax, percentage = 0.3):
 	map = [['#' for x in range(xmax)] for y in range(ymax)]
 	x, y = (int(xmax / 2), int(ymax/2))
 	remove_target = percentage * xmax * ymax
@@ -742,7 +745,7 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 	#print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
 
 
-def empty_zone(cell, xmax=30, ymax=30):
+def empty_zone(cell, xmax, ymax):
 	map = [['.' for x in range(xmax + 1)] for y in range(ymax + 1)]
 	if cell.down:
 		for x, c in enumerate(map[0]):

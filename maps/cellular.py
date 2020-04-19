@@ -5,7 +5,7 @@ DOWN = 2
 LEFT = 3
 RIGHT = 4
 
-def gen_cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = None):
+def gen_cellular(xmax, ymax, percentage = 0.3, gens = 5, entries = None):
 	map = [['#' for x in range(xmax)] for y in range(ymax)]
 	if entries is None:
 		entries = []
@@ -19,7 +19,7 @@ def gen_cellular(xmax = 30, ymax = 30, percentage = 0.3, gens = 5, entries = Non
 	for r in range(removals):
 
 		xsel = random.choice(range(xmax))
-		ysel = random.choice(range(xmax))
+		ysel = random.choice(range(ymax))
 
 		map[ysel][xsel] = '.'
 
