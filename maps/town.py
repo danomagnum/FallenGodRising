@@ -9,7 +9,25 @@ import utility
 
 SPLITS = 8
 
-def genzone(game):
+def town_entry(zone):
+	print('Welcome To Town')
+	if zone.level_visits[zone.level] == 1:
+		print('First Visit')
+		#first visit to town. populate NPCs
+		e = entities.Shop(zone.game)
+		gen_level = zone.game.player.level
+		e.backpack.gold = 100
+
+		e.backpack.store(items.gen_gear(zone.game, gen_level))
+		e.backpack.store(items.gen_movescroll(zone.game))
+		e.backpack.store(items.gen_base_item(zone.game))
+		for potion in range(10):
+			e.backpack.store(items.Potion(zone.game))
+			e.backpack.store(items.HealAll(zone.game))
+
+		maptools.Random_Map_Insert(zone, e)
+
+def genzone(game, townname):
 	game.progress()
 
 	# generate maps
@@ -44,4 +62,8 @@ def genzone(game):
 	
 
 	maptools.Door_Handler_onelevel(game.overworld, ov_level)
+	game.overworld.fast_travel_options[ov_level] = main.FastTravel(townname, ov_level)
+
+			
+	game.overworld.__dict__['level_{:03}'.format(ov_level)] = town_entry
 

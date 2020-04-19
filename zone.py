@@ -79,8 +79,9 @@ class Zone(object):
 		self.grid_width = 1
 		self.level = 0
 		self.map = self.maps[self.level]
-		#self.overworld_x = 0
-		#self.overworld_y = 0
+
+		self.fast_travel_found = set()
+		self.fast_travel_options = {}
 
 		#self.player = None
 		self.level_entities = [[] for level in range(self.levels)]
@@ -143,12 +144,18 @@ class Zone(object):
 		if self.game.overworld == self:
 			self.game.overworld_y = int(newlevel % self.grid_width)
 			self.game.overworld_x = int(newlevel / self.grid_width)
-
 		if entity.is_player:
 			self.change_level(newlevel)
 		else:
 			self.remove_entity(entity)
 			self.add_entity(entity, newlevel)
+		self.check_fasttravel()
+
+	def check_fasttravel(self):
+		if self.level in self.fast_travel_options:
+			self.fast_travel_found.add(self.fast_travel_options[self.level])
+			print('Found new fast travel location: {}'.format(self.fast_travel_options[self.level].name))
+			del(self.fast_travel_options[self.level])
 		
 
 	def change_level(self, level):
@@ -173,7 +180,6 @@ class Zone(object):
 			#self.width = len(self.map[0])
 			self.level_visits[level] += 1
 
-			self.level_populate(level, self.level_visits[level])
 
 			level_method = 'level_{:03}'.format(level)
 			try:
@@ -182,7 +188,9 @@ class Zone(object):
 				method = None
 
 			if method is not None:
-				method()
+				method(self)
+			else:
+				self.level_populate(level, self.level_visits[level])
 
 
 			self.width = 0
@@ -190,6 +198,8 @@ class Zone(object):
 				w = len(line)
 				self.width = max(w, self.width)
 			self.height = len(self.map)
+
+		self.check_fasttravel()
 
 	def level_populate(self, level, visit_no):
 		pass
