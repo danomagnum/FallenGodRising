@@ -46,7 +46,7 @@ class Shop(Entity):
 				else:
 					shopping = False
 
-			zone.display.mode = zonemode
+			self.game.display.mode = zonemode
 
 
 class Door(Entity):
@@ -211,4 +211,5 @@ class ZoneWarp(Entity):
 		if entity.is_player:
 			if self.new_zone is not None:
 				self.game.change_zone(self.new_zone, self.new_x, self.new_y, self.new_level)
+				self.game.zone.check_fasttravel()
 

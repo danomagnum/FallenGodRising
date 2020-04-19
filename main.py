@@ -14,6 +14,13 @@ from os.path import isfile, join
 class GameOver(Exception):
 	pass
 
+class FastTravel(object):
+	def __init__(self, name=None, level=None):
+		self.name = name
+		self.level = level
+	def __str__(self):
+		return self.name
+
 class Game(object):
 	def __init__(self):
 		self.overworld = None
@@ -27,13 +34,13 @@ class Game(object):
 		self.display = None
 		self.player = None
 		self.game_vars = {}
-		self.fast_travel = set()
-		self.fast_travel.add('Overworld')
 		self.debug_history = []
 
 		self.progress_max = 1
 		self.progress_value = 0
 
+	def fast_travel(self):
+		return self.zone.fast_travel_found
 	def save(self, filename = 'last.sav'):
 		print('Saving...')
 		self.display.show_messages()
@@ -76,7 +83,7 @@ class Game(object):
 			if newlevel is not None:
 				self.zone.change_level(newlevel)
 			self.display.change_zone(self.zone)
-			self.fast_travel.add(zonename)
+
 			print('Entering Zone {}'.format(zonename))
 
 		else:
@@ -354,7 +361,10 @@ class Entity(object):
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
 		enemy = random.choice(enemy_ai.combatants)
-		target = [self.combatant, enemy][move.default_target]
+		if move.default_target == ENEMY:
+			target = enemy
+		else:
+			target = self.combatant
 		return [move, [target]]
 	
 	def purge_dead(self):

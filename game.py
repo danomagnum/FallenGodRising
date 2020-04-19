@@ -103,9 +103,9 @@ try:
 					zone3 = maps.wizardtower.genzone(game)
 					zone4 = maps.sewers.genzone(game)
 
-					maps.town.genzone(game)
-					maps.town.genzone(game)
-					maps.town.genzone(game)
+					maps.town.genzone(game, 'Town1')
+					maps.town.genzone(game, 'Town2')
+					maps.town.genzone(game, 'Town3')
 
 
 					if WRITEMAP:
@@ -225,15 +225,17 @@ try:
 							pass
 						elif choice == 'Fast Travel':
 							if game.zone.check_clear():
-								selected_zone = display.menu(list(game.fast_travel), cols=2)
-								if selected_zone != game.zone.name:
-									print('Fast Traveling To {}'.format(selected_zone))
-									z = game.zones[selected_zone]
-									newx, newy = z.find_empty_position()
-									if selected_zone is not None:
-										game.change_zone(selected_zone, newx, newy)
-								else:
-									print('Already in zone {}'.format(selected_zone))
+								sel_ft = display.menu(list(game.fast_travel()), cols=2)
+								if sel_ft is not None:
+									if sel_ft.level != game.zone.level:
+										print('Fast Traveling To {}'.format(sel_ft))
+										game.zone.change_level(sel_ft.level)
+										x, y = game.zone.find_empty_position()
+										game.player.x = x
+										game.player.y = y
+
+									else:
+										print('Already at {}'.format(sel_ft))
 							else:
 								print('Cannot Fast Travel Until Zone Is Clear')
 						elif choice == 'Items':
@@ -296,7 +298,8 @@ try:
 
 						game.save()
 						time.sleep(1)
-						break
+						graphics_interface.shutdown()
+						sys.exit(0)
 
 					game.zone.tick()
 

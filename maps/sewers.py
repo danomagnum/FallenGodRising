@@ -58,4 +58,6 @@ def genzone(game):
 
 	maptools.overworld_inject(game, zone, newchar='s')
 
+	zone.fast_travel_options[0] = main.FastTravel('Entrance', 0)
+
 	return zone

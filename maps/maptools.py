@@ -742,7 +742,7 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 
 	Door_Handler_onelevel(game.overworld, ov_level)
 
-	#print('{}:{} added to overworld at ({},{}) / {}'.format(zone.name, zone.level, ov_y, ov_x, ov_level))
+	game.overworld.fast_travel_options[ov_level] = main.FastTravel(zone.name, level=ov_level)
 
 
 def empty_zone(cell, xmax, ymax):

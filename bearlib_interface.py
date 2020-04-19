@@ -240,7 +240,10 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 		pass
 	except:
 		pass # xterm does not like this
-	return options[selected]
+	if selected < len(options):
+		return options[selected]
+	else:
+		return None
 
 
 

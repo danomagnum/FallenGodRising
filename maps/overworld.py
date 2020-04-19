@@ -114,9 +114,7 @@ class TestZone(zone.Zone):
 			for m in range(mob_count):
 				maptools.Random_Map_Insert(self, Rat)
 
-	def level_023(self):
-		pass # this is another way to do something special on specific levels.
-	
+
 
 #####################
 # populate the zone with entities
