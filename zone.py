@@ -181,6 +181,8 @@ class Zone(object):
 			self.level_visits[level] += 1
 
 
+			#you can bind a property "Level_001" to a function that takes a zone as a parameter
+			#to get custom level events / population per level
 			level_method = 'level_{:03}'.format(level)
 			try:
 				method = getattr(self, level_method)
@@ -188,7 +190,12 @@ class Zone(object):
 				method = None
 
 			if method is not None:
-				method(self)
+				try: # if the method was outside of a class, this works
+					method(self)
+				except:
+					#if it was in a class to start with this works
+					method()
+
 			else:
 				self.level_populate(level, self.level_visits[level])
 
