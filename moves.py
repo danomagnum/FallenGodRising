@@ -86,9 +86,9 @@ class Move(utility.Serializable):
 			# figure out if the move hits.
 			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
 			damage = 0
+			randval = random.random()
 
-			if hit_chance * user.luck > random.random():
-
+			if hit_chance * user.luck > randval:
 
 				# calculate whether it is a critical hit:
 				crit_metric = CRIT_RATE * (user.luck / target.luck) * (user.speed / target.speed)
@@ -164,7 +164,7 @@ class Move(utility.Serializable):
 
 				utility.call_all('effect', self, user, target, damage)
 			else:
-				print('miss!')
+				print('{} missed with move {} against {}'.format(user.name, self.name, target.name))
 
 	def effect(self, user, target, damage=0):
 		pass
