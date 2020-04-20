@@ -67,7 +67,15 @@ class Gear(Item):
 	def config(self):
 		pass
 
+	@property
+	def power(self):
+		return self.level + 5
+
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
+		return initial
+	def evasion(self, initial):
+		return initial
+	def accuracy(self, initial):
 		return initial
 	def physical_defense(self, initial):
 		return initial
@@ -581,7 +589,7 @@ class Sword(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
 	def physical_strength(self, initial):
-		return initial + self.level
+		return initial + (self.power * self.power)
 
 class GreatSword(Gear):
 	def config(self):
@@ -591,7 +599,7 @@ class GreatSword(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
 	def physical_strength(self, initial):
-		return initial + 2 * self.level
+		return initial + (2 * self.power * self.power)
 
 class Axe(Gear):
 	def config(self):
@@ -601,9 +609,9 @@ class Axe(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
 	def physical_strength(self, initial):
-		return initial + self.level
+		return initial + (self.power * self.power)
 	def speed(self, initial):
-		return initial - self.level / 2
+		return initial - (self.power * self.power) / 2
 
 class BattleAxe(Gear):
 	def config(self):
@@ -613,9 +621,9 @@ class BattleAxe(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
 	def physical_strength(self, initial):
-		return initial + 2 * self.level
+		return initial + 2 * self.power * self.power
 	def speed(self, initial):
-		return initial - self.level / 2
+		return initial - (self.power * self.power) / 2
 
 class Wand(Gear):
 	def config(self):
@@ -625,7 +633,7 @@ class Wand(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
 	def special_strength(self, initial):
-		return initial + self.level
+		return initial + self.power * self.power
 
 class Staff(Gear):
 	def config(self):
@@ -635,7 +643,7 @@ class Staff(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
 	def special_strength(self, initial):
-		return initial + 2*self.level
+		return initial + 2*self.power * self.power
 
 
 
@@ -647,7 +655,7 @@ class Helm(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HEAD
 	def physical_defense(self, initial):
-		return initial + (self.level / 5.0)
+		return initial + (self.power * self.power / 5.0)
 
 class Hood(Gear):
 	def config(self):
@@ -657,7 +665,7 @@ class Hood(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HEAD
 	def special_defense(self, initial):
-		return initial + (self.level / 5.0)
+		return initial + (self.power * self.power / 5.0)
 
 class Mail(Gear):
 	def config(self):
@@ -667,7 +675,7 @@ class Mail(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 	def physical_defense(self, initial):
-		return initial + (self.level / 4.0)
+		return initial + (self.power * self.power / 2.0)
 
 class Robe(Gear):
 	def config(self):
@@ -677,7 +685,7 @@ class Robe(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 	def special_defense(self, initial):
-		return initial - (self.level / 4.0)
+		return initial - (self.power * self.power / 2.0)
 
 class BattleRobe(Gear):
 	def config(self):
@@ -687,9 +695,9 @@ class BattleRobe(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 	def special_defense(self, initial):
-		return initial - (self.level / 3.0)
+		return initial - (self.power * self.power)
 	def physical_defense(self, initial):
-		return initial - (self.level / 6.0)
+		return initial - (self.power * self.power / 3.0)
 
 class Plate(Gear):
 	def config(self):
@@ -699,9 +707,9 @@ class Plate(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 	def physical_defense(self, initial):
-		return initial + (self.level / 3.0)
+		return initial + (self.power * self.power)
 	def special_defense(self, initial):
-		return initial - (self.level / 6.0)
+		return initial - (self.power * self.power / 3.0)
 
 class Shield(Gear):
 	def config(self):
@@ -710,8 +718,8 @@ class Shield(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_RIGHT
-	def physical_defense(self, initial):
-		return initial + (self.level / 5.0)
+	def evasion(self, initial):
+		return initial + (self.power * self.power / 5.0)
 
 class Amulet(Gear):
 	def config(self):

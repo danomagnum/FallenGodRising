@@ -221,6 +221,7 @@ try:
 									unequipped = battler.equipment.unequip_by_instance(item_target)
 									if unequipped is not None:
 										game.player.backpack.store(unequipped)
+										print('{} unequipped {}'.format(battler, unequipped))
 						elif choice == 'Quests':
 							pass
 						elif choice == 'Fast Travel':

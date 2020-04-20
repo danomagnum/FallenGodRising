@@ -6,6 +6,7 @@ import elements
 import battle
 import keys
 import pickle
+import time
 from constants import *
 from os import listdir
 from os.path import isfile, join
@@ -47,6 +48,7 @@ class Game(object):
 		file = open(join(SAVEDIR, filename), 'wb')
 		pickle.dump(self, file)
 		file.close()
+		time.sleep(1)
 	
 	def progress_reset(self, max):
 		self.progress_max = max
@@ -262,53 +264,131 @@ class Equipment(object):
 		return [item for item in items if item is not None]
 
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'physical_strength', item)
+			sqr = utility.call_all_recursive(sqr, 'physical_strength', item)
+
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
+
 		return initial
 
-	def physical_defense(self, initial):
+	def evasion(self, initial): # passive stat boosts take effect on these routines
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'physical_defense', item)
+			sqr = utility.call_all_recursive(sqr, 'evasion', item)
+
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
+		return initial
+
+	def accuracy(self, initial): # passive stat boosts take effect on these routines
+		sqr = initial * initial
+		for item in self.all_items():
+			sqr = utility.call_all_recursive(sqr, 'accuracy', item)
+
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
+		return initial
+
+
+
+
+
+	def physical_defense(self, initial):
+		sqr = initial * initial
+		for item in self.all_items():
+			sqr = utility.call_all_recursive(sqr, 'physical_defense', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def special_strength(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'special_strength', item)
+			sqr = utility.call_all_recursive(sqr, 'special_strength', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def special_defense(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'special_defense', item)
+			sqr = utility.call_all_recursive(sqr, 'special_defense', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 		
 	def speed(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'speed', item)
+			sqr = utility.call_all_recursive(sqr, 'speed', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def hp(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'hp', item)
+			sqr = utility.call_all_recursive(sqr, 'hp', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def max_hp(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'max_hp', item)
+			sqr = utility.call_all_recursive(sqr, 'max_hp', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def evasion(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'evasion', item)
+			sqr = utility.call_all_recursive(sqr, 'evasion', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def accuracy(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'accuracy', item)
+			sqr = utility.call_all_recursive(sqr, 'accuracy', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 	def luck(self, initial):
+		sqr = initial * initial
 		for item in self.all_items():
-			initial = utility.call_all_recursive(initial, 'luck', item)
+			sqr = utility.call_all_recursive(sqr, 'luck', item)
+		if sqr < 0:
+			initial = 0
+		else:
+			initial = math.sqrt(sqr)
 		return initial
 
 class Entity(object):

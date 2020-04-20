@@ -67,7 +67,7 @@ class Character(object):
 		self.base_special_defense = 10
 		self.base_speed = 10
 		self.base_hp = 10
-		self.base_luck = 10
+		self.base_luck = 100
 		self.physical = True
 	
 	def tick(self):
@@ -206,12 +206,12 @@ class Character(object):
 	
 	@property
 	def luck(self):
-		stat = (self.base_luck + 40) / 50.0 # One point of luck is a 2% change. Will need balanced.
+		stat = float(self.base_luck) / 100.0 # One point of luck is a 2% change. Will need balanced.
 		for status in self.status:
 			stat = status.luck(stat)
 		stat = self.equipment.luck(stat)
 		stat = stat * self.mod_luck
-		return utility.clamp(stat, 1, 3* self.base_speed)
+		return utility.clamp(stat, 0.1, 3* self.base_luck)
 
 	@hp.setter
 	def hp(self, value):
