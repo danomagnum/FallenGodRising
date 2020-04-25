@@ -41,7 +41,7 @@ class Status(object):
 	def tick(self, effected): # for persistant effects
 		self.life += 1
 		if self.termination_check(effected):
-			print('{} is no longer {}'.format(effected.name, self.name))
+			print('{} lost status {}'.format(effected.name, self.name))
 			effected.status.remove(self)
 
 	def physical_strength(self, initial): # passive stat boosts take effect on these routines
@@ -74,6 +74,7 @@ class StatMod(Status):
 		Status.__init__(self, name=name)
 	def config(self):
 		self.name = '{} {}%'.format(self.stat,int(self.multiplier * 100))
+		self.max_life = 5
 
 	def physical_strength(self, initial):
 		if self.stat == PHYSTR:
