@@ -242,6 +242,8 @@ class Zone(object):
 		if self.game.player is not None:
 			self.redraw.append([self.game.player.x, self.game.player.y])
 			self.game.player.tick(zone=self)
+			self.game.player.subtick(zone=self)
+
 		for e in self.entities:
 			# first we will mark the positions of the entities as needing redrawn.  This will
 			# make sure the map is redrawn if they move or are removed.  If they haven't moved,

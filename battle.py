@@ -112,7 +112,7 @@ def Battle(game, user, enemy_ai):
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
 	all_combatants = valid_users + valid_enemies
-	annex_tries = 0
+	possess_tries = 0
 	#display = display(user, enemy_ai)
 
 	battle_continue = True
@@ -145,10 +145,10 @@ def Battle(game, user, enemy_ai):
 		selection_needed = True
 		user_is_attacking = False
 		user_target = enemy_ai.combatant
-		annex = None
+		possess = None
 		#print('vu: {}, ve: {}'.format(len(valid_users), len(valid_enemies)))
 		if len(valid_users) < 3 and len(valid_enemies) == 1:
-			choices = ['Attack', 'Change', 'Items', 'Run', 'Annex']
+			choices = ['Attack', 'Change', 'Items', 'Run', 'Possess']
 		else:
 			choices = ['Attack', 'Change', 'Items', 'Run']
 		while selection_needed:
@@ -236,22 +236,22 @@ def Battle(game, user, enemy_ai):
 							item_used.use(t)
 				game.display.show_messages()
 				game.display.refresh_combatant()
-			elif first_choice == 'Annex':
-				annex_tries += 1
+			elif first_choice == 'Possess':
+				possess_tries += 1
 				selection_needed = False
 
-				annex_candidate = valid_enemies[0]
-				hp_ratio = 1.0 - (annex_candidate.hp / annex_candidate.max_hp) ** 0.5 # square root to make weakening further get more and more advantageous
-				attempt_ratio = 1.0 - utility.clamp(annex_tries / 100.0, 1.0, 0.3) # the more your try, the harder it gets
+				possess_candidate = valid_enemies[0]
+				hp_ratio = 1.0 - (possess_candidate.hp / possess_candidate.max_hp) ** 0.5 # square root to make weakening further get more and more advantageous
+				attempt_ratio = 1.0 - utility.clamp(possess_tries / 100.0, 1.0, 0.3) # the more your try, the harder it gets
 
 				chance = hp_ratio * attempt_ratio
 				if random.random() < chance:
-					annex = annex_candidate
+					possess = possess_candidate
 					winner = USER
 					battle_continue = False
-					print('Annexed {}'.format(annex.name))
+					print('Possessed {}'.format(possess.name))
 				else:
-					print('Annex Attempt {} Was Unsuccessful.'.format(annex_tries))
+					print('Possession Attempt {} Was Unsuccessful.'.format(possess_tries))
 
 			elif first_choice == 'Run':
 				running = True
@@ -302,7 +302,7 @@ def Battle(game, user, enemy_ai):
 			second_move = user_move
 			second_is_attacking = user_is_attacking
 
-		if annex is None:
+		if possess is None:
 			#first attack
 			if first_is_attacking:
 				for status in first.status:
@@ -330,8 +330,8 @@ def Battle(game, user, enemy_ai):
 
 				game.display.refresh_combatant()
 		else:
-			game.player.combatants.append(annex)
-			print('Annex: {}'.format(str(annex)))
+			game.player.combatants.append(possess)
+			print('Possess: {}'.format(str(possess)))
 		
 		# make sure all post-turn status take place
 		for combatant in all_combatants:
