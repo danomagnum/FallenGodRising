@@ -13,6 +13,7 @@ import random
 #import dill as pickle
 import pickle
 
+import os
 from os import listdir
 from os.path import isfile, join
 from version import *
@@ -71,8 +72,9 @@ try:
 								game.display = display
 								display.change_zone(game.zone)
 								f.close()
+								game.filename = player_choice
 								mainmenu = False
-								#break
+								os.remove(join(SAVEDIR, player_choice))
 							except Exception as e:
 								traceback.print_exc(file=sys.stderr)
 								print("Error loading" + player_choice)

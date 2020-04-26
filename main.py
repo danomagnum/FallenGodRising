@@ -40,12 +40,14 @@ class Game(object):
 		self.progress_max = 1
 		self.progress_value = 0
 
+		self.filename = 'auto.sav'
+
 	def fast_travel(self):
 		return self.zone.fast_travel_found
-	def save(self, filename = 'last.sav'):
+	def save(self):
 		print('Saving...')
 		self.display.show_messages()
-		file = open(join(SAVEDIR, filename), 'wb')
+		file = open(join(SAVEDIR, self.filename), 'wb')
 		pickle.dump(self, file)
 		file.close()
 		time.sleep(1)
