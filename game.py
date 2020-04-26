@@ -56,9 +56,9 @@ try:
 					graphics_interface.shutdown()
 					sys.exit(0)
 				elif player_choice == 'Backstory':
-					display.show_txt('backstory.txt')
+					display.show_txt('data/backstory.txt')
 				elif player_choice == 'Instructions':
-					display.show_txt('instructions.txt')
+					display.show_txt('data/instructions.txt')
 				elif player_choice == 'Resume':
 					onlyfiles = [f for f in listdir(SAVEDIR) if (isfile(join(SAVEDIR, f)) and (f[-3:] == 'sav'))]	
 					if onlyfiles:
