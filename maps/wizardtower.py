@@ -37,7 +37,7 @@ def genzone(game):
 
 	for l in range(20):
 		game.progress()
-		lev = maps.buildings.building_octagon(maptools.MAPSIZE[0], maptools.MAPSIZE[1])
+		lev = maps.buildings.building_octagon(maptools.MAPSIZE[1], maptools.MAPSIZE[1])
 		if l == 0:
 			#maptools.add_stairs(lev, down=False)
 			#maptools.add_stairs(lev, up=False)
@@ -62,7 +62,7 @@ def genzone(game):
 	# add zone to game
 	game.add_zone(zone)
 
-	maps.maptools.overworld_inject(game, zone, newchar='w', mask=maps.buildings.building_octagon(maptools.MAPSIZE[0], maptools.MAPSIZE[1], padding=5,outside_door=True))
+	maps.maptools.overworld_inject(game, zone, newchar='w', mask=maps.buildings.building_octagon(maptools.MAPSIZE[1], maptools.MAPSIZE[1], padding=5,outside_door=True))
 	zone.fast_travel_options[0] = main.FastTravel('Entrance', 0)
 
 	return zone
