@@ -38,13 +38,13 @@ YRAT = 1
 def font_setup():
 	global XRAT
 	global YRAT
-	terminal.set("font: UbuntuMono-R.ttf, size=8x16")
-	terminal.set("main font: UbuntuMono-R.ttf, size=8x16")
+	terminal.set("font: data/UbuntuMono-R.ttf, size=8x16")
+	terminal.set("main font: data/UbuntuMono-R.ttf, size=8x16")
 	#terminal.set("tiles font: tilesets/Bisasam_24x24.png, size=24x24, spacing=3x3")
 	#terminal.set("tiles font: tilesets/Bisasam_24x24.png, size=24x24, spacing=3x3")
 	#XRAT = 3
 	#YRAT = 3
-	terminal.set("tiles font: tilesets/Phoebus_16x16.png, size=16x16, spacing=2x1")
+	terminal.set("tiles font: data/tileset.png, size=16x16, spacing=2x1")
 	XRAT = 2
 	YRAT = 1
 

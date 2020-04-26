@@ -1,0 +1,16 @@
+Pokemon-like world with multiple towns.  Between each town is a randomly-generated "route".  Dungeons are randomly generated with multiple floors.
+
+TODO:
+	Warp between zones
+	"Route" generator
+
+WISHLIST:
+	if an entity hits a locked door, it should look for the key.
+
+Done:
+	Move dist_maps to entities so they can all find the best path to each other.  This would have to update on each move.  Not sure how resource intensive this will end up being.
+	Update zones to support multiple layers 
+	Shops
+	Global game data variables (dict on the player class?)
+	make items initialize with config routine
+	moves should "tick" to regenerate (or not depending on the move)
