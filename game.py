@@ -84,7 +84,7 @@ try:
 						display.show_messages()
 
 				elif player_choice == 'New Game':
-					zone_count = 16*16 + 10 + 20 + 5*5 + 3
+					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3
 					print('Please Wait, Generating World. ({} tasks)'.format(zone_count))
 					display.show_messages()
 
