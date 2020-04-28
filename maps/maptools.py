@@ -4,6 +4,7 @@ import main
 import entities
 import random
 from constants import *
+import sys
 
 #MAPSIZE = [48, 36]
 MAPSIZE = [60, 36]
@@ -799,5 +800,84 @@ def flatten(map, printout = False):
 		if printout:
 			print(line)
 	return lines
+
+def wall_or(list1, list2, char_false='#', char_true='.'):
+	result = [char_false]*(len(list1) - 1)
+	for i in range(len(list1)):
+		if list1[i] == char_true or list2[i] == char_true:
+			result[i] = char_true
+	return result
+
+def wall_and(list1, list2, char_false='#', char_true='.'):
+	result = [char_false]*(len(list1) - 1)
+	for i in range(len(list1)):
+		if list1[i] == char_true and list2[i] == char_true:
+			result[i] = char_true
+
+def wall_any(list1, char_true='.'):
+	for x in list1:
+		if x == char_true:
+			return True
+	return False
+
+def entry_match(map_list, maze, game=None, grid_width = 1):
+	zone_width = grid_width
+	zone_height = int(len(map_list) / grid_width)
+	mapwidth = len(map_list[0][0])
+	mapheight = len(map_list[0])
+	firstrow = 0
+	lastrow = mapheight - 1
+	firstcol = 0
+	lastcol = mapwidth - 1
+
+	mirror_depth = 4
+	sys.stderr.write('({},{})\n'.format(zone_width, zone_height))
+
+	for grid_x in range(zone_width):
+		for grid_y in range(zone_height):
+			sys.stderr.write('({},{})\n'.format(grid_x, grid_y))
+			if game is not None:
+				game.progress()
+			index = grid_x + grid_y * zone_width
+			above = index + zone_width
+			right = index + 1
+			cell = maze[grid_y][grid_x]
+
+
+			if (not cell.up) and (grid_y < zone_height - 1):
+				replacement = ['.'] * mapwidth
+				for line in range(mirror_depth):
+				#while wall_any(replacement)
+					for map_x in range(1,mapwidth - 1):
+						change = False
+						if map_list[index][firstrow + line][map_x] == '.':
+							change = True
+						if map_list[above][lastrow - line][map_x] == '.':
+							change = True
+						if change and replacement[map_x] == '.':
+							map_list[above][lastrow - line][map_x] = '.'
+							map_list[index][firstrow + line][map_x] = '.'
+						else:
+							replacement[map_x] = '#'
+
+			if (not cell.right) and (grid_x < zone_width - 1):
+				replacement = ['.'] * mapheight
+				for line in range(mirror_depth):
+					for map_y in range(1,mapheight - 1):
+						change = False
+						if map_list[index][map_y][lastcol - line] == '.':
+							change = True
+						if map_list[right][map_y][firstcol + line] == '.':
+							change = True
+						if change and replacement[map_y] == '.':
+							map_list[index][map_y][lastcol - line] = '.'
+							map_list[right][map_y][firstcol + line] = '.'
+						else:
+							replacement[map_y] = '#'
+
+
+	
+	return map_list
+
 
 

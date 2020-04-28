@@ -177,7 +177,7 @@ def genzone(game):
 					pass # sky
 				elif biome == 7:
 					pass # underground
-			map = maptools.flatten(map)
+			#map = maptools.flatten(map)
 			maps.append(map)
 
 			if entries > 0:
@@ -188,6 +188,10 @@ def genzone(game):
 				start = y * 16 + x
 			x += 1
 		y += 1
+
+	maps = maptools.entry_match(maps, maze, game, 16)
+	
+	maps = [maptools.flatten(map) for map in maps]
 	
 	# Create zone
 	zone = TestZone(ZONENAME, game, maps=maps)
