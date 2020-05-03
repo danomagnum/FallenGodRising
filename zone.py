@@ -250,8 +250,10 @@ class Zone(object):
 			# they will be drawn on top of the map anyway so it's no problem.
 			self.redraw.append([e.x, e.y])
 			if e.enabled:
-				e.tick(zone=self)
-				e.subtick(zone=self)
+				utility.call_all('tick', e, self)
+				utility.call_all('subtick', e, self)
+				#e.tick(zone=self)
+				#e.subtick(zone=self)
 		# get rid of any entities that were disabled
 		self.entities = [e for e in self.entities if e.enabled] 
 

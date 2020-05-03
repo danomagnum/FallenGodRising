@@ -16,6 +16,20 @@ class Battler(Entity):
 				self.enabled = False
 				entity.backpack.absorb(self.backpack, message = True)
 
+	def tick(self, zone):
+		if len(self.get_available()) == 0:
+			self.enabled = False
+			print('{}: {}'.format(self.name,self.defeated_text))
+			#TODO: drop the backpack
+			if len(self.backpack) > 0:
+				t = Treasure()
+				t.backpack.absorb(self.backpack)
+				t.x = self.x
+				t.y = self.y
+				zone.add_entity(t)
+
+
+
 class Shop(Entity):
 	def config(self):
 		self.name = 'Shop'
@@ -81,6 +95,8 @@ class RandWalker(Entity):
 class Treasure(Entity):
 	def __init__(self,game = None, item_list = None):
 		Entity.__init__(self, game, name=None, combatants = None, item_list=None, x=0, y=0, char='?', AI=None, is_player = False)
+		if item_list is None:
+			item_list = []
 		for i in item_list:
 			self.backpack.store(i)
 		if len(self.backpack) > 1:
@@ -108,7 +124,7 @@ class TowardWalker(Entity):
 			if dir is not None:
 				self.move(zone, dir)
 
-class BasicAI1(Entity):
+class BasicAI1(Battler):
 	STANDBY = 1
 	AGRESSIVE = 2
 	FLEE = 3
@@ -118,14 +134,6 @@ class BasicAI1(Entity):
 		self.standby_delay = 2
 		self.standby_counter = 0
 		self.configured = 1
-
-	def collide(self, entity, zone):
-		#self.enabled = False
-		if entity.is_player == True: #Is the player if no AI
-			result = battle.Battle(self.game, entity, self)
-			if result == USER:
-				self.enabled = False
-				entity.backpack.absorb(self.backpack, message = True)
 
 	def tick(self, zone):
 		#print('walking towards from {},{}'.format(self.x, self.y))

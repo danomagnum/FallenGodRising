@@ -216,20 +216,20 @@ class Backpack():
 		return 0
 
 	
-
-class Potion(Item):
-	def config(self):
-		self.name = 'Potion 1'
-		self.target_type = ALLY
-		self.weight = 1
-		self.value = 100
-		self.rarity = 0.5
-		self.helptext = 'Restores Some HP'
-		self.char = '\x04'
-	
-	def use(self, target):
-		target.heal(20)
-		print('{} used {}'.format(target.name,self.name))
+#
+#class Potion(Item):
+#	def config(self):
+#		self.name = 'Potion 1'
+#		self.target_type = ALLY
+#		self.weight = 1
+#		self.value = 100
+#		self.rarity = 0.5
+#		self.helptext = 'Restores Some HP'
+#		self.char = '\x04'
+#	
+#	def use(self, target):
+#		target.heal(20)
+#		print('{} used {}'.format(target.name,self.name))
 
 class HealAll(Item):
 	def config(self):
@@ -259,6 +259,34 @@ class Booster(Item):
 	def use(self, target):
 		target.status.append(effects.StatMod(1.15, PHYSTR))
 		print('{} used {}'.format(target.name,self.name))
+
+
+class Potion(Item):
+	def config(self):
+		self.name = 'Potion'
+		self.target_type = ALLY
+		self.weight = 1
+		self.value = 300
+		self.rarity = 0.3
+		self.helptext = 'Status Effect Potion'
+		self.char = '\x04'
+	
+	def effect(self):
+		target = random.choice([PHYSTR, PHYDEF, SPCSTR, SPCDEF, SPEED, HP, MAXHP, ACCURACY, EVASION, LUCK])
+		power = random.randrange(85, 115)/ 100.0
+		target = HP
+		power = 1.15
+		if target == HP:
+			return effects.Recovery()
+		else:
+			return effects.StatMod(power, target)
+
+	def use(self, target):
+		target.status.append(self.effect())
+		print('{} used {}'.format(target.name,self.name))
+
+
+
 
 base_items = [Potion, Booster, HealAll]
 

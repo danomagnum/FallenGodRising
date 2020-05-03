@@ -339,7 +339,8 @@ class Piercing(Move):
 		prob = utility.scale(self.uses, 0, 1000, 0.2, 0.95)
 		if self.game.get_var('effect_override'):
 			prob = 1.0
-		if randval < prob:
+		#if randval < prob:
+		if True:
 			print('{} has been wounded'.format(target.name))
 			target.status.append(effects.Bleeding())
 

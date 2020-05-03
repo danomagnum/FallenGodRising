@@ -160,6 +160,7 @@ class StatMod(Status):
 			return initial * self.multiplier
 		else:
 			return initial
+
 class Poison_Minor(Status):
 	def config(self):
 		self.name = 'Minor Poison'
@@ -185,4 +186,10 @@ class Bleeding(Status):
 		print('{} was effected by {} for {}'.format(effected.name,self.name, damage))
 		effected.hp -= damage
 
+class Recovery(Status):
+	def config(self):
+		self.name = 'Recovery'
+		self.max_life = 5
+	def post_turn(self, effected):
+		effected.hp = effected.hp * 1.15
 
