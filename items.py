@@ -9,7 +9,7 @@ import utility
 import sys
 
 class Item(utility.Serializable):
-	def __init__(self, game=None, level=1, name=None, target=TARGET_NONE, uses=None):
+	def __init__(self, game=None, level=1, name=None, target=TARGET_NONE, uses=None, char='?'):
 		self.game = game
 		self.prefixes = []
 		self.suffixes = []
@@ -19,6 +19,7 @@ class Item(utility.Serializable):
 		self.value = 0
 		self.rarity = 0.5
 		self.helptext = ''
+		self.char = char
 		if uses is not None:
 			self.uses = uses
 	
@@ -224,6 +225,7 @@ class Potion(Item):
 		self.value = 100
 		self.rarity = 0.5
 		self.helptext = 'Restores Some HP'
+		self.char = '\x04'
 	
 	def use(self, target):
 		target.heal(20)
@@ -237,6 +239,7 @@ class HealAll(Item):
 		self.value = 500
 		self.rarity = 0.1
 		self.helptext = 'Clear All Status'
+		self.char = '\x04'
 
 	def use(self, target):
 		target.heal(20)
@@ -251,6 +254,7 @@ class Booster(Item):
 		self.value = 300
 		self.rarity = 0.3
 		self.helptext = 'Increases Physical Strength'
+		self.char = '\x04'
 
 	def use(self, target):
 		target.status.append(effects.StatMod(1.15, PHYSTR))
@@ -588,6 +592,7 @@ class Sword(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
+		self.char = '\x02'
 	def physical_strength(self, initial):
 		return initial + (self.power * self.power)
 
@@ -598,6 +603,7 @@ class GreatSword(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
+		self.char = '\x02'
 	def physical_strength(self, initial):
 		return initial + (2 * self.power * self.power)
 
@@ -608,6 +614,7 @@ class Axe(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
+		self.char = '\x02'
 	def physical_strength(self, initial):
 		return initial + (self.power * self.power)
 	def speed(self, initial):
@@ -620,6 +627,7 @@ class BattleAxe(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
+		self.char = '\x02'
 	def physical_strength(self, initial):
 		return initial + 2 * self.power * self.power
 	def speed(self, initial):
@@ -632,6 +640,7 @@ class Wand(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
+		self.char = '\x02'
 	def special_strength(self, initial):
 		return initial + self.power * self.power
 
@@ -642,6 +651,7 @@ class Staff(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
+		self.char = '\x02'
 	def special_strength(self, initial):
 		return initial + 2*self.power * self.power
 
@@ -654,6 +664,7 @@ class Helm(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_HEAD
+		self.char = '\x03'
 	def physical_defense(self, initial):
 		return initial + (self.power * self.power / 5.0)
 
@@ -664,6 +675,7 @@ class Hood(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_HEAD
+		self.char = '\x03'
 	def special_defense(self, initial):
 		return initial + (self.power * self.power / 5.0)
 
@@ -674,6 +686,7 @@ class Mail(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
+		self.char = '\x03'
 	def physical_defense(self, initial):
 		return initial + (self.power * self.power / 2.0)
 
@@ -684,6 +697,7 @@ class Robe(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
+		self.char = '\x03'
 	def special_defense(self, initial):
 		return initial - (self.power * self.power / 2.0)
 
@@ -694,6 +708,7 @@ class BattleRobe(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
+		self.char = '\x03'
 	def special_defense(self, initial):
 		return initial - (self.power * self.power)
 	def physical_defense(self, initial):
@@ -706,6 +721,7 @@ class Plate(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
+		self.char = '\x03'
 	def physical_defense(self, initial):
 		return initial + (self.power * self.power)
 	def special_defense(self, initial):
@@ -718,6 +734,7 @@ class Shield(Gear):
 		self.value = 300
 		self.rarity = 0.2
 		self.target_type = EQUIP_RIGHT
+		self.char = '\x03'
 	def evasion(self, initial):
 		return initial + (self.power * self.power / 5.0)
 
@@ -728,6 +745,7 @@ class Amulet(Gear):
 		self.value = 500
 		self.rarity = 0.1
 		self.target_type = EQUIP_TOKEN
+		self.char = '\x03'
 
 gear_list = {EQUIP_HEAD:[Helm],
              EQUIP_BODY: [Plate, Mail, Robe, BattleRobe],
@@ -791,6 +809,7 @@ class MoveScroll(Item):
 		name = 'Scroll of'
 		level = 1
 		Item.__init__(self, game, level,  name, target=ALLY, uses=None)
+		self.char = '\x01'
 		self.suffixes.append(self.move.name)
 
 	def use(self, target):

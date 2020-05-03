@@ -83,6 +83,10 @@ class Treasure(Entity):
 		Entity.__init__(self, game, name=None, combatants = None, item_list=None, x=0, y=0, char='?', AI=None, is_player = False)
 		for i in item_list:
 			self.backpack.store(i)
+		if len(self.backpack) > 1:
+			self.char = '\x92'
+		else:
+			self.char = self.backpack.all_items()[0].char
 
 	def config(self):
 		self.passive = True
