@@ -10,7 +10,7 @@ import os
 import sys
 ZONENAME = 'Overworld'
 
-USE_SYMBOLS = False
+USE_SYMBOLS = True
 
 #####################
 # The characters subclasses are how you create enemies.
@@ -162,17 +162,22 @@ def genzone(game):
 			biome = biome_map[y][x]
 			if (sys.version_info.major >= 3) and USE_SYMBOLS:
 				if biome == 0:
-					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Sea
+					maptools.swap_char(map, '#', '~\x7F\x8D') # Sea
+					#maptools.swap_char(map, '#', '≅≊≋≌⋍') # Sea
 				elif biome == 1:
-					maptools.swap_char(map, '#', '≅≊≋≌⋍') # Marsh
+					maptools.swap_char(map, '#', '~\xFC') # Marsh
+					#maptools.swap_char(map, '#', '≅≊≋≌⋍') # Marsh
 				elif biome == 2:
 					pass # Plains
 				elif biome == 3:
-					pass # desert
+					#pass # desert
+					maptools.swap_char(map, '#', '\xA6') # Marsh
 				elif biome == 4:
-					maptools.swap_char(map, '#', '♠♣') # forest
+					maptools.swap_char(map, '#', '\x05\x06\x07') # forest
+					#maptools.swap_char(map, '#', '♠♣') # forest
 				elif biome == 5:
-					maptools.swap_char(map, '#', '▲⏶') # Mountains
+					maptools.swap_char(map, '#', '\xEC\xED') # Mountains
+					#maptools.swap_char(map, '#', '▲⏶') # Mountains
 				elif biome == 6:
 					pass # sky
 				elif biome == 7:

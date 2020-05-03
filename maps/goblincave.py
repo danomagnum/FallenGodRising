@@ -43,6 +43,7 @@ def genzone(game):
 			maptools.add_stairs(lev, down=False)
 		else:
 			maptools.add_stairs(lev)
+		maptools.swap_char(lev, '#', '\xDB')
 		map_list.append(maptools.flatten(lev))
 	#maze = maptools.maze(16, 16)
 		# Create zone

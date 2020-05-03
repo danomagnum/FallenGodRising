@@ -73,7 +73,41 @@ class StatMod(Status):
 		self.stat = stat
 		Status.__init__(self, name=name)
 	def config(self):
-		self.name = '{} {}%'.format(self.stat,int(self.multiplier * 100))
+		typestr = ''
+		if self.stat == PHYSTR:
+			typestr = 'PStr'
+		elif self.stat == PHYDEF:
+			typestr = 'PDef'
+		elif self.stat == SPCSTR:
+			typestr = 'SStr'
+		elif self.stat == SPCDEF:
+			typestr = 'SDef'
+		elif self.stat == SPEED:
+			typestr = 'Spd'
+		elif self.stat == HP:
+			typestr = 'HP'
+		elif self.stat == MAXHP:
+			typestr = 'HP'
+		elif self.stat == LUCK:
+			typestr = 'Lck'
+		elif self.stat == ACCURACY:
+			typestr = 'Acc'
+		elif self.stat == EVASION:
+			typestr = 'Evd'
+		
+		multstr = ''
+		if self.multiplier > 1.5:
+			multstr = '++'
+		elif self.multiplier > 1:
+			multstr = '+'
+		elif self.multiplier < 1:
+			multstr = '-'
+		elif self.multiplier < 0.5:
+			multstr = '--'
+		else:
+			multstr = ''
+		#self.name = '{} {}%'.format(self.stat,int(self.multiplier * 100))
+		self.name = typestr + multstr
 		self.max_life = 5
 
 	def physical_strength(self, initial):
