@@ -103,9 +103,9 @@ class TestZone(zone.Zone):
 			item_count = random.randint(0,2)
 			for i in range(item_count):
 				chance = random.random()
-				if chance < 0.05:
+				if chance < 0.3:
 					newitem = items.gen_gear(self.game, gen_level)
-				elif chance < 0.3:
+				elif chance < 0.6:
 					newitem = items.gen_movescroll(self.game)
 				else:
 					newitem = items.gen_base_item(self.game)
