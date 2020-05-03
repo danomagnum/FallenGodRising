@@ -130,7 +130,7 @@ def Battle(game, user, enemy_ai):
 	running = False
 
 	while battle_continue:
-		game.display.show_messages()
+		game.display.show_btl_messages()
 		valid_users = user.get_available()
 		valid_enemies = enemy_ai.get_available()
 		all_combatants = valid_users + valid_enemies
@@ -234,7 +234,7 @@ def Battle(game, user, enemy_ai):
 						selection_needed = False
 						for t in item_target:
 							item_used.use(t)
-				game.display.show_messages()
+				#game.display.show_btl_messages()
 				game.display.refresh_combatant()
 			elif first_choice == 'Possess':
 				possess_tries += 1
@@ -387,7 +387,7 @@ def Battle(game, user, enemy_ai):
 		for c in enemy_ai.get_available():
 			c.battletick()
 
-		game.display.show_messages()
+		#game.display.show_btl_messages()
 
 		#time.sleep(1.0 / 60.0)
 
@@ -398,7 +398,7 @@ def Battle(game, user, enemy_ai):
 	if winner == USER:
 		print('{}: {}'.format(enemy_ai.name,enemy_ai.defeated_text))
 	
-	game.display.show_messages()
+	game.display.show_btl_messages()
 
 	game.display.end_battle()
 

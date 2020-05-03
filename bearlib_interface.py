@@ -258,6 +258,7 @@ class Display(object):
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.charboxsize = (int(YMAX / MAX_COMBATANTS), 40)
 		self.msgboxsize = [12, int(XMAX - 2*self.charboxsize[1])]
+		self.btl_msgboxsize = [24, int(XMAX - 2*self.charboxsize[1])]
 		self.splashbox = None
 		self.charboxes = []
 		self.nmeboxes = []
@@ -267,7 +268,8 @@ class Display(object):
 			self.nmeboxes.append(nmebox)
 			self.charboxes.append(charbox)
 		self.msgbox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
-		self.battlemenubox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-2*self.msgboxsize[0],self.charboxsize[1])
+		self.btl_msgbox   = Window(self.btl_msgboxsize[0],self.btl_msgboxsize[1],YMAX-self.btl_msgboxsize[0],self.charboxsize[1])
+		self.battlemenubox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0] - self.btl_msgboxsize[0],self.charboxsize[1])
 
 		self.overworldbox = Window(self.charboxsize[0] + 1,self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
 
@@ -398,6 +400,16 @@ class Display(object):
 		for i in range(len(msgs)):
 			self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, msgs[i])
 		terminal.refresh()
+	
+	def show_btl_messages(self):
+		msgs = sys.stdout.readlines(self.btl_msgboxsize[0] - 2)
+		self.btl_msgbox.erase()
+		self.btl_msgbox.box()
+		for i in range(len(msgs)):
+			self.btl_msgbox.addstr(self.btl_msgboxsize[0] - 2 - i, 1, msgs[i])
+		terminal.refresh()
+
+
 
 	##################################
 	##### Combat Draw Routines
@@ -487,7 +499,7 @@ class Display(object):
 					self.charboxes[i].box()
 
 		self.msgbox.box()
-		self.show_messages()
+		#self.show_messages()
 
 	def show_overworld(self):
 		y = 1
