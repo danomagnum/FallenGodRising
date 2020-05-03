@@ -111,30 +111,52 @@ class Zone(object):
 		pass
 
 	def exit(self, entity, direction):
+		x = entity.x
+		y = entity.y
 		if direction == UP:
 			newlevel = self.level + self.grid_width
 			if newlevel >= len(self.maps):
 				return
 			else:
-				newx, newy = self.find_empty_position(level=newlevel, position=DOWN)
+				y = len(self.maps[newlevel]) - 1
+				if self.maps[newlevel][y][x] == WALKABLE:
+					newx, newy = x, y
+				else:
+					newx, newy = self.find_empty_position(level=newlevel, position=DOWN)
 		elif direction == DOWN:
 			newlevel = self.level - self.grid_width
 			if newlevel < 0:
 				return
 			else:
-				newx, newy = self.find_empty_position(level=newlevel, position=UP)
+				y = 0
+				if self.maps[newlevel][y][x] == WALKABLE:
+					newx, newy = x, y
+				else:
+					newx, newy = self.find_empty_position(level=newlevel, position=UP)
 		elif direction == LEFT:
 			newlevel = self.level - 1
 			if newlevel < 0:
 				return
 			else:
-				newx, newy = self.find_empty_position(level=newlevel, position=RIGHT)
+				x = len(self.maps[newlevel][y]) - 1
+				if self.maps[newlevel][y][x] == WALKABLE:
+					newx, newy = x, y
+				else:
+					newx, newy = self.find_empty_position(level=newlevel, position=RIGHT)
 		elif direction == RIGHT:
 			newlevel = self.level + 1
 			if newlevel >= len(self.maps):
 				return
 			else:
-				newx, newy = self.find_empty_position(level=newlevel, position=LEFT)
+				x = 0
+				try:
+					if self.maps[newlevel][y][x] == WALKABLE:
+						newx, newy = x, y
+					else:
+						newx, newy = self.find_empty_position(level=newlevel, position=LEFT)
+				except:
+					print('Failed at ({}, {}) / ({}, {})'.format(x, y, entity.x, entity.y))
+					newx, newy = self.find_empty_position(level=newlevel, position=LEFT)
 
 
 		entity.x = newx

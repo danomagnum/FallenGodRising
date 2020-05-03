@@ -260,31 +260,63 @@ class Booster(Item):
 		target.status.append(effects.StatMod(1.15, PHYSTR))
 		print('{} used {}'.format(target.name,self.name))
 
-
 class Potion(Item):
 	def config(self):
 		self.name = 'Potion'
-		self.target_type = ALLY
+		self.target_type = ANY
+
 		self.weight = 1
 		self.value = 300
 		self.rarity = 0.3
+
+		self.effects = []
+
+		multieffect_roll = random.random()
+
+		if multieffect_roll < 0.1:
+			effect_count = 3
+			self.value *= 3
+			self.rarity /= 5
+
+		elif multieffect_roll < 0.3:
+			effect_count = 2
+			self.value *= 2
+			self.rarity /= 2
+
+		else:
+			effect_count = 1
+
+		for x in range(effect_count):
+			target_effect = random.choice([PHYSTR, PHYDEF, SPCSTR, SPCDEF, SPEED, HP, MAXHP, ACCURACY, EVASION, LUCK, 'Poison'])
+			target_power = random.randrange(85, 115)/ 100.0
+
+			if target_effect == HP:
+				self.effects.append(effects.Recovery())
+			elif target_effect == 'Poison':
+				self.effects.append(effects.Poison_Minor())
+			else:
+				self.effects.append(effects.StatMod(target_power, target_effect))
+
+		self.prefixes = [e.name for e in self.effects]
+
 		self.helptext = 'Status Effect Potion'
 		self.char = '\x04'
-	
-	def effect(self):
-		target = random.choice([PHYSTR, PHYDEF, SPCSTR, SPCDEF, SPEED, HP, MAXHP, ACCURACY, EVASION, LUCK])
-		power = random.randrange(85, 115)/ 100.0
-		target = HP
-		power = 1.15
-		if target == HP:
-			return effects.Recovery()
-		else:
-			return effects.StatMod(power, target)
 
 	def use(self, target):
-		target.status.append(self.effect())
+		for effect in self.effects:
+			target.status.append(effect)
 		print('{} used {}'.format(target.name,self.name))
 
+def x_potion(*effects):
+	p = Potion()
+	p.effects = effects
+	p.prefixes = [e.name for e in self.effects]
+	return p
+
+def potion_of(potion, *effects):
+	potion.effects += effects
+	p.postfixes = [e.name for e in effects]
+	return potion
 
 
 

@@ -226,10 +226,12 @@ def Battle(game, user, enemy_ai):
 						item_target = user.combatants
 					elif item_target_type == MULTI_ENEMY:
 						item_target = enemy_ai.combatants
+					elif item_target_type == ANY:
+						item_target = [game.display.battlemenu(user.get_available() + enemy_ai.get_available(), selected=user.combatant, cols=2)]
 					else:
 						item_target = None
 						print("Can't Use that now")
-					if item_target is not None:
+					if len(item_target) > 0:
 						item_used = item_slot_used.take()
 						selection_needed = False
 						for t in item_target:
