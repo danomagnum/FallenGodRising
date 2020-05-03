@@ -831,11 +831,9 @@ def entry_match(map_list, maze, game=None, grid_width = 1):
 	lastcol = mapwidth - 1
 
 	mirror_depth = 4
-	sys.stderr.write('({},{})\n'.format(zone_width, zone_height))
 
 	for grid_x in range(zone_width):
 		for grid_y in range(zone_height):
-			sys.stderr.write('({},{})\n'.format(grid_x, grid_y))
 			if game is not None:
 				game.progress()
 			index = grid_x + grid_y * zone_width

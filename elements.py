@@ -73,13 +73,24 @@ Wind.modifiers[Fire] = 1.5
 Wind.modifiers[Earth] = 1.5
 Wind.modifiers[Wind] = 0.75
 
-Light.modifiers[Dark] = 1.5
+Light.modifiers[Dark] = 2.0
 Light.modifiers[Light] = 0.5
-Light.modifiers[Normal] = 2.0
+Light.modifiers[Normal] = 1.5
+Light.modifiers[Fire] = 0.8
+Light.modifiers[Water] = 0.8
+Light.modifiers[Earth] = 0.8
+Light.modifiers[Electric] = 0.8
+Light.modifiers[Wind] = 0.8
 
-Dark.modifiers[Light] = 1.5
+Dark.modifiers[Light] = 2.0
 Dark.modifiers[Dark] = 0.5
-Dark.modifiers[Normal] = 2.0
+Dark.modifiers[Normal] = 1.5
+Dark.modifiers[Fire] = 0.8
+Dark.modifiers[Water] = 0.8
+Dark.modifiers[Earth] = 0.8
+Dark.modifiers[Electric] = 0.8
+Dark.modifiers[Wind] = 0.8
+
 
 
 # base biome interactions.
