@@ -71,7 +71,9 @@ class Character(object):
 		self.physical = True
 	
 	def tick(self):
-		pass
+		for stat in self.status:
+			utility.call_all('pre_turn', stat, self)
+			utility.call_all('post_turn', stat, self)
 
 	def battletick(self):
 		for item in self.equipment.all_items():

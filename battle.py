@@ -339,6 +339,10 @@ def Battle(game, user, enemy_ai):
 				status.post_turn(combatant)
 		game.display.refresh_combatant()
 
+		
+		if len(enemy_ai.get_available()) == 0:
+			battle_continue = False
+			winner = USER
 
 		# check for any deaths
 		for e in valid_enemies:
