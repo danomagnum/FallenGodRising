@@ -194,6 +194,8 @@ try:
 			display.refresh_full()
 			gameloop = True
 			while gameloop:
+				display.refresh_full()
+				display.show_messages()
 				key = display.mapbox.getch()
 				##########################
 				# Player movement
@@ -315,8 +317,6 @@ try:
 					#terminal.read()
 					display.getch()
 					gameloop = False
-				display.show_messages()
-				display.refresh_full()
 
 except Exception as e:
 	graphics_interface.shutdown()
