@@ -39,3 +39,6 @@ class ioCatcher(object):
 				self.messages.append(line)
 				self.new += 1
 
+	def flush(self):
+		pass
+

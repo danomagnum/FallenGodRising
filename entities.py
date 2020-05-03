@@ -22,8 +22,7 @@ class Battler(Entity):
 			print('{}: {}'.format(self.name,self.defeated_text))
 			#TODO: drop the backpack
 			if len(self.backpack) > 0:
-				t = Treasure()
-				t.backpack.absorb(self.backpack)
+				t = Treasure(backpack=self.backpack)
 				t.x = self.x
 				t.y = self.y
 				zone.add_entity(t)
@@ -93,8 +92,10 @@ class RandWalker(Entity):
 			self.move(zone, random.choice([UP, DOWN, LEFT, RIGHT]))
 
 class Treasure(Entity):
-	def __init__(self,game = None, item_list = None):
+	def __init__(self,game = None, item_list = None, backpack = None):
 		Entity.__init__(self, game, name=None, combatants = None, item_list=None, x=0, y=0, char='?', AI=None, is_player = False)
+		if backpack is not None:
+			self.backpack = backpack
 		if item_list is None:
 			item_list = []
 		for i in item_list:
@@ -102,7 +103,8 @@ class Treasure(Entity):
 		if len(self.backpack) > 1:
 			self.char = '\x92'
 		else:
-			self.char = self.backpack.all_items()[0].char
+			if len(self.backpack) > 0:
+				self.char = self.backpack.all_items()[0].char
 
 	def config(self):
 		self.passive = True

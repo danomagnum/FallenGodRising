@@ -142,7 +142,12 @@ def genzone(game):
 		x = 0
 		for maze_x in maze_y:
 			game.progress()
-			map = maptools.drunkard_walk(maptools.MAPSIZE[0], maptools.MAPSIZE[1])
+			biome = biome_map[y][x]
+			if biome == 3:
+				percent = 0.8
+			else:
+				percent = 0.3
+			map = maptools.drunkard_walk(maptools.MAPSIZE[0], maptools.MAPSIZE[1], percent)
 			#up and down are swapped because of the zone map list goes from bottom to top but the 
 			#maze y order is top to bottom
 			entries = 0
@@ -159,7 +164,6 @@ def genzone(game):
 				maptools.add_entry(map, RIGHT)
 				entries += 1
 			maptools.noise_prune(map)
-			biome = biome_map[y][x]
 			if (sys.version_info.major >= 3) and USE_SYMBOLS:
 				if biome == 0:
 					maptools.swap_char(map, '#', '~\x7F\x8D') # Sea
@@ -171,7 +175,7 @@ def genzone(game):
 					pass # Plains
 				elif biome == 3:
 					#pass # desert
-					maptools.swap_char(map, '#', '\xA6') # Marsh
+					maptools.swap_char(map, '#', '\xA6') # Desert
 				elif biome == 4:
 					maptools.swap_char(map, '#', '\x05\x06\x07') # forest
 					#maptools.swap_char(map, '#', '♠♣') # forest
