@@ -215,22 +215,6 @@ class Backpack():
 			return len(self.slots[itemname])
 		return 0
 
-	
-#
-#class Potion(Item):
-#	def config(self):
-#		self.name = 'Potion 1'
-#		self.target_type = ALLY
-#		self.weight = 1
-#		self.value = 100
-#		self.rarity = 0.5
-#		self.helptext = 'Restores Some HP'
-#		self.char = '\x04'
-#	
-#	def use(self, target):
-#		target.heal(20)
-#		print('{} used {}'.format(target.name,self.name))
-
 class HealAll(Item):
 	def config(self):
 		self.name = 'Heal All'
