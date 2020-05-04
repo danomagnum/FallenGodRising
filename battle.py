@@ -148,9 +148,15 @@ def Battle(game, user, enemy_ai):
 		possess = None
 		#print('vu: {}, ve: {}'.format(len(valid_users), len(valid_enemies)))
 		if len(valid_users) < 3 and len(valid_enemies) == 1:
-			choices = ['Attack', 'Change', 'Items', 'Run', 'Possess']
+			if len(valid_users) > 1 :
+				choices = ['Attack', 'Change', 'Items', 'Run', 'Possess']
+			else:
+				choices = ['Attack', 'Items', 'Run', 'Possess']
 		else:
-			choices = ['Attack', 'Change', 'Items', 'Run']
+			if len(valid_users) > 1 :
+				choices = ['Attack', 'Change', 'Items', 'Run']
+			else:
+				choices = ['Attack', 'Items', 'Run']
 		while selection_needed:
 			#if the enemy died outside of active combat (from poison or something) this check will
 			# end the battle by "running" and the final checks will take care of the rest, dosing out
