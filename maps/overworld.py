@@ -177,7 +177,7 @@ def genzone(game):
 					#pass # desert
 					maptools.swap_char(map, '#', '\xA6') # Desert
 				elif biome == 4:
-					maptools.swap_char(map, '#', '\x05\x06\x07') # forest
+					maptools.swap_char(map, '#', '\x05\x06\x07\x08') # forest
 					#maptools.swap_char(map, '#', '♠♣') # forest
 				elif biome == 5:
 					maptools.swap_char(map, '#', '\xEC\xED') # Mountains
