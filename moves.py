@@ -74,11 +74,13 @@ class Move(utility.Serializable):
 		if (self.mp > 0):
 			self.mp -= 1
 		else:
-			print('{} is out of MP to use move {}'.format(user.name,self.name))
+			msg = '{} is out of MP to use move {}'.format(user.name,self.name)
 			self.mp = 0
 			if 0.2 * user.luck > random.random():
-				print('{} used move {}'.format(user.name,self.name))
+				msg += ' but still attacks.'
+				print(msg)
 			else:
+				print(msg)
 				return
 		target_coefficient = 1.1 / len(targets)
 
@@ -160,10 +162,16 @@ class Move(utility.Serializable):
 					#apply the damage
 					target.hp -= int(damage)
 
-					print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
+					if user == target:
+						print('{} used move {} on themself for {}'.format(user.name,self.name, target.name, int(damage)))
+					else:
+						print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
 
 				else:
-					print('{} used move {} on {}'.format(user.name,self.name, target.name))
+					if user == target:
+						print('{} used move {} on themself'.format(user.name,self.name, target.name))
+					else:
+						print('{} used move {} on {}'.format(user.name,self.name, target.name))
 
 				utility.call_all('effect', self, user, target, damage)
 			else:

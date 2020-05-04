@@ -200,6 +200,8 @@ class Character(object):
 
 	@property
 	def hp(self):
+		if self._hp > self.max_hp:
+			self._hp = self.max_hp
 		stat = self._hp
 		for status in self.status:
 			stat = status.hp(stat)
