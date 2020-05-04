@@ -12,6 +12,7 @@ class ioCatcher(object):
 		if len(self.messages) > MAX_MESSAGES:
 			self.messages = self.messages[-MAX_MESSAGES:]
 		toshow = self.messages[-lines:]
+		self.new = min(self.new, len(toshow))
 		for x in range(1,self.new + 1):
 			#toshow[-x] = '> ' + toshow[-x]
 			toshow[-x] = '[color=lightest yellow]> ' + toshow[-x] + '[/color]'

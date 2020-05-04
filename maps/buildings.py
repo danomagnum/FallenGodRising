@@ -394,10 +394,6 @@ def building_octagon(xmax, ymax,divisions=5,padding=0, drops=0, outside_door=Fal
 			if dmap[y][x] >= 0:
 				map[y][x] = ' '
 
-
-
-
-
 	return map
 
 def building_twobox(xmax, ymax,padding=0,divisions=5,drops=0, outside_door=False):

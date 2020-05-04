@@ -30,6 +30,7 @@ import elements
 from constants import *
 
 import maps.overworld
+import maps.fortress
 import maps.goblincave
 import maps.wizardtower
 import maps.maptools
@@ -84,7 +85,7 @@ try:
 						display.show_messages()
 
 				elif player_choice == 'New Game':
-					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3
+					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3 + 5
 					print('Please Wait, Generating World. ({} tasks)'.format(zone_count))
 					display.show_messages()
 
@@ -104,6 +105,7 @@ try:
 					zone2 = maps.goblincave.genzone(game)
 					zone3 = maps.wizardtower.genzone(game)
 					zone4 = maps.sewers.genzone(game)
+					zone5 = maps.fortress.genzone(game)
 
 					maps.town.genzone(game, 'Town1')
 					maps.town.genzone(game, 'Town2')

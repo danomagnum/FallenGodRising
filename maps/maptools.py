@@ -66,30 +66,28 @@ def Stair_Handler(zone, dir=0):
 	levels = len(zone.maps)
 	if levels > 1:
 		for level in range(levels - 1):
-			if dir == 0:
-				down_pos = map_search(zone, '>', level)
-				up_pos = map_search(zone, '<', level + 1)
-			else:
-				down_pos = map_search(zone, '>', level + 1)
-				up_pos = map_search(zone, '<', level)
-			
 			up = entities.UpStairs(zone.game)
+			down = entities.DownStairs(zone.game)
+			down_pos = map_search(zone, '>', level)
+			up_pos = map_search(zone, '<', level + 1)
+
+			if dir == 0:
+				pass
+			else:
+				up.char = '>'
+				down.char = '<'
+			
 			up.new_x = down_pos[0]
 			up.new_y = down_pos[1]
 			up.x = up_pos[0]
 			up.y = up_pos[1]
-			down = entities.DownStairs(zone.game)
 			down.new_x = up_pos[0]
 			down.new_y = up_pos[1]
 			down.x = down_pos[0]
 			down.y = down_pos[1]
 
-			if dir == 0:
-				zone.level_entities[level].append(down)
-				zone.level_entities[level + 1].append(up)
-			else:
-				zone.level_entities[level].append(up)
-				zone.level_entities[level + 1].append(down)
+			zone.level_entities[level].append(down)
+			zone.level_entities[level + 1].append(up)
 
 
 def map_gen(height, width, rooms, minroomsize = 4):
