@@ -12,12 +12,12 @@ import sys
 def add_vdoor(lev, x, y):
 	x = int(x)
 	y = int(y)
-	if lev[y][x] == '.':
+	if lev[y][x] == '.' or lev[y][x] == '+':
 		return True
-	lev[y][x] = '.'
+	lev[y][x] = '+'
 
-	lev[y][x - 1] = '.'
-	lev[y][x + 1] = '.'
+	lev[y][x - 1] = '+'
+	lev[y][x + 1] = '+'
 
 	lev[y - 1][x - 2] = '#'
 	lev[y - 1][x + 2] = '#'
@@ -39,12 +39,13 @@ def add_vdoor(lev, x, y):
 def add_hdoor(lev, x, y):
 	x = int(x)
 	y = int(y)
-	if lev[y][x] == '.':
+	#if lev[y][x] == '.':
+	if lev[y][x] == '.' or lev[y][x] == '+':
 		return True
-	lev[y][x] = '.'
+	lev[y][x] = '+'
 
-	lev[y-1][x] = '.'
-	lev[y+1][x] = '.'
+	lev[y-1][x] = '+'
+	lev[y+1][x] = '+'
 
 	lev[y-2][x-1] = '#'
 	lev[y+2][x-1] = '#'

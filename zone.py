@@ -119,10 +119,15 @@ class Zone(object):
 				return
 			else:
 				y = len(self.maps[newlevel]) - 1
-				if self.maps[newlevel][y][x] == WALKABLE:
-					newx, newy = x, y
-				else:
-					newx, newy = self.find_empty_position(level=newlevel, position=DOWN)
+				try:
+					if self.maps[newlevel][y][x] == WALKABLE:
+						newx, newy = x, y
+					else:
+						newx, newy = self.find_empty_position(level=newlevel, position=DOWN)
+				except:
+					newx = entity.x
+					newy = entity.y
+					print('error going up @ ({}, {})'.format(x, y))
 		elif direction == DOWN:
 			newlevel = self.level - self.grid_width
 			if newlevel < 0:
