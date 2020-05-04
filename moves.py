@@ -162,6 +162,9 @@ class Move(utility.Serializable):
 
 					print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
 
+				else:
+					print('{} used move {} on {}'.format(user.name,self.name, target.name))
+
 				utility.call_all('effect', self, user, target, damage)
 			else:
 				print('{} missed with move {} against {}'.format(user.name, self.name, target.name))
