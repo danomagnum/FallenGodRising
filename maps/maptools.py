@@ -704,12 +704,13 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 		y = random.randint(0, ov_wd)
 		x = random.randint(0, ov_ht)
 		cell = game.overworld_minimap[y][x]
-		if any([cell.up, cell.down, cell.left, cell.right]):
+		if any([not cell.up, not cell.down, not cell.left, not cell.right]):
 			ov_x = x
 			ov_y = y
-			search = False
+			ov_level = ov_x + ov_y * game.overworld.grid_width
+			if not (ov_level in game.overworld.fast_travel_options):
+				search = False
 	cell.char = newchar
-	ov_level = ov_x + ov_y * game.overworld.grid_width
 	if mask is not None:
 		new_ow_map = empty_zone_with_mask(cell, mask)
 		game.overworld.maps[ov_level] = new_ow_map
