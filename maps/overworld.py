@@ -164,7 +164,8 @@ def genzone(game):
 				maptools.add_entry(map, RIGHT)
 				entries += 1
 			maptools.noise_prune(map)
-			if (sys.version_info.major >= 3) and USE_SYMBOLS:
+			#if (sys.version_info.major >= 3) and USE_SYMBOLS:
+			if True:
 				if biome == 0:
 					maptools.swap_char(map, '#', '~\x7F\x8D') # Sea
 					#maptools.swap_char(map, '#', '≅≊≋≌⋍') # Sea
