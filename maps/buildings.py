@@ -332,8 +332,19 @@ def building_gen(xmax, ymax, divisions=5, padding=0, drops=0,outside_door=False)
 
 	return map
 
-def building_octagon(xmax, ymax,divisions=5,padding=0, drops=0, outside_door=False):
+def building_octagon(xmax, ymax,divisions=5,padding=0, drops=0, outside_door=False, square=True):
 	map = [['.' for x in range(xmax)] for y in range(ymax)]
+
+	xmax0 = xmax
+	ymax0 = ymax
+
+	if square:
+		xmax = min(xmax, ymax)
+		ymax = min(xmax, ymax)
+
+	xoffset = int((xmax0 - xmax)  / 2)
+	yoffset = int((ymax0 - ymax)  / 2)
+
 
 	maxpad = padding + 1
 	ystop = ymax - maxpad
@@ -344,15 +355,15 @@ def building_octagon(xmax, ymax,divisions=5,padding=0, drops=0, outside_door=Fal
 	y1 = 2*y0
 
 
-	pts = [(x0, padding),
-	       (x1, padding),
-	       (xstop, y0),
-	       (xstop, y1),
-	       (x1, ystop),
-	       (x0, ystop),
-	       (padding, y1),
-	       (padding, y0),
-	       (x0, padding)]
+	pts = [(xoffset + x0, yoffset + padding),
+	       (xoffset + x1, yoffset + padding),
+	       (xoffset + xstop, yoffset + y0),
+	       (xoffset + xstop, yoffset + y1),
+	       (xoffset + x1, yoffset + ystop),
+	       (xoffset + x0, yoffset + ystop),
+	       (xoffset + padding, yoffset + y1),
+	       (xoffset + padding, yoffset + y0),
+	       (xoffset + x0, yoffset + padding)]
 
 	walls = walls_from_points(pts)
 

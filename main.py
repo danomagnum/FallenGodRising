@@ -4,7 +4,7 @@ import utility
 import items
 import elements
 import battle
-import keys
+import bearlibkeys as keys
 import pickle
 import time
 from constants import *
