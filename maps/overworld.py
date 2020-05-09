@@ -110,6 +110,17 @@ class TestZone(zone.Zone):
 				else:
 					newitem = items.gen_base_item(self.game)
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
+			gold_count = random.randint(0,2)
+			for i in range(gold_count):
+				g0 = random.randint(5,100)
+				g2 = random.randint(5,100)
+				g3 = random.randint(5,100)
+
+				gtotal = g0 + g2 + g3
+				bp = items.Backpack()
+				bp.gold = gtotal
+				maptools.Random_Map_Insert(self, entities.Treasure(self.game, backpack=bp))
+
 			mob_count = random.randint(0, 10)
 			for m in range(mob_count):
 				maptools.Random_Map_Insert(self, Rat)
@@ -176,7 +187,7 @@ def genzone(game):
 					pass # Plains
 				elif biome == 3:
 					#pass # desert
-					maptools.swap_char(map, '#', '\xA6') # Desert
+					maptools.swap_char(map, '#', '\xA6\xA7') # Desert
 				elif biome == 4:
 					maptools.swap_char(map, '#', '\x05\x06\x07\x08') # forest
 					#maptools.swap_char(map, '#', '♠♣') # forest

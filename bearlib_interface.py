@@ -514,8 +514,10 @@ class Display(object):
 		self.overworldbox.addch(x0, y0, '@')
 		try:
 			self.overworldbox.addstr(1, 17, 'Biome: {}'.format(str(self.game.biome())))
+			self.overworldbox.addstr(2, 17, 'Gold: {}'.format(str(self.game.player.backpack.gold)))
 		except:
 			pass
+
 
 	def change_zone(self, zone):
 		self.zone = zone

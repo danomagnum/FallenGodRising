@@ -252,7 +252,7 @@ try:
 								item_target_type = item_slot_used.target_type
 								if item_target_type == ALLY:
 									item_target = [display.menu(game.player.combatants, cols=2)]
-								if item_target_type == ANY:
+								elif item_target_type == ANY:
 									item_target = [display.menu(game.player.combatants, cols=2)]
 								elif item_target_type == MULTI_ALLY:
 									item_target = game.player.combatants
