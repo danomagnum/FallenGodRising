@@ -102,9 +102,10 @@ class Treasure(Entity):
 			self.backpack.store(i)
 		if len(self.backpack) > 1:
 			self.char = '\x92'
+		elif len(self.backpack) == 0:
+			self.char = '\x0B'
 		else:
-			if len(self.backpack) > 0:
-				self.char = self.backpack.all_items()[0].char
+			self.char = self.backpack.all_items()[0].char
 
 	def config(self):
 		self.passive = True
