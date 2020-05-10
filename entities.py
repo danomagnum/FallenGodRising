@@ -4,6 +4,7 @@ import random
 from constants import *
 import characters
 import sys
+from copy import deepcopy
 #import curses_interface as graphics_interface
 import bearlib_interface as graphics_interface
 
@@ -135,8 +136,10 @@ class DoomAI(Battler):
 		self.state = self.standby
 		self.standby_delay = 2
 		self.standby_counter = 0
+		self.flee_counter = 0
 		self.configured = 1
 		self.movingdir = None
+		self.target_map  = None
 
 	def standby(self, zone):
 		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
@@ -145,29 +148,52 @@ class DoomAI(Battler):
 
 	def battle_run(self):
 		self.state = self.flee
-		pass
 
 	def advancing(self, zone):
-		dir = self.toward_entity(self.game.player)
+		dir = None
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			dir = self.toward_entity(self.game.player)
+
 		if dir is not None:
 			self.move(zone, dir)
-
-		if not zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
-			self.standby_counter += 1
-
-		if self.standby_counter > self.standby_delay:
-			self.state = self.standby
-
+			self.target_map = self.game.player.dist_map
+			print('seen')
+		else:
+			if self.target_map is not None:
+				dir = self.follow_distmap(self.target_map)
+				print('memory {}'.format(dir))
+				if dir is None:
+					self.target_map = None
+					self.state = self.standby
+				else:
+					self.move(zone, dir)
+			else:
+				self.state = self.standby
+			
 	def flee(self, zone):
-		dir = self.flee_entity(self.game.player)
+		dir = None
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			dir = self.flee_entity(self.game.player)
+
 		if dir is not None:
 			self.move(zone, dir)
+			self.target_map = self.game.player.dist_map
+			print('seen')
+		else:
+			self.flee_counter += 1
+			if self.target_map is not None:
+				dir = self.flee_distmap(self.target_map)
+				print('memory {}'.format(dir))
+				if dir is None:
+					self.target_map = None
+					self.state = self.standby
+				else:
+					self.move(zone, dir)
+			else:
+				self.state = self.standby
 
-		if not zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
-			self.standby_counter -= 1
-
-		if self.standby_counter < 1:
-			self.state = self.standby
+			if self.flee_counter > 5:
+				self.state = self.standby
 
 	def tick(self, zone):
 		self.state(zone)

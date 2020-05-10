@@ -44,6 +44,7 @@ class Rat( battle.Skiddish_AI,entities.DoomAI):
 		self.name = 'Rat'
 		self.combatants.append(LittleRat(self.game, level=1))
 		self.char = 'r'
+		self.backpack.gold = random.randint(0, 10)
 
 class PackRat(entities.TowardWalker, entities.Battler):
 	# example basic enemy that gives an item when killed

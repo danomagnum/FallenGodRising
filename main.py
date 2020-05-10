@@ -587,6 +587,81 @@ class Entity(object):
 								to_check.append(pt)
 							i = i + 1
 							checked.add(pt)
+	def follow_distmap(self, dmap):
+		y = self.y
+		x = self.x
+		current = dmap[y][x]
+		up = current + 1
+		down = current + 1
+		left = current + 1
+		right = current + 1
+
+		ymax = len(dmap) - 1
+		xmax = len(dmap[0]) - 1
+		if y > 0:
+			up = dmap[y - 1][x]
+		if y < ymax:
+			down = dmap[y + 1][x]
+		if x > 0:
+			left = dmap[y][x - 1]
+		if x < xmax:
+			right = dmap[y][x + 1]
+
+		options = [up, down, left, right]
+
+		options = [opt for opt in options if (opt <= current) and (opt >= 0)]
+
+		if options:
+			minval = min(options)
+
+			if up == minval:
+				return UP
+			elif down == minval:
+				return DOWN 
+			elif left==minval:
+				return LEFT
+			elif right==minval:
+				return RIGHT
+		return None
+
+
+
+	def toward_entity(self, entity):
+		y = self.y
+		x = self.x
+		up = -1
+		down = -1
+		left = -1
+		right = -1
+		if entity.dist_map:
+			ymax = len(entity.dist_map) - 1
+			xmax = len(entity.dist_map[0]) - 1
+			if y > 0:
+				up = entity.dist_map[y - 1][x]
+			if y < ymax:
+				down = entity.dist_map[y + 1][x]
+			if x > 0:
+				left = entity.dist_map[y][x - 1]
+			if x < xmax:
+				right = entity.dist_map[y][x + 1]
+
+			options = [up, down, left, right]
+
+			options = [opt for opt in options if opt >= 0]
+
+			if options:
+				minval = min(options)
+
+				if up == minval:
+					return UP
+				elif down == minval:
+					return DOWN 
+				elif left==minval:
+					return LEFT
+				elif right==minval:
+					return RIGHT
+		return None
+
 
 
 	def toward_entity(self, entity):
@@ -643,6 +718,43 @@ class Entity(object):
 				left = entity.dist_map[y][x - 1]
 			if x < xmax:
 				right = entity.dist_map[y][x + 1]
+
+			options = [up, down, left, right]
+
+			options = [opt for opt in options if opt >= 0]
+
+			if options:
+				maxval = max(options)
+
+				if up == maxval:
+					return UP
+				elif down == maxval:
+					return DOWN 
+				elif left==maxval:
+					return LEFT
+				elif right==maxval:
+					return RIGHT
+		return None
+
+
+	def flee_distmap(self, dmap):
+		y = self.y
+		x = self.x
+		up = -1
+		down = -1
+		left = -1
+		right = -1
+		if dmap:
+			ymax = len(dmap) - 1
+			xmax = len(dmap[0]) - 1
+			if y > 0:
+				up = dmap[y - 1][x]
+			if y < ymax:
+				down = dmap[y + 1][x]
+			if x > 0:
+				left = dmap[y][x - 1]
+			if x < xmax:
+				right = dmap[y][x + 1]
 
 			options = [up, down, left, right]
 
