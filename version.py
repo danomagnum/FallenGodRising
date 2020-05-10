@@ -1,2 +1,2 @@
-version = "0.l.1"
-revision = filter(str.isdigit, "$Revision$")
+version = "0.1.1"
+revision = ''.join(filter(str.isdigit, "$Revision$"))
