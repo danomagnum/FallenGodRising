@@ -16,6 +16,12 @@ from os.path import isfile, join
 class GameOver(Exception):
 	pass
 
+class GameHardExit(Exception):
+	pass
+
+class GameSoftExit(Exception):
+	pass
+
 class FastTravel(object):
 	def __init__(self, name=None, level=None):
 		self.name = name
@@ -530,7 +536,6 @@ class Entity(object):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
 	
 	def tick(self, zone):
-		self.action_points = 0
 		pass
 
 	def subtick(self, zone):
