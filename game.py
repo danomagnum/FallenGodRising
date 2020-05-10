@@ -37,6 +37,7 @@ import maps.maptools
 import maps.buildings
 import maps.sewers
 import maps.town
+import player
 
 WRITEMAP = False
 
@@ -174,7 +175,7 @@ try:
 									amulet = items.add_item_mod(amulet, items.OfRegen)
 									item_list.append(amulet)
 
-									user = main.ActingEntity(game, 'playercharacter', combatants=player_party, item_list=item_list, char='@',is_player=True)
+									user = player.PlayerEntity(game, 'playercharacter', combatants=player_party, item_list=item_list, char='@',is_player=True)
 									#user.combatants = player_party
 									user.x, user.y = zone.find_empty_position()
 									user.backpack.gold = 100
@@ -197,121 +198,13 @@ try:
 			while gameloop:
 				display.refresh_full()
 				display.show_messages()
-				key = display.mapbox.getch()
+				#key = display.mapbox.getch()
 				##########################
 				# Player movement
 				##########################
 
 				try:
-					if key in keys.UP:
-						game.player.move(game.zone, UP)
-					elif key in keys.DOWN:
-						game.player.move(game.zone, DOWN)
-					elif key in keys.LEFT:
-						game.player.move(game.zone, LEFT)
-					elif key in keys.RIGHT:
-						game.player.move(game.zone, RIGHT)
-
-					##########################
-					# Player menu
-					##########################
-					elif key in keys.MENUKEY:
-						#Menu
-						choice = display.menu(['Battlers', 'Quests', 'Fast Travel', 'Save', 'Options', 'Items', 'Quit'], 4)
-						if choice == 'Battlers':
-							battler = display.menu(game.player.combatants)
-							if battler is not None:
-								item_target = display.menu(battler.equipment.all_items())
-								if item_target is not None:
-									unequipped = battler.equipment.unequip_by_instance(item_target)
-									if unequipped is not None:
-										game.player.backpack.store(unequipped)
-										print('{} unequipped {}'.format(battler, unequipped))
-						elif choice == 'Quests':
-							pass
-						elif choice == 'Fast Travel':
-							if game.zone.check_clear():
-								sel_ft = display.menu(list(game.fast_travel()), cols=2)
-								if sel_ft is not None:
-									if sel_ft.level != game.zone.level:
-										print('Fast Traveling To {}'.format(sel_ft))
-										game.zone.change_level(sel_ft.level)
-										x, y = game.zone.find_empty_position()
-										game.player.x = x
-										game.player.y = y
-
-									else:
-										print('Already at {}'.format(sel_ft))
-							else:
-								print('Cannot Fast Travel Until Zone Is Clear')
-						elif choice == 'Items':
-							item_slot_used = display.menu(game.player.backpack.show(), cols=2)
-							item_target = None
-							if item_slot_used is not None:
-								item_target_type = item_slot_used.target_type
-								if item_target_type == ALLY:
-									item_target = [display.menu(game.player.combatants, cols=2)]
-								elif item_target_type == ANY:
-									item_target = [display.menu(game.player.combatants, cols=2)]
-								elif item_target_type == MULTI_ALLY:
-									item_target = game.player.combatants
-								elif item_target_type in EQUIPPABLE:
-									item_target = [display.menu(game.player.combatants, cols=2)]
-								else:
-									print("Can't Use that now")
-								if item_target[0] is not None:
-									item_used = item_slot_used.take()
-									selection_needed = False
-									for t in item_target:
-										if t is not None:
-											item_used.use(t)
-						elif choice == 'Quit':
-							game.save()
-							break
-
-						elif choice == 'Save':
-							game.save()
-
-					elif key in keys.DEBUG_K:
-						#up
-						game.zone.exit(game.player, UP)
-					elif key in keys.DEBUG_J:
-						game.zone.exit(game.player, DOWN)
-						#down
-					elif key in keys.DEBUG_H:
-						game.zone.exit(game.player, LEFT)
-						#left
-					elif key in keys.DEBUG_L:
-						game.zone.exit(game.player, RIGHT)
-						#right
-					##########################
-					# Player did nothing
-					##########################
-					elif key in keys.DEBUGKEY:
-						#print(game.display.mapbox.getmaxyx())
-						#game.player.combatants[0].level += 1
-						while True:
-							input_command = display.text_entry(history=game.debug_history)
-							if input_command == '':
-								break
-							try:
-								output = game.debug(input_command)
-								if output is not None:
-									print(output)
-							except Exception as e:
-								#print(e.message)
-								print(sys.exc_info()[0])
-							display.show_messages()
-					elif key in keys.EXIT:
-
-						game.save()
-						time.sleep(1)
-						graphics_interface.shutdown()
-						sys.exit(0)
-
-					#game.zone.tick()
 					game.tick()
-
 				except main.GameOver as e:
 					display.show_messages()
 					#terminal.read()
@@ -321,6 +214,17 @@ try:
 					#terminal.read()
 					display.getch()
 					gameloop = False
+				except main.GameSoftExit as e:
+					game.save()
+					time.sleep(1)
+					break
+				except main.GameHardExit as e:
+					game.save()
+					time.sleep(1)
+					graphics_interface.shutdown()
+					sys.exit(0)
+				except Exception as e:
+					raise e
 
 except Exception as e:
 	graphics_interface.shutdown()
