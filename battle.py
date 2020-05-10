@@ -98,7 +98,7 @@ class Skiddish_AI(AI):
 			maxhealth += c.max_hp
 		run_chance = float(health) / float(maxhealth)
 		if random.random() > run_chance:
-			self.state = self.FLEE
+			self.battle_run()
 			return RUN
 		if self.get_standby():
 			return random.choice([ATTACK, SWITCH])
