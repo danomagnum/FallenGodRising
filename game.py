@@ -50,7 +50,7 @@ try:
 			mainmenu = True
 			while mainmenu:
 				display.splash_screen()
-				print('Version: ' + version)
+				print('Version: {}:{} '.format(version, revision))
 				display.show_messages()
 
 				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Quit'] ,clear=False)
