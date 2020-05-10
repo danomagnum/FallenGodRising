@@ -1,4 +1,5 @@
 import random
+import sys
 import math
 import utility
 import items
@@ -42,8 +43,33 @@ class Game(object):
 
 		self.filename = 'auto.sav'
 
+	def tick(self):
+		#this main tick routine will determine if any active entities are ready
+		# to do something.  It will loop on actions until its the players turn 
+		# at which point it wil return
+		while True:
+			valid_entities = self.zone.entities + [self.player]
+
+			for e in valid_entities:
+				e.action_accumulate()
+
+			valid_entities.sort(key=lambda x: -x.action_points)
+
+			top_entity = valid_entities[0]
+
+			top_entity.tick(zone=self.zone)
+			top_entity.subtick(zone=self.zone)
+			top_entity.action_points = 0
+			if top_entity == self.player:
+				return
+
+			self.zone.entities = [e for e in self.zone.entities if e.enabled] 
+
+
+
 	def fast_travel(self):
 		return self.zone.fast_travel_found
+
 	def save(self):
 		print('Saving...')
 		self.display.show_messages()
@@ -424,6 +450,7 @@ class Entity(object):
 		self.helptext = ''
 
 		self.passive = False
+		self.action_points = 0
 		
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
@@ -439,6 +466,8 @@ class Entity(object):
 		if self.defeated_text is None:
 			self.defeated_text = '{} was defeated'.format(self.name)
 
+	def action_accumulate(self):
+		return 0
 
 	def attack(self, enemy_ai):
 		move = random.choice(self.combatant.moves)
@@ -501,6 +530,7 @@ class Entity(object):
 		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
 	
 	def tick(self, zone):
+		self.action_points = 0
 		pass
 
 	def subtick(self, zone):
@@ -774,3 +804,8 @@ class Entity(object):
 		return None
 
 
+class ActingEntity(Entity):
+	def action_accumulate(self):
+		combatantspeed = sum([combatant.speed for combatant in self.combatants]) / len(self.combatants)
+		self.action_points += combatantspeed
+		return self.action_points

@@ -50,7 +50,7 @@ try:
 			mainmenu = True
 			while mainmenu:
 				display.splash_screen()
-				print('Version: {}:{} '.format(version, revision))
+				print(versionstring)
 				display.show_messages()
 
 				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Quit'] ,clear=False)
@@ -174,7 +174,7 @@ try:
 									amulet = items.add_item_mod(amulet, items.OfRegen)
 									item_list.append(amulet)
 
-									user = main.Entity('playercharacter', game, combatants=player_party, item_list=item_list, char='@',is_player=True)
+									user = main.ActingEntity(game, 'playercharacter', combatants=player_party, item_list=item_list, char='@',is_player=True)
 									#user.combatants = player_party
 									user.x, user.y = zone.find_empty_position()
 									user.backpack.gold = 100
@@ -186,7 +186,6 @@ try:
 						else:
 							if i > 0:
 								i -= 1
-					#break
 
 
 			##########################
@@ -310,7 +309,8 @@ try:
 						graphics_interface.shutdown()
 						sys.exit(0)
 
-					game.zone.tick()
+					#game.zone.tick()
+					game.tick()
 
 				except main.GameOver as e:
 					display.show_messages()

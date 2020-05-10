@@ -1,4 +1,4 @@
-from main import Entity
+from main import Entity, ActingEntity
 import battle
 import random
 from constants import *
@@ -8,7 +8,7 @@ from copy import deepcopy
 #import curses_interface as graphics_interface
 import bearlib_interface as graphics_interface
 
-class Battler(Entity):
+class Battler(ActingEntity):
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
@@ -157,11 +157,9 @@ class DoomAI(Battler):
 		if dir is not None:
 			self.move(zone, dir)
 			self.target_map = self.game.player.dist_map
-			print('seen')
 		else:
 			if self.target_map is not None:
 				dir = self.follow_distmap(self.target_map)
-				print('memory {}'.format(dir))
 				if dir is None:
 					self.target_map = None
 					self.state = self.standby
