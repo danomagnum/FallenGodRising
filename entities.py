@@ -15,6 +15,8 @@ class Battler(Entity):
 			if result == USER:
 				self.enabled = False
 				entity.backpack.absorb(self.backpack, message = True)
+	def battle_run(self):
+		pass
 
 	def tick(self, zone):
 		if len(self.get_available()) == 0:
@@ -127,6 +129,49 @@ class TowardWalker(Entity):
 			if dir is not None:
 				self.move(zone, dir)
 
+
+class DoomAI(Battler):
+	def config(self):
+		self.state = self.standby
+		self.standby_delay = 2
+		self.standby_counter = 0
+		self.configured = 1
+		self.movingdir = None
+
+	def standby(self, zone):
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			self.standby_counter = 0
+			self.state = self.advancing
+
+	def battle_run(self):
+		self.state = self.flee
+		pass
+
+	def advancing(self, zone):
+		dir = self.toward_entity(self.game.player)
+		if dir is not None:
+			self.move(zone, dir)
+
+		if not zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			self.standby_counter += 1
+
+		if self.standby_counter > self.standby_delay:
+			self.state = self.standby
+
+	def flee(self, zone):
+		dir = self.flee_entity(self.game.player)
+		if dir is not None:
+			self.move(zone, dir)
+
+		if not zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			self.standby_counter -= 1
+
+		if self.standby_counter < 1:
+			self.state = self.standby
+
+	def tick(self, zone):
+		self.state(zone)
+
 class BasicAI1(Battler):
 	STANDBY = 1
 	AGRESSIVE = 2
@@ -164,6 +209,7 @@ class BasicAI1(Battler):
 
 			if self.standby_counter < 1:
 				self.state = self.STANDBY
+
 
 class NPC(Entity):
 	def config(self):

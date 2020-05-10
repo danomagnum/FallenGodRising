@@ -37,7 +37,8 @@ class LittleRat(characters.Character):
 # assigning combatants
 #####################
 #class Rat(entities.RandWalker, entities.Battler):
-class Rat( battle.Skiddish_AI,entities.BasicAI1):
+#class Rat( battle.Skiddish_AI,entities.BasicAI1):
+class Rat( battle.Skiddish_AI,entities.DoomAI):
 	# example basic enemy
 	def config(self):
 		self.name = 'Rat'
