@@ -10,9 +10,7 @@ import utility
 SPLITS = 8
 
 def town_entry(zone):
-	print('Welcome To Town')
 	if zone.level_visits[zone.level] == 1:
-		print('First Visit')
 		#first visit to town. populate NPCs
 		e = entities.Shop(zone.game)
 		gen_level = zone.game.player.level

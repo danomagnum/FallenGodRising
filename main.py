@@ -54,6 +54,7 @@ class Game(object):
 		# to do something.  It will loop on actions until its the players turn 
 		# at which point it wil return
 		while True:
+			#self.display.refresh_full()
 			valid_entities = self.zone.entities + [self.player]
 
 			for e in valid_entities:
@@ -66,10 +67,17 @@ class Game(object):
 			top_entity.tick(zone=self.zone)
 			top_entity.subtick(zone=self.zone)
 			top_entity.action_points = 0
-			if top_entity == self.player:
-				return
+			self.zone.redraw.append([top_entity.x, top_entity.y])
+			#if top_entity == self.player:
+				#return
+
+			purged = [ e for e in self.zone.entities if not e.enabled]
+			for p in purged:
+				self.zone.redraw.append([p.x, p.y])
 
 			self.zone.entities = [e for e in self.zone.entities if e.enabled] 
+			if top_entity == self.player:
+				return
 
 
 
