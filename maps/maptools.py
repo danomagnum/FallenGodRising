@@ -735,14 +735,14 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 	ov_entity.new_x = z_x
 	ov_entity.new_y = z_y
 	ov_entity.new_zone = zone.name
-
-
 	game.overworld.add_entity(ov_entity, ov_level)
 
 
 	Door_Handler_onelevel(game.overworld, ov_level)
 
 	game.overworld.fast_travel_options[ov_level] = main.FastTravel(zone.name, level=ov_level)
+
+	return ov_level
 
 
 def empty_zone(cell, xmax, ymax):

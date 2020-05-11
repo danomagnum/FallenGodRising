@@ -28,6 +28,7 @@ import items
 import entities
 import elements
 from constants import *
+import player
 
 import maps.overworld
 import maps.fortress
@@ -37,7 +38,7 @@ import maps.maptools
 import maps.buildings
 import maps.sewers
 import maps.town
-import player
+import maps.home
 
 WRITEMAP = False
 
@@ -108,9 +109,12 @@ try:
 					zone4 = maps.sewers.genzone(game)
 					zone5 = maps.fortress.genzone(game)
 
+					homezone = maps.home.genzone(game)
+
 					maps.town.genzone(game, 'Town1')
 					maps.town.genzone(game, 'Town2')
 					maps.town.genzone(game, 'Town3')
+
 
 
 					if WRITEMAP:
@@ -127,6 +131,7 @@ try:
 
 						file.close()
 
+					game.zone = homezone
 					display.change_zone(game.zone)
 					#zone.display = display
 
@@ -174,10 +179,13 @@ try:
 									amulet = items.Amulet(game)
 									amulet = items.add_item_mod(amulet, items.OfRegen)
 									item_list.append(amulet)
+									for item in item_list:
+										maps.maptools.Random_Map_Insert(game.zone, entities.Treasure(game, [item,]))
 
-									user = player.PlayerEntity(game, 'playercharacter', combatants=player_party, item_list=item_list, char='@',is_player=True)
+
+									user = player.PlayerEntity(game, 'playercharacter', combatants=player_party, char='@',is_player=True)
 									#user.combatants = player_party
-									user.x, user.y = zone.find_empty_position()
+									user.x, user.y = game.zone.find_empty_position()
 									user.backpack.gold = 100
 									#zone.set_player(user)
 									display.user = user
