@@ -163,3 +163,35 @@ def add_class(original, addition):
 			pass
 	return Generated
 
+
+def add_class_to_instance(instance, mod):
+
+	mro = list(inspect.getmro(instance.__class__))
+	calls = set()
+	for m in mro:
+		try:
+			call = m.config
+			calls.add(call)
+		except:
+			pass
+
+	if instance.__class__.__name__ == 'Generated':
+		classes = list(instance.__class__.__bases__)
+		if mod not in classes:
+			classes.append(mod)
+		classes = tuple(classes)
+		Generated = type('Generated', classes, {})
+		
+	else:
+		class Generated(instance.__class__, mod):
+			pass
+	instance.__class__ = Generated
+
+	try:
+		if mod.config not in calls:
+			mod.config(instance)
+	except:
+		pass
+	return instance
+
+

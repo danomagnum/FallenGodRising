@@ -1,4 +1,5 @@
-import main, battle, characters, zone, entities, moves, elements, items
+import main, battle, characters, zone, entities, moves, elements
+import items
 from constants import *
 import random
 import maps.bsp as bsp
@@ -35,7 +36,10 @@ def genzone(game, townname):
 
 	for split in range(SPLITS):
 		buildings.split(True)
-	for building in buildings.final_nodes():
+	buildings = buildings.final_nodes()
+	for b in range(5):
+		buildings.remove(random.choice(buildings))
+	for building in buildings:
 		building.draw(lev, True)
 
 	overworld_map = maptools.flatten(lev)
