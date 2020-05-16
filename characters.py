@@ -1,6 +1,6 @@
 import main
 import sys
-import items
+from items import items
 import elements
 import moves
 import random

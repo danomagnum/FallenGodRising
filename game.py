@@ -9,6 +9,7 @@ import characters
 import battle
 import main
 import random
+import utility
 
 #import dill as pickle
 import pickle
@@ -24,6 +25,7 @@ import bearlib_interface as graphics_interface
 import bearlibkeys as keys
 
 import time
+#from items import items
 import items
 import entities
 import elements
@@ -175,9 +177,9 @@ try:
 									item_list = []
 									item_list = [items.gen_base_item(game) for x in range(4)]
 									item_list += [items.gen_gear(game, level=1) for x in range(4)]
-									item_list += [items.gen_movescroll(game) for x in range(4)]
-									amulet = items.Amulet(game)
-									amulet = items.add_item_mod(amulet, items.OfRegen)
+									item_list += [items.scrolls.gen_movescroll(game) for x in range(4)]
+									amulet = items.armor.Amulet(game)
+									amulet = utility.add_class_to_instance(amulet, items.gearmods.OfRegen)
 									item_list.append(amulet)
 									for item in item_list:
 										maps.maptools.Random_Map_Insert(game.zone, entities.Treasure(game, [item,]))

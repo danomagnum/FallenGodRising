@@ -4,7 +4,6 @@ import time
 import main
 import sayings
 import sys
-import items
 import utility
 from constants import *
 

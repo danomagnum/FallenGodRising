@@ -441,7 +441,7 @@ class LinearZone(Zone):
 				if chance < 0.05:
 					newitem = items.gen_gear(self.game, gen_level)
 				elif chance < 0.3:
-					newitem = items.gen_movescroll(self.game)
+					newitem = items.scrolls.gen_movescroll(self.game)
 				else:
 					newitem = items.gen_base_item(self.game)
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))

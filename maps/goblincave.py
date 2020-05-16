@@ -1,4 +1,5 @@
-import main, battle, characters, zone, entities, moves, elements, items
+import main, battle, characters, zone, entities, moves, elements
+from items import items
 from constants import *
 import random
 import maps.maptools as maptools

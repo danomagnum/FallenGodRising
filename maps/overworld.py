@@ -1,7 +1,9 @@
 #!/usr/bin/python
 #coding: utf-8 
 
-import main, battle, characters, zone, entities, moves, elements, items
+import main, battle, characters, zone, entities, moves, elements
+import items
+#from items import items
 from constants import *
 import random
 import maps.maptools as maptools
@@ -51,7 +53,7 @@ class PackRat(entities.TowardWalker, entities.Battler):
 	def config(self):
 		self.name = 'Rat Pack'
 		self.combatants.append(LittleRat(self.game, level=1))
-		self.backpack.store(items.Potion(self.game))
+		self.backpack.store(items.status.Potion(self.game))
 		self.char = 'F'
 		self.AI = battle.Random_AI
 
@@ -72,11 +74,11 @@ class Door2(entities.Door):
 
 class MyShop(entities.Shop):
 	def config(self):
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
-		self.backpack.store(items.Potion(self.game))
+		self.backpack.store(items.status.Potion(self.game))
+		self.backpack.store(items.status.Potion(self.game))
+		self.backpack.store(items.status.Potion(self.game))
+		self.backpack.store(items.status.Potion(self.game))
+		self.backpack.store(items.status.Potion(self.game))
 
 #####################
 # load the map file(s)
@@ -108,7 +110,7 @@ class TestZone(zone.Zone):
 				if chance < 0.3:
 					newitem = items.gen_gear(self.game, gen_level)
 				elif chance < 0.6:
-					newitem = items.gen_movescroll(self.game)
+					newitem = items.scrolls.gen_movescroll(self.game)
 				else:
 					newitem = items.gen_base_item(self.game)
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
