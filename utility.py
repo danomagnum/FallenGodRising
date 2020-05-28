@@ -195,3 +195,13 @@ def add_class_to_instance(instance, mod):
 	return instance
 
 
+
+def change_class_of_instance(instance, *newclasses):
+
+	Generated = type('Generated', newclasses, {})
+
+	instance.__class__ = Generated
+
+	return instance
+
+
