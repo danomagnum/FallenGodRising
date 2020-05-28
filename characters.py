@@ -118,7 +118,16 @@ class Character(object):
 					method = None
 				if method is not None:
 					method()
+		self.levelup()
 		self.partial_heal()
+
+	def levelup(self):
+		#check if the character leveled up.  Template code below
+		#if self.level > xx:
+		#	res = self.game.prompt('Advance {} to {}'.format(self.name, 'NewCharName'))
+		#	if res:
+		#		utilities.change_class_of_instance(self, NewCharacter)
+		pass
 	
 	def add_move(self, move):
 		m = move(self.game)
@@ -287,6 +296,7 @@ class Fighter(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
+
 
 	def level_03(self):
 		if self.elements[0] in moves.typed_blasts:
