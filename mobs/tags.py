@@ -1,2 +1,2 @@
-taglist = ['base']
+taglist = ['starters']
 
