@@ -1,4 +1,4 @@
-import main, battle, characters, zone, entities, moves, elements
+import main, battle, zone, entities, moves, elements
 import items
 from constants import *
 import random
