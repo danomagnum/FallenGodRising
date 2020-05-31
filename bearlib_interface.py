@@ -21,7 +21,6 @@ locale.setlocale(locale.LC_ALL, '')
 
 #from StringIO import StringIO
 
-import characters
 
 DEBUG = True
 
