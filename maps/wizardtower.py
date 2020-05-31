@@ -1,4 +1,4 @@
-import main, battle, characters, zone, entities, moves, elements
+import main, battle, zone, entities, moves, elements
 from items import items
 from constants import *
 import random
@@ -13,13 +13,13 @@ ZONENAME = 'WizardTower'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.Imp]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', characters.Wizard]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', characters.Wizard, mobs.Imp]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'wizard', characters.Wizard, characters.Wizard]),
-		                   (9, [battle.Random_AI, entities.BasicAI1, 'wizard', characters.Wizard, characters.Battlemage]),
-		                   (13, [battle.Random_AI, entities.BasicAI1, 'wizard', characters.Wizard, characters.Wizard, characters.Wizard]),
-		                   (17, [battle.Random_AI, entities.BasicAI1, 'wizard', characters.Wizard, characters.Wizard, characters.Battlemage])]
+		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.mobs.Imp]),
+		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard]),
+		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.mobs.Imp]),
+		                   (5, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Wizard]),
+		                   (9, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Battlemage]),
+		                   (13, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Wizard, mobs.characters.Wizard]),
+		                   (17, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Wizard, mobs.characters.Battlemage])]
 	def level_019(self):
 		gen_level = 1
 		if self.game.player is not None:

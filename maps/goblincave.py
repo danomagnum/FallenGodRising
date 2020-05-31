@@ -1,4 +1,4 @@
-import main, battle, characters, zone, entities, moves, elements
+import main, battle, zone, entities, moves, elements
 from items import items
 from constants import *
 import random
@@ -12,10 +12,10 @@ ZONENAME = 'GoblinCave'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.Goblin]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.Goblin, mobs.Goblin]),
-			           (5, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.Goblin, mobs.Hobgoblin]),
-			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.Goblin, mobs.Goblin, mobs.Hobgoblin])]
+		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin]),
+		                   (3, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin, mobs.mobs.Goblin]),
+			           (5, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin, mobs.mobs.Hobgoblin]),
+			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin, mobs.mobs.Goblin, mobs.mobs.Hobgoblin])]
 	def level_009(self):
 		gen_level = 1
 		if self.game.player is not None:

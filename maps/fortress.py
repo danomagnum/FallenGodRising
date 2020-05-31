@@ -1,4 +1,4 @@
-import main, battle, characters, zone, entities, moves, elements, items
+import main, battle, mobs, zone, entities, moves, elements, items
 from constants import *
 import maps.grid as grid
 import random
@@ -13,10 +13,10 @@ ZONENAME = 'Fortress'
 class FortressZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'fighter', characters.Fighter]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'fighter', characters.Fighter, characters.Fighter]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'fighter', characters.Fighter, characters.Juggernaut]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'fighter', characters.Fighter, characters.Juggernaut, characters.Juggernaut])]
+		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'fighter', mobs.characters.Fighter]),
+		                   (2, [battle.Random_AI, entities.BasicAI1, 'fighter', mobs.characters.Fighter, mobs.characters.Fighter]),
+		                   (2, [battle.Random_AI, entities.BasicAI1, 'fighter', mobs.characters.Fighter, mobs.characters.Juggernaut]),
+		                   (5, [battle.Random_AI, entities.BasicAI1, 'fighter', mobs.characters.Fighter, mobs.characters.Juggernaut, mobs.characters.Juggernaut])]
 
 #####################
 # populate the zone with entities
