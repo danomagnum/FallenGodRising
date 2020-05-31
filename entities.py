@@ -177,7 +177,6 @@ class DoomAI(Battler):
 		if dir is not None:
 			self.move(zone, dir)
 			self.target_map = self.game.player.dist_map
-			print('seen')
 		else:
 			self.flee_counter += 1
 			if self.target_map is not None:

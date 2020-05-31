@@ -109,7 +109,8 @@ class Character(object):
 		if value > self._level:
 			for lvl in range(self._level + 1, value + 1):
 				self._level = lvl
-				self._exp = self.exp_at_level(self.level)
+				if self.exp_at_level(self.level) > self._exp:
+					self._exp = self.exp_at_level(self.level)
 				self.levelup()
 				level_method = 'level_{:02}'.format(lvl)
 				try:
@@ -144,7 +145,7 @@ class Character(object):
 		self._exp = value
 		check_level = True
 		while check_level:
-			if self._exp > self.exp_at_level(self.level + 1):
+			if self._exp >= self.exp_at_level(self.level + 1):
 				self.level += 1
 			else:
 				check_level = False
