@@ -5,7 +5,8 @@ import traceback
 
 sys.dont_write_bytecode = True
 
-import characters
+#import characters
+import mobs
 import battle
 import main
 import random
@@ -148,7 +149,7 @@ try:
 					while loop:
 						if i >= graphics_interface.MAX_COMBATANTS:
 							i = 0
-						player_characters = [characters.Fighter(game), characters.Wizard(game), characters.Cleric(game), characters.Knight(game), characters.Paladin(game), characters.Rogue(game), characters.Dragoon(game), characters.Juggernaut(game), characters.Battlemage(game), characters.Nightblade(game), characters.Witchhunter(game), characters.Debug(game)]
+						player_characters = [mobs.characters.Fighter(game), mobs.characters.Wizard(game), mobs.characters.Cleric(game), mobs.characters.Knight(game), mobs.characters.Paladin(game), mobs.characters.Rogue(game), mobs.characters.Dragoon(game), mobs.characters.Juggernaut(game), mobs.characters.Battlemage(game), mobs.characters.Nightblade(game), mobs.characters.Witchhunter(game), mobs.characters.Debug(game)]
 
 
 						def update_confirm_box(choice):

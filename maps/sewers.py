@@ -1,4 +1,4 @@
-import main, battle, characters, zone, entities, moves, elements, items
+import main, battle, zone, entities, moves, elements, items
 from constants import *
 import random
 import maps.maptools as maptools
@@ -12,13 +12,13 @@ ZONENAME = 'Sewers'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'rat', mobs.Rat]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'spider', mobs.Spider]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'spider', mobs.Spider, mobs.Spider]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.Imp]),
-		                   (9, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.Skeleton]),
-		                   (13, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.Skeleton, mobs.Spider]),
-		                   (17, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.Skeleton, mobs.Skeleton, mobs.Spider])]
+		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'rat', mobs.mobs.Rat]),
+		                   (2, [battle.Random_AI, entities.BasicAI1, 'spider', mobs.mobs.Spider]),
+		                   (3, [battle.Random_AI, entities.BasicAI1, 'spider', mobs.mobs.Spider, mobs.mobs.Spider]),
+		                   (5, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.mobs.Imp]),
+		                   (9, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.mobs.Skeleton]),
+		                   (13, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.mobs.Skeleton, mobs.mobs.Spider]),
+		                   (17, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.mobs.Skeleton, mobs.mobs.Skeleton, mobs.mobs.Spider])]
 	def level_019(self):
 		gen_level = 1
 		if self.game.player is not None:

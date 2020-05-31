@@ -2,7 +2,8 @@ from main import Entity, ActingEntity
 import battle
 import random
 from constants import *
-import characters
+#import characters
+import mobs
 import sys
 from copy import deepcopy
 #import curses_interface as graphics_interface
@@ -119,7 +120,7 @@ class Treasure(Entity):
 
 class Rat(RandWalker, Battler):
 	def config(self):
-		self.combatants.append(characters.Page(level=20))
+		self.combatants.append(mobs.characters.Page(level=20))
 
 class TowardWalker(Entity):
 	def config(self):
@@ -181,7 +182,6 @@ class DoomAI(Battler):
 			self.flee_counter += 1
 			if self.target_map is not None:
 				dir = self.flee_distmap(self.target_map)
-				print('memory {}'.format(dir))
 				if dir is None:
 					self.target_map = None
 					self.state = self.standby

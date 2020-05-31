@@ -1,7 +1,8 @@
 #!/usr/bin/python
 #coding: utf-8 
 
-import main, battle, characters, zone, entities, moves, elements
+import main, battle, zone, entities, moves, elements
+import mobs
 import items
 #from items import items
 from constants import *
@@ -19,7 +20,7 @@ USE_SYMBOLS = True
 # The characters subclasses are how you create enemies.
 # You can used "canned" ones or create your own.
 #####################
-class LittleRat(characters.Character):
+class LittleRat(mobs.Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game)]
 		self.elements = [elements.Normal]

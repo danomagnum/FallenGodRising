@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #coding: utf-8 
 
-import main, battle, characters, zone, entities, moves, elements, items
+import main, battle, zone, entities, moves, elements, items
 from constants import *
 import random
 import maps.maptools as maptools

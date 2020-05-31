@@ -561,31 +561,46 @@ class Display(object):
 
 
 		#physical
-		box.addstr(4, 1, "P. Atk.: {}".format(int(combatant.physical_strength)), None)
-		box.addstr(5, 1, "P. Def.: {}".format(int(combatant.physical_defense)), None)
+		box.addstr(4, 1, "Physical Atk.: {:3}   Def.: {:3}".format(int(combatant.physical_strength), int(combatant.physical_defense)), None)
+		#box.addstr(4, 1, "P. Atk.: {}".format(int(combatant.physical_strength)), None)
+		#box.addstr(5, 1, "P. Def.: {}".format(int(combatant.physical_defense)), None)
 
 		#special
-		box.addstr(6, 1, "S. Atk: {}".format(int(combatant.special_strength)), None)
-		box.addstr(7, 1, "S. Def: {}".format(int(combatant.special_defense)), None)
+		box.addstr(5, 1, "Special  Atk.: {:3}   Def.: {:3}".format(int(combatant.special_strength), int(combatant.special_defense)), None)
+		#box.addstr(6, 1, "S. Atk: {}".format(int(combatant.special_strength)), None)
+		#box.addstr(7, 1, "S. Def: {}".format(int(combatant.special_defense)), None)
 
 		#speed
-		box.addstr(8, 1, "Speed: {}".format(int(combatant.speed)), None)
+		box.addstr(6, 1, "Speed: {}           Luck: {}".format(int(combatant.speed), int(combatant.luck)), None)
+		#box.addstr(6, 1, "Speed: {}".format(int(combatant.speed)), None)
 
 		#elements
 		element_list = ' '.join([str(element) for element in combatant.elements])
-		box.addstr(9, 1, "Elements: {}".format(element_list), None)
+		box.addstr(7, 1, "Elements: {}".format(element_list), None)
+		#box.addstr(9, 1, "Elements: {}".format(element_list), None)
 
-		box.addstr(10, 1, "Head: {}".format(combatant.equipment.Head), None)
-		box.addstr(11, 1, "Body: {}".format(combatant.equipment.Body), None)
-		box.addstr(12, 1, "Token: {}".format(combatant.equipment.Token), None)
+		box.addstr( 8, 1, "Head : {}".format(combatant.equipment.Head), None)
+		box.addstr( 9, 1, "Body : {}".format(combatant.equipment.Body), None)
+		box.addstr(10, 1, "Token: {}".format(combatant.equipment.Token), None)
+
+		#box.addstr(10, 1, "Head: {}".format(combatant.equipment.Head), None)
+		#box.addstr(11, 1, "Body: {}".format(combatant.equipment.Body), None)
+		#box.addstr(12, 1, "Token: {}".format(combatant.equipment.Token), None)
 		if combatant.equipment.Hands is None:
-			box.addstr(13, 1, "Left: {}".format(combatant.equipment.Left), None)
-			box.addstr(14, 1, "Right: {}".format(combatant.equipment.Right), None)
+			box.addstr(11, 1, "Left : {}".format(combatant.equipment.Left), None)
+			box.addstr(12, 1, "Right: {}".format(combatant.equipment.Right), None)
+			#box.addstr(13, 1, "Left: {}".format(combatant.equipment.Left), None)
+			#box.addstr(14, 1, "Right: {}".format(combatant.equipment.Right), None)
 		else:
-			box.addstr(13, 1, "Hands: {}".format(combatant.equipment.Hands), None)
+			box.addstr(11, 1, "Hands: {}".format(combatant.equipment.Hands), None)
+			#box.addstr(13, 1, "Hands: {}".format(combatant.equipment.Hands), None)
 
-		stat_list = ' '.join([str(stat) for stat in combatant.status])
-		box.addstr(15, 1, "Status: {}".format(stat_list), None)
+		if len(combatant.status) == 0:
+			stat_list = 'None'
+		else:
+			stat_list = ' '.join([str(stat) for stat in combatant.status])
+		box.addstr(12, 1, "Status: {}".format(stat_list), None)
+		#box.addstr(15, 1, "Status: {}".format(stat_list), None)
 
 
 
