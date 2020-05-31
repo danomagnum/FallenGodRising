@@ -197,8 +197,11 @@ def add_class_to_instance(instance, mod):
 
 
 def change_class_of_instance(instance, *newclasses):
+	newclasses = list(newclasses)
+	if Serializable not in newclasses:
+		newclasses.append(Serializable)
 
-	Generated = type('Generated', newclasses, {})
+	Generated = type('Generated', tuple(newclasses), {})
 
 	instance.__class__ = Generated
 

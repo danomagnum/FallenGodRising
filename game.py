@@ -149,7 +149,10 @@ try:
 					while loop:
 						if i >= graphics_interface.MAX_COMBATANTS:
 							i = 0
-						player_characters = [mobs.characters.Fighter(game), mobs.characters.Wizard(game), mobs.characters.Cleric(game), mobs.characters.Knight(game), mobs.characters.Paladin(game), mobs.characters.Rogue(game), mobs.characters.Dragoon(game), mobs.characters.Juggernaut(game), mobs.characters.Battlemage(game), mobs.characters.Nightblade(game), mobs.characters.Witchhunter(game), mobs.characters.Debug(game)]
+						#player_characters = [mobs.characters.Fighter(game), mobs.characters.Wizard(game), mobs.characters.Cleric(game), mobs.characters.Knight(game), mobs.characters.Paladin(game), mobs.characters.Rogue(game), mobs.characters.Dragoon(game), mobs.characters.Juggernaut(game), mobs.characters.Battlemage(game), mobs.characters.Nightblade(game), mobs.characters.Witchhunter(game), mobs.characters.Debug(game)]
+						player_characters = []
+						for starter in mobs.starters:
+							player_characters.append(starter(game))
 
 
 						def update_confirm_box(choice):

@@ -286,27 +286,6 @@ class Character(object):
 			self.hp = 1
 
 
-
-class Fighter(Character):
-	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
-		self.base_physical_strength = 100 
-		self.base_physical_defense = 100
-		self.base_special_strength = 100
-		self.base_special_defense = 100
-		self.base_speed = 100
-		self.base_hp = 100
-		self.base_luck = 100
-
-
-	def level_03(self):
-		if self.elements[0] in moves.typed_blasts:
-			preferred_move = moves.typed_strikes.index(self.element)
-			if (random.random() * self.luck) > 50:
-				self.add_move(preferred_move)
-				return
-		self.add_move(random.choice(moves.typed_strikes))
-
 class Wizard(Character):
 	def config(self):
 		self.moves = [moves.Blast(self.game), moves.Focus(self.game)]
@@ -327,17 +306,6 @@ class Cleric(Character):
 		self.base_special_defense = 120
 		self.base_speed = 80
 		self.base_hp = 120
-		self.base_luck = 100
-
-class Knight(Character):
-	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Taunt(self.game)]
-		self.base_physical_strength = 120
-		self.base_physical_defense = 120
-		self.base_special_strength = 80
-		self.base_special_defense = 80
-		self.base_speed = 100
-		self.base_hp = 100
 		self.base_luck = 100
 
 class Paladin(Character):
@@ -437,4 +405,14 @@ class Debug(Character):
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
+
+def promote(instance, newclass):
+	name = instance.name
+	utility.change_class_of_instance(instance, newclass)
+	print('{} was promoted to {}'.format(name, newclass.__name__))
+	instance.name = newclass.__name__
+
+
+starters = [Debug]
+
 
