@@ -1,9 +1,8 @@
-import entities
-from .characters import Character
-import main
+from .characters import Character, promote
 import moves
 import elements
 import utility
+import random
 
 class Rat(Character):
 	def config(self):

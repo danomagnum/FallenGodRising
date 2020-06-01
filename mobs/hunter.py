@@ -5,18 +5,17 @@ import utility
 import random
 
 
-class Barbarian(Character):
+class Hunter(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
 		self.base_stats()
-
 	def base_stats(self):
-		self.base_hp = 50
-		self.base_physical_strength = 70 
-		self.base_physical_defense = 100
-		self.base_special_strength = 40
-		self.base_special_defense = 40
-		self.base_speed = 30
+		self.base_hp = 39
+		self.base_physical_strength = 52 
+		self.base_physical_defense = 43
+		self.base_special_strength = 60
+		self.base_special_defense = 50
+		self.base_speed = 65
 		self.base_luck = 100
 
 
@@ -29,22 +28,22 @@ class Barbarian(Character):
 		self.add_move(random.choice(moves.typed_strikes))
 
 	def level_16(self):
-		promote(self, Juggernaut)	
+		promote(self, Rogue)	
 
 
-class Juggernaut(Character):
+class Rogue(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
 		self.base_stats()
-
 	def base_stats(self):
-		self.base_hp = 60
-		self.base_physical_strength = 90 
-		self.base_physical_defense = 140
-		self.base_special_strength = 50
-		self.base_special_defense = 50
-		self.base_speed = 40
+		self.base_hp = 58
+		self.base_physical_strength = 64 
+		self.base_physical_defense = 58
+		self.base_special_strength = 80
+		self.base_special_defense = 65
+		self.base_speed = 80
 		self.base_luck = 100
+
 
 	def level_03(self):
 		if self.elements[0] in moves.typed_blasts:
@@ -55,21 +54,20 @@ class Juggernaut(Character):
 		self.add_move(random.choice(moves.typed_strikes))
 
 	def level_36(self):
-		promote(self, Warlord)	
+		promote(self, Ranger)	
 
 
-class Warlord(Character):
+class Ranger(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
 		self.base_stats()
-
 	def base_stats(self):
-		self.base_hp = 70
-		self.base_physical_strength = 110 
-		self.base_physical_defense = 180
-		self.base_special_strength = 60
-		self.base_special_defense = 60
-		self.base_speed = 50
+		self.base_hp = 78
+		self.base_physical_strength = 84 
+		self.base_physical_defense = 78
+		self.base_special_strength = 109
+		self.base_special_defense = 85
+		self.base_speed = 100
 		self.base_luck = 100
 
 
@@ -83,6 +81,4 @@ class Warlord(Character):
 
 
 
-
-
-starters = [Barbarian]
+starters = [Hunter]

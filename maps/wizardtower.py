@@ -14,12 +14,12 @@ class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
 		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.mobs.Imp]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.mobs.Imp]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Wizard]),
-		                   (9, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Battlemage]),
-		                   (13, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Wizard, mobs.characters.Wizard]),
-		                   (17, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.characters.Wizard, mobs.characters.Wizard, mobs.characters.Battlemage])]
+		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer]),
+		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.mobs.Imp]),
+		                   (5, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard]),
+		                   (9, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Wizard, mobs.sorcerer.Sorcerer, mobs.sorcerer.Sorcerer]),
+		                   (13, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard]),
+		                   (17, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Wizard, mobs.sorcerer.Wizard, mobs.sorcerer.Archmage])]
 	def level_019(self):
 		gen_level = 1
 		if self.game.player is not None:

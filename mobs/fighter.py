@@ -1,6 +1,4 @@
-import entities
 from .characters import Character, promote
-import main
 import moves
 import elements
 import utility
@@ -10,12 +8,14 @@ import random
 class Fighter(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
-		self.base_physical_strength = 100 
-		self.base_physical_defense = 100
-		self.base_special_strength = 100
-		self.base_special_defense = 100
-		self.base_speed = 100
-		self.base_hp = 100
+		self.base_stats()
+	def base_stats(self):
+		self.base_hp = 70
+		self.base_physical_strength = 80 
+		self.base_physical_defense = 50
+		self.base_special_strength = 35
+		self.base_special_defense = 35
+		self.base_speed = 35
 		self.base_luck = 100
 
 
@@ -33,12 +33,14 @@ class Fighter(Character):
 class Squire(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.base_stats()
+	def base_stats(self):
+		self.base_hp = 80
 		self.base_physical_strength = 100 
-		self.base_physical_defense = 100
-		self.base_special_strength = 100
-		self.base_special_defense = 100
-		self.base_speed = 100
-		self.base_hp = 100
+		self.base_physical_defense = 70
+		self.base_special_strength = 50
+		self.base_special_defense = 60
+		self.base_speed = 45
 		self.base_luck = 100
 
 	def level_36(self):
@@ -47,12 +49,14 @@ class Squire(Character):
 class Knight(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Taunt(self.game)]
-		self.base_physical_strength = 120
-		self.base_physical_defense = 120
-		self.base_special_strength = 80
-		self.base_special_defense = 80
-		self.base_speed = 100
-		self.base_hp = 100
+		self.base_stats()
+	def base_stats(self):
+		self.base_hp = 90
+		self.base_physical_strength = 130
+		self.base_physical_defense = 80
+		self.base_special_strength = 65
+		self.base_special_defense = 85
+		self.base_speed = 55
 		self.base_luck = 100
 
 
