@@ -1,5 +1,4 @@
 import main
-import sys
 from items import items
 import elements
 import moves
@@ -61,6 +60,9 @@ class Character(object):
 
 	def config(self):
 		self.moves = []
+		self.base_stats()
+
+	def base_stats(self):
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
 		self.base_special_strength = 10
@@ -80,7 +82,6 @@ class Character(object):
 			item.subtick(self)
 			item.tick(self)
 		for move in self.moves:
-			#sys.stderr.write(str(move))
 			move.tick(self)
 
 	def subtick(self):
@@ -88,7 +89,6 @@ class Character(object):
 			utility.call_all('tick', item, self)
 			utility.call_all('subtick', item, self)
 		for move in self.moves:
-			#sys.stderr.write(str(move))
 			utility.call_all('tick', move, self)
 			#move.tick(self)
 		for stat in self.status:
@@ -285,52 +285,6 @@ class Character(object):
 		if self.hp <= 0:
 			self.hp = 1
 
-
-class Wizard(Character):
-	def config(self):
-		self.moves = [moves.Blast(self.game), moves.Focus(self.game)]
-		self.base_physical_strength = 80 
-		self.base_physical_defense = 80
-		self.base_special_strength = 120
-		self.base_special_defense = 120
-		self.base_speed = 100
-		self.base_hp = 100
-		self.base_luck = 100
-
-class Cleric(Character):
-	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Heal(self.game)]
-		self.base_physical_strength = 80
-		self.base_physical_defense = 120
-		self.base_special_strength = 80
-		self.base_special_defense = 120
-		self.base_speed = 80
-		self.base_hp = 120
-		self.base_luck = 100
-
-class Paladin(Character):
-	def config(self):
-		#self.moves = [moves.Strike(self.game), moves.LightBlast(self.game)]
-		self.moves = [moves.Strike(self.game), moves.mod_move(moves.Blast, moves.LightMove)(self.game)]
-		self.base_physical_strength = 110
-		self.base_physical_defense = 110
-		self.base_special_strength = 50
-		self.base_special_defense = 110
-		self.base_speed = 100
-		self.base_hp = 110
-		self.base_luck = 100
-
-class Rogue(Character):
-	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Poison(self.game)]
-		self.base_physical_strength = 100
-		self.base_physical_defense = 100
-		self.base_special_strength = 80
-		self.base_special_defense = 100
-		self.base_speed = 120
-		self.base_hp = 80
-		self.base_luck = 120
-
 class Dragoon(Character):
 	def config(self):
 		self.moves = [moves.Strike(self.game), moves.Smoke(self.game)]
@@ -340,17 +294,6 @@ class Dragoon(Character):
 		self.base_special_defense = 80
 		self.base_speed = 120
 		self.base_hp = 120
-		self.base_luck = 100
-
-class Juggernaut(Character):
-	def config(self):
-		self.moves = [moves.Strike(self.game)]
-		self.base_physical_strength = 140
-		self.base_physical_defense = 140
-		self.base_special_strength = 60
-		self.base_special_defense = 60
-		self.base_speed = 60
-		self.base_hp = 140
 		self.base_luck = 100
 
 class Battlemage(Character):
@@ -411,6 +354,7 @@ def promote(instance, newclass):
 	utility.change_class_of_instance(instance, newclass)
 	print('{} was promoted to {}'.format(name, newclass.__name__))
 	instance.name = newclass.__name__
+	instance.base_stats()
 
 
 starters = [Debug]
