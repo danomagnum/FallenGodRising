@@ -631,7 +631,8 @@ class Display(object):
 
 	def splash_screen(self):
 		terminal.clear()
-		with open('data/Splash.txt') as f:
+		with open('data/splash3.txt') as f:
+		#with open('data/Splash.txt') as f:
 			splash_data = f.readlines()
 		width, height = TERMSIZE
 		#width = len(splash_data[1])
