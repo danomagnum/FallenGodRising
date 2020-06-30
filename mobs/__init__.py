@@ -33,7 +33,10 @@ def party(game, battle_AI, world_AI, level, combatants, name, item_list = None):
 		def config(self):
 			self.name = name
 			for c in combatants:
-				self.combatants.append(c(game, level=level))
+				try:
+					self.combatants.append(c(game, level=level))
+				except:
+					self.combatants.append(c)
 			self.char = name[0]
 	return Generated(game)
 

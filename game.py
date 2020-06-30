@@ -178,16 +178,6 @@ try:
 								player_party[i] = player_choice
 								i += 1
 								if i == graphics_interface.MAX_COMBATANTS:
-									item_list = []
-									item_list = [items.gen_base_item(game) for x in range(4)]
-									item_list += [items.gen_gear(game, level=1) for x in range(4)]
-									item_list += [items.scrolls.gen_movescroll(game) for x in range(4)]
-									amulet = items.armor.Amulet(game)
-									amulet = utility.add_class_to_instance(amulet, items.gearmods.OfRegen)
-									item_list.append(amulet)
-									for item in item_list:
-										maps.maptools.Random_Map_Insert(game.zone, entities.Treasure(game, [item,]))
-
 
 									user = player.PlayerEntity(game, 'playercharacter', combatants=player_party, char='@',is_player=True)
 									#user.combatants = player_party
