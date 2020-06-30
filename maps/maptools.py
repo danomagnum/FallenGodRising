@@ -34,7 +34,12 @@ def map_search(zone, id, level=0):
 def Positional_Map_Insert(zone, entity, id, level=0, replace=True):
 	result = map_search(zone, id, level)
 	if result[0] is not None:
-		e1 = entity(zone.game, x=result[0], y=result[1])
+		try:
+			e1 = entity(zone.game, x=result[0], y=result[1])
+		except:
+			e1 = entity
+			e1.x = result[0]
+			e1.y = result[1]
 		if e1.x is not None:
 			if e1.y is not None:
 				zone.add_entity(e1, level)
