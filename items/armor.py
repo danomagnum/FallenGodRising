@@ -24,7 +24,7 @@ class Hood(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HEAD
 		self.char = '\x03'
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial + (self.power * self.power / 5.0)
 
 class Mail(Gear):
@@ -46,7 +46,7 @@ class Robe(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 		self.char = '\x03'
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial - (self.power * self.power / 2.0)
 
 class BattleRobe(Gear):
@@ -57,7 +57,7 @@ class BattleRobe(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_BODY
 		self.char = '\x03'
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial - (self.power * self.power)
 	def physical_defense(self, initial):
 		return initial - (self.power * self.power / 3.0)
@@ -72,7 +72,7 @@ class Plate(Gear):
 		self.char = '\x03'
 	def physical_defense(self, initial):
 		return initial + (self.power * self.power)
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial - (self.power * self.power / 3.0)
 
 class Shield(Gear):

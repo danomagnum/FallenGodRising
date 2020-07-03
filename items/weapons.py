@@ -62,7 +62,7 @@ class Wand(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_LEFT
 		self.char = '\x02'
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial + self.power * self.power
 
 class Staff(Gear):
@@ -73,7 +73,7 @@ class Staff(Gear):
 		self.rarity = 0.2
 		self.target_type = EQUIP_HANDS
 		self.char = '\x02'
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial + 2*self.power * self.power
 
 

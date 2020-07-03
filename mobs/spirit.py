@@ -13,8 +13,8 @@ class Spirit(Character):
 		self.base_hp = 90
 		self.base_physical_strength = 65 
 		self.base_physical_defense = 65
-		self.base_special_strength = 40
-		self.base_special_defense = 40
+		self.base_arcane_strength = 40
+		self.base_arcane_defense = 40
 		self.base_speed = 15
 		self.base_luck = 100
 
@@ -39,8 +39,8 @@ class Spectre(Character):
 		self.base_hp = 95
 		self.base_physical_strength = 75 
 		self.base_physical_defense = 110
-		self.base_special_strength = 100
-		self.base_special_defense = 80
+		self.base_arcane_strength = 100
+		self.base_arcane_defense = 80
 		self.base_speed = 30
 		self.base_luck = 100
 
@@ -65,8 +65,8 @@ class Ghoul(Character):
 		self.base_hp = 95
 		self.base_physical_strength = 75 
 		self.base_physical_defense = 80
-		self.base_special_strength = 100
-		self.base_special_defense = 110
+		self.base_arcane_strength = 100
+		self.base_arcane_defense = 110
 		self.base_speed = 30
 		self.base_luck = 100
 

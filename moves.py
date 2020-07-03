@@ -104,11 +104,11 @@ class Move(utility.Serializable):
 					if self.physical[0]:
 						attack_str = user.physical_strength
 					else:
-						attack_str = user.special_strength
+						attack_str = user.arcane_strength
 					if self.physical[1]:
 						attack_def = target.physical_defense
 					else:
-						attack_def = target.special_defense
+						attack_def = target.arcane_defense
 
 					if DAMAGE_CALC == 0:
 						damage = ((user.level/100.0 ) * attack_str/(attack_def/crit_factor) * self.power + 2) * target_coefficient
@@ -430,7 +430,7 @@ class Cure(Move):
 			to_remove = random.choice(target.status)
 			target.status.remove(to_remove)
 
-#single snemy special move
+#single snemy arcane move
 class Blast(Move):
 	def config(self):
 		self.name = 'Blast'
@@ -438,7 +438,7 @@ class Blast(Move):
 		self.accuracy = 0.9
 		self.physical = (False, False)
 
-#multi snemy special move
+#multi snemy arcane move
 class Wave(Move):
 	def config(self):
 		self.name = 'Wave'

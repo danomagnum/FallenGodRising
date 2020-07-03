@@ -13,8 +13,8 @@ class Fighter(Character):
 		self.base_hp = 70
 		self.base_physical_strength = 80 
 		self.base_physical_defense = 50
-		self.base_special_strength = 35
-		self.base_special_defense = 35
+		self.base_arcane_strength = 35
+		self.base_arcane_defense = 35
 		self.base_speed = 35
 		self.base_luck = 100
 
@@ -38,8 +38,8 @@ class Squire(Character):
 		self.base_hp = 80
 		self.base_physical_strength = 100 
 		self.base_physical_defense = 70
-		self.base_special_strength = 50
-		self.base_special_defense = 60
+		self.base_arcane_strength = 50
+		self.base_arcane_defense = 60
 		self.base_speed = 45
 		self.base_luck = 100
 
@@ -54,8 +54,8 @@ class Knight(Character):
 		self.base_hp = 90
 		self.base_physical_strength = 130
 		self.base_physical_defense = 80
-		self.base_special_strength = 65
-		self.base_special_defense = 85
+		self.base_arcane_strength = 65
+		self.base_arcane_defense = 85
 		self.base_speed = 55
 		self.base_luck = 100
 

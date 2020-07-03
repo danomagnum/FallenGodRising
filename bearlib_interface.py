@@ -564,10 +564,10 @@ class Display(object):
 		#box.addstr(4, 1, "P. Atk.: {}".format(int(combatant.physical_strength)), None)
 		#box.addstr(5, 1, "P. Def.: {}".format(int(combatant.physical_defense)), None)
 
-		#special
-		box.addstr(5, 1, "Special  Atk.: {:3}   Def.: {:3}".format(int(combatant.special_strength), int(combatant.special_defense)), None)
-		#box.addstr(6, 1, "S. Atk: {}".format(int(combatant.special_strength)), None)
-		#box.addstr(7, 1, "S. Def: {}".format(int(combatant.special_defense)), None)
+		#arcane
+		box.addstr(5, 1, "Arcane  Atk.: {:3}   Def.: {:3}".format(int(combatant.arcane_strength), int(combatant.arcane_defense)), None)
+		#box.addstr(6, 1, "S. Atk: {}".format(int(combatant.arcane_strength)), None)
+		#box.addstr(7, 1, "S. Def: {}".format(int(combatant.arcane_defense)), None)
 
 		#speed
 		box.addstr(6, 1, "Speed: {}           Luck: {}".format(int(combatant.speed), int(combatant.luck)), None)

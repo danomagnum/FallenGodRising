@@ -353,20 +353,20 @@ class Equipment(object):
 			initial = math.sqrt(sqr)
 		return initial
 
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		sqr = initial * initial
 		for item in self.all_items():
-			sqr = utility.call_all_recursive(sqr, 'special_strength', item)
+			sqr = utility.call_all_recursive(sqr, 'arcane_strength', item)
 		if sqr < 0:
 			initial = 0
 		else:
 			initial = math.sqrt(sqr)
 		return initial
 
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		sqr = initial * initial
 		for item in self.all_items():
-			sqr = utility.call_all_recursive(sqr, 'special_defense', item)
+			sqr = utility.call_all_recursive(sqr, 'arcane_defense', item)
 		if sqr < 0:
 			initial = 0
 		else:
