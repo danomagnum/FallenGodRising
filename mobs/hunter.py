@@ -13,8 +13,8 @@ class Hunter(Character):
 		self.base_hp = 39
 		self.base_physical_strength = 52 
 		self.base_physical_defense = 43
-		self.base_special_strength = 60
-		self.base_special_defense = 50
+		self.base_arcane_strength = 60
+		self.base_arcane_defense = 50
 		self.base_speed = 65
 		self.base_luck = 100
 
@@ -39,8 +39,8 @@ class Rogue(Character):
 		self.base_hp = 58
 		self.base_physical_strength = 64 
 		self.base_physical_defense = 58
-		self.base_special_strength = 80
-		self.base_special_defense = 65
+		self.base_arcane_strength = 80
+		self.base_arcane_defense = 65
 		self.base_speed = 80
 		self.base_luck = 100
 
@@ -65,8 +65,8 @@ class Ranger(Character):
 		self.base_hp = 78
 		self.base_physical_strength = 84 
 		self.base_physical_defense = 78
-		self.base_special_strength = 109
-		self.base_special_defense = 85
+		self.base_arcane_strength = 109
+		self.base_arcane_defense = 85
 		self.base_speed = 100
 		self.base_luck = 100
 

@@ -28,8 +28,8 @@ class LittleRat(mobs.Character):
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
 		self.base_physical_strength = 50
 		self.base_physical_defense = 50
-		self.base_special_strength = 50
-		self.base_special_defense = 50
+		self.base_arcane_strength = 50
+		self.base_arcane_defense = 50
 		self.base_speed = 50
 		self.base_hp = 50
 		self.base_luck = 100

@@ -500,9 +500,9 @@ class Display(object):
 		box.addstr(4, 1, "P. Atk.: {}".format(int(combatant.physical_strength)), curses.color_pair(11))
 		box.addstr(5, 1, "P. Def.: {}".format(int(combatant.physical_defense)), curses.color_pair(11))
 
-		#special
-		box.addstr(6, 1, "S. Atk: {}".format(int(combatant.special_strength)), curses.color_pair(11))
-		box.addstr(7, 1, "S. Def: {}".format(int(combatant.special_defense)), curses.color_pair(11))
+		#Arcane
+		box.addstr(6, 1, "A. Atk: {}".format(int(combatant.arcane_strength)), curses.color_pair(11))
+		box.addstr(7, 1, "A. Def: {}".format(int(combatant.arcane_defense)), curses.color_pair(11))
 
 		#speed
 		box.addstr(8, 1, "Speed: {}".format(int(combatant.speed)), curses.color_pair(11))

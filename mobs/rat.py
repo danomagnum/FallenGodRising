@@ -13,8 +13,8 @@ class LittleRat(Character):
 		self.base_hp = 30
 		self.base_physical_strength = 56 
 		self.base_physical_defense = 35
-		self.base_special_strength = 25
-		self.base_special_defense = 35
+		self.base_arcane_strength = 25
+		self.base_arcane_defense = 35
 		self.base_speed = 72
 		self.base_luck = 100
 
@@ -30,8 +30,8 @@ class Rat(Character):
 		self.base_hp = 55
 		self.base_physical_strength = 81 
 		self.base_physical_defense = 60
-		self.base_special_strength = 50
-		self.base_special_defense = 70
+		self.base_arcane_strength = 50
+		self.base_arcane_defense = 70
 		self.base_speed = 97
 		self.base_luck = 100
 

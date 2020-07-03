@@ -51,8 +51,8 @@ class Character(object):
 		DEV = 0.05
 		self.mod_physical_strength = random.normalvariate(BASE, DEV)
 		self.mod_physical_defense = random.normalvariate(BASE, DEV)
-		self.mod_special_strength = random.normalvariate(BASE, DEV)
-		self.mod_special_defense = random.normalvariate(BASE, DEV)
+		self.mod_arcane_strength = random.normalvariate(BASE, DEV)
+		self.mod_arcane_defense = random.normalvariate(BASE, DEV)
 		self.mod_speed = random.normalvariate(BASE, DEV)
 		self.mod_hp = random.normalvariate(BASE, DEV)
 		self.mod_luck = random.normalvariate(BASE, DEV)
@@ -65,8 +65,8 @@ class Character(object):
 	def base_stats(self):
 		self.base_physical_strength = 10
 		self.base_physical_defense = 10
-		self.base_special_strength = 10
-		self.base_special_defense = 10
+		self.base_arcane_strength = 10
+		self.base_arcane_defense = 10
 		self.base_speed = 10
 		self.base_hp = 10
 		self.base_luck = 100
@@ -153,7 +153,7 @@ class Character(object):
 	@property
 	def exp_value(self):
 		val = self.physical_strength + self.physical_defense
-		val += self.special_strength + self.special_defense
+		val += self.arcane_strength + self.arcane_defense
 		val += self.speed + self.max_hp
 		val *= self.level / 6
 		return int(val)
@@ -180,21 +180,21 @@ class Character(object):
 		stat = stat * self.mod_physical_defense
 		return utility.clamp(stat, 1, 3* self.base_physical_defense)
 	@property
-	def special_strength(self):
-		stat = (self.base_special_strength + self.coefficients[2]) * 3 * self.level / 100.0 + 5
+	def arcane_strength(self):
+		stat = (self.base_arcane_strength + self.coefficients[2]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
-			stat = status.special_strength(stat)
-		stat = self.equipment.special_strength(stat)
-		stat = stat * self.mod_special_strength
-		return utility.clamp(stat, 1, 3* self.base_special_strength)
+			stat = status.arcane_strength(stat)
+		stat = self.equipment.arcane_strength(stat)
+		stat = stat * self.mod_arcane_strength
+		return utility.clamp(stat, 1, 3* self.base_arcane_strength)
 	@property
-	def special_defense(self):
-		stat = (self.base_special_defense + self.coefficients[3]) * 3 * self.level / 100.0 + 5
+	def arcane_defense(self):
+		stat = (self.base_arcane_defense + self.coefficients[3]) * 3 * self.level / 100.0 + 5
 		for status in self.status:
-			stat = status.special_defense(stat)
-		stat = self.equipment.special_defense(stat)
-		stat = stat * self.mod_special_defense
-		return utility.clamp(stat, 1, 3* self.base_special_defense)
+			stat = status.arcane_defense(stat)
+		stat = self.equipment.arcane_defense(stat)
+		stat = stat * self.mod_arcane_defense
+		return utility.clamp(stat, 1, 3* self.base_arcane_defense)
 
 	@property
 	def speed(self):
@@ -290,8 +290,8 @@ class Dragoon(Character):
 		self.moves = [moves.Strike(self.game), moves.Smoke(self.game)]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 80
-		self.base_special_strength = 100
-		self.base_special_defense = 80
+		self.base_arcane_strength = 100
+		self.base_arcane_defense = 80
 		self.base_speed = 120
 		self.base_hp = 120
 		self.base_luck = 100
@@ -301,8 +301,8 @@ class Battlemage(Character):
 		self.moves = [moves.Blast(self.game), moves.Protect(self.game)]
 		self.base_physical_strength = 80
 		self.base_physical_defense = 120
-		self.base_special_strength = 100
-		self.base_special_defense = 100
+		self.base_arcane_strength = 100
+		self.base_arcane_defense = 100
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
@@ -312,8 +312,8 @@ class Nightblade(Character):
 		self.moves = [moves.Strike(self.game), moves.Blast(self.game)]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 80
-		self.base_special_strength = 120
-		self.base_special_defense = 80
+		self.base_arcane_strength = 120
+		self.base_arcane_defense = 80
 		self.base_speed = 100
 		self.base_hp = 80
 		self.base_luck = 100
@@ -323,8 +323,8 @@ class Witchhunter(Character):
 		self.moves = [moves.Strike(self.game), moves.Haste(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
-		self.base_special_strength = 60
-		self.base_special_defense = 140
+		self.base_arcane_strength = 60
+		self.base_arcane_defense = 140
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100
@@ -343,8 +343,8 @@ class Debug(Character):
 			      moves.mod_move(moves.mod_move(moves.Strike, moves.Poison), moves.Piercing)(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
-		self.base_special_strength = 60
-		self.base_special_defense = 140
+		self.base_arcane_strength = 60
+		self.base_arcane_defense = 140
 		self.base_speed = 100
 		self.base_hp = 100
 		self.base_luck = 100

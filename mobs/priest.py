@@ -13,8 +13,8 @@ class Priest(Character):
 		self.base_hp = 55
 		self.base_physical_strength = 47 
 		self.base_physical_defense = 52
-		self.base_special_strength = 40
-		self.base_special_defense = 40
+		self.base_arcane_strength = 40
+		self.base_arcane_defense = 40
 		self.base_speed = 41
 		self.base_luck = 100
 
@@ -39,8 +39,8 @@ class Cleric(Character):
 		self.base_hp = 70
 		self.base_physical_strength = 62 
 		self.base_physical_defense = 67
-		self.base_special_strength = 55
-		self.base_special_defense = 55
+		self.base_arcane_strength = 55
+		self.base_arcane_defense = 55
 		self.base_speed = 56
 		self.base_luck = 100
 
@@ -65,8 +65,8 @@ class Paladin(Character):
 		self.base_hp = 90
 		self.base_physical_strength = 82 
 		self.base_physical_defense = 87
-		self.base_special_strength = 75
-		self.base_special_defense = 85
+		self.base_arcane_strength = 75
+		self.base_arcane_defense = 85
 		self.base_speed = 76
 		self.base_luck = 100
 

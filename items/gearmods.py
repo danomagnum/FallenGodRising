@@ -114,7 +114,7 @@ class Admantium(Gear):
 
 base_gear_mods = [Bronze, Iron, Steel, Mithrill, Admantium]
 base_gear_mod_levels = [(None, 0),(Bronze, 5), (Iron, 10),(Steel, 15),(Mithrill, 20),(Admantium, 25)]
-# Start Special gear mods
+# Start Arcane gear mods
 
 class OfWarrior(Gear):
 	def config(self):
@@ -141,20 +141,20 @@ class OfWizard(Gear):
 	def config(self):
 		self.suffixes.append('of the wizard')
 
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial * 1.1
 class OfApprentice(Gear):
 	def config(self):
 		self.suffixes.append('of the apprentice')
 
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial * 0.9
 
 class OfDevotion(Gear):
 	def config(self):
 		self.suffixes.append('of devotion')
 
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial * 1.1
 
 class OfVigor(Gear):
@@ -213,9 +213,9 @@ class OfSorrow(Gear):
 		return initial * 0.9
 	def physical_defense(self, initial):
 		return initial * 0.9
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial * 0.9
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial * 0.9
 	def speed(self, initial):
 		return initial * 0.9
@@ -240,10 +240,10 @@ class OfChaos(Gear):# this returns a "random" stat by actually returning the las
 	def physical_defense(self, initial):
 		initial, self.last_initial = self.last_initial, initial
 		return initial
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		initial, self.last_initial = self.last_initial, initial
 		return initial
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		initial, self.last_initial = self.last_initial, initial
 		return initial
 	def speed(self, initial):

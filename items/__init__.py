@@ -92,7 +92,7 @@ def gen_gear(game, level, equip_position=None, luck_ratio = 1.0):
 	if random.random() * luck_ratio > 0.80:
 		utility.add_class_to_instance(gear, elemental_mod)
 
-	special_mod= random.choice(special_gear_mods)
+	special_mod = random.choice(special_gear_mods)
 	if random.random() * luck_ratio > 0.99:
 		utility.add_class_to_instance(gear, special_mod)
 	return gear

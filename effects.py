@@ -48,9 +48,9 @@ class Status(object):
 		return initial
 	def physical_defense(self, initial):
 		return initial
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial
 	def speed(self, initial):
 		return initial
@@ -120,12 +120,12 @@ class StatMod(Status):
 			return initial * self.multiplier
 		else:
 			return initial
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		if self.stat == SPCSTR:
 			return initial * self.multiplier
 		else:
 			return initial
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		if self.stat == SPCDEF:
 			return initial * self.multiplier
 		else:

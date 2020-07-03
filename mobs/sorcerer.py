@@ -13,8 +13,8 @@ class Sorcerer(Character):
 		self.base_hp = 25
 		self.base_physical_strength = 20 
 		self.base_physical_defense = 15
-		self.base_special_strength = 105
-		self.base_special_defense = 55
+		self.base_arcane_strength = 105
+		self.base_arcane_defense = 55
 		self.base_speed = 90
 		self.base_luck = 100
 
@@ -38,8 +38,8 @@ class Wizard(Character):
 		self.base_hp = 40
 		self.base_physical_strength = 35 
 		self.base_physical_defense = 30
-		self.base_special_strength = 120
-		self.base_special_defense = 70
+		self.base_arcane_strength = 120
+		self.base_arcane_defense = 70
 		self.base_speed = 105
 		self.base_luck = 100
 
@@ -63,8 +63,8 @@ class Archmage(Character):
 		self.base_hp = 55
 		self.base_physical_strength = 50 
 		self.base_physical_defense = 45
-		self.base_special_strength = 135
-		self.base_special_defense = 85
+		self.base_arcane_strength = 135
+		self.base_arcane_defense = 85
 		self.base_speed = 120
 		self.base_luck = 100
 

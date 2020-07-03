@@ -30,9 +30,9 @@ class Gear(Item):
 		return initial
 	def physical_defense(self, initial):
 		return initial
-	def special_strength(self, initial):
+	def arcane_strength(self, initial):
 		return initial
-	def special_defense(self, initial):
+	def arcane_defense(self, initial):
 		return initial
 	def speed(self, initial):
 		return initial

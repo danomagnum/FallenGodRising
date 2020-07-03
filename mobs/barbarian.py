@@ -14,8 +14,8 @@ class Barbarian(Character):
 		self.base_hp = 50
 		self.base_physical_strength = 70 
 		self.base_physical_defense = 100
-		self.base_special_strength = 40
-		self.base_special_defense = 40
+		self.base_arcane_strength = 40
+		self.base_arcane_defense = 40
 		self.base_speed = 30
 		self.base_luck = 100
 
@@ -41,8 +41,8 @@ class Juggernaut(Character):
 		self.base_hp = 60
 		self.base_physical_strength = 90 
 		self.base_physical_defense = 140
-		self.base_special_strength = 50
-		self.base_special_defense = 50
+		self.base_arcane_strength = 50
+		self.base_arcane_defense = 50
 		self.base_speed = 40
 		self.base_luck = 100
 
@@ -67,8 +67,8 @@ class Warlord(Character):
 		self.base_hp = 70
 		self.base_physical_strength = 110 
 		self.base_physical_defense = 180
-		self.base_special_strength = 60
-		self.base_special_defense = 60
+		self.base_arcane_strength = 60
+		self.base_arcane_defense = 60
 		self.base_speed = 50
 		self.base_luck = 100
 
