@@ -448,6 +448,7 @@ class Entity(object):
 	def __init__(self,game, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
 		self.game = game
 		self.defeated_text = None
+		self.music = None
 		if name is None:
 			name = ''
 		self._level = 1

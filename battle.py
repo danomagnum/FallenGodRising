@@ -107,6 +107,8 @@ class Skiddish_AI(AI):
 
 
 def Battle(game, user, enemy_ai):
+	old_music = game.music
+	game.set_music(enemy_ai.music)
 	game.display.start_battle(enemy_ai)
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
@@ -414,6 +416,8 @@ def Battle(game, user, enemy_ai):
 	game.display.end_battle()
 
 	user.purge_dead()
+
+	game.set_music(old_music)
 
 	return winner
 
