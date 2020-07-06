@@ -12,6 +12,7 @@ from constants import *
 from os import listdir
 from os.path import isfile, join
 
+import pygame
 
 class GameOver(Exception):
 	pass
@@ -49,6 +50,8 @@ class Game(object):
 
 		self.filename = 'auto.sav'
 
+		self.music = None
+
 	def tick(self):
 		#this main tick routine will determine if any active entities are ready
 		# to do something.  It will loop on actions until its the players turn 
@@ -79,6 +82,12 @@ class Game(object):
 			if top_entity == self.player:
 				return
 
+	def set_music(self, filename, fade_ms=1000):
+		if filename is not None:
+			pygame.mixer.music.fadeout(1000)
+			pygame.mixer.music.load('data/music/' + filename)
+			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms = fade_ms)
+			self.music = filename
 
 
 	def fast_travel(self):
@@ -129,6 +138,8 @@ class Game(object):
 			self.display.change_zone(self.zone)
 
 			print('Entering Zone {}'.format(zonename))
+
+			self.set_music(self.zone.music)
 
 		else:
 			print('Zone {} does not exist'.format(zonename))
