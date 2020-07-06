@@ -33,6 +33,8 @@ import elements
 from constants import *
 import player
 
+import pygame
+
 import maps.overworld
 import maps.fortress
 import maps.goblincave
@@ -45,12 +47,15 @@ import maps.home
 
 WRITEMAP = False
 
+pygame.mixer.init()
+
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		display = graphics_interface.Display()
 		while True:
-
+			pygame.mixer.music.load('data/music/mainmenu.mid')
+			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
 			display.mode = MAP
 			mainmenu = True
 			while mainmenu:
@@ -199,6 +204,8 @@ try:
 			display.mode = graphics_interface.MAP
 			display.refresh_full()
 			gameloop = True
+			game.set_music(game.zone.music)
+
 			while gameloop:
 				display.refresh_full()
 				display.show_messages()

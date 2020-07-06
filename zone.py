@@ -72,6 +72,7 @@ class Zone(object):
 	def __init__(self, name, game = None, maps = None):
 		self.levels = 0
 		self.name = name
+		self.music = None
 		if maps is not None:
 			self.maps = maps
 			self.levels = len(maps)

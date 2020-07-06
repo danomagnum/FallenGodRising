@@ -9,6 +9,9 @@ import utility
 
 class HomeZone(zone.Zone):
 
+	def config(self):
+		self.music = 'wizard.mid'
+
 	def level_000(self):
 		print('Tutorial> Navigate with WASD.  To continue, walk off the screen to the right.')
 	def level_001(self):
