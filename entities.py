@@ -10,6 +10,8 @@ from copy import deepcopy
 import bearlib_interface as graphics_interface
 
 class Battler(ActingEntity):
+	def config(self):
+		self.music = 'battle.mid'
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
