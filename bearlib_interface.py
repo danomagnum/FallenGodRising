@@ -80,6 +80,7 @@ class Window(object):
 		self.y = 0
 		self.layer = current_layer + 1
 		current_layer = current_layer + 1
+		self.spacing = [1, 1]
 
 	def getmaxyx(self):
 		return(self.height, self.width)
@@ -136,6 +137,26 @@ class Window(object):
 
 	def getch(self):
 		return terminal.read()
+
+	def getmousepos(self):
+		mx = terminal.state(terminal.TK_MOUSE_X)
+		my = terminal.state(terminal.TK_MOUSE_Y)
+		
+		top = self.top
+		left = self.left
+		width = self.width
+		height = self.height
+
+		spacing = self.spacing
+
+		mx1 = mx - left
+		my1 = my - top
+
+		mx2 = mx1 // spacing[0]
+		my2 = my1 // spacing[1]
+
+		if mx1 < width and my1 < height: # height/width are in absolute units
+			return (mx2, my2)
 
 
 
@@ -280,6 +301,7 @@ class Display(object):
 		self.enemy = enemy
 
 		self.mapbox = Window(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
+		self.mapbox.spacing = [2,1]
 
 		self.zone = None
 
