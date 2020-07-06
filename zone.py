@@ -396,6 +396,55 @@ class Zone(object):
 		visibilities = [self.check_pos(pt[0], pt[1])[0] for pt in pts]
 		return not (WALL in visibilities)
 
+	def dist_map(self, x, y):
+		dist_map = [[-1 for x in range(self.width)] for x in range(self.height)]
+		x0 = x
+		y0 = y
+		d = 0
+		try:
+			dist_map[y0][x0] = d
+		except:
+			print('error @ ({}, {})'.format(x0, y0))
+			return None
+		checked = set()
+		checked.add((x0,y0))
+		to_check = [(x0,y0)]
+		checking = []
+		i = 0
+		while len(to_check) > 0:
+			checking = to_check[:]
+			to_check = []
+			for point in checking:
+				d = dist_map[point[1]][point[0]]
+				pts = []
+				if point[1] > 0:
+					up = (point[0], point[1] - 1)
+					pts.append(up)
+				if point[1] < self.height - 2:
+					down = (point[0], point[1] + 1)
+					pts.append(down)
+				if point[0] > 0:
+					left = (point[0] - 1, point[1])
+					pts.append(left)
+				if point[0] < self.width - 2:
+					right = (point[0] + 1, point[1])
+					pts.append(right)
+
+				d = d + 1
+				for pt in pts:
+					if pt not in checked:
+						chk_pos = self.check_pos(pt[0], pt[1])
+						if chk_pos[0] != WALL:
+							if pt[0] == x0 and pt[1] == y0:
+								print('error')
+							if (dist_map[pt[1]][pt[0]] > d) or (dist_map[pt[1]][pt[0]] < 0):
+								dist_map[pt[1]][pt[0]] = d
+								to_check.append(pt)
+							i = i + 1
+							checked.add(pt)
+		return dist_map
+
+
 def overworld_gen(maze):
 	#dict key=(up, down, left, right)
 	# 0 = open 1 = closed
