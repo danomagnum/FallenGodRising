@@ -127,6 +127,8 @@ class Game(object):
 			self.zone = zone
 
 	def change_zone(self, zonename, newx = None, newy = None, newlevel=None):
+		if self.player is not None:
+			self.player.target_map = None # cancel any auto-moves if we changed zones
 		if zonename in self.zones:
 			self.zone = self.zones[zonename]
 			if newx is not None:

@@ -107,6 +107,7 @@ class Skiddish_AI(AI):
 
 
 def Battle(game, user, enemy_ai):
+	game.player.target_map = None # cancel any auto-moves if we got in a battle
 	old_music = game.music
 	game.set_music(enemy_ai.music)
 	game.display.start_battle(enemy_ai)
@@ -238,11 +239,12 @@ def Battle(game, user, enemy_ai):
 					else:
 						item_target = None
 						print("Can't Use that now")
-					if len(item_target) > 0:
-						item_used = item_slot_used.take()
-						selection_needed = False
-						for t in item_target:
-							item_used.use(t)
+					if item_target is not None:
+						if len(item_target) > 0:
+							item_used = item_slot_used.take()
+							selection_needed = False
+							for t in item_target:
+								item_used.use(t)
 				#game.display.show_btl_messages()
 				game.display.refresh_combatant()
 			elif first_choice == 'Possess':
