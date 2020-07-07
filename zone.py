@@ -187,6 +187,8 @@ class Zone(object):
 		
 
 	def change_level(self, level):
+		if self.game.player is not None:
+			self.game.player.target_map = None # cancel any auto-moves if we changed levels
 		if level < 0:
 			print("Can't go below level 0")
 		elif level > (len(self.maps) - 1):
