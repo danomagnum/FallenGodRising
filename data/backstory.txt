@@ -1,24 +1,26 @@
-The very existence of a god is wholly reliant on their connection to the mortal world.
-Some gods have talismans.  Some embed themselves deep in the ground. An unlucky few hold on only in stories.
+In the beginning there was a single being known only as "the one great god" or "the one". The one created the world and all its inhabitants. 
 
-Some wage war.
+After some time, it created holy alters spread out throught the land.  These alters provided the worlds creatures with a place to worship and give thanks to the one.
 
-You are a minor god who has nearly been purged out by a greedy competitor, they've drained you
-of most of your power. Before they could finish you off, you slipped into the shadows with your last
-remaining soldiers.
+Growing tired of the day-to-day, the one embued each of the alters with its own minor god.  These minor gods would develop their powers over the millenia and become the 
+predominant forces in the world.
 
+Eventually, very few remembered the one.  This displeased the one and it began altering the status quo of existance.  This understandably did not go over well with the minor gods.
+Their power being contested for the first time.
 
-You must take revenge on the god who attempted to displace you.  Go to the stronghold where
-the followers of this cruel adversary have the gods talisman stored and destroy it.
+The minor gods raised up in mutany against the one and after a fierce battle, managed to seal the one away.
 
-Just don't lose your link to the world in the process.
+Of the many skills the minor gods devloped, none were ever able to obtain the ability to create.  In turn, as alters fell to decay, war, and sabotage, the number of gods left in the 
+world dwindled.  At present, only 9 remain.
 
-In your weakened state, you only have the capacity to possess three mortals.
-Once possessed, a mortal remains possessed until they perish.  When a spot has opened up, you
+You are a god with the power of possession.  Your alter is teetering on the edge of decaying into nothingness, taking you with it.  The only way to have a continued existance is to venture 
+out into the world and destroy all the remaining alters, eliminating all other minor gods, and releasing the seal on the one.  Then you must use your possession ability to gain control of 
+the one great god itself and rebuild your alter.
+
+In your weakened state, you only have the capacity to possess three mortals.  Once possessed, a mortal remains possessed until they perish.  When a spot has opened up, you
 can attempt to possess any other creature you come in contact with.
 
-The weaker the creature is when you attempt to gain possession of them the more likely you are
-to succeed.  Failing a possession attempt reduces the likelihood that you will be successful
+The weaker the creature is when you attempt to gain possession of them the more likely you are to succeed.  Failing a possession attempt reduces the likelihood that you will be successful
 on subsequent attempts.
 
 
