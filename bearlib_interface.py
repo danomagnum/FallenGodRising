@@ -238,7 +238,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 		elif key in keys.SELECT or key == terminal.TK_MOUSE_LEFT:
 			loop = False
 			#sys.exit(key)
-		elif key == terminal.TK_BACKSPACE:
+		elif key == terminal.TK_BACKSPACE or key == terminal.TK_MOUSE_RIGHT:
 			#sys.exit(key)
 			return None #escape key
 		elif key == terminal.TK_MOUSE_MOVE:
