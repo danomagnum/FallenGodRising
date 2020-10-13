@@ -154,19 +154,36 @@ try:
 					while loop:
 						if i >= graphics_interface.MAX_COMBATANTS:
 							i = 0
-						#player_characters = [mobs.characters.Fighter(game), mobs.characters.Wizard(game), mobs.characters.Cleric(game), mobs.characters.Knight(game), mobs.characters.Paladin(game), mobs.characters.Rogue(game), mobs.characters.Dragoon(game), mobs.characters.Juggernaut(game), mobs.characters.Battlemage(game), mobs.characters.Nightblade(game), mobs.characters.Witchhunter(game), mobs.characters.Debug(game)]
 						player_characters = []
 						for starter in mobs.starters:
 							player_characters.append(starter(game))
 
+						if i > 0:
+							player_characters.append('None')
+
 
 						def update_confirm_box(choice):
-							display.show_combatant_stats(choice, display.start_menus[(i * 3) + 2])
+							if choice != 'None':
+								display.show_combatant_stats(choice, display.start_menus[(i * 3) + 2])
+							else:
+								pass
 
 						update_confirm_box(player_characters[0])
 						player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters,selected=random.choice(player_characters) ,clear=False, callback_on_change=update_confirm_box)
 
 						if player_choice is not None:
+							if player_choice == 'None':
+								player_party = player_party[:i]
+								user = player.PlayerEntity(game, 'playercharacter', combatants=player_party, char='@',is_player=True)
+								#user.combatants = player_party
+								user.x, user.y = game.zone.find_empty_position()
+								user.backpack.gold = 100
+								#zone.set_player(user)
+								display.user = user
+								game.player = user
+								loop = False
+								mainmenu = False
+								break
 							player_elements = [elements.Normal, elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 							def update_confirm_box(choice):
 								player_choice.elements = []
@@ -183,7 +200,6 @@ try:
 								player_party[i] = player_choice
 								i += 1
 								if i == graphics_interface.MAX_COMBATANTS:
-
 									user = player.PlayerEntity(game, 'playercharacter', combatants=player_party, char='@',is_player=True)
 									#user.combatants = player_party
 									user.x, user.y = game.zone.find_empty_position()
