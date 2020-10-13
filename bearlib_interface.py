@@ -155,7 +155,7 @@ class Window(object):
 		mx2 = mx1 // spacing[0]
 		my2 = my1 // spacing[1]
 
-		if mx1 < width and my1 < height: # height/width are in absolute units
+		if mx1 >= 0 and mx1 < width and my1 >= 0 and my1 < height: # height/width are in absolute units
 			return (mx2, my2)
 
 
@@ -172,6 +172,8 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 	else:
 		selected = 0
 
+	# offset is how far into the list the top-left
+	# item is as we scroll through it.
 	offset = 0
 
 	ymax, xmax = window.getmaxyx()
@@ -233,12 +235,27 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 			selected = selected - 1
 		elif key in keys.RIGHT:
 			selected = selected + 1
-		elif key in keys.SELECT:
+		elif key in keys.SELECT or key == terminal.TK_MOUSE_LEFT:
 			loop = False
 			#sys.exit(key)
 		elif key == terminal.TK_BACKSPACE:
 			#sys.exit(key)
 			return None #escape key
+		elif key == terminal.TK_MOUSE_MOVE:
+			mousepos = window.getmousepos()
+			if mousepos is not None:
+				mx, my = mousepos
+				#we may have to do something here with scrolling
+				if mx > 0 and my > 0:
+					#because we're counting wide rows here, we need to add 1
+					#since the leftmost border is part of the first row. and is 0
+					mcolumn = int(mx / colgap) + 1
+					#we don't have to do that here since the first row is 0 but
+					#is a border so it doesn't matter.
+					mrow = my
+					item_no = int(cols * (mrow - 1) + mcolumn - 1)
+					if item_no < len(options):
+						selected = item_no
 
 		if selected < 0:
 			selected = 0
