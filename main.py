@@ -12,6 +12,7 @@ from constants import *
 from os import listdir
 from os.path import isfile, join
 
+import namegen
 import pygame
 
 class GameOver(Exception):
@@ -51,6 +52,7 @@ class Game(object):
 		self.filename = 'auto.sav'
 
 		self.music = None
+		self.generated_names = set() 
 
 	def tick(self):
 		#this main tick routine will determine if any active entities are ready
@@ -89,6 +91,14 @@ class Game(object):
 			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms = fade_ms)
 			self.music = filename
 
+
+	def generate_name(self, allow_repeats=False):
+		
+		while True:
+			name = namegen.gen_name()
+			if (name not in self.generated_names) or allow_repeats:
+				self.generated_names.add(name)
+				return name
 
 	def fast_travel(self):
 		return self.zone.fast_travel_found
