@@ -320,6 +320,9 @@ class Display(object):
 		self.mapbox = Window(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
 		self.mapbox.spacing = [2,1]
 
+		self.popupbox = Window(self.charboxsize[0] - 5, self.charboxsize[1], YMAX / 2 - self.charboxsize[0] / 2, XMAX / 2 - self.charboxsize[1] / 2)
+		self.popupbox_menu = Window(5, self.charboxsize[1], (YMAX / 2 - self.charboxsize[0] / 2) + self.charboxsize[0] - 5, XMAX / 2 - self.charboxsize[1] / 2)
+
 		self.zone = None
 
 		self.x = 0
@@ -650,6 +653,23 @@ class Display(object):
 	def refresh_full_startmenu(self):
 		for box in self.start_menus:
 			box.box()
+
+
+	##################################
+	##### Start Popup Draw Routines
+	##################################
+	
+	def popup(self, message, choices = None, selected=None, cols=2):
+		if choices is None:
+			choices = [True, False]
+
+		self.popupbox.erase()
+		self.popupbox.box()
+		self.popupbox.addstr(1, 1, message)
+		self.popupbox_menu.erase()
+		self.popupbox_menu.box()
+		return menu(self.popupbox_menu, choices, cols, selected)
+
 
 
 	##################################
