@@ -49,6 +49,11 @@ def genzone(game):
 	zone.grid_width = 5
 	zone.change_level(0)
 
+
+	# add an alter somewhere
+	alter = entities.Alter(game)
+	maptools.Random_Map_Insert(zone, alter, random.randint(0,24))
+
 	# Populate zone with entities
 	#maptools.Stair_Handler(zone)
 	#maptools.Door_Handler(zone)

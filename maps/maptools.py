@@ -22,7 +22,7 @@ def Random_Map_Insert(zone, entity, level=None):
 	#e1 = entity(zone.game, x=pos[0], y=pos[1])
 	entity.x = pos[0]
 	entity.y = pos[1]
-	zone.add_entity(entity)
+	zone.add_entity(entity, level)
 
 def map_search(zone, id, level=0):
 	for y in range(len(zone.maps[level]) - 2):

@@ -1,5 +1,5 @@
 import main, battle, zone, entities, moves, elements
-from items import items
+from items import items, gen_gear
 from constants import *
 import random
 import maps.maptools as maptools
@@ -20,7 +20,7 @@ class ThisZone(zone.LinearZone):
 		gen_level = 1
 		if self.game.player is not None:
 			gen_level = self.game.player.level
-		newitem = items.gen_gear(self.game, gen_level + 3)
+		newitem = gen_gear(self.game, gen_level + 3)
 		maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
 
 #####################
@@ -49,6 +49,11 @@ def genzone(game):
 	#maze = maptools.maze(16, 16)
 		# Create zone
 	zone = ThisZone(ZONENAME, game, maps=map_list)
+
+	# add an alter at the bottom
+	alter = entities.Alter(game)
+	maptools.Random_Map_Insert(zone, alter, 9)
+
 	#zone.grid_width = 16
 	zone.change_level(0)
 
