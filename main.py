@@ -54,10 +54,13 @@ class Game(object):
 		self.music = None
 		self.generated_names = set() 
 
+		self.ticks = 0
+
 	def tick(self):
 		#this main tick routine will determine if any active entities are ready
 		# to do something.  It will loop on actions until its the players turn 
 		# at which point it wil return
+		self.ticks += 1
 		while True:
 			#self.display.refresh_full()
 			valid_entities = self.zone.entities + [self.player]

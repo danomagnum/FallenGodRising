@@ -17,6 +17,11 @@ class HomeZone(zone.Zone):
 	def level_001(self):
 		print('Tutorial> You can open doors by walking through them')
 		print('Tutorial> You can pick up items by touching them')
+
+		if self.level_visits[1] == 1:
+			t = entities.Alter(self.game)
+			maptools.Positional_Map_Insert(self, t, '?', level=1)
+
 	def level_002(self):
 		if self.level_visits[2] == 1:
 			print('Tutorial> Enemies appear as letters on the screen.  Bump into them to start combat')
