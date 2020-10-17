@@ -34,6 +34,44 @@ class Battler(ActingEntity):
 				zone.add_entity(t)
 
 
+class Alter(Entity):
+	def config(self):
+		name = self.game.generate_name()
+		self.name = 'Alter of {}'.format(name)
+		self.char = '\x91'
+		self.passive = True
+		self.recharge = 10
+
+	def collide(self, entity, zone):
+		#self.enabled = False
+		if entity.is_player:
+			choice = self.game.display.popup('Encountered {}'.format(self.name), ['Pray', 'Destroy', 'Leave'])
+			if choice == 'Pray':
+				self.pray(entity, zone)
+			elif choice == 'Destroy':
+				self.destroy(entity, zone)
+			elif choice == 'Leave':
+				self.leave(entity, zone)
+		else:
+			pass
+
+	def pray(self, entity, zone):
+		var_name = '{}_ticks'.format(self.name)
+		time = self.game.ticks - self.game.get_var(var_name)
+		if time > self.recharge:
+			self.game.set_var(var_name, self.game.ticks)
+			print('You pray at the {} and it grants you its blessing'.format(self.name))
+		else:
+			print('The alter has no charge')
+
+	def destroy(self, entity, zone):
+		print('You have destoryed the {}'.format(self.name))
+		self.enabled = False
+
+	def leave(self, entity, zone):
+		pass
+			
+
 
 class Shop(Entity):
 	def config(self):
