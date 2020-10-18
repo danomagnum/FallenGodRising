@@ -101,6 +101,7 @@ try:
 
 
 					game = main.Game()
+					game.set_var('Alters', [])
 
 					display.game = game
 					game.display = display

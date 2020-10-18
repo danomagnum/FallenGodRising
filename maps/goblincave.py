@@ -52,6 +52,7 @@ def genzone(game):
 
 	# add an alter at the bottom
 	alter = entities.Alter(game)
+	game.get_var('Alters').append(alter)
 	maptools.Random_Map_Insert(zone, alter, 9)
 
 	#zone.grid_width = 16

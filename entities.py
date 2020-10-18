@@ -39,7 +39,7 @@ class Alter(Entity):
 		name = self.game.generate_name()
 		self.name = 'Alter of {}'.format(name)
 		self.char = '\x91'
-		self.passive = True
+		self.passive = False
 		self.recharge = 10
 
 	def collide(self, entity, zone):
