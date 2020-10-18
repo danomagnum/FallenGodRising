@@ -67,6 +67,7 @@ class Alter(Entity):
 	def destroy(self, entity, zone):
 		print('You have destoryed the {}'.format(self.name))
 		self.enabled = False
+		self.game.get_var('Alters').remove(self)
 
 	def leave(self, entity, zone):
 		pass

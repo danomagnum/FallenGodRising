@@ -20,7 +20,7 @@ class HomeZone(zone.Zone):
 
 		if self.level_visits[1] == 1:
 			t = entities.Alter(self.game)
-			game.get_var('Alters').append(t)
+			self.game.get_var('Alters').append(t)
 			maptools.Positional_Map_Insert(self, t, '?', level=1)
 
 	def level_002(self):
