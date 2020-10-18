@@ -52,6 +52,7 @@ def genzone(game):
 
 	# add an alter somewhere
 	alter = entities.Alter(game)
+	game.get_var('Alters').append(alter)
 	maptools.Random_Map_Insert(zone, alter, random.randint(0,24))
 
 	# Populate zone with entities

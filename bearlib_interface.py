@@ -70,7 +70,7 @@ def progress_bar(actual, maxvalue, length):
 BOXCHARS = ['┌', '─', '┐', '│', ' ', '│', '└', '─', '┘']
 
 class Window(object):
-	def __init__(self, height, width, top, left):
+	def __init__(self, height, width, top, left, layer=0):
 		global current_layer
 		self.height = height
 		self.width = width
@@ -81,6 +81,7 @@ class Window(object):
 		self.layer = current_layer + 1
 		current_layer = current_layer + 1
 		self.spacing = [1, 1]
+		self.layer = layer
 
 	def getmaxyx(self):
 		return(self.height, self.width)
@@ -89,10 +90,13 @@ class Window(object):
 		return(self.height, self.width)
 
 	def erase(self):
-		terminal.clear_area(int(self.left), int(self.top), int(self.width), int(self.height))
+		for layer in range(0,3):
+			terminal.layer(layer)
+			terminal.clear_area(int(self.left), int(self.top), int(self.width), int(self.height))
 		#terminal.clear_area(self.left, self.top, self.width, self.height)
 
 	def box(self):
+		terminal.layer(self.layer)
 		char = '█'
 		for x in range(self.width):
 			terminal.printf(int(self.left + x),int(self.top), BOXCHARS[1])
@@ -105,7 +109,8 @@ class Window(object):
 		terminal.printf(int(self.left), int(self.top + self.height), BOXCHARS[6])
 		terminal.printf(int(self.left + self.width), int(self.top + self.height), BOXCHARS[8])
 
-	def addstr(self, yposition, xposition, string, color = None, font=None):
+	def addstr(self, yposition, xposition, string, color = None, font=None, dx=0, dy=0):
+		terminal.layer(self.layer)
 		#TODO: add color/bold/etc
 		if color is not None:
 			color = terminal.color_from_name(color)
@@ -116,10 +121,12 @@ class Window(object):
 			prefix = "[font=" + font + "]"
 			postfix = "[/font]"
 			terminal.printf(int(self.left + xposition), int(self.top + yposition),prefix + string + postfix)
+			#terminal.put_ext(int(self.left + xposition), int(self.top + yposition), dx, dy, prefix + string + postfix)
 		color = terminal.color_from_name("white")
 		terminal.color(color)
 
 	def addch(self, y, x, char, color = None, font=None):
+		terminal.layer(self.layer)
 		#TODO: add color/bold/etc
 		if color is not None:
 			color = terminal.color_from_name(color)
@@ -136,6 +143,7 @@ class Window(object):
 		terminal.color(color)
 
 	def getch(self):
+		terminal.layer(self.layer)
 		return terminal.read()
 
 	def getmousepos(self):
@@ -301,27 +309,27 @@ class Display(object):
 		self.charboxes = []
 		self.nmeboxes = []
 		for i in range(MAX_COMBATANTS):
-			charbox = Window(self.charboxsize[0],self.charboxsize[1],self.charboxsize[0]*i,0) 
-			nmebox = Window(self.charboxsize[0],self.charboxsize[1],self.charboxsize[0]*i,XMAX - self.charboxsize[1]) 
+			charbox = Window(self.charboxsize[0],self.charboxsize[1],self.charboxsize[0]*i,0, 1) 
+			nmebox = Window(self.charboxsize[0],self.charboxsize[1],self.charboxsize[0]*i,XMAX - self.charboxsize[1], 1) 
 			self.nmeboxes.append(nmebox)
 			self.charboxes.append(charbox)
-		self.msgbox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1])
-		self.btl_msgbox   = Window(self.btl_msgboxsize[0],self.btl_msgboxsize[1],YMAX-self.btl_msgboxsize[0],self.charboxsize[1])
-		self.battlemenubox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0] - self.btl_msgboxsize[0],self.charboxsize[1])
+		self.msgbox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0],self.charboxsize[1], 1)
+		self.btl_msgbox   = Window(self.btl_msgboxsize[0],self.btl_msgboxsize[1],YMAX-self.btl_msgboxsize[0],self.charboxsize[1], 1)
+		self.battlemenubox   = Window(self.msgboxsize[0],self.msgboxsize[1],YMAX-self.msgboxsize[0] - self.btl_msgboxsize[0],self.charboxsize[1], 1)
 
-		self.overworldbox = Window(self.charboxsize[0] + 1,self.charboxsize[1],0,XMAX - self.charboxsize[1]) 
+		self.overworldbox = Window(self.charboxsize[0] + 1,self.charboxsize[1],0,XMAX - self.charboxsize[1], 1) 
 
 		MENUHEIGHT = 10
 		MENUWIDTH = 20
-		self.menubox = Window(MENUHEIGHT,MENUWIDTH,YMAX / 2 - MENUHEIGHT,XMAX / 2 - MENUWIDTH) 
+		self.menubox = Window(MENUHEIGHT,MENUWIDTH,YMAX / 2 - MENUHEIGHT,XMAX / 2 - MENUWIDTH, 1) 
 
 		self.enemy = enemy
 
-		self.mapbox = Window(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1])
+		self.mapbox = Window(YMAX - self.msgboxsize[0], XMAX - 2*self.charboxsize[1], 0, self.charboxsize[1], 0)
 		self.mapbox.spacing = [2,1]
 
-		self.popupbox = Window(self.charboxsize[0] - 5, self.charboxsize[1], YMAX / 2 - self.charboxsize[0] / 2, XMAX / 2 - self.charboxsize[1] / 2)
-		self.popupbox_menu = Window(5, self.charboxsize[1], (YMAX / 2 - self.charboxsize[0] / 2) + self.charboxsize[0] - 5, XMAX / 2 - self.charboxsize[1] / 2)
+		self.popupbox = Window(self.charboxsize[0] - 5, self.charboxsize[1], YMAX / 2 - self.charboxsize[0] / 2, XMAX / 2 - self.charboxsize[1] / 2, 2)
+		self.popupbox_menu = Window(5, self.charboxsize[1], (YMAX / 2 - self.charboxsize[0] / 2) + self.charboxsize[0] - 5, XMAX / 2 - self.charboxsize[1] / 2, 2)
 
 		self.zone = None
 
@@ -330,21 +338,21 @@ class Display(object):
 
 		self.statbox = []
 		for i in range(MAX_COMBATANTS):
-			self.statbox.append(Window(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i))
+			self.statbox.append(Window(self.statboxsize[0],self.statboxsize[1],0,self.statboxsize[1]*i, 1))
 
 		self.startmenusize = (int((YMAX) / MAX_COMBATANTS), int((XMAX - 1) / MAX_COMBATANTS))
 		self.start_menus = []
 		for i in range(MAX_COMBATANTS):
-			classbox = Window(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*0)
-			elementbox = Window(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*1) 
-			confirmbox = Window(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*2) 
+			classbox = Window(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*0, 1)
+			elementbox = Window(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*1, 1) 
+			confirmbox = Window(self.startmenusize[0],self.startmenusize[1],self.startmenusize[0]*i,self.startmenusize[1]*2, 1) 
 			self.start_menus.append(classbox)
 			self.start_menus.append(elementbox)
 			self.start_menus.append(confirmbox)
 
 		self.storemenusize = ((YMAX - 1 - self.msgboxsize[0]), int((XMAX -1) / 3))
-		self.storebox = Window(self.storemenusize[0], self.storemenusize[1],0,0)
-		self.storeinfobox = Window(self.storemenusize[0], self.storemenusize[1],0,self.storemenusize[1])
+		self.storebox = Window(self.storemenusize[0], self.storemenusize[1],0,0, 1)
+		self.storeinfobox = Window(self.storemenusize[0], self.storemenusize[1],0,self.storemenusize[1], 1)
 
 		self._mode = MAP
 
@@ -360,7 +368,7 @@ class Display(object):
 	def text_entry(self, win=None, string=None, history=None):
 		#TODO: text entry box
 		if win is None:
-			win = Window(2, TERMSIZE[0], 1, 1)
+			win = Window(2, TERMSIZE[0], 1, 1, 2)
 		if string is None:
 			string = ''
 		history_position = 0
@@ -555,8 +563,9 @@ class Display(object):
 		y0 = self.game.overworld_y + 1
 		self.overworldbox.addch(x0, y0, '@')
 		try:
-			self.overworldbox.addstr(1, 17, 'Biome: {}'.format(str(self.game.biome())))
-			self.overworldbox.addstr(2, 17, 'Gold: {}'.format(str(self.game.player.backpack.gold)))
+			self.overworldbox.addstr(1, 18, 'Biome: {}'.format(str(self.game.biome())))
+			self.overworldbox.addstr(2, 18, 'Gold: {}'.format(str(self.game.player.backpack.gold)))
+			self.overworldbox.addstr(3, 18, 'Alters: {}'.format(str(len(self.game.get_var('Alters')))))
 		except:
 			pass
 
@@ -696,7 +705,7 @@ class Display(object):
 			splash_data = f.readlines()
 		width, height = TERMSIZE
 		#width = len(splash_data[1])
-		self.splashbox = Window(height,width,0,0) 
+		self.splashbox = Window(height,width,0,0,0) 
 		splashbox = self.splashbox
 
 		for y, line in enumerate(splash_data):
@@ -715,7 +724,7 @@ class Display(object):
 		with open(filename) as f:
 			txt_data = f.readlines()
 		width, height = TERMSIZE
-		txtbox = Window(height,width,0,0) 
+		txtbox = Window(height,width,0,0, 0) 
 
 		for y, line in enumerate(txt_data):
 			txtbox.addstr(y + 1, 1, line)
@@ -731,7 +740,7 @@ class Display(object):
 		with open('data/GameOver.txt') as f:
 			splash_data = f.readlines()
 		width, height = TERMSIZE
-		splashbox = Window(height,width,0,0) 
+		splashbox = Window(height,width,0,0, 0) 
 
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
