@@ -33,7 +33,6 @@ import elements
 from constants import *
 import player
 
-import pygame
 
 import maps.overworld
 import maps.fortress
@@ -45,17 +44,30 @@ import maps.sewers
 import maps.town
 import maps.home
 
+import music
+
+from multiprocessing import Process, Queue
+
 WRITEMAP = False
 
-pygame.mixer.init()
+
+
+music_queue = Queue()
+music_process = Process(target=music.thread, args=(music_queue,))
+music_process.start()
+
+def shutdown():
+	graphics_interface.shutdown()
+	music.shutdown(music_process, music_queue)
 
 try:
 	if __name__ == '__main__':
 		graphics_interface.initialize()
 		display = graphics_interface.Display()
 		while True:
-			pygame.mixer.music.load('data/music/mainmenu.mid')
-			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
+			music_queue.put(['play', 'data/music/mainmenu.mid'])
+			#pygame.mixer.music.load('data/music/mainmenu.mid')
+			#pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
 			display.mode = MAP
 			mainmenu = True
 			while mainmenu:
@@ -65,7 +77,7 @@ try:
 
 				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Quit'] ,clear=False)
 				if player_choice == 'Quit':
-					graphics_interface.shutdown()
+					shutdown()
 					sys.exit(0)
 				elif player_choice == 'Backstory':
 					display.show_txt('data/backstory.txt')
@@ -81,6 +93,8 @@ try:
 								game = pickle.load(f)
 								display.game = game
 								game.display = display
+								game.music_queue = music_queue
+								game.music_queue = music_queue
 								display.change_zone(game.zone)
 								f.close()
 								game.filename = player_choice
@@ -105,6 +119,7 @@ try:
 
 					display.game = game
 					game.display = display
+					game.music_queue = music_queue
 
 					game.progress_reset(zone_count)
 					zone, biome_map, overworld_minimap = maps.overworld.genzone(game)
@@ -249,16 +264,15 @@ try:
 				except main.GameHardExit as e:
 					game.save()
 					time.sleep(1)
-					graphics_interface.shutdown()
+					shutdown()
 					sys.exit(0)
 				except Exception as e:
 					raise e
 
 except Exception as e:
-	graphics_interface.shutdown()
-	raise
+	shutdown()
 
-graphics_interface.shutdown()
+shutdown()
 
 
 
