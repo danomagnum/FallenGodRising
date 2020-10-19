@@ -13,7 +13,7 @@ from os import listdir
 from os.path import isfile, join
 
 import namegen
-import pygame
+#import pygame
 
 class GameOver(Exception):
 	pass
@@ -89,9 +89,11 @@ class Game(object):
 
 	def set_music(self, filename, fade_ms=1000):
 		if filename is not None:
-			pygame.mixer.music.fadeout(1000)
-			pygame.mixer.music.load('data/music/' + filename)
-			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms = fade_ms)
+			#pygame.mixer.music.fadeout(1000)
+			self.music_queue.put(['fadeout'])
+			self.music_queue.put(['play', 'data/music/' + filename])
+			#pygame.mixer.music.load('data/music/' + filename)
+			#pygame.mixer.music.play(loops = -1, start=0.0, fade_ms = fade_ms)
 			self.music = filename
 
 
