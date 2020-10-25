@@ -271,6 +271,8 @@ try:
 
 except Exception as e:
 	shutdown()
+	sys.stdout = graphics_interface.original_stdout
+	raise
 
 shutdown()
 
