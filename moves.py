@@ -353,7 +353,7 @@ class Piercing(Move):
 		#if randval < prob:
 		if True:
 			print('{} has been wounded'.format(target.name))
-			target.status.append(effects.Bleeding())
+			target.status.append(effects.poison.Bleeding())
 
 
 class Multi(Move):
@@ -397,10 +397,10 @@ class Poison(Move):
 		major_range = utility.scale(self.uses, 0, 1000, 0.05, 0.5)
 		if randval < major_range:
 			print('{} has major poisoning'.format(target.name))
-			target.status.append(effects.Poison_Major())
+			target.status.append(effects.poison.Poison_Major())
 		elif randval < minor_range:
 			print('{} has minor poisoning'.format(target.name))
-			target.status.append(effects.Poison_Minor())
+			target.status.append(effects.poison.Poison_Minor())
 
 class Absorb(Move):
 	def config(self):

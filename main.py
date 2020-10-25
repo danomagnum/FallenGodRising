@@ -112,8 +112,11 @@ class Game(object):
 		print('Saving...')
 		self.display.show_messages()
 		file = open(join(SAVEDIR, self.filename), 'wb')
+		music_queue = self.music_queue
+		self.music_queue = None
 		pickle.dump(self, file)
 		file.close()
+		self.music_queue = music_queue
 		time.sleep(1)
 	
 	def progress_reset(self, max):

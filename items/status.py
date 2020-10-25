@@ -55,9 +55,9 @@ class Potion(Item):
 			target_power = random.randrange(85, 115)/ 100.0
 
 			if target_effect == HP:
-				self.effects.append(effects.Recovery())
+				self.effects.append(effects.healing.Recovery())
 			elif target_effect == 'Poison':
-				self.effects.append(effects.Poison_Minor())
+				self.effects.append(effects.poison.Poison_Minor())
 			else:
 				self.effects.append(effects.StatMod(target_power, target_effect))
 
