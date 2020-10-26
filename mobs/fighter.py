@@ -7,7 +7,7 @@ import random
 
 class Fighter(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 70
@@ -32,7 +32,7 @@ class Fighter(Character):
 
 class Squire(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 80
@@ -48,7 +48,7 @@ class Squire(Character):
 
 class Knight(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Taunt(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Taunt(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 90

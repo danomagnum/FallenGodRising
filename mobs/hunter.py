@@ -7,7 +7,7 @@ import random
 
 class Hunter(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 39
@@ -33,7 +33,7 @@ class Hunter(Character):
 
 class Rogue(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 58
@@ -59,7 +59,7 @@ class Rogue(Character):
 
 class Ranger(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 78

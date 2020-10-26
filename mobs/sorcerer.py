@@ -7,7 +7,7 @@ import random
 
 class Sorcerer(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 25
@@ -32,7 +32,7 @@ class Sorcerer(Character):
 
 class Wizard(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 40
@@ -57,7 +57,7 @@ class Wizard(Character):
 
 class Archmage(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 55
