@@ -7,7 +7,7 @@ import random
 
 class LittleRat(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 30
@@ -24,7 +24,7 @@ class LittleRat(Character):
 
 class Rat(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 55

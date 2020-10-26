@@ -287,7 +287,7 @@ class Character(object):
 
 class Dragoon(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Smoke(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Smoke(self.game)]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 80
 		self.base_arcane_strength = 100
@@ -298,7 +298,7 @@ class Dragoon(Character):
 
 class Battlemage(Character):
 	def config(self):
-		self.moves = [moves.Blast(self.game), moves.Protect(self.game)]
+		self.moves = [moves.arc.Blast(self.game), moves.stat.Protect(self.game)]
 		self.base_physical_strength = 80
 		self.base_physical_defense = 120
 		self.base_arcane_strength = 100
@@ -309,7 +309,7 @@ class Battlemage(Character):
 
 class Nightblade(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Blast(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.arc.Blast(self.game)]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 80
 		self.base_arcane_strength = 120
@@ -320,7 +320,7 @@ class Nightblade(Character):
 
 class Witchhunter(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Haste(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Haste(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
 		self.base_arcane_strength = 60
@@ -332,15 +332,15 @@ class Witchhunter(Character):
 
 class Debug(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game),
-		              moves.Haste(self.game),
-		              moves.Wave(self.game),
-		              moves.SelfDestruct(self.game),
-		              moves.Transfuse(self.game),
-			      moves.mod_move(moves.Strike, moves.Piercing)(self.game),
-			      moves.mod_move(moves.mod_move(moves.Strike, moves.Piercing), moves.Multi)(self.game),
-			      moves.mod_move(moves.Strike, moves.Poison)(self.game),
-			      moves.mod_move(moves.mod_move(moves.Strike, moves.Poison), moves.Piercing)(self.game)]
+		self.moves = [moves.phy.Strike(self.game),
+		              moves.stat.Haste(self.game),
+		              moves.arc.Wave(self.game),
+		              moves.moves.SelfDestruct(self.game),
+		              moves.heal.Transfuse(self.game),
+			      moves.mods.mod_move(moves.phy.Strike, moves.mods.Piercing)(self.game),
+			      moves.mods.mod_move(moves.mods.mod_move(moves.phy.Strike, moves.mods.Piercing), moves.mods.Multi)(self.game),
+			      moves.mods.mod_move(moves.phy.Strike, moves.mods.Poison)(self.game),
+			      moves.mods.mod_move(moves.mods.mod_move(moves.phy.Strike, moves.mods.Poison), moves.mods.Piercing)(self.game)]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
 		self.base_arcane_strength = 60

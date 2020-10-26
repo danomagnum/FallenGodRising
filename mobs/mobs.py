@@ -6,7 +6,7 @@ import random
 
 class Rat(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 50
 		self.base_physical_defense = 50
@@ -18,7 +18,7 @@ class Rat(Character):
 
 class Spider(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Poison(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.mods.Poison(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 50
 		self.base_physical_defense = 50
@@ -30,7 +30,7 @@ class Spider(Character):
 
 class Imp(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 50
 		self.base_physical_defense = 50
@@ -42,7 +42,7 @@ class Imp(Character):
 
 class Goblin(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 70
 		self.base_physical_defense = 70
@@ -54,7 +54,7 @@ class Goblin(Character):
 
 class Hobgoblin(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 100
 		self.base_physical_defense = 100
@@ -66,7 +66,7 @@ class Hobgoblin(Character):
 
 class Ogre(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 120
 		self.base_physical_defense = 120
@@ -78,7 +78,7 @@ class Ogre(Character):
 
 class Highwayman(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 90
 		self.base_physical_defense = 90
@@ -90,7 +90,7 @@ class Highwayman(Character):
 
 class Skeleton(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 90
 		self.base_physical_defense = 90
@@ -102,7 +102,7 @@ class Skeleton(Character):
 
 class Zombie(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 90
 		self.base_physical_defense = 90
@@ -114,7 +114,7 @@ class Zombie(Character):
 
 class Mimic(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.base_physical_strength = 90
 		self.base_physical_defense = 90

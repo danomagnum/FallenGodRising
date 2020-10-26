@@ -7,7 +7,7 @@ import random
 
 class Spirit(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 90
@@ -33,7 +33,7 @@ class Spirit(Character):
 
 class Spectre(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 95
@@ -59,7 +59,7 @@ class Spectre(Character):
 
 class Ghoul(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 95

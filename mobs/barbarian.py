@@ -7,7 +7,7 @@ import random
 
 class Barbarian(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 
 	def base_stats(self):
@@ -34,7 +34,7 @@ class Barbarian(Character):
 
 class Juggernaut(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 
 	def base_stats(self):
@@ -60,7 +60,7 @@ class Juggernaut(Character):
 
 class Warlord(Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game), moves.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
 
 	def base_stats(self):
