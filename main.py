@@ -509,6 +509,7 @@ class Entity(object):
 			self.priority = 10
 		else:
 			self.priority = 100
+
 		if self.defeated_text is None:
 			self.defeated_text = '{} was defeated'.format(self.name)
 

@@ -22,7 +22,7 @@ USE_SYMBOLS = True
 #####################
 class LittleRat(mobs.Character):
 	def config(self):
-		self.moves = [moves.Strike(self.game)]
+		self.moves = [moves.phy.Strike(self.game)]
 		self.elements = [elements.Normal]
 		self.status = []
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)

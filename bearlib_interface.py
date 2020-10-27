@@ -617,7 +617,7 @@ class Display(object):
 		#box.addstr(5, 1, "P. Def.: {}".format(int(combatant.physical_defense)), None)
 
 		#arcane
-		box.addstr(5, 1, "Arcane  Atk.: {:3}   Def.: {:3}".format(int(combatant.arcane_strength), int(combatant.arcane_defense)), None)
+		box.addstr(5, 1, "Arcane   Atk.: {:3}   Def.: {:3}".format(int(combatant.arcane_strength), int(combatant.arcane_defense)), None)
 		#box.addstr(6, 1, "S. Atk: {}".format(int(combatant.arcane_strength)), None)
 		#box.addstr(7, 1, "S. Def: {}".format(int(combatant.arcane_defense)), None)
 

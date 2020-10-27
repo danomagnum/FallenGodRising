@@ -7,7 +7,7 @@ import random
 
 class Sorcerer(Character):
 	def config(self):
-		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
+		self.moves = [moves.arc.Blast(self.game), moves.stat.Focus(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 25
@@ -21,18 +21,18 @@ class Sorcerer(Character):
 
 	def level_03(self):
 		if self.elements[0] in moves.typed_blasts:
-			preferred_move = moves.typed_strikes.index(self.element)
+			preferred_move = moves.typed_blasts.index(self.element)
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_strikes))
+		self.add_move(random.choice(moves.typed_blasts))
 
 	def level_16(self):
 		promote(self, Wizard)	
 
 class Wizard(Character):
 	def config(self):
-		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
+		self.moves = [moves.arc.Blast(self.game), moves.stat.Focus(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 40
@@ -46,18 +46,18 @@ class Wizard(Character):
 
 	def level_03(self):
 		if self.elements[0] in moves.typed_blasts:
-			preferred_move = moves.typed_strikes.index(self.element)
+			preferred_move = moves.typed_blasts.index(self.element)
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_strikes))
+		self.add_move(random.choice(moves.typed_blasts))
 
 	def level_36(self):
 		promote(self, Archmage)	
 
 class Archmage(Character):
 	def config(self):
-		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
+		self.moves = [moves.arc.Blast(self.game), moves.stat.Focus(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 55
@@ -71,11 +71,11 @@ class Archmage(Character):
 
 	def level_03(self):
 		if self.elements[0] in moves.typed_blasts:
-			preferred_move = moves.typed_strikes.index(self.element)
+			preferred_move = moves.typed_blasts.index(self.element)
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_strikes))
+		self.add_move(random.choice(moves.typed_blasts))
 
 
 

@@ -1,4 +1,4 @@
-import main, battle, zone, entities, moves, elements, items
+import main, battle, zone, entities, moves, elements, items, effects
 from constants import *
 import random
 import maps.bsp as bsp
@@ -6,6 +6,34 @@ import maps.maptools as maptools
 import os
 import mobs
 import utility
+
+class myAlter(entities.Alter):
+	def config(self):
+		self.name = 'Your Alter'
+		self.char = '\x91'
+		self.passive = False
+		self.recharge = 10
+
+	def pray(self, entity, zone):
+		var_name = '{}_ticks'.format(self.name)
+		time = self.game.ticks - self.game.get_var(var_name)
+		if time > self.recharge:
+			self.game.set_var(var_name, self.game.ticks)
+			if random.random() > 0.10:
+				print('You pray to yourself. Unsurprisingly, nothing happens.')
+			else:
+				print('You pray to yourself. Somehow you receive a blessing.')
+				for x in entity.combatants:
+					x.status.append(effects.healing.Recovery())
+
+		else:
+			print('The alter has no charge')
+
+	def destroy(self, entity, zone):
+		print('You have destoryed your alter.')
+		print('You retain your powers but are now mortal.')
+		self.enabled = False
+		self.game.get_var('Alters').remove(self)
 
 class HomeZone(zone.Zone):
 
@@ -19,7 +47,7 @@ class HomeZone(zone.Zone):
 		print('Tutorial> You can pick up items by touching them')
 
 		if self.level_visits[1] == 1:
-			t = entities.Alter(self.game)
+			t = myAlter(self.game)
 			self.game.get_var('Alters').append(t)
 			maptools.Positional_Map_Insert(self, t, '?', level=1)
 
