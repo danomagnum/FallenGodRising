@@ -157,10 +157,13 @@ try:
 
 					homezone = maps.home.genzone(game)
 
+
 					maps.town.genzone(game, 'Town1')
 					maps.town.genzone(game, 'Town2')
 					maps.town.genzone(game, 'Town3')
 
+					game.overworld_y = int(game.overworld.level % game.overworld.grid_width)
+					game.overworld_x = int(game.overworld.level / game.overworld.grid_width)
 
 
 					if WRITEMAP:
