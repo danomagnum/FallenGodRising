@@ -54,6 +54,7 @@ WRITEMAP = False
 
 music_queue = Queue()
 music_process = Process(target=music.thread, args=(music_queue,))
+music_volume = 1
 music_process.start()
 
 def shutdown():
@@ -86,9 +87,14 @@ try:
 				elif player_choice == 'Settings':
 					settingmenu = True
 					while settingmenu:
-						setting = graphics_interface.menu(display.menubox, ['Volume', None] ,clear=False)
-						if setting == 'Volume':
-							pass
+						setting = graphics_interface.menu(display.menubox, ['Music', None] ,clear=False)
+						if setting == 'Music':
+							if music_volume == 1:
+								music_queue.put(['volume', 0])
+								music_volume = 0
+							else:
+								music_queue.put(['volume', 1])
+								music_volume = 1
 						else:
 							settingmenu = False
 				elif player_choice == 'Resume':

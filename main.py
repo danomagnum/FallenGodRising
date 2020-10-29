@@ -53,6 +53,7 @@ class Game(object):
 
 		self.music = None
 		self.music_lock = False
+
 		self.generated_names = set() 
 
 		self.ticks = 0
