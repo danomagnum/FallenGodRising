@@ -92,9 +92,12 @@ try:
 							if music_volume == 1:
 								music_queue.put(['volume', 0])
 								music_volume = 0
+								print('Music is now off')
 							else:
 								music_queue.put(['volume', 1])
 								music_volume = 1
+								print('Music is now on')
+							display.show_messages()
 						else:
 							settingmenu = False
 				elif player_choice == 'Resume':
