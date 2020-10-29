@@ -3,6 +3,8 @@
 import sys
 import traceback
 
+DEBUG = True
+
 sys.dont_write_bytecode = True
 
 #import characters
@@ -117,7 +119,8 @@ try:
 								f.close()
 								game.filename = player_choice
 								mainmenu = False
-								os.remove(join(SAVEDIR, player_choice))
+								if not DEBUG:
+									os.remove(join(SAVEDIR, player_choice))
 							except Exception as e:
 								traceback.print_exc(file=sys.stderr)
 								print("Error loading" + player_choice)

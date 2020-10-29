@@ -155,6 +155,7 @@ def genzone(game):
 
 	game.add_zone(zone)
 	ov_level = maptools.overworld_inject(game, zone, newchar='h', entry_level = 5)
+	game.overworld.entry = ov_level
 	game.overworld.change_level(ov_level)
 
 
