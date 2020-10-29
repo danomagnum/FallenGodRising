@@ -75,7 +75,7 @@ try:
 				print(versionstring)
 				display.show_messages()
 
-				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Quit'] ,clear=False)
+				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Settings', 'Quit'] ,clear=False)
 				if player_choice == 'Quit':
 					shutdown()
 					sys.exit(0)
@@ -83,6 +83,14 @@ try:
 					display.show_txt('data/backstory.txt')
 				elif player_choice == 'Instructions':
 					display.show_txt('data/instructions.txt')
+				elif player_choice == 'Settings':
+					settingmenu = True
+					while settingmenu:
+						setting = graphics_interface.menu(display.menubox, ['Volume', None] ,clear=False)
+						if setting == 'Volume':
+							pass
+						else:
+							settingmenu = False
 				elif player_choice == 'Resume':
 					onlyfiles = [f for f in listdir(SAVEDIR) if (isfile(join(SAVEDIR, f)) and (f[-3:] == 'sav'))]	
 					if onlyfiles:
@@ -91,6 +99,7 @@ try:
 							try:
 								f = open(join(SAVEDIR, player_choice), 'rb')
 								game = pickle.load(f)
+								game.music_lock = False
 								display.game = game
 								game.display = display
 								game.music_queue = music_queue

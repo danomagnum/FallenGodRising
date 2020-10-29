@@ -3,6 +3,7 @@ The interface for the music library requires a thread(queue) routine that takes 
 the following messages.  All messages are lists where the zeroth item is the command and the rest of the items are the parameters.
 ['play', 'filename']: start playing the file 'filename'.  If already playing a song, switch.
 ['fadeout']: fadeout the current playing song.
+['volume']: set volume to a value from 0 - 1.0
 ['quit']: return from the function
 
 
@@ -21,6 +22,8 @@ def thread(queue):
 			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
 		elif msg[0] == 'fadeout':
 			pygame.mixer.music.fadeout(1000)
+		elif msg[0] == 'volume':
+			pygame.mixer.music.set_volume(msg[1])
 		elif msg[0] == 'quit':
 			return
 
