@@ -98,6 +98,15 @@ for i in os.listdir(path):
 			files.append(os.path.join(path, i))
 		
 
+music_per_biome = {elements.Sea: 'overworld1.mid',
+                   elements.Marsh: 'overworld1.mid',
+		   elements.Plains: 'overworld1.mid',
+		   elements.Desert: 'overworld1.mid',
+		   elements.Forest: 'forest.mid',
+		   elements.Mountains: 'mountains.mid',
+		   elements.Sky: 'overworld1.mid',
+		   elements.Underground: 'overworld1.mid'}
+
 class OverworldZone(zone.Zone):
 	def level_populate(self, level, visit_no):
 		gen_level = 1
@@ -131,6 +140,9 @@ class OverworldZone(zone.Zone):
 			for m in range(mob_count):
 				maptools.Random_Map_Insert(self, Rat)
 
+		b = self.game.biome()
+		if b in music_per_biome:
+			self.game.set_music(music_per_biome[b])
 
 
 #####################
