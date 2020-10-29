@@ -115,6 +115,7 @@ try:
 
 
 					game = main.Game()
+					game.music_lock = True
 					game.set_var('Alters', [])
 
 					display.game = game
@@ -236,6 +237,7 @@ try:
 			display.mode = graphics_interface.MAP
 			display.refresh_full()
 			gameloop = True
+			game.music_lock = False
 			game.set_music(game.zone.music)
 
 			while gameloop:

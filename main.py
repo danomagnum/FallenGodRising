@@ -52,6 +52,7 @@ class Game(object):
 		self.filename = 'auto.sav'
 
 		self.music = None
+		self.music_lock = False
 		self.generated_names = set() 
 
 		self.ticks = 0
@@ -88,6 +89,10 @@ class Game(object):
 				return
 
 	def set_music(self, filename, fade_ms=1000):
+		if self.music_lock:
+			return
+		if filename == self.music:
+			return
 		if filename is not None:
 			#pygame.mixer.music.fadeout(1000)
 			self.music_queue.put(['fadeout'])
