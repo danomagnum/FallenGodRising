@@ -12,6 +12,7 @@ import maps.perlin as perlin
 import maps.bezier as bezier
 import os
 import sys
+import math
 ZONENAME = 'Overworld'
 
 USE_SYMBOLS = True
@@ -20,23 +21,23 @@ USE_SYMBOLS = True
 # The characters subclasses are how you create enemies.
 # You can used "canned" ones or create your own.
 #####################
-class LittleRat(mobs.Character):
-	def config(self):
-		self.moves = [moves.phy.Strike(self.game)]
-		self.elements = [elements.Normal]
-		self.status = []
-		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-		self.base_physical_strength = 50
-		self.base_physical_defense = 50
-		self.base_arcane_strength = 50
-		self.base_arcane_defense = 50
-		self.base_speed = 50
-		self.base_hp = 50
-		self.base_luck = 100
-
-#####################
-# The entities subclasses are items that will appear in the world.
-# You can used "canned" ones or create your own.
+#class LittleRat(mobs.Character):
+#	def config(self):
+#		self.moves = [moves.phy.Strike(self.game)]
+#		self.elements = [elements.Normal]
+#		self.status = []
+#		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+#		self.base_physical_strength = 50
+#		self.base_physical_defense = 50
+#		self.base_arcane_strength = 50
+#		self.base_arcane_defense = 50
+#		self.base_speed = 50
+#		self.base_hp = 50
+#		self.base_luck = 100
+#
+######################
+## The entities subclasses are items that will appear in the world.
+## You can used "canned" ones or create your own.
 # This is also where you set up battle groups by inheriting entities.Battler and
 # assigning combatants
 #####################
@@ -46,7 +47,7 @@ class Rat( battle.Skiddish_AI,entities.DoomAI):
 	# example basic enemy
 	def config(self):
 		self.name = 'Rat'
-		self.combatants.append(LittleRat(self.game, level=1))
+		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
 		self.char = 'r'
 		self.backpack.gold = random.randint(0, 10)
 
@@ -54,7 +55,7 @@ class PackRat(entities.TowardWalker, entities.Battler):
 	# example basic enemy that gives an item when killed
 	def config(self):
 		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(self.game, level=1))
+		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
 		self.backpack.store(items.status.Potion(self.game))
 		self.char = 'F'
 		self.AI = battle.Random_AI
@@ -62,9 +63,9 @@ class PackRat(entities.TowardWalker, entities.Battler):
 class RatPack(entities.RandWalker, entities.Battler):
 	def config(self):
 		self.name = 'Rat Pack'
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.combatants.append(LittleRat(self.game, level=1))
-		self.combatants.append(LittleRat(self.game, level=1))
+		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
+		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
+		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
 		self.char = 'R'
 		self.AI = battle.Random_AI
 

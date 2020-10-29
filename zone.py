@@ -71,6 +71,7 @@ def savelines(lines, filename):
 class Zone(object):
 	def __init__(self, name, game = None, maps = None):
 		self.levels = 0
+		self.entry = 0
 		self.name = name
 		self.music = None
 		if maps is not None:
@@ -102,6 +103,19 @@ class Zone(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.biome_map = None
+
+	def depth(self):
+		if self.width == 0:
+			return max(abs(self.level - self.entry), 1)
+		else:
+			y0 = self.entry // self.width
+			x0 = self.entry - (self.width * y0)
+
+			y1 = self.level // self.width
+			x1 = self.level - (self.width * y0)
+
+			return int(math.sqrt((y0 - y1) ** 2 + (x0 - x1) ** 2))
+
 	def check_clear(self):
 		return all([e.passive for e in self.entities])
 
