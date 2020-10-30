@@ -17,32 +17,6 @@ ZONENAME = 'Overworld'
 
 USE_SYMBOLS = True
 
-#####################
-# The characters subclasses are how you create enemies.
-# You can used "canned" ones or create your own.
-#####################
-#class LittleRat(mobs.Character):
-#	def config(self):
-#		self.moves = [moves.phy.Strike(self.game)]
-#		self.elements = [elements.Normal]
-#		self.status = []
-#		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-#		self.base_physical_strength = 50
-#		self.base_physical_defense = 50
-#		self.base_arcane_strength = 50
-#		self.base_arcane_defense = 50
-#		self.base_speed = 50
-#		self.base_hp = 50
-#		self.base_luck = 100
-#
-######################
-## The entities subclasses are items that will appear in the world.
-## You can used "canned" ones or create your own.
-# This is also where you set up battle groups by inheriting entities.Battler and
-# assigning combatants
-#####################
-#class Rat(entities.RandWalker, entities.Battler):
-#class Rat( battle.Skiddish_AI,entities.BasicAI1):
 class Rat( battle.Skiddish_AI,entities.DoomAI):
 	# example basic enemy
 	def config(self):
@@ -139,7 +113,13 @@ class OverworldZone(zone.Zone):
 
 			mob_count = random.randint(0, 10)
 			for m in range(mob_count):
-				maptools.Random_Map_Insert(self, Rat)
+				#maptools.Random_Map_Insert(self, Rat)
+				#party = mobs.party(self.game, Battle_AI, Entity_AI, mob_level, mobs_list, 'name')
+				parties = []
+				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat], 'rat'))
+				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat, mobs.rat.Rat], 'rats'))
+				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat, mobs.rat.LittleRat, mobs.rat.LittleRat], 'ratpack'))
+				maptools.Random_Map_Insert(self, random.choice(parties))
 
 		b = self.game.biome()
 		if b in music_per_biome:

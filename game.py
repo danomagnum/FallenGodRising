@@ -114,8 +114,8 @@ try:
 								display.game = game
 								game.display = display
 								game.music_queue = music_queue
-								game.music_queue = music_queue
 								display.change_zone(game.zone)
+								game.set_music(game.music, force=True)
 								f.close()
 								game.filename = player_choice
 								mainmenu = False
