@@ -157,6 +157,8 @@ def genzone(game):
 	ov_level = maptools.overworld_inject(game, zone, newchar='h', entry_level = 5)
 	game.overworld.entry = ov_level
 	game.overworld.change_level(ov_level)
+	#zone.fast_travel_options[0] = main.FastTravel('Entrance', 5)
+	zone.fast_travel_found.add(main.FastTravel('Entrance', 5))
 
 
 	#TODO: create and add "tutorial" entities
