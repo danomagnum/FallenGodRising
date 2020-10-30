@@ -42,6 +42,7 @@ class HomeZone(zone.Zone):
 
 	def level_000(self):
 		print('Tutorial> Navigate with WASD.  To continue, walk off the screen to the right.')
+		print('Tutorial> To skip the tutorial, use the fast travel menu')
 	def level_001(self):
 		print('Tutorial> You can open doors by walking through them')
 		print('Tutorial> You can pick up items by touching them')
