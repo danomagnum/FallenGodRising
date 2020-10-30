@@ -89,10 +89,10 @@ class Game(object):
 			if top_entity == self.player:
 				return
 
-	def set_music(self, filename, fade_ms=1000):
+	def set_music(self, filename, fade_ms=1000, force=False):
 		if self.music_lock:
 			return
-		if filename == self.music:
+		if filename == self.music and not force:
 			return
 		if filename is not None:
 			#pygame.mixer.music.fadeout(1000)

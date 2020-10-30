@@ -4,6 +4,7 @@
 from main import Entity
 from constants import *
 import items
+import math
 import utility
 import random
 import mobs
@@ -105,14 +106,14 @@ class Zone(object):
 		self.biome_map = None
 
 	def depth(self):
-		if self.width == 0:
+		if self.grid_width == 0:
 			return max(abs(self.level - self.entry), 1)
 		else:
-			y0 = self.entry // self.width
-			x0 = self.entry - (self.width * y0)
+			y0 = self.entry // self.grid_width
+			x0 = self.entry - (self.grid_width * y0)
 
-			y1 = self.level // self.width
-			x1 = self.level - (self.width * y0)
+			y1 = self.level // self.grid_width
+			x1 = self.level - (self.grid_width * y1)
 
 			return int(math.sqrt((y0 - y1) ** 2 + (x0 - x1) ** 2))
 
