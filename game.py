@@ -2,8 +2,8 @@
 #coding: utf-8 
 import sys
 import traceback
+import settings
 
-DEBUG = True
 
 sys.dont_write_bytecode = True
 
@@ -59,6 +59,9 @@ music_process = Process(target=music.thread, args=(music_queue,))
 music_volume = 1
 music_process.start()
 
+if not settings.music:
+	music_queue.put(['volume', 0])
+
 def shutdown():
 	graphics_interface.shutdown()
 	music.shutdown(music_process, music_queue)
@@ -91,13 +94,13 @@ try:
 					while settingmenu:
 						setting = graphics_interface.menu(display.menubox, ['Music', None] ,clear=False)
 						if setting == 'Music':
-							if music_volume == 1:
+							if settings.music == 1:
 								music_queue.put(['volume', 0])
-								music_volume = 0
+								settings.music = False
 								print('Music is now off')
 							else:
 								music_queue.put(['volume', 1])
-								music_volume = 1
+								settings.music = True
 								print('Music is now on')
 							display.show_messages()
 						else:
@@ -119,7 +122,7 @@ try:
 								f.close()
 								game.filename = player_choice
 								mainmenu = False
-								if not DEBUG:
+								if not settings.debug:
 									os.remove(join(SAVEDIR, player_choice))
 							except Exception as e:
 								traceback.print_exc(file=sys.stderr)
