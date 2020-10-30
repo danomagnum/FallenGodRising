@@ -5,6 +5,9 @@ import utility
 import items
 import elements
 import battle
+import effects
+import mobs
+import moves
 import bearlibkeys as keys
 import pickle
 import time
