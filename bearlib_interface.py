@@ -378,6 +378,8 @@ class Display(object):
 			win.box()
 			printstring = string.replace('[', '[[')
 			printstring = printstring.replace(']', ']]')
+			printstring = printstring.replace('{', '{{')
+			printstring = printstring.replace('}', '}}')
 			terminal.printf(int(2),int(2), printstring)
 			terminal.refresh()
 			key = terminal.read()
@@ -389,7 +391,10 @@ class Display(object):
 				if len(string) > 0:
 					string = string[:-1]
 			elif terminal.check(terminal.TK_CHAR):
-				string += chr(terminal.state(terminal.TK_CHAR))
+				newchar = chr(terminal.state(terminal.TK_CHAR))
+				if newchar == '`' and len(string) == 0:
+					return None
+				string += newchar
 			elif history is not None:
 				if terminal.check(terminal.TK_UP):
 					if history_position < len(history):
