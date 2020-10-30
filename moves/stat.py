@@ -79,6 +79,17 @@ class Taunt(Move):
 	def effect(self, user, target, damage=0):
 		target.status.append(effects.StatMod(0.85, PHYSTR))
 
+class Drain(Move):
+	def config(self):
+		self.name = 'Drain'
+		self.accuracy = 1
+		self.power = 0
+		self.default_target = ENEMY
+
+	def effect(self, user, target, damage=0):
+		target.status.append(effects.poison.Drain())
+
+
 
 stat_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]
 effect_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]

@@ -29,5 +29,15 @@ class Bleeding(Status):
 		print('{} was effected by {} for {}'.format(effected.name,self.name, damage))
 		effected.hp -= damage
 
+class Drain(Status):
+	def config(self):
+		self.name = 'Drain'
+		self.max_life = 5
+	def pre_turn(self, effected):
+		move = random.choice(effected.moves)
+		move.mp -= 1
+		print('{} lost 1 mp on move {} from {}. {} mp remain'.format(effected.name,move.name, self.name, move.mp))
+
+
 basic = [Poison_Minor, Bleeding]
 advanced = [Poison_Major]

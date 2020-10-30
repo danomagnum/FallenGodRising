@@ -337,6 +337,7 @@ class Debug(Character):
 		              moves.arc.Wave(self.game),
 		              moves.moves.SelfDestruct(self.game),
 		              moves.heal.Transfuse(self.game),
+		              moves.stat.Drain(self.game),
 			      moves.mods.mod_move(moves.phy.Strike, moves.mods.Piercing)(self.game),
 			      moves.mods.mod_move(moves.mods.mod_move(moves.phy.Strike, moves.mods.Piercing), moves.mods.Multi)(self.game),
 			      moves.mods.mod_move(moves.phy.Strike, moves.mods.Poison)(self.game),
