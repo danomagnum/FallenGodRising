@@ -15,8 +15,10 @@ class Cell(object):
 		self.map = None
 		self.visited = False
 
-	def box(self):
-		output = [[' ', ' ', ' '],[' ', ' ', ' '],[' ', ' ', ' ']]
+	def box(self, nullchar = None):
+		if nullchar == None:
+			nullchar = ' '
+		output = [[nullchar, nullchar, nullchar],[nullchar, nullchar, nullchar],[nullchar, nullchar, nullchar]]
 		if self.up:
 			output[0] = ['#', '#', '#']
 		if self.down:
@@ -67,7 +69,7 @@ def maze(width, height, clear_percent = 0.99):
 		if x < width - 1:
 			if not map[y][x + 1].visited:
 				opts.append(RIGHT)
-		print('({}, {}) / {}'.format(x, y, len(opts)))
+		#print('({}, {}) / {}'.format(x, y, len(opts)))
 		if len(opts) > 0:
 			dir = random.choice(opts)
 		else:
@@ -111,20 +113,42 @@ def maze(width, height, clear_percent = 0.99):
 
 	return map
 
-	
+
+def maze_map(width, height, clear_percent = 0.99):
+	map = maze(width, height, clear_percent)
+	out_map = []
+
+	for y in map:
+		line = ['', '', '']
+		row = ''
+		for x in y:
+			disp = x.box(nullchar='.')
+			for c in disp[0]:
+				line[0] += c
+			for c in disp[1]:
+				line[1] += c
+			for c in disp[2]:
+				line[2] += c
+		for spot in line:
+			#row += spot
+			out_map.append(list(spot))
+		#out_map.append(row)
+
+	return out_map
 
 
-map = maze(16, 16)
+if __name__ == '__main__':
+	map = maze(16, 16)
 
-for y in map:
-	line = ['', '', '']
-	for x in y:
-		disp = x.box()
-		for c in disp[0]:
-			line[0] += c
-		for c in disp[1]:
-			line[1] += c
-		for c in disp[2]:
-			line[2] += c
-	for spot in line:
-		print spot
+	for y in map:
+		line = ['', '', '']
+		for x in y:
+			disp = x.box()
+			for c in disp[0]:
+				line[0] += c
+			for c in disp[1]:
+				line[1] += c
+			for c in disp[2]:
+				line[2] += c
+		for spot in line:
+			print(spot)

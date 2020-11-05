@@ -40,6 +40,7 @@ import maps.overworld
 import maps.fortress
 import maps.goblincave
 import maps.wizardtower
+import maps.pyramid
 import maps.maptools
 import maps.buildings
 import maps.sewers
@@ -133,7 +134,7 @@ try:
 						display.show_messages()
 
 				elif player_choice == 'New Game':
-					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3 + 5
+					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3 + 5 + 10
 					print('Please Wait, Generating World. ({} tasks)'.format(zone_count))
 					display.show_messages()
 
@@ -152,11 +153,24 @@ try:
 					game.biome_map = biome_map
 					game.overworld_minimap = overworld_minimap
 					game.overworld = zone
+					print('ow done')
+					display.show_messages()
 
 					zone2 = maps.goblincave.genzone(game)
+					print('gc done')
+					display.show_messages()
+					zone6 = maps.pyramid.genzone(game)
+					print('p done')
+					display.show_messages()
 					zone3 = maps.wizardtower.genzone(game)
+					print('wt done')
+					display.show_messages()
 					zone4 = maps.sewers.genzone(game)
+					print('s done')
+					display.show_messages()
 					zone5 = maps.fortress.genzone(game)
+					print('f done')
+					display.show_messages()
 
 					homezone = maps.home.genzone(game)
 
