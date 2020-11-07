@@ -13,6 +13,7 @@ ZONENAME = 'Pyramid'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
+		self.music = 'Purgatory.mid'
 		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.mobs.Imp]),
 		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer]),
 		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.mobs.Imp]),
