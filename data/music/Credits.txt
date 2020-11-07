@@ -1,1 +1,9 @@
-NES.mid and NES2.mid were created by Luke O'Neal.
+The following were created by Luke O'Neal:
+
+NES.mid
+NES2.mid 
+Boss Battle.mid
+Mystery.mid
+Purgatory.mid
+Winter Frost.mid
+Adventure.mid
