@@ -18,11 +18,11 @@ def town_entry(zone):
 		e.backpack.gold = 100
 
 		e.backpack.store(items.gen_gear(zone.game, gen_level))
-		e.backpack.store(items.gen_movescroll(zone.game))
+		e.backpack.store(items.scrolls.gen_movescroll(zone.game))
 		e.backpack.store(items.gen_base_item(zone.game))
 		for potion in range(10):
-			e.backpack.store(items.Potion(zone.game))
-			e.backpack.store(items.HealAll(zone.game))
+			e.backpack.store(items.status.Potion(zone.game))
+			e.backpack.store(items.status.HealAll(zone.game))
 
 		maptools.Random_Map_Insert(zone, e)
 

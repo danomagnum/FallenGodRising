@@ -78,7 +78,7 @@ class Shop(Entity):
 	def config(self):
 		self.name = 'Shop'
 		self.char = '$'
-		self.passive = True
+		self.passive = False
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player:

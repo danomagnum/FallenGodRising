@@ -43,6 +43,7 @@ import maps.wizardtower
 import maps.pyramid
 import maps.maptools
 import maps.buildings
+import maps.lair
 import maps.sewers
 import maps.town
 import maps.home
@@ -134,7 +135,7 @@ try:
 						display.show_messages()
 
 				elif player_choice == 'New Game':
-					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3 + 5 + 10
+					zone_count = 2 * 16*16 + 10 + 20 + 5*5 + 3 + 5 + 10 + 20
 					print('Please Wait, Generating World. ({} tasks)'.format(zone_count))
 					display.show_messages()
 
@@ -170,6 +171,9 @@ try:
 					display.show_messages()
 					zone5 = maps.fortress.genzone(game)
 					print('f done')
+					display.show_messages()
+					zone3 = maps.lair.genzone(game)
+					print('l done')
 					display.show_messages()
 
 					homezone = maps.home.genzone(game)
