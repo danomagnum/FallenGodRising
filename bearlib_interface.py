@@ -557,16 +557,27 @@ class Display(object):
 		#self.show_messages()
 
 	def show_overworld(self):
+		#show the overworld minimap
+		biome_colors = ['#08B3E5', '#14C9CB', '#2AF598', '#d2b48c', '#006400', '#654321', 'white', 'white', 'white']
 		y = 1
 		for line in self.game.overworld_minimap:
 			x = 1
 			for cell in line:
-				self.overworldbox.addstr(17 - y, x, str(cell))
+				#biome_index = self.game.biome_map[16 - x][16 - y]
+				biome_index = self.game.biome_map[y - 1][x - 1]
+				try:
+					biome_color = biome_colors[biome_index]
+				except:
+					print('index error: {}'.format(biome_index))
+					biome_color = 'yellow'
+				self.overworldbox.addstr(17 - y, x, str(cell), biome_color)
 				x += 1
 			y += 1
 		x0 = 16 - self.game.overworld_x
 		y0 = self.game.overworld_y + 1
 		self.overworldbox.addch(x0, y0, '@')
+
+		#show game stats
 		try:
 			self.overworldbox.addstr(1, 18, 'Biome: {}'.format(str(self.game.biome())))
 			self.overworldbox.addstr(2, 18, 'Gold: {}'.format(str(self.game.player.backpack.gold)))
