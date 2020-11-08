@@ -139,7 +139,7 @@ class Generator():
 
 			join = None
 
-			if join_type is 'either' and set([0, 1]).intersection(
+			if join_type == 'either' and set([0, 1]).intersection(
 
 				 set([x1, x2, y1, y2])):
 
@@ -147,7 +147,7 @@ class Generator():
 
 				join = 'bottom'
 
-			elif join_type is 'either' and set([self.width - 1,
+			elif join_type == 'either' and set([self.width - 1,
 
 				 self.width - 2]).intersection(set([x1, x2])) or set(
 
@@ -159,7 +159,7 @@ class Generator():
 
 				join = 'top'
 
-			elif join_type is 'either':
+			elif join_type == 'either':
 
 				join = random.choice(['top', 'bottom'])
 
@@ -169,11 +169,11 @@ class Generator():
 
  
 
-			if join is 'top':
+			if join == 'top':
 
 				return [(x1, y1), (x1, y2), (x2, y2)]
 
-			elif join is 'bottom':
+			elif join == 'bottom':
 
 				return [(x1, y1), (x2, y1), (x2, y2)]
 
@@ -279,7 +279,7 @@ class Generator():
 
 			join = None
 
-			if join_type is 'either':
+			if join_type == 'either':
 
 				join = random.choice(['top', 'bottom'])
 
@@ -289,7 +289,7 @@ class Generator():
 
  
 
-			if join is 'top':
+			if join == 'top':
 
 				if y2 > y1:
 
@@ -325,7 +325,7 @@ class Generator():
 
  
 
-			elif join is 'bottom':
+			elif join == 'bottom':
 
 				if y2 > y1:
 
@@ -583,6 +583,14 @@ class Generator():
 
 		#print('Room List: ', self.room_list)
 		#print('\nCorridor List: ', self.corridor_list)
+		level = []
+		for row in self.tiles_level:
+			r = []
+			for c in row:
+				r.append(c)
+			level.append(r)
+		return level
+		return [row for row in self.tiles_level]
 
  
 
