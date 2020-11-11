@@ -168,7 +168,7 @@ class Game(object):
 
 			print('Entering Zone {}'.format(zonename))
 
-			self.set_music(self.zone.music)
+			self.set_music(self.zone.get_music())
 
 		else:
 			print('Zone {} does not exist'.format(zonename))

@@ -11,6 +11,7 @@ import utility
 SPLITS = 8
 
 def town_entry(zone):
+	zone.game.set_music('town.mid')
 	if zone.level_visits[zone.level] == 1:
 		#first visit to town. populate NPCs
 		e = entities.Shop(zone.game)
@@ -68,4 +69,5 @@ def genzone(game, townname):
 
 			
 	game.overworld.__dict__['level_{:03}'.format(ov_level)] = town_entry
+	game.overworld.special_music[ov_level] = 'town.mid'
 

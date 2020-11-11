@@ -124,7 +124,6 @@ def normalize(grid, factors, ints = True):
 
 	return output
 
-
 def printgrid(grid):
 	for y in grid:
 		line = ''
@@ -158,7 +157,7 @@ def gen_overworld(xmax=16, ymax=16):
 				counts[x] += 1
 
 		percentages = [int(100.0 * cnt / tiles) for cnt in counts]
-		if all([p > 10 for p in percentages[:6]]):
+		if all([p > 10 for p in percentages[:7]]):
 			gen = False
 	return grid2
 
@@ -171,7 +170,7 @@ def main():
 	while gen:
 		tries += 1
 		grid = Generate(16,16)
-		grid2 = normalize(grid, 7)
+		grid2 = normalize(grid, 6)
 		
 		counts = [0,0,0,0,0,0,0,0,0,0]
 		for y in grid2:
@@ -179,7 +178,7 @@ def main():
 				counts[x] += 1
 
 		percentages = [int(100.0 * cnt / tiles) for cnt in counts]
-		if all([p > 10 for p in percentages[:6]]):
+		if all([p > 10 for p in percentages[:7]]):
 			gen = False
 		#if percentages[0] < 20 and percentages[0] > 5:
 			#gen = False

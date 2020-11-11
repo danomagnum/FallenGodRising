@@ -9,6 +9,7 @@ from constants import *
 import random
 import maps.maptools as maptools
 import maps.perlin as perlin
+import maps.nearest_biome as biomegen
 import maps.bezier as bezier
 import os
 import sys
@@ -76,10 +77,10 @@ for i in os.listdir(path):
 music_per_biome = {elements.Sea: 'overworld1.mid',
                    elements.Marsh: 'overworld1.mid',
 		   elements.Plains: 'overworld1.mid',
-		   elements.Desert: 'Winter Frost.mid',
+		   elements.Desert: 'desert.mid',
 		   elements.Forest: 'forest.mid',
 		   elements.Mountains: 'mountains.mid',
-		   elements.Sky: 'overworld1.mid',
+		   elements.Sky: 'Winter Frost.mid',
 		   elements.Underground: 'overworld1.mid'}
 
 class OverworldZone(zone.Zone):
@@ -121,9 +122,19 @@ class OverworldZone(zone.Zone):
 				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat, mobs.rat.LittleRat, mobs.rat.LittleRat], 'ratpack'))
 				maptools.Random_Map_Insert(self, random.choice(parties))
 
+		self.game.set_music(self.get_music())
+		#b = self.game.biome()
+		#if b in music_per_biome:
+			#self.game.set_music(music_per_biome[b])
+
+	def get_music(self):
+		print('music check for level {}'.format(self.level))
+		if self.level in self.special_music:
+			return self.special_music[self.level]
+
 		b = self.game.biome()
 		if b in music_per_biome:
-			self.game.set_music(music_per_biome[b])
+			return music_per_biome[b]
 
 
 #####################
@@ -139,7 +150,8 @@ def genzone(game):
 
 	
 	#this defines the biomes
-	biome_map = perlin.gen_overworld(16, 16)
+	#biome_map = perlin.gen_overworld(16, 16)
+	biome_map = biomegen.generate()
 	
 	maps = []
 	maze = maptools.maze(16, 16)
