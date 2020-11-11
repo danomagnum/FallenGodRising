@@ -75,6 +75,7 @@ class Zone(object):
 		self.entry = 0
 		self.name = name
 		self.music = None
+		self.special_music = {}
 		if maps is not None:
 			self.maps = maps
 			self.levels = len(maps)
@@ -104,6 +105,9 @@ class Zone(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.biome_map = None
+
+	def get_music(self):
+		return self.music
 
 	def depth(self):
 		if self.grid_width == 0:

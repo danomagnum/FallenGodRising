@@ -41,7 +41,7 @@ def genzone(game):
 		game.progress()
 		#lev = maps.buildings.building_octagon(maptools.MAPSIZE[1], maptools.MAPSIZE[1])
 		lev = maps.maze.maze_map(12 - l, 12 -  l)
-		print('lev created')
+		#print('lev created')
 		game.display.show_messages()
 		if l == 0:
 			#maptools.add_stairs(lev, down=False)
@@ -53,10 +53,10 @@ def genzone(game):
 		else:
 			maptools.add_stairs(lev)
 		#lev = maptools.flatten(lev)
-		print('flattening')
+		#print('flattening')
 		game.display.show_messages()
 		map_list.append(maptools.flatten(lev))
-		print('flattened')
+		#print('flattened')
 		game.display.show_messages()
 	#maze = maptools.maze(16, 16)
 		# Create zone
