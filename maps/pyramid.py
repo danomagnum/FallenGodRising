@@ -42,7 +42,6 @@ def genzone(game):
 		#lev = maps.buildings.building_octagon(maptools.MAPSIZE[1], maptools.MAPSIZE[1])
 		lev = maps.maze.maze_map(12 - l, 12 -  l)
 		#print('lev created')
-		game.display.show_messages()
 		if l == 0:
 			#maptools.add_stairs(lev, down=False)
 			#maptools.add_stairs(lev, up=False)
@@ -54,10 +53,8 @@ def genzone(game):
 			maptools.add_stairs(lev)
 		#lev = maptools.flatten(lev)
 		#print('flattening')
-		game.display.show_messages()
 		map_list.append(maptools.flatten(lev))
 		#print('flattened')
-		game.display.show_messages()
 	#maze = maptools.maze(16, 16)
 		# Create zone
 	zone = ThisZone(ZONENAME, game, maps=map_list)
@@ -76,7 +73,7 @@ def genzone(game):
 	# add zone to game
 	game.add_zone(zone)
 
-	maps.maptools.overworld_inject(game, zone, newchar='p', mask=maps.buildings.building_octagon(maptools.MAPSIZE[0], maptools.MAPSIZE[1], padding=5,outside_door=True))
+	maps.maptools.overworld_inject(game, zone, newchar='p', mask=maps.buildings.building_octagon(maptools.MAPSIZE[0], maptools.MAPSIZE[1], padding=5,outside_door=True), biome=3)
 	zone.fast_travel_options[0] = main.FastTravel('Entrance', 0)
 
 	return zone

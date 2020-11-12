@@ -701,7 +701,7 @@ def add_stairs(map, up=True, down=True):
 		ydown = y
 
 
-def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
+def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None, biome=None):
 	ov_ht = len(game.overworld_minimap) - 1
 	ov_wd = len(game.overworld_minimap[0]) - 1
 	search = True
@@ -714,7 +714,8 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None):
 			ov_y = y
 			ov_level = ov_x + ov_y * game.overworld.grid_width
 			if not (ov_level in game.overworld.fast_travel_options):
-				search = False
+				if (biome is None) or (game.biome_map[y][x] == biome):
+					search = False
 	cell.char = newchar
 	if mask is not None:
 		new_ow_map = empty_zone_with_mask(cell, mask)
