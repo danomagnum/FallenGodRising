@@ -459,6 +459,8 @@ def Battle(game, user, enemy_ai):
 		for c in enemy_ai.get_available():
 			c.battletick()
 
+		game.ticks += 1
+
 		#game.display.show_btl_messages()
 
 		#time.sleep(1.0 / 60.0)
