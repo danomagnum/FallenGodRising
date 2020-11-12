@@ -441,13 +441,13 @@ class Zone(object):
 				if point[1] > 0:
 					up = (point[0], point[1] - 1)
 					pts.append(up)
-				if point[1] < self.height - 2:
+				if point[1] < self.height - 1:
 					down = (point[0], point[1] + 1)
 					pts.append(down)
 				if point[0] > 0:
 					left = (point[0] - 1, point[1])
 					pts.append(left)
-				if point[0] < self.width - 2:
+				if point[0] < self.width - 1:
 					right = (point[0] + 1, point[1])
 					pts.append(right)
 
