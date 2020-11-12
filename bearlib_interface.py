@@ -582,7 +582,7 @@ class Display(object):
 			self.overworldbox.addstr(1, 18, 'Biome: {}'.format(str(self.game.biome())))
 			self.overworldbox.addstr(2, 18, 'Gold: {}'.format(str(self.game.player.backpack.gold)))
 			self.overworldbox.addstr(3, 18, 'Alters: {}'.format(str(len(self.game.get_var('Alters')))))
-			self.overworldbox.addstr(4, 18, 'Turn: {}'.format(str(self.game.ticks)))
+			self.overworldbox.addstr(4, 18, 'Turn: {:,}'.format(self.game.ticks))
 		except:
 			pass
 
