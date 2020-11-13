@@ -438,6 +438,12 @@ class Display(object):
 
 		terminal.refresh()
 
+	def menu(self, options, window=None, cols = 1, selected = None, clear=True, callback_on_change=None):
+		
+		if window is None:
+			window = self.msgbox
+		return menu(window, options, cols, selected, clear, callback_on_change)
+
 
 	def clear(self):
 		self.mapbox.erase()
@@ -496,9 +502,9 @@ class Display(object):
 		window = self.battlemenubox
 		return menu(window, options, cols, selected)
 
-	def menu(self, options, cols = 1, selected = None):
-		window = self.msgbox
-		return menu(window, options, cols, selected)
+	#def menu(self, options, cols = 1, selected = None):
+		#window = self.msgbox
+		#return menu(window, options, cols, selected)
 
 	def refresh_combatant(self):
 		for i in range(MAX_COMBATANTS):
