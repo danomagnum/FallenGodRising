@@ -95,15 +95,21 @@ class Window(object):
 			terminal.clear_area(int(self.left), int(self.top), int(self.width), int(self.height))
 		#terminal.clear_area(self.left, self.top, self.width, self.height)
 
-	def box(self):
+	def box(self, opaque=False):
+		if opaque:
+			for layer in range(self.layer + 1):
+				terminal.layer(layer)
+				terminal.clear_area(int(self.left), int(self.top), int(self.width), int(self.height))
+
 		terminal.layer(self.layer)
-		char = '█'
+
 		for x in range(self.width):
 			terminal.printf(int(self.left + x),int(self.top), BOXCHARS[1])
 			terminal.printf(int(self.left + x), int(self.top + self.height), BOXCHARS[7])
 		for y in range(self.height):
 			terminal.printf(int(self.left), int(self.top + y), BOXCHARS[3])
 			terminal.printf(int(self.left + self.width), int(self.top + y), BOXCHARS[5])
+
 		terminal.printf(int(self.left), int(self.top), BOXCHARS[0])
 		terminal.printf(int(self.left + self.width), int(self.top), BOXCHARS[2])
 		terminal.printf(int(self.left), int(self.top + self.height), BOXCHARS[6])
@@ -118,14 +124,14 @@ class Window(object):
 		if font is None:
 			terminal.printf(int(self.left + xposition), int(self.top + yposition),string)
 		else:
-			prefix = "[font=" + font + "]"
-			postfix = "[/font]"
+			prefix = '[font={}][offset={},{}]'.format(font, dx, dy)
+			postfix = '[/offset][/font]'
 			terminal.printf(int(self.left + xposition), int(self.top + yposition),prefix + string + postfix)
 			#terminal.put_ext(int(self.left + xposition), int(self.top + yposition), dx, dy, prefix + string + postfix)
 		color = terminal.color_from_name("white")
 		terminal.color(color)
 
-	def addch(self, y, x, char, color = None, font=None):
+	def addch(self, y, x, char, color = None, font=None, dx = 0, dy = 0):
 		terminal.layer(self.layer)
 		#TODO: add color/bold/etc
 		if color is not None:
@@ -134,8 +140,8 @@ class Window(object):
 		if font is None:
 			terminal.printf(int(self.left + x), int(self.top + y),char)
 		else:
-			prefix = "[font=" + font + "]"
-			postfix = "[/font]"
+			prefix = '[font={}][offset={},{}]'.format(font, dx, dy)
+			postfix = '[/offset][/font]'
 			terminal.printf(int(self.left + x), int(self.top + y),prefix + char + postfix)
 
 		#terminal.put(self.left + x, self.top + y, char)
@@ -171,7 +177,7 @@ class Window(object):
 #TODO: add a "helptext" function where you can hit "?" on a menu to get more
 # information on the entry you've selected before going back to the menu right
 # where you left off.  Some items could even give better help info (on monsters, etc...)
-def menu(window, options, cols = 1, selected = None, clear=True, callback_on_change=None):
+def menu(window, options, cols = 1, selected = None, clear=True, callback_on_change=None, opaque=False):
 
 	for opt_id in range(len(options)):
 		if selected == options[opt_id]:
@@ -200,7 +206,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 	loop = True
 	while loop:
 		window.erase()
-		window.box()
+		window.box(opaque)
 		count = 0
 		col = 0
 		row = 0
@@ -248,6 +254,7 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 			#sys.exit(key)
 		elif key == terminal.TK_BACKSPACE or key == terminal.TK_MOUSE_RIGHT:
 			#sys.exit(key)
+			window.erase()
 			return None #escape key
 		elif key == terminal.TK_MOUSE_MOVE:
 			mousepos = window.getmousepos()
@@ -287,10 +294,13 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 	except:
 		pass # xterm does not like this
 	if selected < len(options):
+		window.erase()
 		return options[selected]
 	else:
+		window.erase()
 		return None
 
+	window.erase()
 
 
 MAX_COMBATANTS = 3
@@ -456,7 +466,7 @@ class Display(object):
 		
 	def show_messages(self):
 		msgs = sys.stdout.readlines()
-		self.msgbox.erase()
+		#self.msgbox.erase()
 		self.msgbox.box()
 		for i in range(len(msgs)):
 			self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, msgs[i])
@@ -497,7 +507,7 @@ class Display(object):
 			if i < len(self.enemy.combatants):
 				self.nmeboxes[i].box()
 		self.refresh_combatant()
-		self.msgbox.box()
+		#self.msgbox.box()
 	def battlemenu(self, options, cols=1, selected=None):
 		window = self.battlemenubox
 		return menu(window, options, cols, selected)
@@ -520,27 +530,31 @@ class Display(object):
 	##### Map Draw Routines
 	##################################
 	def update_pad(self):
+		dx = -4
+		dy = 6
 		self.mapbox.erase()
 		if self.zone is None:
 			return
 		i = 1
 		for line in self.zone.map:
-			self.mapbox.addstr(i, 1, line, font="tiles")
+			self.mapbox.addstr(i, 1, line, font="tiles", dx = dx, dy = dy)
 			i += 1
 		drawn = set()
 		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)
+		terminal.composition(True)
 		for e in entity_list:
 			if (e.x, e.y) not in drawn:
 				if e.x is not None:
 					try:
-						self.mapbox.addch(YRAT * e.y + 1,XRAT * e.x + 1, e.char, None, font="tiles")
+						self.mapbox.addch(YRAT * e.y + 1,XRAT * e.x + 1, e.char, None, font="tiles", dx=dx, dy=dy)
 					except:
 						print ('{} {} {}'.format(e.y + 1, e.x + 1, e.char))
 					drawn.add((e.x + 1, e.y + 1))
 
 
 		if self.game.player is not None:
-			self.mapbox.addch(YRAT * self.game.player.y + 1, XRAT * self.game.player.x + 1, self.game.player.char, None, font="tiles")
+			self.mapbox.addch(YRAT * self.game.player.y + 1, XRAT * self.game.player.x + 1, self.game.player.char, None, font="tiles", dx=dx, dy=dy)
+		terminal.composition(False)
 
 	def refresh_full_map(self):
 		if self.zone is None:
@@ -559,7 +573,7 @@ class Display(object):
 					self.charboxes[i].erase()
 					self.charboxes[i].box()
 
-		self.msgbox.box()
+		#self.msgbox.box()
 		#self.show_messages()
 
 	def show_overworld(self):
@@ -611,7 +625,7 @@ class Display(object):
 				#self.statbox[i].box()
 				self.show_combatant_stats(self.game.player.combatants[i],self.statbox[i])
 
-		self.msgbox.box()
+		#self.msgbox.box()
 
 	def show_combatant_stats(self, combatant, box):
 		col2pos = 20
@@ -696,11 +710,11 @@ class Display(object):
 			choices = [True, False]
 
 		self.popupbox.erase()
-		self.popupbox.box()
+		self.popupbox.box(True)
 		self.popupbox.addstr(1, 1, message)
-		self.popupbox_menu.erase()
-		self.popupbox_menu.box()
-		return menu(self.popupbox_menu, choices, cols, selected)
+		#self.popupbox_menu.erase()
+		self.popupbox_menu.box(True)
+		return menu(self.popupbox_menu, choices, cols, selected, opaque=True)
 
 
 
@@ -730,11 +744,11 @@ class Display(object):
 		#width = len(splash_data[1])
 		self.splashbox = Window(height,width,0,0,0) 
 		splashbox = self.splashbox
+		splashbox.box()
 
 		for y, line in enumerate(splash_data):
 			splashbox.addstr(y + 1, 1, line)
 
-		splashbox.box()
 		terminal.refresh()
 
 	def update_generation_progress(self, percent):
