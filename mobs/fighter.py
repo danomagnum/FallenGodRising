@@ -9,6 +9,7 @@ class Fighter(Character):
 	def config(self):
 		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
+
 	def base_stats(self):
 		self.base_hp = 70
 		self.base_physical_strength = 80 
