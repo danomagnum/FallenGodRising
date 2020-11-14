@@ -351,11 +351,43 @@ class Debug(Character):
 		self.base_luck = 100
 
 def promote(instance, newclass):
+	# need to figure out if we've had any base stat modifiers. So save the current base stat values
+	base_hp = instance.base_hp
+	base_physical_strength = instance.base_physical_strength 
+	base_physical_defense = instance.base_physical_defense
+	base_arcane_strength = instance.base_arcane_strength
+	base_arcane_defense = instance.base_arcane_defense
+	base_speed = instance.base_speed
+	base_luck = instance.base_luck
+
+	#then reset them to default for the current instance
+	instance.base_stats()
+
+	#then subtract the current (base) values from the original
+	base_hp -= instance.base_hp
+	base_physical_strength -= instance.base_physical_strength 
+	base_physical_defense -= instance.base_physical_defense
+	base_arcane_strength -= instance.base_arcane_strength
+	base_arcane_defense -= instance.base_arcane_defense
+	base_speed -= instance.base_speed
+	base_luck -= instance.base_luck
+
 	name = instance.name
 	utility.change_class_of_instance(instance, newclass)
 	print('{} was promoted to {}'.format(name, newclass.__name__))
 	instance.name = newclass.__name__
+
+	#update the base stats to the new class
 	instance.base_stats()
+
+	#add the modifiers back
+	instance.base_hp += base_hp
+	instance.base_physical_strength += base_physical_strength 
+	instance.base_physical_defense += base_physical_defense
+	instance.base_arcane_strength += base_arcane_strength
+	instance.base_arcane_defense += base_arcane_defense
+	instance.base_speed += base_speed
+	instance.base_luck += base_luck
 
 
 starters = [Debug]

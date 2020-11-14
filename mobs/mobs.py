@@ -4,18 +4,6 @@ import elements
 import utility
 import random
 
-class Rat(Character):
-	def config(self):
-		self.moves = [moves.phy.Strike(self.game)]
-		self.elements = [elements.Normal]
-		self.base_physical_strength = 50
-		self.base_physical_defense = 50
-		self.base_arcane_strength = 50
-		self.base_arcane_defense = 50
-		self.base_speed = 50
-		self.base_hp = 50
-		self.base_luck = 100
-
 class Spider(Character):
 	def config(self):
 		self.moves = [moves.phy.Strike(self.game), moves.mods.Poison(self.game)]
@@ -26,42 +14,6 @@ class Spider(Character):
 		self.base_arcane_defense = 50
 		self.base_speed = 50
 		self.base_hp = 20
-		self.base_luck = 100
-
-class Imp(Character):
-	def config(self):
-		self.moves = [moves.phy.Strike(self.game)]
-		self.elements = [elements.Normal]
-		self.base_physical_strength = 50
-		self.base_physical_defense = 50
-		self.base_arcane_strength = 70
-		self.base_arcane_defense = 70
-		self.base_speed = 100
-		self.base_hp = 60
-		self.base_luck = 100
-
-class Goblin(Character):
-	def config(self):
-		self.moves = [moves.phy.Strike(self.game)]
-		self.elements = [elements.Normal]
-		self.base_physical_strength = 70
-		self.base_physical_defense = 70
-		self.base_arcane_strength = 50
-		self.base_arcane_defense = 50
-		self.base_speed = 100
-		self.base_hp = 60
-		self.base_luck = 100
-
-class Hobgoblin(Character):
-	def config(self):
-		self.moves = [moves.phy.Strike(self.game)]
-		self.elements = [elements.Normal]
-		self.base_physical_strength = 100
-		self.base_physical_defense = 100
-		self.base_arcane_strength = 80
-		self.base_arcane_defense = 80
-		self.base_speed = 100
-		self.base_hp = 100
 		self.base_luck = 100
 
 class Ogre(Character):
