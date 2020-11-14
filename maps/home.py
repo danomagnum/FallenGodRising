@@ -106,7 +106,8 @@ class HomeZone(zone.Zone):
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [item,]), level=4)
 
 	def level_005(self):
-		print('Tutorial> Touching the castle tile brings you between the overworld and dungeons')
+		print('Tutorial> Touching the world tile brings you between the overworld and dungeons')
+		print('Tutorial> From the overworld, a castle tile will bring you into dungeons')
 		if self.level_visits[5] == 1:
 			total = 0
 			item_list = []

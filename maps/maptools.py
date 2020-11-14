@@ -733,6 +733,7 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None, biome
 	z_entity.new_x = ov_x2
 	z_entity.new_y = ov_y2
 	z_entity.new_zone = 'Overworld'
+	z_entity.char = '\x1D'
 	zone.add_entity(z_entity, entry_level)
 
 	ov_entity = entities.ZoneWarp(game)

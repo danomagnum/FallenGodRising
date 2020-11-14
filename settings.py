@@ -6,3 +6,4 @@ _save = _self_save.gen_save_func(__file__, __name__)
 
 debug = True
 music = True
+animate = True
