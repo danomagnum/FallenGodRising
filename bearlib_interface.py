@@ -15,6 +15,7 @@ import bearlibkeys as keys
 from constants import *
 
 import stdoutCatcher
+import settings
 
 import locale
 locale.setlocale(locale.LC_ALL, '')
@@ -34,6 +35,31 @@ TERMSIZE = [200, 50]
 XRAT = 1
 YRAT = 1
 
+ANIMATION_RATE = 0.1 
+ANIMATION_LAST = 0
+ANIMATION_FRAME = 1
+ANIMATION_FRAMES = 3
+ANIMATION_DIR = 1
+
+
+def update_animation_frame():
+	global ANIMATION_FRAME
+	global ANIMATION_DIR
+	global ANIMATION_LAST
+	global ANIMATION_RATE
+	global ANIMATION_FRAMES
+
+	now = time.time()
+	delta = now - ANIMATION_LAST
+	
+	if delta > ANIMATION_RATE:
+		ANIMATION_LAST = now
+		ANIMATION_FRAME += ANIMATION_DIR
+		if ANIMATION_FRAME == ANIMATION_FRAMES:
+			ANIMATION_DIR = -1
+		elif ANIMATION_FRAME == 1:
+			ANIMATION_DIR = 1
+
 def font_setup():
 	global XRAT
 	global YRAT
@@ -44,6 +70,9 @@ def font_setup():
 	#XRAT = 3
 	#YRAT = 3
 	terminal.set("tiles font: data/tileset.png, size=16x16, spacing=2x1")
+	terminal.set("tiles1 font: data/tileset1.png, size=16x16, spacing=2x1")
+	terminal.set("tiles2 font: data/tileset2.png, size=16x16, spacing=2x1")
+	terminal.set("tiles3 font: data/tileset3.png, size=16x16, spacing=2x1")
 	XRAT = 2
 	YRAT = 1
 
@@ -539,9 +568,16 @@ class Display(object):
 		self.mapbox.erase()
 		if self.zone is None:
 			return
+
+		font = 'tiles'
+		if settings.animate:
+			font = 'tiles{}'.format(ANIMATION_FRAME)
+		update_animation_frame()
+
 		i = 1
 		for line in self.zone.map:
-			self.mapbox.addstr(i, 1, line, font="tiles", dx = dx, dy = dy)
+
+			self.mapbox.addstr(i, 1, line, font=font, dx = dx, dy = dy)
 			i += 1
 		drawn = set()
 		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)
@@ -550,14 +586,14 @@ class Display(object):
 			if (e.x, e.y) not in drawn:
 				if e.x is not None:
 					try:
-						self.mapbox.addch(YRAT * e.y + 1,XRAT * e.x + 1, e.char, None, font="tiles", dx=dx, dy=dy)
+						self.mapbox.addch(YRAT * e.y + 1,XRAT * e.x + 1, e.char, None, font=font, dx=dx, dy=dy)
 					except:
 						print ('{} {} {}'.format(e.y + 1, e.x + 1, e.char))
 					drawn.add((e.x + 1, e.y + 1))
 
 
 		if self.game.player is not None:
-			self.mapbox.addch(YRAT * self.game.player.y + 1, XRAT * self.game.player.x + 1, self.game.player.char, None, font="tiles", dx=dx, dy=dy)
+			self.mapbox.addch(YRAT * self.game.player.y + 1, XRAT * self.game.player.x + 1, self.game.player.char, None, font=font, dx=dx, dy=dy)
 		terminal.composition(False)
 
 	def refresh_full_map(self):
