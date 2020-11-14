@@ -107,6 +107,7 @@ try:
 							display.show_messages()
 						else:
 							settingmenu = False
+					settings._save()
 				elif player_choice == 'Resume':
 					onlyfiles = [f for f in listdir(SAVEDIR) if (isfile(join(SAVEDIR, f)) and (f[-3:] == 'sav'))]	
 					if onlyfiles:

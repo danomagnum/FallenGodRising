@@ -90,7 +90,7 @@ class Window(object):
 		return(self.height, self.width)
 
 	def erase(self):
-		for layer in range(0,3):
+		for layer in range(0,4):
 			terminal.layer(layer)
 			terminal.clear_area(int(self.left), int(self.top), int(self.width), int(self.height))
 		#terminal.clear_area(self.left, self.top, self.width, self.height)
@@ -254,7 +254,8 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 			#sys.exit(key)
 		elif key == terminal.TK_BACKSPACE or key == terminal.TK_MOUSE_RIGHT:
 			#sys.exit(key)
-			window.erase()
+			if clear:
+				window.erase()
 			return None #escape key
 		elif key == terminal.TK_MOUSE_MOVE:
 			mousepos = window.getmousepos()
@@ -294,13 +295,16 @@ def menu(window, options, cols = 1, selected = None, clear=True, callback_on_cha
 	except:
 		pass # xterm does not like this
 	if selected < len(options):
-		window.erase()
+		if clear:
+			window.erase()
 		return options[selected]
 	else:
-		window.erase()
+		if clear:
+			window.erase()
 		return None
 
-	window.erase()
+	if clear:
+		window.erase()
 
 
 MAX_COMBATANTS = 3
