@@ -3,7 +3,7 @@ from .item import Item
 
 class ExpBoost(Item):
 	def config(self):
-		self.name = 'Element of Knowledge'
+		self.name = 'Knowledge Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
@@ -21,7 +21,7 @@ class ExpBoost(Item):
 
 class StrBoost(Item):
 	def config(self):
-		self.name = 'Element of Strength'
+		self.name = 'Steel Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
@@ -36,7 +36,7 @@ class StrBoost(Item):
 		
 class DefBoost(Item):
 	def config(self):
-		self.name = 'Element of Defense'
+		self.name = 'Stone Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
@@ -51,7 +51,7 @@ class DefBoost(Item):
 	
 class ArcStrBoost(Item):
 	def config(self):
-		self.name = 'Element of Impulse'
+		self.name = 'Light Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
@@ -66,7 +66,7 @@ class ArcStrBoost(Item):
 	
 class ArcDefBoost(Item):
 	def config(self):
-		self.name = 'Element of Fortitude'
+		self.name = 'Shade Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
@@ -81,7 +81,7 @@ class ArcDefBoost(Item):
 
 class SpdBoost(Item):
 	def config(self):
-		self.name = 'Element of Time'
+		self.name = 'Time Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
@@ -96,7 +96,7 @@ class SpdBoost(Item):
 
 class LuckBoost(Item):
 	def config(self):
-		self.name = 'Element of Chance'
+		self.name = 'Chance Shard'
 		self.weigth = 1
 		self.target_type = ANY
 		self.value = 100
