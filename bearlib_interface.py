@@ -78,6 +78,7 @@ def font_setup():
 
 def initialize():
 	terminal.open()
+	terminal.set("window: size=200x50, title='Fallen God Rising';")
 	terminal.set("window: size=200x50;")
 	terminal.set("input: filter=[keyboard, mouse]")
 	font_setup()

@@ -15,9 +15,10 @@ __all__ = []
 
 for tag in taglist:
 	#__dict__[tag] = []
-	exec('{} = []'.format(tag))
+	#exec('{} = []'.format(tag))
+	exec('{} = set()'.format(tag))
 
-all_moves = []
+all_moves = set()
 
 for name in os.listdir('moves'):
 	if name.endswith('.py') and not name.startswith('__'):
@@ -27,7 +28,10 @@ for name in os.listdir('moves'):
 		__all__.append(name[:-3])
 		for tag in taglist:
 			if tag in module.__dict__:
-				exec('{} += module.__dict__[tag]'.format(tag))
-				exec('all_moves += module.__dict__[tag]'.format(tag))
+				#exec('{}.add(module.__dict__[tag])'.format(tag))
+				exec('{} = {} | set(module.__dict__[tag])'.format(tag, tag))
+				#exec('{} += module.__dict__[tag]'.format(tag))
+				exec('all_moves = all_moves | set(module.__dict__[tag])'.format(tag))
+				#exec('all_moves += module.__dict__[tag]'.format(tag))
 
 

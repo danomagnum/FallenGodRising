@@ -32,6 +32,6 @@ class MoveScroll(Item):
 
 
 def gen_movescroll(game):
-	move = random.choice(moves.all_moves)
+	move = random.sample(moves.all_moves,1)[0]
 	return MoveScroll(game, move)
 
