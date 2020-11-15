@@ -15,8 +15,8 @@ class ThisZone(zone.LinearZone):
 		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin]),
 		                   (3, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin]),
 			           (5, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin]),
-			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin, mobs.mobs.HobGoblin])]
-			           (9, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin, mobs.mobs.GoblinLord])]
+			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin, mobs.goblin.HobGoblin]),
+			           (9, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin, mobs.goblin.GoblinLord])]
 	def level_009(self):
 		gen_level = 1
 		if self.game.player is not None:

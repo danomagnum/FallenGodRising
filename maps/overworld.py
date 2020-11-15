@@ -74,7 +74,7 @@ for i in os.listdir(path):
 			files.append(os.path.join(path, i))
 		
 
-music_per_biome = {elements.Sea: 'overworld1.mid',
+music_per_biome = {elements.Sea: 'calm.mid',
                    elements.Marsh: 'overworld1.mid',
 		   elements.Plains: 'overworld1.mid',
 		   elements.Desert: 'desert.mid',
