@@ -27,7 +27,7 @@ for name in os.listdir('mobs'):
 				exec('{} = {} | set(module.__dict__[tag])'.format(tag, tag))
 
 
-def party(game, battle_AI, world_AI, level, combatants, name, item_list = None):
+def party(game, battle_AI, world_AI, level, combatants, name=None, item_list = None):
 	class Generated(world_AI,battle_AI, utility.Serializable):
 		# example basic enemy
 		def config(self):
@@ -37,7 +37,9 @@ def party(game, battle_AI, world_AI, level, combatants, name, item_list = None):
 					self.combatants.append(c(game, level=level))
 				except:
 					self.combatants.append(c)
-			self.char = name[0]
+			if self.name is None:
+				self.name = self.combatants[0].name
+			self.char = self.name[0]
 	return Generated(game)
 
 
