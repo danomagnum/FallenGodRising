@@ -500,7 +500,7 @@ class Display(object):
 	def show_messages(self):
 		msgs = sys.stdout.readlines()
 		#self.msgbox.erase()
-		self.msgbox.box()
+		self.msgbox.box(opaque=True)
 		for i in range(len(msgs)):
 			self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, msgs[i])
 		terminal.refresh()

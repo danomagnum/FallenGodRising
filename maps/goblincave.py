@@ -12,10 +12,11 @@ ZONENAME = 'GoblinCave'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin, mobs.mobs.Goblin]),
-			           (5, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin, mobs.mobs.Hobgoblin]),
-			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.mobs.Goblin, mobs.mobs.Goblin, mobs.mobs.Hobgoblin])]
+		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin]),
+		                   (3, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin]),
+			           (5, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin]),
+			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin, mobs.mobs.HobGoblin])]
+			           (9, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin, mobs.mobs.GoblinLord])]
 	def level_009(self):
 		gen_level = 1
 		if self.game.player is not None:
@@ -44,6 +45,7 @@ def genzone(game):
 			maptools.add_stairs(lev, down=False)
 		else:
 			maptools.add_stairs(lev)
+		lev = maptools.fix_disjoint_hall(lev)
 		maptools.swap_char(lev, '#', '\xDB')
 		map_list.append(maptools.flatten(lev))
 	#maze = maptools.maze(16, 16)

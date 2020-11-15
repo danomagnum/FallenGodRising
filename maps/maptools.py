@@ -129,10 +129,10 @@ def map_gen(height, width, rooms, minroomsize = 4):
 
 	return tiles
 
-def flatten(map, printout = False):
+def flatten_nonstr(map_in, printout = False):
 	lines = []
-	for y in map:
-		line = ''.join(y)
+	for y in map_in:
+		line = ''.join(map(str, y))
 		lines.append(line)
 		if printout:
 			print(line)
@@ -883,5 +883,121 @@ def entry_match(map_list, maze, game=None, grid_width = 1):
 	
 	return map_list
 
+def flood_disjoint(map, x,  y, floodmap, floodroom):
+	''' updates floodmap recursively '''
+
+	height = len(map)
+	width = len(map[0])
+
+	if floodmap[y][x] != 0:
+		#already assigned
+		return
+
+	# Change the character at world[x][y] to newChar
+	if map[y][x] == '.':
+		floodmap[y][x] = floodroom
+	else:
+		#something not a wall, this recursive direction is a bust
+		return
+
+	# Recursive calls. Make a recursive call as long as we are not on the
+	# boundary (which would cause an Index Error.)
+	if x > 0: # left
+		flood_disjoint(map, x-1, y, floodmap, floodroom)
+
+	if y > 0: # up
+		flood_disjoint(map, x, y-1, floodmap, floodroom)
+
+	if x < width-1: # right
+		flood_disjoint(map, x+1, y, floodmap, floodroom)
+
+	if y < height-1: # down
+		flood_disjoint(map, x, y+1, floodmap, floodroom)
+
+
+def detect_disjoint(map):
+	# The recursive algorithm. Starting at x and y, changes any adjacent
+	# characters that match oldChar to newChar.
+	height = len(map)
+	width = len(map[0])
+
+	floodrooms = {}
+	floodroom = 0
+
+	floodmap = [[0 for x in range(width)] for y in range(height)]
+
+	for x in range(width):
+		for y in range(height):
+			if map[y][x] == '.':
+				#is a floor tile, check if it's been assigned to a room yet.
+				#if not, we need to start a new room and floodfill.
+				#if so, we ignore it and continue.
+				room = floodmap[y][x]
+				if room == 0:
+					floodroom = floodroom + 1
+					floodrooms[floodroom] = [(x, y)]
+					flood_disjoint(map, x, y, floodmap, floodroom)
+
+					#new tile
+				else:
+					floodrooms[room].append((x, y))
+					
+	return floodmap, floodrooms
+	
+
+def fix_disjoint_hall(map):
+	fmap, frooms = detect_disjoint(map)
+
+	if len(frooms) > 1:
+		#disjointed rooms exist
+		centroids = []
+		for room in frooms:
+			#room is the room number 1,2,3... convert it to 0,1,2...
+			xtot = 0
+			ytot = 0
+			count = 0
+			for coord in frooms[room]:
+				count += 1
+				xtot += coord[0]
+				ytot += coord[1]
+			x = xtot // count
+			y = ytot // count
+
+			centroids.append((x,y))
+
+		count = len(centroids)
+
+		for c in range(count - 1):
+			#connect 0 and 1, 1 and 2, 2 and 3... till the end
+			c0 = centroids[c]
+			c1 = centroids[c + 1]
+
+			x = c0[0]
+			y = c0[1]
+
+			x1 = c1[0]
+			y1 = c1[1]
+
+			if fmap[y][x] == c + 2:
+				#we hit a walkable tile in the room we are trying to connect to
+				# plus two because we are zero indexed here but 1 indexed in the fmap
+				# and we want the next index so +1 +1
+				continue
+
+			while x != x1:
+				map[y][x] = '.'
+				if x1 < x:
+					x -= 1
+				else:
+					x += 1
+
+			while y != y1:
+				map[y][x] = '.'
+				if y1 < y:
+					y -= 1
+				else:
+					y += 1
+
+	return map
 
 
