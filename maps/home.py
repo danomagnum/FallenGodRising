@@ -57,7 +57,7 @@ class HomeZone(zone.Zone):
 			print('Tutorial> Enemies appear as letters on the screen.  Bump into them to start combat')
 			print('Tutorial> You can continue by stepping on the stairs')
 			first_mob = random.sample(mobs.trash,1)[0](self.game)
-			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [first_mob], 'rat'), '!', level=2)
+			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [first_mob]), '!', level=2)
 	def level_003(self):
 		if self.level_visits[3] == 1:
 			print('Tutorial> You can get a general idea of what type items are by their apperaance')
@@ -78,7 +78,7 @@ class HomeZone(zone.Zone):
 			maptools.Positional_Map_Insert(self, t, '&', level=3)
 
 			second_mob = random.sample(mobs.trash,1)[0](self.game)
-			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [second_mob], 'rat'), '!', level=3)
+			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [second_mob]), '!', level=3)
 
 	def level_004(self):
 		total = 0
