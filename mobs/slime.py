@@ -7,7 +7,7 @@ import random
 
 class Slime(Character):
 	def config(self):
-		self.moves = [moves.phy.Blast(self.game)]
+		self.moves = [moves.arc.Blast(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 70
@@ -24,7 +24,7 @@ class Slime(Character):
 
 class Glob(Character):
 	def config(self):
-		self.moves = [moves.phy.Blast(self.game), moves.stat.Focus(self.game)]
+		self.moves = [moves.arc.Blast(self.game), moves.stat.Focus(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 95

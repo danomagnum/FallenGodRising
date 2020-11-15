@@ -13,7 +13,7 @@ __all__ = []
 
 for tag in taglist:
 	#__dict__[tag] = []
-	exec('{} = []'.format(tag))
+	exec('{} = set()'.format(tag))
 
 
 for name in os.listdir('mobs'):
@@ -24,7 +24,7 @@ for name in os.listdir('mobs'):
 		__all__.append(name[:-3])
 		for tag in taglist:
 			if tag in module.__dict__:
-				exec('{} += module.__dict__[tag]'.format(tag))
+				exec('{} = {} | set(module.__dict__[tag])'.format(tag, tag))
 
 
 def party(game, battle_AI, world_AI, level, combatants, name, item_list = None):

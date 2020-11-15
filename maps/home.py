@@ -56,7 +56,7 @@ class HomeZone(zone.Zone):
 		if self.level_visits[2] == 1:
 			print('Tutorial> Enemies appear as letters on the screen.  Bump into them to start combat')
 			print('Tutorial> You can continue by stepping on the stairs')
-			first_mob = random.choice(mobs.trash)(self.game)
+			first_mob = random.sample(mobs.trash,1)[0](self.game)
 			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [first_mob], 'rat'), '!', level=2)
 	def level_003(self):
 		if self.level_visits[3] == 1:
@@ -77,7 +77,7 @@ class HomeZone(zone.Zone):
 			t = entities.Treasure(self.game, [items.status.Potion(self.game)])
 			maptools.Positional_Map_Insert(self, t, '&', level=3)
 
-			second_mob = random.choice(mobs.trash)(self.game)
+			second_mob = random.sample(mobs.trash,1)[0](self.game)
 			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [second_mob], 'rat'), '!', level=3)
 
 	def level_004(self):
@@ -100,7 +100,7 @@ class HomeZone(zone.Zone):
 			if random.random() < 0.1:
 				#10% chance of getting a magic amulet
 				amulet = items.armor.Amulet(self.game)
-				amulet = utility.add_class_to_instance(amulet, random.choice(items.special_gear_mods))
+				amulet = utility.add_class_to_instance(amulet, random.sample(items.special_gear_mods,1)[0])
 				item_list.append(amulet)
 			for item in item_list:
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [item,]), level=4)

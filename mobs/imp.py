@@ -7,7 +7,7 @@ import random
 
 class Imp(Character):
 	def config(self):
-		self.moves = [moves.phy.Blast(self.game)]
+		self.moves = [moves.arc.Blast(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 60
