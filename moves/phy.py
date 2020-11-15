@@ -24,6 +24,23 @@ class Rush(Move):
 		self.physical = (True, True)
 		self.default_target = MULTI_ENEMY
 
+class Bite(Move):
+	def config(self):
+		self.name = 'Bite'
+		self.max_mp = 20.0
+		self.accuracy = 0.9
+		self.physical = (True, True)
+
+	def effect(self, user, target, damage=0):
+		target.status.append(effects.poison.Bleeding())
+
+class Swoop(Move):
+	def config(self):
+		self.name = 'Swoop'
+		self.max_mp = 20.0
+		self.accuracy = 0.9
+		self.power = 1
+		self.physical = (True, True)
 
 
 typed_strikes = gen_Typed_Moves(Strike)

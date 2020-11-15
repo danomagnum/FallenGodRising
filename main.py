@@ -190,6 +190,12 @@ class Game(object):
 		if len(self.debug_history) > 20:
 			self.debug_history = self.debug_history[1:]
 		self.debug_history.append(command)
+		#special debug commands
+		if command == 'GODMODE':
+			for c in self.player.combatants:
+				c.level = 100
+			return
+
 		if '=' in command:
 			exec(command)
 		else:
