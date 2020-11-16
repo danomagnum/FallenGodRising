@@ -80,25 +80,53 @@ class Shop(Entity):
 		self.char = '$'
 		self.passive = False
 	def collide(self, entity, zone):
+		SELLRATIO = 0.5
 		#self.enabled = False
 		if entity.is_player:
 			shopping = True
 			zonemode = self.game.display.mode
 
-			if len(self.backpack) > 0:
-				self.game.display.mode = SHOP
-			else:
-				print('Shop is empty')
 			def update_info_box(choice):
 				self.game.display.display_item_stats(choice, entity.backpack)
+
+			def update_info_box2(choice):
+				self.game.display.display_item_stats(choice, entity.backpack, cost_mult = SELLRATIO)
+
+			choice = self.game.display.popup('Shop {}'.format(self.name), ['Buy', 'Sell', 'Leave'])
 			while shopping:
-				if len(self.backpack) > 0:
-					update_info_box(self.backpack.show()[0])
-					selected_item = graphics_interface.menu(self.game.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box)
-					if selected_item is not None:
-						if entity.backpack.gold >= selected_item.cost():
-							entity.backpack.gold -= selected_item.cost()
-							entity.backpack.store(selected_item.take())
+
+				if choice == 'Sell':
+					self.game.display.mode = SHOP
+					if len(entity.backpack) > 0:
+						update_info_box(entity.backpack.show()[0])
+						selected_item = graphics_interface.menu(self.game.display.storebox, entity.backpack.show(), cols=2, callback_on_change=update_info_box2, opaque=True)
+						if selected_item is not None:
+							entity.backpack.gold += selected_item.cost() * SELLRATIO
+							self.backpack.store(selected_item.take())
+						else:
+							shopping = False
+					else:
+						shopping = False
+
+
+
+				elif choice == 'Buy':
+					if len(self.backpack) > 0:
+						self.game.display.mode = SHOP
+
+					else:
+						print('Shop is empty')
+						break
+					
+					if len(self.backpack) > 0:
+						update_info_box(self.backpack.show()[0])
+						selected_item = graphics_interface.menu(self.game.display.storebox, self.backpack.show(), cols=2, callback_on_change=update_info_box, opaque=True)
+						if selected_item is not None:
+							if entity.backpack.gold >= selected_item.cost():
+								entity.backpack.gold -= selected_item.cost()
+								entity.backpack.store(selected_item.take())
+						else:
+							shopping = False
 					else:
 						shopping = False
 				else:

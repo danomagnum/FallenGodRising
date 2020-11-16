@@ -26,7 +26,7 @@ class Fighter(Character):
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_strikes))
+		self.add_move(random.sample(moves.typed_strikes,1)[0])
 	
 	def level_16(self):
 		promote(self, Squire)	
