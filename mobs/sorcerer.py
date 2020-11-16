@@ -25,7 +25,7 @@ class Sorcerer(Character):
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_blasts))
+		self.add_move(random.sample(moves.typed_blasts,1)[0])
 
 	def level_16(self):
 		promote(self, Wizard)	
@@ -50,7 +50,7 @@ class Wizard(Character):
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_blasts))
+		self.add_move(random.sample(moves.typed_blasts,1)[0])
 
 	def level_36(self):
 		promote(self, Archmage)	
@@ -75,7 +75,7 @@ class Archmage(Character):
 			if (random.random() * self.luck) > 50:
 				self.add_move(preferred_move)
 				return
-		self.add_move(random.choice(moves.typed_blasts))
+		self.add_move(random.sample(moves.typed_blasts,1)[0])
 
 
 

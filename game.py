@@ -83,7 +83,7 @@ try:
 				print(versionstring)
 				display.show_messages()
 
-				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Settings', 'Quit'] ,clear=False)
+				player_choice = graphics_interface.menu(display.menubox, ['New Game', 'Resume', 'Backstory', 'Instructions', 'Settings', 'Quit'] ,cols = 1, clear=False)
 				if player_choice == 'Quit':
 					shutdown()
 					sys.exit(0)
@@ -94,7 +94,7 @@ try:
 				elif player_choice == 'Settings':
 					settingmenu = True
 					while settingmenu:
-						setting = graphics_interface.menu(display.menubox, ['Music', None] ,clear=False)
+						setting = graphics_interface.menu(display.menubox, ['Music', None] , cols=1, clear=False)
 						if setting == 'Music':
 							if settings.music == 1:
 								music_queue.put(['volume', 0])
@@ -111,7 +111,7 @@ try:
 				elif player_choice == 'Resume':
 					onlyfiles = [f for f in listdir(SAVEDIR) if (isfile(join(SAVEDIR, f)) and (f[-3:] == 'sav'))]	
 					if onlyfiles:
-						player_choice = graphics_interface.menu(display.menubox, onlyfiles ,clear=False)
+						player_choice = graphics_interface.menu(display.menubox, onlyfiles ,cols=1, clear=False)
 						if player_choice is not None:
 							try:
 								f = open(join(SAVEDIR, player_choice), 'rb')
@@ -232,7 +232,7 @@ try:
 								pass
 
 						update_confirm_box(player_characters[0])
-						player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters,selected=random.choice(player_characters) ,clear=False, callback_on_change=update_confirm_box)
+						player_choice = graphics_interface.menu(display.start_menus[i * 3], player_characters,selected=random.choice(player_characters) ,cols=1, clear=False, callback_on_change=update_confirm_box)
 
 						if player_choice is not None:
 							if player_choice == 'None':
@@ -253,7 +253,7 @@ try:
 								player_choice.elements.append(choice)
 								display.show_combatant_stats(player_choice, display.start_menus[(i * 3) + 2])
 
-							element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, selected=random.choice(player_elements), clear=False, callback_on_change=update_confirm_box)
+							element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, selected=random.choice(player_elements),cols=1, clear=False, callback_on_change=update_confirm_box)
 
 							#confirm_choices = ['Accept', 'Cancel', 'Randomize']
 							#confirm_choice = graphics_interface.menu(display.start_menus[(i * 3) + 2], confirm_choices, clear=False)

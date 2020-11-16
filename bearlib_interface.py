@@ -207,7 +207,7 @@ class Window(object):
 #TODO: add a "helptext" function where you can hit "?" on a menu to get more
 # information on the entry you've selected before going back to the menu right
 # where you left off.  Some items could even give better help info (on monsters, etc...)
-def menu(window, options, cols = 1, selected = None, clear=True, callback_on_change=None, opaque=False):
+def menu(window, options, cols = 2, selected = None, clear=True, callback_on_change=None, opaque=False):
 
 	for opt_id in range(len(options)):
 		if selected == options[opt_id]:
@@ -768,12 +768,12 @@ class Display(object):
 		for box in self.charboxes:
 			box.box()
 
-	def display_item_stats(self, item, backpack = None):
-		self.storeinfobox.box()
+	def display_item_stats(self, item, backpack = None, cost_mult = 1.0):
+		self.storeinfobox.box(opaque=True)
 		self.storeinfobox.addstr(0, 1, item.name)
 		if backpack is not None:
 			self.storeinfobox.addstr(1, 1, 'In Backpack: {}'.format(backpack.qty(item.name)))
-		self.storeinfobox.addstr(2, 1, 'Cost: {} ({} in backpack)     '.format(item.cost(), self.game.player.backpack.gold))
+		self.storeinfobox.addstr(2, 1, 'Cost: {} ({} in backpack)     '.format(item.cost() * cost_mult, self.game.player.backpack.gold))
 		self.storeinfobox.addstr(3, 1, 'Desc: {}'.format(item.helptext()))
 
 	def splash_screen(self):
