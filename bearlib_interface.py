@@ -14,6 +14,10 @@ import sayings
 import bearlibkeys as keys
 from constants import *
 
+import maps.maptools as maptools
+
+import vision
+
 import stdoutCatcher
 import settings
 
@@ -145,8 +149,12 @@ class Window(object):
 		terminal.printf(int(self.left), int(self.top + self.height), BOXCHARS[6])
 		terminal.printf(int(self.left + self.width), int(self.top + self.height), BOXCHARS[8])
 
-	def addstr(self, yposition, xposition, string, color = None, font=None, dx=0, dy=0):
-		terminal.layer(self.layer)
+	def addstr(self, yposition, xposition, string, color = None, font=None, dx=0, dy=0, layer=None):
+		if layer is None:
+			terminal.layer(self.layer)
+		else:
+			terminal.layer(layer)
+
 		#TODO: add color/bold/etc
 		if color is not None:
 			color = terminal.color_from_name(color)
@@ -577,9 +585,21 @@ class Display(object):
 
 		i = 1
 		for line in self.zone.map:
-
 			self.mapbox.addstr(i, 1, line, font=font, dx = dx, dy = dy)
 			i += 1
+
+
+		if self.game.player is not None:
+			fog = vision.View(self.zone.map, self.zone.fog)
+			fog.do_fov(self.game.player.x, self.game.player.y, 15)
+			fog = maptools.flatten(fog.light)
+			
+			if settings.fog:
+				i = 1
+				for line in fog:
+					self.mapbox.addstr(i, 1, line, font=font, dx = dx, dy = dy, layer = self.mapbox.layer + 1)
+					i += 1
+
 		drawn = set()
 		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)
 		terminal.composition(True)
