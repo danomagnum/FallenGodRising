@@ -76,13 +76,17 @@ class Zone(object):
 		self.name = name
 		self.music = None
 		self.special_music = {}
+		self.fogs = []
 		if maps is not None:
 			self.maps = maps
 			self.levels = len(maps)
+			self.fog_gen()
 
 		self.grid_width = 1
 		self.level = 0
+
 		self.map = self.maps[self.level]
+		self.fog = self.fogs[self.level]
 
 		self.fast_travel_found = set()
 		self.fast_travel_options = {}
@@ -105,6 +109,13 @@ class Zone(object):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.biome_map = None
+
+	def fog_gen(self):
+		fog_char = '█'
+		for level in self.maps:
+			wd = len(level[0])
+			fog = [[fog_char for col in level[0]] for row in level]
+			self.fogs.append(fog)
 
 	def get_music(self):
 		return self.music
@@ -224,6 +235,7 @@ class Zone(object):
 			self.level_entities[self.level] = self.entities
 			self.level = level
 			self.map = self.maps[self.level]
+			self.fog = self.fogs[self.level]
 			#print(len(self.level_entities), level)
 			self.entities = self.level_entities[level]
 			#self.width = len(self.map[0])
