@@ -589,16 +589,12 @@ class Display(object):
 			i += 1
 
 
-		if self.game.player is not None:
-			fog = vision.View(self.zone.map, self.zone.fog)
-			fog.do_fov(self.game.player.x, self.game.player.y, 15)
-			fog = maptools.flatten(fog.light)
-			
-			if settings.fog:
-				i = 1
-				for line in fog:
-					self.mapbox.addstr(i, 1, line, font=font, dx = dx, dy = dy, layer = self.mapbox.layer + 1)
-					i += 1
+		if settings.fog:
+			i = 1
+			fog = maptools.flatten(self.zone.fog)
+			for line in fog:
+				self.mapbox.addstr(i, 1, line, font=font, dx = dx, dy = dy, layer = self.mapbox.layer + 1)
+				i += 1
 
 		drawn = set()
 		entity_list = sorted(self.zone.entities, key=lambda x:x.priority)

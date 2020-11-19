@@ -10,6 +10,7 @@ import random
 import mobs
 import entities
 import maps.maptools as maptools
+import vision
 
 
 def map_gen(height, width, rooms, minroomsize = 4):
@@ -117,6 +118,12 @@ class Zone(object):
 			fog = [[fog_char for col in level[0]] for row in level]
 			self.fogs.append(fog)
 
+	def update_fog(self):
+		if self.game.player is not None:
+			fog = vision.View(self.map, self.fog)
+			fog.do_fov(self.game.player.x, self.game.player.y, 15)
+			self.fog[self.game.player.y][self.game.player.x] = ' '
+		
 	def get_music(self):
 		return self.music
 
@@ -268,6 +275,7 @@ class Zone(object):
 			self.height = len(self.map)
 
 		self.check_fasttravel()
+		self.update_fog()
 
 	def level_populate(self, level, visit_no):
 		pass
