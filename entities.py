@@ -80,6 +80,7 @@ class Shop(Entity):
 	def config(self):
 		self.name = 'Shop'
 		self.char = '$'
+		self.blocking = True
 		self.passive = False
 	def collide(self, entity, zone):
 		SELLRATIO = 0.5
