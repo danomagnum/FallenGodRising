@@ -120,7 +120,11 @@ class Zone(object):
 
 	def update_fog(self):
 		if self.game.player is not None:
-			fog = vision.View(self.map, self.fog)
+			ecoords = []
+			for e in self.entities:
+				if e.vis_blocking:
+					ecoords.append((e.x, e.y))
+			fog = vision.View(self.map, self.fog, ecoords)
 			fog.do_fov(self.game.player.x, self.game.player.y, 25)
 			self.fog[self.game.player.y][self.game.player.x] = ' '
 		
