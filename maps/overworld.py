@@ -85,13 +85,20 @@ class OverworldZone(zone.Zone):
 
 			mob_count = random.randint(0, 10)
 			for m in range(mob_count):
-				#maptools.Random_Map_Insert(self, Rat)
 				#party = mobs.party(self.game, Battle_AI, Entity_AI, mob_level, mobs_list, 'name')
-				parties = []
-				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat], 'rat'))
-				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat, mobs.rat.Rat], 'rats'))
-				parties.append(mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), [mobs.rat.LittleRat, mobs.rat.LittleRat, mobs.rat.LittleRat], 'ratpack'))
-				maptools.Random_Map_Insert(self, random.choice(parties))
+				try:
+					partysize = random.choice([1,1,1,1,1,1,1,1,2,2,2,2,2,3,])
+					available_mobs = mobs.trash & moblist[self.game.biome()]
+
+					chosen_mobs = []
+
+					for mobno in range(partysize):
+						chosen_mobs.append(random.sample(available_mobs,1)[0])
+
+					#parties = []
+					maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), chosen_mobs))
+				except:
+					pass
 
 		self.game.set_music(self.get_music())
 		#b = self.game.biome()
