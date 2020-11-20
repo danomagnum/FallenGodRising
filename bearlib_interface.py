@@ -849,8 +849,41 @@ class Display(object):
 		terminal.refresh()
 
 
+	def settingsmenu(self, music_queue):
+		settingmenu = True
+		while settingmenu:
+			if settings.fog:
+				fogoption = 'Fog (on)'
+			else:
+				fogoption = 'Fog (off)'
+			if settings.music:
+				musicoption = 'Music (on)'
+			else:
+				musicoption = 'Music (off)'
+
+			setting = menu(self.menubox, [musicoption, fogoption, 'Exit'] , cols=1, clear=False)
+			if setting == musicoption:
+				if settings.music == 1:
+					music_queue.put(['volume', 0])
+					settings.music = False
+					print('Music is now off')
+				else:
+					music_queue.put(['volume', 1])
+					settings.music = True
+					print('Music is now on')
+				self.show_messages()
+
+			elif setting == fogoption:
+				settings.fog = not settings.fog
+			else:
+				settingmenu = False
+		settings._save()
+
 
 #TODO: work this into the object
 def shutdown():
 	terminal.close()
 	sys.stdout = original_stdout
+
+
+

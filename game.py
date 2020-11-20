@@ -92,22 +92,7 @@ try:
 				elif player_choice == 'Instructions':
 					display.show_txt('data/instructions.txt')
 				elif player_choice == 'Settings':
-					settingmenu = True
-					while settingmenu:
-						setting = graphics_interface.menu(display.menubox, ['Music', None] , cols=1, clear=False)
-						if setting == 'Music':
-							if settings.music == 1:
-								music_queue.put(['volume', 0])
-								settings.music = False
-								print('Music is now off')
-							else:
-								music_queue.put(['volume', 1])
-								settings.music = True
-								print('Music is now on')
-							display.show_messages()
-						else:
-							settingmenu = False
-					settings._save()
+					display.settingsmenu(music_queue)
 				elif player_choice == 'Resume':
 					onlyfiles = [f for f in listdir(SAVEDIR) if (isfile(join(SAVEDIR, f)) and (f[-3:] == 'sav'))]	
 					if onlyfiles:

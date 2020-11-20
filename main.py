@@ -1,4 +1,5 @@
 import random
+import settings
 import sys
 import math
 import utility
@@ -873,3 +874,5 @@ class ActingEntity(Entity):
 		combatantspeed = sum([combatant.speed for combatant in self.combatants]) / len(self.combatants)
 		self.action_points += combatantspeed
 		return self.action_points
+
+
