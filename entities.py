@@ -150,12 +150,14 @@ class Door(Entity):
 		#self.enabled = False
 		if self.lock is None:
 			self.char = '-'
+			self.vis_blocking = False
 			return WALKABLE
 			#self.enabled = False
 		elif self.lock in entity.backpack:
 			entity.backpack.take_by_name(self.lock)
 			#self.enabled = False
 			self.lock = None
+			self.vis_blocking = False
 			return WALKABLE
 		else:
 			print('Locked.  Key={}'.format(self.lock))

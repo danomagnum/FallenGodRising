@@ -853,7 +853,10 @@ class Display(object):
 		settingmenu = True
 		while settingmenu:
 			if settings.fog:
-				fogoption = 'Fog (on)'
+				if settings.fog_old:
+					fogoption = 'Fog (on - los)'
+				else:
+					fogoption = 'Fog (on - unseen)'
 			else:
 				fogoption = 'Fog (off)'
 			if settings.music:
@@ -874,7 +877,14 @@ class Display(object):
 				self.show_messages()
 
 			elif setting == fogoption:
-				settings.fog = not settings.fog
+				if settings.fog:
+					if settings.fog_old:
+						settings.fog_old = False
+					else:
+						settings.fog = False
+				else:
+					settings.fog = True
+					settings.fog_old = True
 			else:
 				settingmenu = False
 		settings._save()

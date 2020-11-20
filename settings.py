@@ -6,5 +6,6 @@ _save = _self_save.gen_save_func(__file__, __name__)
 
 animate = True
 debug = True
-fog = True
+fog = False
+fog_old = False
 music = False
