@@ -87,7 +87,9 @@ class OverworldZone(zone.Zone):
 			for m in range(mob_count):
 				#party = mobs.party(self.game, Battle_AI, Entity_AI, mob_level, mobs_list, 'name')
 				try:
-					partysize = random.choice([1,1,1,1,1,1,1,1,2,2,2,2,2,3,])
+					#this array is the probabilities of getting 1, 2, or 3 mobs in a spawned party
+					probabilities = [1] * 30 + [2] * 3 + [3]
+					partysize = random.choice(probabilities)
 					available_mobs = mobs.trash & moblist[self.game.biome()]
 
 					chosen_mobs = []
