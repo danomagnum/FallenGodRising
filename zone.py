@@ -121,7 +121,7 @@ class Zone(object):
 	def update_fog(self):
 		if self.game.player is not None:
 			fog = vision.View(self.map, self.fog)
-			fog.do_fov(self.game.player.x, self.game.player.y, 15)
+			fog.do_fov(self.game.player.x, self.game.player.y, 25)
 			self.fog[self.game.player.y][self.game.player.x] = ' '
 		
 	def get_music(self):
