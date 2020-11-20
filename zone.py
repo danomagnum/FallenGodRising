@@ -12,6 +12,9 @@ import entities
 import maps.maptools as maptools
 import vision
 
+FOG_CHAR = '\x13'
+FOG_CHAR_SEEN = '\x14'
+
 
 def map_gen(height, width, rooms, minroomsize = 4):
 	tiles = [[0 for y in range(height)] for x in range(width)]
@@ -112,15 +115,21 @@ class Zone(object):
 		self.biome_map = None
 
 	def fog_gen(self):
-		fog_char = '\x13'
-		#fog_char = '█'
+		
 		for level in self.maps:
 			wd = len(level[0])
-			fog = [[fog_char for col in level[0]] for row in level]
+			fog = [[FOG_CHAR for col in level[0]] for row in level]
 			self.fogs.append(fog)
 
 	def update_fog(self):
 		if self.game.player is not None:
+
+			if settings.fog_old:
+				for y in range(len(self.fog)):
+					for x in range(len(self.fog[y])):
+						if self.fog[y][x] == ' ':
+							self.fog[y][x] = FOG_CHAR_SEEN
+
 			ecoords = []
 			for e in self.entities:
 				if e.vis_blocking:
