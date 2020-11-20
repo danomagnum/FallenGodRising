@@ -99,10 +99,10 @@ class Random_AI(AI):
 	
 	def action(self, enemy):
 		if self.get_standby():
-			action = random.choice([ATTACK, SWITCH, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+			action = random.choice([ATTACK, SWITCH, ATTACK, ATTACK, ATTACK, ATTACK])
 			return action
 		else:
-			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK])
 			return action
 
 
