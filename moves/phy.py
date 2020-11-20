@@ -46,3 +46,4 @@ class Swoop(Move):
 typed_strikes = gen_Typed_Moves(Strike)
 typed_rushes = gen_Typed_Moves(Rush)
 basic_moves = [Strike, Rush]
+scroll_moves = typed_strikes + typed_rushes

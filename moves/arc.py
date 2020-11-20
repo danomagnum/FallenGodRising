@@ -31,3 +31,4 @@ class Wave(Move):
 typed_blasts = gen_Typed_Moves(Blast)
 typed_waves = gen_Typed_Moves(Wave)
 basic_moves = [Blast, Wave]
+scroll_moves = typed_blasts + typed_waves

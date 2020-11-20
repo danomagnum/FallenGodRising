@@ -57,3 +57,4 @@ class Cure(Move):
 			target.status.remove(to_remove)
 
 heal_moves = [Heal, Transfuse, Absorb, Cure]
+scroll_moves = [Heal, Transfuse, Absorb, Cure]
