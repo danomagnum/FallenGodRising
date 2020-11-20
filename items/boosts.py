@@ -1,4 +1,5 @@
 from constants import *
+import random
 from .item import Item
 
 class ExpBoost(Item):

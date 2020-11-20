@@ -170,10 +170,11 @@ class Game(object):
 
 			self.set_music(self.zone.get_music())
 
+			self.zone.update_fog()
+
 		else:
 			print('Zone {} does not exist'.format(zonename))
 
-		self.zone.update_fog()
 
 	def get_var(self, variable):
 		return self.game_vars.get(variable, 0)
