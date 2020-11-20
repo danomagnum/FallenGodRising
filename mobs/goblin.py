@@ -58,3 +58,4 @@ class GoblinLord(Character):
 trash = [Goblin]
 okay = [HobGoblin]
 good = [GoblinLord]
+plains = [Goblin, HobGoblin]

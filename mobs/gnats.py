@@ -55,3 +55,6 @@ class Locusts(Character):
 trash = [Gnats]
 okay = [Skeeters]
 good = [Locusts]
+marsh = [Gnats, Skeeters, Locusts]
+desert = [Locusts]
+forest = [Skeeters]

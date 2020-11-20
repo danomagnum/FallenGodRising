@@ -22,3 +22,4 @@ class Minotaur(Character):
 
 
 okay = [Minotaur]
+plains = [Minotaur]

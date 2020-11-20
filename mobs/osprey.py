@@ -62,3 +62,5 @@ class Eagle(Character):
 trash = [Osprey]
 okay = [Hawk]
 good = [Eagle]
+sea = [Osprey, Hawk, Eagle]
+marsh = [Osprey, Hawk, Eagle]

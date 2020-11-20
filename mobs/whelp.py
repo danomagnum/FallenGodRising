@@ -55,3 +55,6 @@ class Dragon(Character):
 
 okay = [Whelp, Drake]
 good = [Dragon]
+marsh = [Whelp]
+desert = [Drake]
+sky = [Dragon]

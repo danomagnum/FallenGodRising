@@ -21,3 +21,6 @@ class Skeleton(Character):
 
 
 good = [Skeleton]
+forest = [Skeleton]
+sea = [Skeleton]
+desert = [Skeleton]

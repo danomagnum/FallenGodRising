@@ -39,3 +39,6 @@ class Highwayman(Character):
 
 trash = [Wanderer]
 okay = [Highwayman]
+plains = [Wanderer, Highwayman]
+forest = [Wanderer, Highwayman]
+mountains = [Wanderer, Highwayman]

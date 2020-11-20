@@ -17,47 +17,6 @@ import math
 ZONENAME = 'Overworld'
 
 USE_SYMBOLS = True
-
-class Rat( battle.Skiddish_AI,entities.DoomAI):
-	# example basic enemy
-	def config(self):
-		self.name = 'Rat'
-		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
-		self.char = 'r'
-		self.backpack.gold = random.randint(0, 10)
-
-class PackRat(entities.TowardWalker, entities.Battler):
-	# example basic enemy that gives an item when killed
-	def config(self):
-		self.name = 'Rat Pack'
-		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
-		self.backpack.store(items.status.Potion(self.game))
-		self.char = 'F'
-		self.AI = battle.Random_AI
-
-class RatPack(entities.RandWalker, entities.Battler):
-	def config(self):
-		self.name = 'Rat Pack'
-		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
-		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
-		self.combatants.append(mobs.rat.LittleRat(self.game, level=1))
-		self.char = 'R'
-		self.AI = battle.Random_AI
-
-class Door1(entities.Door):
-	pass
-class Door2(entities.Door):
-	def key(self):
-		self.lock='Key'
-
-class MyShop(entities.Shop):
-	def config(self):
-		self.backpack.store(items.status.Potion(self.game))
-		self.backpack.store(items.status.Potion(self.game))
-		self.backpack.store(items.status.Potion(self.game))
-		self.backpack.store(items.status.Potion(self.game))
-		self.backpack.store(items.status.Potion(self.game))
-
 #####################
 # load the map file(s)
 #####################
@@ -82,6 +41,18 @@ music_per_biome = {elements.Sea: 'calm.mid',
 		   elements.Mountains: 'mountains.mid',
 		   elements.Sky: 'Winter Frost.mid',
 		   elements.Underground: 'overworld1.mid'}
+
+
+moblist         = {elements.Sea: mobs.sea,
+                   elements.Marsh: mobs.marsh,
+		   elements.Plains: mobs.plains,
+		   elements.Desert: mobs.desert,
+		   elements.Forest: mobs.forest,
+		   elements.Mountains: mobs.mountain,
+		   elements.Sky: mobs.sky,
+		   elements.Underground: mobs.underground}
+
+
 
 class OverworldZone(zone.Zone):
 	def level_populate(self, level, visit_no):
@@ -238,12 +209,6 @@ def genzone(game):
 	zone.grid_width = 16
 	zone.change_level(start)
 
-	# Populate zone with entities
-	maptools.Random_Map_Insert(zone, RatPack)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
-	maptools.Random_Map_Insert(zone, Rat)
 	maptools.Stair_Handler(zone)
 
 	# add zone to game

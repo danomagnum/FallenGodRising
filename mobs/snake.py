@@ -39,3 +39,5 @@ class Serpent(Character):
 
 trash = [Snake]
 okay = [Serpent]
+forest = [Snake, Serpent]
+desert = [Snake, Serpent]

@@ -21,3 +21,4 @@ class Wyrm(Character):
 
 
 good = [Wyrm]
+sky = [Wyrm]

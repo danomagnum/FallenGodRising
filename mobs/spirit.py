@@ -82,3 +82,7 @@ class Ghoul(Character):
 
 
 #starters = [Spirit]
+okay = [Spirit, Spectre]
+good = [Ghoul]
+sea = [Spirit, Spectre, Ghoul]
+sky = [Ghoul]
