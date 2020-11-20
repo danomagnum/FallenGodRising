@@ -38,3 +38,6 @@ class Rat(Character):
 
 
 trash = [LittleRat]
+plains = [LittleRat, Rat]
+Marsh = [LittleRat, Rat]
+Forest = [LittleRat, Rat]

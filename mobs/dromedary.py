@@ -39,3 +39,4 @@ class Bactrian(Character):
 
 trash = [Dromedary]
 okay = [Bactrian]
+desert = [Dromedary, Bactrian]

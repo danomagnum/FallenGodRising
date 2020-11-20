@@ -39,3 +39,5 @@ class FlyTrap(Character):
 
 trash = [Lechen]
 okay = [FlyTrap]
+forest = [Lechen, FlyTrap]
+marsh = [Lechen, FlyTrap]

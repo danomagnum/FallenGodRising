@@ -49,3 +49,5 @@ class Demon(Character):
 
 trash = [Imp]
 okay = [Demon]
+mountains = [Imp]
+sky = [Demon]

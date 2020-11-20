@@ -39,3 +39,4 @@ class Chimera(Character):
 
 okay = [Cerberus]
 good = [Chimera]
+sky = [Cerberus, Chimera]

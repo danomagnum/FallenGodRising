@@ -270,6 +270,8 @@ try:
 			gameloop = True
 			game.music_lock = False
 			game.set_music(game.zone.music)
+			game.zone.update_fog()
+
 
 			while gameloop:
 				display.refresh_full()

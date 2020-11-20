@@ -21,3 +21,4 @@ class Zombie(Character):
 
 
 good = [Zombie]
+underground =[Zombie]

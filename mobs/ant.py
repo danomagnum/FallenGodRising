@@ -39,3 +39,4 @@ class FireAnt(Character):
 
 trash = [Ant]
 okay = [FireAnt]
+desert = [Ant, FireAnt]

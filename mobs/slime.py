@@ -39,3 +39,6 @@ class Glob(Character):
 
 trash = [Slime]
 okay = [Glob]
+marsh = [Slime, Glob]
+plains = [Slime, Glob]
+sea = [Slime, Glob]

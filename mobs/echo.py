@@ -39,3 +39,5 @@ class Shadow(Character):
 
 trash = [Echo]
 okay = [Shadow]
+mountain = [Echo]
+marsh = [Echo, Shadow]

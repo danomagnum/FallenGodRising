@@ -39,3 +39,5 @@ class Troll(Character):
 
 trash = [Orc]
 okay = [Troll]
+plains = [Orc]
+mountains = [Troll, Orc]

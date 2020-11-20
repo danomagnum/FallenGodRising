@@ -39,3 +39,4 @@ class Centaur(Character):
 
 trash = [Satyr]
 okay = [Centaur]
+plains = [Satyr, Centaur]

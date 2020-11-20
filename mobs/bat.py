@@ -47,3 +47,4 @@ class Vampire(Character):
 
 trash = [Bat]
 good = [Vampire]
+underground = [Bat, Vampire]
