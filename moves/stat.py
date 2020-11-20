@@ -93,3 +93,4 @@ class Drain(Move):
 
 stat_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]
 effect_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]
+scroll_moves = [Haste, Smoke, Protect, Guard, Focus, Taunt, Buff]

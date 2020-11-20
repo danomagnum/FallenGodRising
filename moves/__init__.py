@@ -18,7 +18,6 @@ for tag in taglist:
 	#exec('{} = []'.format(tag))
 	exec('{} = set()'.format(tag))
 
-all_moves = set()
 
 for name in os.listdir('moves'):
 	if name.endswith('.py') and not name.startswith('__'):
@@ -31,7 +30,4 @@ for name in os.listdir('moves'):
 				#exec('{}.add(module.__dict__[tag])'.format(tag))
 				exec('{} = {} | set(module.__dict__[tag])'.format(tag, tag))
 				#exec('{} += module.__dict__[tag]'.format(tag))
-				exec('all_moves = all_moves | set(module.__dict__[tag])'.format(tag))
-				#exec('all_moves += module.__dict__[tag]'.format(tag))
-
 
