@@ -12,17 +12,19 @@ class View(object):
                 [0,  1,  1,  0,  0, -1, -1,  0],
                 [1,  0,  0,  1, -1,  0,  0, -1]
             ]
-    def __init__(self, map, fog):
+    def __init__(self, map, fog, entities):
         self.data = map
         self.width, self.height = len(map[0]), len(map)
         self.light = fog
         self.flag = ' ' 
+        self.entities = entities
     def square(self, x, y):
         return self.data[y][x]
     def blocked(self, x, y):
         return (x < 0 or y < 0
                 or x >= self.width or y >= self.height
-                or self.data[y][x] != ".")
+                or self.data[y][x] != "."
+		or (x, y) in self.entities)
     def lit(self, x, y):
         return self.light[y][x] == self.flag
     def set_lit(self, x, y):

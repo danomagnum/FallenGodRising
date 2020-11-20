@@ -12,6 +12,7 @@ import bearlib_interface as graphics_interface
 class Battler(ActingEntity):
 	def config(self):
 		self.music = 'battle.mid'
+		self.stopping = True
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
@@ -182,6 +183,8 @@ class Treasure(Entity):
 
 	def config(self):
 		self.passive = True
+		self.stopping = False
+		self.vis_blocking = False
 
 	def collide(self, entity, zone):
 		self.enabled = False
