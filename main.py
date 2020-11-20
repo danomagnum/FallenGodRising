@@ -515,7 +515,7 @@ class Entity(object):
 		self.helptext = ''
 
 		self.passive = False
-		self.stopping = False
+		self.blocking = False
 		self.vis_blocking = True
 
 		self.action_points = 0

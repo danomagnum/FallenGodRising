@@ -112,7 +112,8 @@ class Zone(object):
 		self.biome_map = None
 
 	def fog_gen(self):
-		fog_char = '█'
+		fog_char = '\x13'
+		#fog_char = '█'
 		for level in self.maps:
 			wd = len(level[0])
 			fog = [[fog_char for col in level[0]] for row in level]
