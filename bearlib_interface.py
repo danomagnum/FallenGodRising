@@ -854,7 +854,7 @@ class Display(object):
 		while settingmenu:
 			if settings.fog:
 				if settings.fog_old:
-					fogoption = 'Fog (on - los)'
+					fogoption = 'Fog (on - current)'
 				else:
 					fogoption = 'Fog (on - unseen)'
 			else:
