@@ -35,7 +35,7 @@ class Character(object):
 
 	@property
 	def elements(self):
-		e_list = self._elements
+		e_list = self._elements[:]
 		for item in self.equipment.all_items():
 			e_list = item.elements(e_list)
 		return e_list

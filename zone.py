@@ -11,6 +11,7 @@ import mobs
 import entities
 import maps.maptools as maptools
 import vision
+import settings
 
 FOG_CHAR = '\x13'
 FOG_CHAR_SEEN = '\x14'
@@ -341,58 +342,69 @@ class Zone(object):
 		self.entities = [e for e in self.entities if e.enabled] 
 
 	def find_empty_position(self, level=None, position=None):
+		used_positions = []
+		for e in self.entities:
+			used_positions.append((e.x, e.y))
 		if position is None:
 			if level == None:
 				level = self.level
 			while True:
 				y = random.randint(0, len(self.maps[level]) - 1)
 				x = random.randint(0, len(self.maps[level][y]) - 1)
-				if self.maps[level][y][x] == WALKABLE:
+				if self.maps[level][y][x] == WALKABLE and (x, y) not in used_positions:
 					return (x, y)
 		elif position == UP:
 			y = 0
 			options = []
 			for cell_x in range(len(self.maps[level][y])):
 				if self.maps[level][y][cell_x] == WALKABLE:
-					options.append((cell_x, y))
+					if (cell_x, y) not in used_positions:
+						options.append((cell_x, y))
 			if len(options) > 0:
 				return random.choice(options)
 			else:
 				print('Could not find a valid position Up')
+				return self.find_empty_position(level = level)
 		elif position == DOWN:
 			y = len(self.maps[level]) - 1
 			options = []
 			for cell_x in range(len(self.maps[level][y])):
 				if self.maps[level][y][cell_x] == WALKABLE:
-					options.append((cell_x, y))
+					if (cell_x, y) not in used_positions:
+						options.append((cell_x, y))
 			if len(options) > 0:
 				return random.choice(options)
 			else:
 				print('Could not find a valid position Down')
+				return self.find_empty_position(level = level)
 		elif position == LEFT:
 			x = 0
 			options = []
 			
 			for cell_y in range(len(self.maps[level])):
 				if self.maps[level][cell_y][0] == WALKABLE:
-					options.append((x, cell_y))
+					if (0, cell_y) not in used_positions:
+						options.append((x, cell_y))
 
 			if len(options) > 0:
 				return random.choice(options)
 			else:
 				print('Could not find a valid position Left')
+				return self.find_empty_position(level = level)
 
 		elif position == RIGHT:
 			options = []
 			for cell_y in range(len(self.maps[level])):
 				cell_x = len(self.maps[level][cell_y]) - 1
 				if self.maps[level][cell_y][cell_x] == WALKABLE:
-					options.append((cell_x, cell_y))
+					if (cell_x, cell_y) not in used_positions:
+						options.append((cell_x, cell_y))
 
 			if len(options) > 0:
 				return random.choice(options)
 			else:
 				print('Could not find a valid position Right')
+				return self.find_empty_position(level = level)
 
 			#while True:
 				#y = random.randint(0, len(self.maps[level]) - 1)

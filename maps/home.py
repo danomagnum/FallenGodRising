@@ -52,12 +52,25 @@ class HomeZone(zone.Zone):
 			self.game.get_var('Alters').append(t)
 			maptools.Positional_Map_Insert(self, t, '?', level=1)
 
+			t = entities.Treasure(self.game)
+			backpack = items.Backpack(self.game)
+			for x in range(3):
+				p = items.status.HealAll(self.game)
+				backpack.store(p)
+			backpack.gold = random.randint(20, 200)
+			t.backpack = backpack
+			t.char = '\x92'
+			maptools.Positional_Map_Insert(self, t, '*', level=1)
+
+
+
 	def level_002(self):
 		if self.level_visits[2] == 1:
 			print('Tutorial> Enemies appear as letters on the screen.  Bump into them to start combat')
 			print('Tutorial> You can continue by stepping on the stairs')
 			first_mob = random.sample(mobs.trash,1)[0](self.game)
 			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [first_mob]), '!', level=2)
+
 	def level_003(self):
 		if self.level_visits[3] == 1:
 			print('Tutorial> You can get a general idea of what type items are by their apperaance')
