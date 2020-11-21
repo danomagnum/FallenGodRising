@@ -43,41 +43,7 @@ def genzone(game, townname):
 	for building in buildings:
 		building.draw(lev, True)
 
-
-	#ov_ht = len(game.overworld_minimap) - 1
-	#ov_wd = len(game.overworld_minimap[0]) - 1
-	#search = True
-	#while search:
-		#x = random.randint(0, ov_wd)
-		#y = random.randint(0, ov_ht)
-		#cell = game.overworld_minimap[y][x]
-		#if any([cell.up, cell.down, cell.left, cell.right]):
-			#ov_x = x
-			#ov_y = y
-			#search = False
-	#cell.char = 'T'
-	#if not cell.up:
-		#for x in range(len(lev[0])):
-			#lev[0][x] = '#'
-	#if not cell.down:
-		#for x in range(len(lev[-1])):
-			#lev[-1][x] = '#'
-	#if not cell.left:
-		#for y in range(len(lev)):
-			#lev[y][0] = '#'
-	#if not cell.right:
-		#for y in range(len(lev)):
-			#lev[y][-1] = '#'
-	#overworld_map = maptools.flatten(lev)
 	overworld_map = maptools.flatten(lev)
-
-	#ov_level = ov_x + ov_y * game.overworld.grid_width
-
-	#new_ow_map = maptools.empty_zone_with_mask(cell, overworld_map)
-	#game.overworld.maps[ov_level] = overworld_map
-	
-
-	#maptools.Door_Handler_onelevel(game.overworld, ov_level)
 
 	ov_level = maptools.overworld_inject(game, None, newchar='T', mask=overworld_map)
 
