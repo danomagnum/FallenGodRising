@@ -204,7 +204,7 @@ try:
 							i = 0
 						player_characters = []
 						for starter in mobs.starters:
-							player_characters.append(starter(game))
+							player_characters.append(starter(game,level=settings.start_level))
 
 						if i > 0:
 							player_characters.append('None')
