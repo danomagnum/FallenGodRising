@@ -234,8 +234,8 @@ try:
 								break
 							player_elements = [elements.Normal, elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 							def update_confirm_box(choice):
-								player_choice.elements = []
-								player_choice.elements.append(choice)
+								player_choice.elements = [choice]
+								#player_choice.elements.append(choice)
 								display.show_combatant_stats(player_choice, display.start_menus[(i * 3) + 2])
 
 							element_choice =graphics_interface.menu(display.start_menus[(i * 3) + 1], player_elements, selected=random.choice(player_elements),cols=1, clear=False, callback_on_change=update_confirm_box)
@@ -243,8 +243,8 @@ try:
 							#confirm_choices = ['Accept', 'Cancel', 'Randomize']
 							#confirm_choice = graphics_interface.menu(display.start_menus[(i * 3) + 2], confirm_choices, clear=False)
 							if element_choice is not None:
-								player_choice.elements = []
-								player_choice.elements.append(element_choice)
+								player_choice.elements = [element_choice]
+								#player_choice.elements.append(element_choice)
 								player_party[i] = player_choice
 								i += 1
 								if i == graphics_interface.MAX_COMBATANTS:
