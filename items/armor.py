@@ -47,7 +47,7 @@ class Robe(Gear):
 		self.target_type = EQUIP_BODY
 		self.char = '\x03'
 	def arcane_defense(self, initial):
-		return initial - (self.power * self.power / 2.0)
+		return initial + (self.power * self.power / 2.0)
 
 class BattleRobe(Gear):
 	def config(self):
@@ -60,7 +60,7 @@ class BattleRobe(Gear):
 	def arcane_defense(self, initial):
 		return initial - (self.power * self.power)
 	def physical_defense(self, initial):
-		return initial - (self.power * self.power / 3.0)
+		return initial + (self.power * self.power / 3.0)
 
 class Plate(Gear):
 	def config(self):

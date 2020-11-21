@@ -687,7 +687,7 @@ class Display(object):
 	def show_combatant_stats(self, combatant, box):
 		col2pos = 20
 		box.erase()
-		box.box()
+		box.box(opaque=True)
 		height, width = box.getmaxyx()
 		
 		#Name
@@ -744,7 +744,7 @@ class Display(object):
 			stat_list = 'None'
 		else:
 			stat_list = ' '.join([str(stat) for stat in combatant.status])
-		box.addstr(12, 1, "Status: {}".format(stat_list), None)
+		box.addstr(13, 1, "Status: {}".format(stat_list), None)
 		#box.addstr(15, 1, "Status: {}".format(stat_list), None)
 
 

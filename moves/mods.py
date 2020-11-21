@@ -107,6 +107,18 @@ class Poison(Move):
 			print('{} has minor poisoning'.format(target.name))
 			target.status.append(effects.poison.Poison_Minor())
 
+class Absorbing(Move):
+	def config(self):
+		self.prefixes.append('Absorbing')
+
+	def effect(self, user, target, damage=0):
+		high = damage/1.5
+		low = damage/3
+		mode = max(min(high, damage * user.luck), low)
+		regain = random.triangular(low, high, mode)
+		user.hp += regain
+		print("{} gained {} hp".format(user.name, regain))
+		
 
 def mod_move(move, mod):
 	return utility.add_class(move, mod)
@@ -114,7 +126,7 @@ def mod_move(move, mod):
 def gen_Typed_Moves(move, type_mods = None):
 	typed_moves = []
 	if type_mods is None:
-		type_mods = [FireMove, WaterMove, EarthMove, ElectricMove, WindMove, LightMove, DarkMove, Poison, Piercing]
+		type_mods = [FireMove, WaterMove, EarthMove, ElectricMove, WindMove, LightMove, DarkMove, Poison, Piercing, Absorbing]
 	for mod in type_mods:
 		typed_moves.append(mod_move(move, mod))
 	return typed_moves

@@ -47,7 +47,7 @@ class AI(object):
 		if self.get_standby():
 			return random.choice([ATTACK, SWITCH])
 		else:
-			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+			action = ATTACK
 		return action
 	
 	def get_available(self):
@@ -153,9 +153,10 @@ class Skiddish_AI(AI):
 			health += c.hp
 			maxhealth += c.max_hp
 		run_chance = float(health) / float(maxhealth)
-		if random.random() > run_chance:
+		if random.random() > run_chance * 10:
 			self.battle_run()
-			return RUN
+			#return RUN
+			return ATTACK
 		if self.get_standby():
 			return random.choice([ATTACK, SWITCH])
 		else:

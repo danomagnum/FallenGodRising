@@ -572,7 +572,7 @@ class Entity(object):
 		if self.get_standby():
 			return random.choice([ATTACK, SWITCH])
 		else:
-			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, RUN])
+			action = random.choice([ATTACK, ATTACK, ATTACK, ATTACK, ATTACK])
 		return action
 	
 	def get_available(self):

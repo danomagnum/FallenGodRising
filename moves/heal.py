@@ -30,7 +30,7 @@ class Transfuse(Move):
 
 class Absorb(Move):
 	def config(self):
-		self.prefixes.append('Absorbing')
+		self.name = 'Absorb'
 
 	def effect(self, user, target, damage=0):
 		high = damage/1.5
@@ -56,5 +56,5 @@ class Cure(Move):
 			to_remove = random.choice(target.status)
 			target.status.remove(to_remove)
 
-heal_moves = [Heal, Transfuse, Absorb, Cure]
-scroll_moves = [Heal, Transfuse, Absorb, Cure]
+heal_moves = [Heal, Transfuse, Cure, Absorb]
+scroll_moves = [Heal, Transfuse, Cure, Absorb]
