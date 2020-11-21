@@ -4,6 +4,7 @@ import elements
 import moves
 import random
 import utility
+import traceback
 
 class Character(object):
 	def __init__(self, game,  name=None, level=1):
@@ -35,10 +36,16 @@ class Character(object):
 
 	@property
 	def elements(self):
-		e_list = self._elements[:]
-		for item in self.equipment.all_items():
-			e_list = item.elements(e_list)
-		return e_list
+		#return self._elements
+		try:
+			e_list = self._elements[:]
+			for item in self.equipment.all_items():
+				e_list = item.elements(e_list)
+			return e_list
+		except Exception as e:
+			with open('traceback.log', 'a') as f:
+				f.write(str(e))
+				f.write(traceback.format_exc())
 
 	@elements.setter
 	def elements(self, value):
