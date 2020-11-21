@@ -90,6 +90,9 @@ class HomeZone(zone.Zone):
 			t = entities.Treasure(self.game, [items.status.Potion(self.game)])
 			maptools.Positional_Map_Insert(self, t, '&', level=3)
 
+			t = entities.Treasure(self.game, [items.gen_gear(self.game, 1)])
+			maptools.Positional_Map_Insert(self, t, ';', level=3)
+
 			second_mob = random.sample(mobs.trash,1)[0](self.game)
 			maptools.Positional_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, 1, [second_mob]), '!', level=3)
 
