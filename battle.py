@@ -3,6 +3,7 @@ import random
 import time
 import main
 import sayings
+import settings
 import sys
 import utility
 from constants import *
@@ -168,6 +169,10 @@ def Battle(game, user, enemy_ai):
 	game.player.target_map = None # cancel any auto-moves if we got in a battle
 	old_music = game.music
 	game.set_music(enemy_ai.music)
+
+	if settings.battle_anim:
+		game.display.flash_screen()
+
 	game.display.start_battle(enemy_ai)
 	valid_users = user.get_available()
 	valid_enemies = enemy_ai.get_available()
@@ -178,6 +183,7 @@ def Battle(game, user, enemy_ai):
 	battle_continue = True
 	user_move = None
 	winner = None
+
 
 	#make sure all pre-battle status take effect
 	for combatant in all_combatants:

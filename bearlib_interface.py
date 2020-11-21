@@ -496,7 +496,33 @@ class Display(object):
 			window = self.msgbox
 		return menu(window, options, cols, selected, clear, callback_on_change)
 
+	def flash_screen(self):
+		font = 'tiles{}'.format(ANIMATION_FRAME)
+		dx = -4
+		dy = 6
+		y = 0
+		x = 0
+		allcoords = []
+		for line in self.zone.map:
+			for column in line:
+				allcoords.append((x, y))
+				x += 1
+			y += 1
+			x = 0
+		random.shuffle(allcoords)
+		popped = 0
+		for x, y in allcoords:
+			self.mapbox.addch(y, 2*x, '\x15', None, font=font, dx=dx, dy=dy)
+			popped += 1
+			if popped > 40:
+				popped = 0
+				terminal.refresh()
 
+
+		
+
+
+		
 	def clear(self):
 		self.mapbox.erase()
 		for box in self.nmeboxes:
@@ -859,12 +885,20 @@ class Display(object):
 					fogoption = 'Fog (on - unseen)'
 			else:
 				fogoption = 'Fog (off)'
+
 			if settings.music:
 				musicoption = 'Music (on)'
 			else:
 				musicoption = 'Music (off)'
 
-			setting = menu(self.menubox, [musicoption, fogoption, 'Exit'] , cols=1, clear=False)
+			if settings.battle_anim:
+				batan_opt = 'Battle Anim.(on)'
+			else:
+				batan_opt = 'Battle Anim.(off)'
+
+
+
+			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, 'Exit'] , cols=1, clear=False)
 			if setting == musicoption:
 				if settings.music == 1:
 					music_queue.put(['volume', 0])
@@ -885,6 +919,8 @@ class Display(object):
 				else:
 					settings.fog = True
 					settings.fog_old = True
+			elif setting == batan_opt:
+				settings.battle_anim = not settings.battle_anim
 			else:
 				settingmenu = False
 		settings._save()
