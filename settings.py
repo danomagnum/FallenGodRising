@@ -5,6 +5,7 @@ _save = _self_save.gen_save_func(__file__, __name__)
 ################
 
 animate = True
+battle_anim = True
 debug = True
 fog = False
 fog_old = False

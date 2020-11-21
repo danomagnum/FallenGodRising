@@ -8,6 +8,7 @@ import sys
 from copy import deepcopy
 #import curses_interface as graphics_interface
 import bearlib_interface as graphics_interface
+import settings
 
 class Battler(ActingEntity):
 	def config(self):
