@@ -51,7 +51,7 @@ class Robe(Gear):
 
 class BattleRobe(Gear):
 	def config(self):
-		self.name = 'Robe'
+		self.name = 'BattleRobe'
 		self.weight = 2
 		self.value = 300
 		self.rarity = 0.2
