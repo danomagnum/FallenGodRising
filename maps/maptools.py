@@ -724,30 +724,33 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None, biome
 
 	#Door_Handler(zone)
 
-	ov_x2, ov_y2 = game.overworld.find_empty_position(level=ov_level)
+	if zone is not None:
 
-	z_x, z_y = zone.find_empty_position(level=entry_level)
-	z_entity = entities.ZoneWarp(game)
-	z_entity.x = z_x
-	z_entity.y = z_y
-	z_entity.new_x = ov_x2
-	z_entity.new_y = ov_y2
-	z_entity.new_zone = 'Overworld'
-	z_entity.char = '\x1D'
-	zone.add_entity(z_entity, entry_level)
+		ov_x2, ov_y2 = game.overworld.find_empty_position(level=ov_level)
 
-	ov_entity = entities.ZoneWarp(game)
-	ov_entity.x = ov_x2
-	ov_entity.y = ov_y2
-	ov_entity.new_x = z_x
-	ov_entity.new_y = z_y
-	ov_entity.new_zone = zone.name
-	game.overworld.add_entity(ov_entity, ov_level)
+		z_x, z_y = zone.find_empty_position(level=entry_level)
+		z_entity = entities.ZoneWarp(game)
+		z_entity.x = z_x
+		z_entity.y = z_y
+		z_entity.new_x = ov_x2
+		z_entity.new_y = ov_y2
+		z_entity.new_zone = 'Overworld'
+		z_entity.char = '\x1D'
+		zone.add_entity(z_entity, entry_level)
+
+		ov_entity = entities.ZoneWarp(game)
+		ov_entity.x = ov_x2
+		ov_entity.y = ov_y2
+		ov_entity.new_x = z_x
+		ov_entity.new_y = z_y
+		ov_entity.new_zone = zone.name
+		game.overworld.add_entity(ov_entity, ov_level)
+
+		game.overworld.fast_travel_options[ov_level] = main.FastTravel(zone.name, level=ov_level)
 
 
 	Door_Handler_onelevel(game.overworld, ov_level)
 
-	game.overworld.fast_travel_options[ov_level] = main.FastTravel(zone.name, level=ov_level)
 
 	return ov_level
 
