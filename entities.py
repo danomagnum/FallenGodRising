@@ -18,6 +18,7 @@ class Battler(ActingEntity):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
 			result = battle.Battle(self.game, entity, self)
+
 			if result == USER:
 				self.enabled = False
 				entity.backpack.absorb(self.backpack, message = True)

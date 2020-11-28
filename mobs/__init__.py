@@ -28,7 +28,8 @@ for name in os.listdir('mobs'):
 
 
 def party(game, battle_AI, world_AI, level, combatants, name=None, item_list = None):
-	class Generated(world_AI,battle_AI, utility.Serializable):
+	#class Generated(world_AI,battle_AI, utility.Serializable):
+	class Generated(battle_AI, world_AI, utility.Serializable):
 		# example basic enemy
 		def config(self):
 			self.name = name

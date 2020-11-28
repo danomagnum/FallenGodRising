@@ -30,7 +30,7 @@ class Move(utility.Serializable):
 		self.uses = 0
 		self.physical = (True, True) # Attack stat to use, def stat to use
 		if default_target is None:
-			default_target=ENEMY
+			default_target=ACTIVE
 		self.default_target = default_target
 	
 		self.helptext = ''
@@ -163,7 +163,7 @@ class Move(utility.Serializable):
 					target.hp -= int(damage)
 
 					if user == target:
-						print('{} used move {} on themself for {}'.format(user.name,self.name, target.name, int(damage)))
+						print('{} used move {} on themself for {}'.format(user.name,self.name, int(damage)))
 					else:
 						print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
 
