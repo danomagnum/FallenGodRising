@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#/usr/bin/python
 #coding: utf-8 
 
 
@@ -42,7 +42,7 @@ YRAT = 1
 ANIMATION_RATE = 0.1 
 ANIMATION_LAST = 0
 ANIMATION_FRAME = 1
-ANIMATION_FRAMES = 3
+ANIMATION_FRAMES = 4
 ANIMATION_DIR = 1
 
 
