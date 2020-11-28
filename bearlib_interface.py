@@ -77,6 +77,7 @@ def font_setup():
 	terminal.set("tiles1 font: data/tileset1.png, size=16x16, spacing=2x1")
 	terminal.set("tiles2 font: data/tileset2.png, size=16x16, spacing=2x1")
 	terminal.set("tiles3 font: data/tileset3.png, size=16x16, spacing=2x1")
+	terminal.set("tiles4 font: data/tileset4.png, size=16x16, spacing=2x1")
 	XRAT = 2
 	YRAT = 1
 

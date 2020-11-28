@@ -29,6 +29,14 @@ class AI(object):
 			target = enemy_ai.get_available()
 		elif t == multi_ALL:
 			target = self.get_available() + enemy_ai.get_available()
+		elif t == ACTIVE:
+			targets = enemy_ai.combatant
+		elif t == INACTIVE:
+			targets = random.choice(enemy_ai.get_standby())
+		elif t == RAND_ENEMY:
+			target = enemy
+		elif t == RAND_ALLY:
+			target = random.choice(self.combatants)
 		#target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 
@@ -77,14 +85,17 @@ class Random_AI(AI):
 			target = enemy_ai.get_available()
 		elif t == multi_ALL:
 			target = self.get_available() + enemy_ai.get_available()
+		elif t == ACTIVE:
+			targets = enemy_ai.combatant
+		elif t == INACTIVE:
+			targets = random.choice(enemy_ai.get_standby())
+		elif t == RAND_ENEMY:
+			target = enemy
+		elif t == RAND_ALLY:
+			target = random.choice(self.combatants)
 		#target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
 
-
-		#move = random.choice(self.combatant.moves)
-		#enemy = random.choice(enemy_ai.get_available())
-		#target = [self.combatant, enemy][move.default_target]
-		#return [move, [target]]
 
 	def change(self, enemy):
 		standby = self.get_standby()
@@ -126,14 +137,16 @@ class Skiddish_AI(AI):
 			target = enemy_ai.get_available()
 		elif t == multi_ALL:
 			target = self.get_available() + enemy_ai.get_available()
+		elif t == ACTIVE:
+			targets = enemy_ai.combatant
+		elif t == INACTIVE:
+			targets = random.choice(enemy_ai.get_standby())
+		elif t == RAND_ENEMY:
+			target = enemy
+		elif t == RAND_ALLY:
+			target = random.choice(self.combatants)
 		#target = [self.combatant, enemy][move.default_target]
 		return [move, [target]]
-
-
-		#move = random.choice(self.combatant.moves)
-		#enemy = random.choice(enemy_ai.get_available())
-		#target = [self.combatant, enemy][move.default_target]
-		#return [move, [target]]
 
 	def change(self, enemy):
 		standby = self.get_standby()
@@ -261,7 +274,6 @@ def Battle(game, user, enemy_ai):
 							user_target = enemy_ai.get_available()
 							user_is_attacking = True
 							selection_needed = False
-
 					elif target == main.ACTIVE:
 						user_target = [enemy_ai.combatant]
 						user_is_attacking = True
@@ -278,6 +290,23 @@ def Battle(game, user, enemy_ai):
 						user_target = user.get_available() + enemy_ai.get_available()
 						user_is_attacking = True
 						selection_needed = False
+					elif target == main.INACTIVE:
+						standby = enemy_ai.get_standby()
+						if len(standby) > 0:
+							user_target = [random.choice(standby)]
+							user_is_attacking = True
+						else:
+							selection_needed = False
+							user_is_attacking = False
+					elif target == main.RAND_ENEMY:
+						user_target = [random.choice(enemy_ai.get_available())]
+						user_is_attacking = True
+						selection_needed = False
+					elif target == main.RAND_ALLY:
+						user_target = [random.choice(user.get_available())]
+						user_is_attacking = True
+						selection_needed = False
+
 			elif first_choice == 'Change':
 				if user.get_standby():
 					change_choice = game.display.battlemenu(user.get_standby())
