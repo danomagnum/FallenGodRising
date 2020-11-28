@@ -16,29 +16,29 @@ class AI(object):
 		enemy = random.choice(enemy_ai.get_available())
 		t = move.default_target
 		if t == SELF:
-			target = self.combatant
+			target = [self.combatant]
 		elif t == ENEMY:
-			target = enemy
+			target = [enemy]
 		elif t == ANY:
-			target = random.choice([self.combatant, enemy])
+			target = [random.choice([self.combatant, enemy])]
 		elif t == ALLY:
-			target = random.choice(self.combatants)
+			target = [random.choice(self.combatants)]
 		elif t == MULTI_ALLY:
 			target = self.combatants
 		elif t == MULTI_ENEMY:
 			target = enemy_ai.get_available()
-		elif t == multi_ALL:
+		elif t == MULTI_ALL:
 			target = self.get_available() + enemy_ai.get_available()
 		elif t == ACTIVE:
-			targets = enemy_ai.combatant
+			target = [enemy_ai.combatant]
 		elif t == INACTIVE:
-			targets = random.choice(enemy_ai.get_standby())
+			target = [random.choice(enemy_ai.get_standby())]
 		elif t == RAND_ENEMY:
-			target = enemy
+			target = [enemy]
 		elif t == RAND_ALLY:
-			target = random.choice(self.combatants)
+			target = [random.choice(self.combatants)]
 		#target = [self.combatant, enemy][move.default_target]
-		return [move, [target]]
+		return [move, target]
 
 	def change(self, enemy):
 		standby = self.get_standby()
@@ -72,29 +72,29 @@ class Random_AI(AI):
 		enemy = random.choice(enemy_ai.get_available())
 		t = move.default_target
 		if t == SELF:
-			target = self.combatant
+			target = [self.combatant]
 		elif t == ENEMY:
-			target = enemy
+			target = [enemy]
 		elif t == ANY:
-			target = random.choice([self.combatant, enemy])
+			target = [random.choice([self.combatant, enemy])]
 		elif t == ALLY:
-			target = random.choice(self.combatants)
+			target = [random.choice(self.combatants)]
 		elif t == MULTI_ALLY:
 			target = self.combatants
 		elif t == MULTI_ENEMY:
 			target = enemy_ai.get_available()
-		elif t == multi_ALL:
+		elif t == MULTI_ALL:
 			target = self.get_available() + enemy_ai.get_available()
 		elif t == ACTIVE:
-			targets = enemy_ai.combatant
+			target = [enemy_ai.combatant]
 		elif t == INACTIVE:
-			targets = random.choice(enemy_ai.get_standby())
+			target = [random.choice(enemy_ai.get_standby())]
 		elif t == RAND_ENEMY:
-			target = enemy
+			target = [enemy]
 		elif t == RAND_ALLY:
-			target = random.choice(self.combatants)
+			target = [random.choice(self.combatants)]
 		#target = [self.combatant, enemy][move.default_target]
-		return [move, [target]]
+		return [move, target]
 
 
 	def change(self, enemy):
@@ -124,29 +124,30 @@ class Skiddish_AI(AI):
 		enemy = random.choice(enemy_ai.get_available())
 		t = move.default_target
 		if t == SELF:
-			target = self.combatant
+			target = [self.combatant]
 		elif t == ENEMY:
-			target = enemy
+			target = [enemy]
 		elif t == ANY:
-			target = random.choice([self.combatant, enemy])
+			target = [random.choice([self.combatant, enemy])]
 		elif t == ALLY:
-			target = random.choice(self.combatants)
+			target = [random.choice(self.combatants)]
 		elif t == MULTI_ALLY:
 			target = self.combatants
 		elif t == MULTI_ENEMY:
 			target = enemy_ai.get_available()
-		elif t == multi_ALL:
+		elif t == MULTI_ALL:
 			target = self.get_available() + enemy_ai.get_available()
 		elif t == ACTIVE:
-			targets = enemy_ai.combatant
+			target = [enemy_ai.combatant]
 		elif t == INACTIVE:
-			targets = random.choice(enemy_ai.get_standby())
+			target = [random.choice(enemy_ai.get_standby())]
 		elif t == RAND_ENEMY:
-			target = enemy
+			target = [enemy]
 		elif t == RAND_ALLY:
-			target = random.choice(self.combatants)
+			target = [random.choice(self.combatants)]
 		#target = [self.combatant, enemy][move.default_target]
-		return [move, [target]]
+		return [move, target]
+
 
 	def change(self, enemy):
 		standby = self.get_standby()
