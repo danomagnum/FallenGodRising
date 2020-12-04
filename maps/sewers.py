@@ -52,6 +52,11 @@ def genzone(game):
 
 	# add an alter somewhere
 	alter = entities.Alter(game)
+	backpack = items.Backpack(self.game)
+	for x in range(random.randint(2,6)):
+		p = items.boosts.ArcDefBoost(self.game)
+		backpack.store(p)
+	alter.backpack = backpack
 	game.get_var('Alters').append(alter)
 	maptools.Random_Map_Insert(zone, alter, random.randint(0,24))
 

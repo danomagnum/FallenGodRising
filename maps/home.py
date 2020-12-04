@@ -31,9 +31,9 @@ class myAlter(entities.Alter):
 
 	def destroy(self, entity, zone):
 		print('You have destoryed your alter.')
-		print('You retain your powers but are now mortal.')
 		self.enabled = False
 		self.game.get_var('Alters').remove(self)
+		entity.backpack.absorb(self.backpack, message = True)
 
 class HomeZone(zone.Zone):
 
@@ -49,6 +49,11 @@ class HomeZone(zone.Zone):
 
 		if self.level_visits[1] == 1:
 			t = myAlter(self.game)
+			backpack = items.Backpack(self.game)
+			for x in range(random.randint(2,6)):
+				p = items.boosts.ExpBoost(self.game)
+				backpack.store(p)
+			t.backpack = backpack
 			self.game.get_var('Alters').append(t)
 			maptools.Positional_Map_Insert(self, t, '?', level=1)
 
