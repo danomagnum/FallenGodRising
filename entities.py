@@ -72,6 +72,7 @@ class Alter(Entity):
 		print('You have destoryed the {}'.format(self.name))
 		self.enabled = False
 		self.game.get_var('Alters').remove(self)
+		entity.backpack.absorb(self.backpack, message = True)
 
 	def leave(self, entity, zone):
 		pass
