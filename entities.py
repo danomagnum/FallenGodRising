@@ -74,6 +74,9 @@ class Alter(Entity):
 		self.game.get_var('Alters').remove(self)
 		entity.backpack.absorb(self.backpack, message = True)
 
+		global_level_offset = self.game.get_var('GLO')
+		self.game.set_var('GLO', global_level_offset + 1)
+
 	def leave(self, entity, zone):
 		pass
 			

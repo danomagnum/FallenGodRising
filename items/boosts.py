@@ -77,7 +77,7 @@ class ArcDefBoost(Item):
 
 	def use(self, target):
 		gain = random.randint(1, 5)
-		target.base_arcane_efense += gain
+		target.base_arcane_defense += gain
 		print('{} used {} and gained {} arcane def.'.format(target.name,self.name, gain))
 
 class SpdBoost(Item):

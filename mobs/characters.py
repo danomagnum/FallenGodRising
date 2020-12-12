@@ -281,9 +281,9 @@ class Character(object):
 
 	def partial_heal(self):
 		for move in self.moves:
-			move.mp += int(move.max_mp / 5)
+			move.mp += int(move.max_mp / 8)
 		if self.hp > 0:
-			self.hp += int(self.max_hp / 5)
+			self.hp += int(self.max_hp / 10)
 
 	def levelup(self): # override this with sub classes to do fancy things
 		pass

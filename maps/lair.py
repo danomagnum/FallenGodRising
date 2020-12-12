@@ -1,5 +1,4 @@
-import main, battle, zone, entities, moves, elements
-from items import items, gen_gear
+import main, battle, zone, entities, moves, elements, items
 from constants import *
 import random
 import maps.maptools as maptools
@@ -26,7 +25,7 @@ class ThisZone(zone.LinearZone):
 		gen_level = 1
 		if self.game.player is not None:
 			gen_level = self.game.player.level
-		newitem = gen_gear(self.game, gen_level + 3)
+		newitem = items.gen_gear(self.game, gen_level + 3)
 		maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
 
 #####################
@@ -66,9 +65,9 @@ def genzone(game):
 	zone.change_level(0)
 
 	alter = entities.Alter(game)
-	backpack = items.Backpack(self.game)
+	backpack = items.Backpack(game)
 	for x in range(random.randint(2,6)):
-		p = items.boosts.ArcDefBoost(self.game)
+		p = items.boosts.ArcDefBoost(game)
 		backpack.store(p)
 	alter.backpack = backpack
 	maptools.Random_Map_Insert(zone, alter, 9)

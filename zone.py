@@ -548,7 +548,9 @@ class LinearZone(Zone):
 	def level_populate(self, level, visit_no):
 		gen_level = 1
 		if self.game.player is not None:
-			gen_level = self.game.player.level
+			gen_level = self.game.player.combatants[0].level
+
+		gen_level += self.game.get_var('GLO')
 
 		if visit_no < 2:
 			#if I only want to populate on the first visit
@@ -565,6 +567,6 @@ class LinearZone(Zone):
 			mob_count = random.randint(0, 6)
 			for m in range(mob_count):
 				moblist = utility.select_by_level(level, self.mobchoices)
-				maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], level, moblist[3:], moblist[2]))
+				maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], gen_level, moblist[3:], moblist[2]))
 
 

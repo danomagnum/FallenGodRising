@@ -29,7 +29,7 @@ def genzone(game):
 	# generate maps
 	map_list = []
 
-	for l in range(4):
+	for l in range(12):
 		game.progress()
 		#lev = maps.buildings.building_octagon(maptools.MAPSIZE[1], maptools.MAPSIZE[1])
 		lev = grid.gridlevel()
@@ -47,13 +47,13 @@ def genzone(game):
 
 	# add an alter at the end
 	alter = entities.Alter(game)
-	backpack = items.Backpack(self.game)
+	backpack = items.Backpack(game)
 	for x in range(random.randint(2,6)):
-		p = items.boosts.StrBoost(self.game)
+		p = items.boosts.StrBoost(game)
 		backpack.store(p)
 	alter.backpack = backpack
 	game.get_var('Alters').append(alter)
-	maptools.Random_Map_Insert(zone, alter, 3)
+	maptools.Random_Map_Insert(zone, alter, 11)
 
 	# Populate zone with entities
 	maptools.Stair_Handler(zone, dir=1)
