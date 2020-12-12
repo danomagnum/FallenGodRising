@@ -130,6 +130,9 @@ try:
 					game.music_lock = True
 					game.set_var('Alters', [])
 
+					#The global level offset
+					game.set_var('GLO', 0)
+
 					display.game = game
 					game.display = display
 					game.music_queue = music_queue

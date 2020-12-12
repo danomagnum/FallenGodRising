@@ -52,9 +52,9 @@ def genzone(game):
 
 	# add an alter somewhere
 	alter = entities.Alter(game)
-	backpack = items.Backpack(self.game)
+	backpack = items.Backpack(game)
 	for x in range(random.randint(2,6)):
-		p = items.boosts.ArcDefBoost(self.game)
+		p = items.boosts.ArcDefBoost(game)
 		backpack.store(p)
 	alter.backpack = backpack
 	game.get_var('Alters').append(alter)

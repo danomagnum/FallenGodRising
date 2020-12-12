@@ -58,7 +58,9 @@ class OverworldZone(zone.Zone):
 	def level_populate(self, level, visit_no):
 		gen_level = 1
 		if self.game.player is not None:
-			gen_level = self.game.player.level
+			gen_level = self.game.player.combatants[0].level
+
+		gen_level += self.game.get_var('GLO')
 
 		if visit_no < 2:
 			#if I only want to populate on the first visit
@@ -98,7 +100,8 @@ class OverworldZone(zone.Zone):
 						chosen_mobs.append(random.sample(available_mobs,1)[0])
 
 					#parties = []
-					maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, self.depth(), chosen_mobs))
+					mob_level = random.choice([gen_level, self.depth()])
+					maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, mob_level, chosen_mobs))
 				except:
 					pass
 
