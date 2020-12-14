@@ -379,3 +379,42 @@ class ZoneWarp(Entity):
 				self.game.change_zone(self.new_zone, self.new_x, self.new_y, self.new_level)
 				self.game.zone.check_fasttravel()
 
+
+class Inn(Entity):
+	def config(self):
+		self.name = 'Inn'
+		self.char = '\x16'
+		self.blocking = True
+		self.passive = False
+	def collide(self, entity, zone):
+		modifier = self.game.get_var('GLO')
+		
+		cost = 100 * modifier
+
+		cost = max(100, cost)
+
+
+		#If you look like you've got money, it might cost more
+		# Add up the value of all equipped items of the combatants
+		# and then use some fraction of that as a minimum cost
+		equip_value = 0
+		for dude in entity.combatants:
+			for item in dude.equipment.all_items():
+				equip_value += item.value
+
+		print('Equip Value: {}'.format(equip_value))
+
+		equip_cost = equip_value / 3
+
+		cost = max(equip_cost, cost)
+
+		if entity.is_player:
+			choice = self.game.display.popup('Sleep at the Inn? Cost: {}'.format(cost), ['Sleep', 'Leave'])
+			if choice == 'Sleep':
+				if cost <= entity.backpack.gold:
+					entity.backpack.gold -= cost
+					for c in entity.combatants:
+						c.full_heal()
+				else:
+					print('Not Enough Money')
+

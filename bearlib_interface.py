@@ -897,9 +897,18 @@ class Display(object):
 			else:
 				batan_opt = 'Battle Anim.(off)'
 
+			if settings.battle_speed == 0:
+				bs_opt = 'Btl Spd. (Instant)'
+			elif settings.battle_speed == 1:
+				bs_opt = 'Btl Spd. (Fast)'
+			elif settings.battle_speed == 2:
+				bs_opt = 'Btl Spd. (Med)'
+			elif settings.battle_speed == 3:
+				bs_opt = 'Btl Spd. (Slow)'
 
 
-			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, 'Exit'] , cols=1, clear=False)
+
+			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, bs_opt, 'Exit'] , cols=1, clear=False)
 			if setting == musicoption:
 				if settings.music == 1:
 					music_queue.put(['volume', 0])
@@ -922,6 +931,10 @@ class Display(object):
 					settings.fog_old = True
 			elif setting == batan_opt:
 				settings.battle_anim = not settings.battle_anim
+			elif setting == bs_opt:
+				settings.battle_speed += 1
+				if settings.battle_speed > 3:
+					settings.battle_speed = 0
 			else:
 				settingmenu = False
 		settings._save()

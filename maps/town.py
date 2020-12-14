@@ -27,6 +27,10 @@ def town_entry(zone):
 
 		maptools.Random_Map_Insert(zone, e)
 
+
+		i = entities.Inn(zone.game)
+		maptools.Random_Map_Insert(zone, i)
+
 def genzone(game, townname):
 	game.progress()
 
