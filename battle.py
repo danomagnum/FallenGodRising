@@ -209,6 +209,8 @@ def Battle(game, user, enemy_ai):
 	if settings.battle_speed > 1:
 		game.display.show_messages()
 		time.sleep(SLOWDOWN)
+		if settings.battle_speed > 3:
+			game.display.mapbox.getch()
 
 	selected_target = None
 	first_choice = None
@@ -229,6 +231,8 @@ def Battle(game, user, enemy_ai):
 		if settings.battle_speed > 1:
 			game.display.show_messages()
 			time.sleep(SLOWDOWN)
+			if settings.battle_speed > 3:
+				game.display.mapbox.getch()
 
 		#have the user select an action
 		selection_needed = True
@@ -433,6 +437,8 @@ def Battle(game, user, enemy_ai):
 				if settings.battle_speed > 0:
 					game.display.show_messages()
 					time.sleep(SLOWDOWN)
+					if settings.battle_speed > 3:
+						game.display.mapbox.getch()
 
 			#second attack, assuming they did not die
 			if second_is_attacking and second.hp > 0:
@@ -452,6 +458,8 @@ def Battle(game, user, enemy_ai):
 				if settings.battle_speed > 0:
 					game.display.show_messages()
 					time.sleep(SLOWDOWN)
+					if settings.battle_speed > 3:
+						game.display.mapbox.getch()
 
 		else:
 			game.player.combatants.append(possess)
@@ -466,6 +474,8 @@ def Battle(game, user, enemy_ai):
 		if settings.battle_speed > 1:
 			game.display.show_messages()
 			time.sleep(SLOWDOWN)
+			if settings.battle_speed > 3:
+				game.display.mapbox.getch()
 		
 		if len(enemy_ai.get_available()) == 0:
 			battle_continue = False
