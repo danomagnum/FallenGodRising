@@ -905,6 +905,8 @@ class Display(object):
 				bs_opt = 'Btl Spd. (Med)'
 			elif settings.battle_speed == 3:
 				bs_opt = 'Btl Spd. (Slow)'
+			elif settings.battle_speed == 4:
+				bs_opt = 'Btl Spd. (Wait)'
 
 
 
@@ -933,7 +935,7 @@ class Display(object):
 				settings.battle_anim = not settings.battle_anim
 			elif setting == bs_opt:
 				settings.battle_speed += 1
-				if settings.battle_speed > 3:
+				if settings.battle_speed > 4:
 					settings.battle_speed = 0
 			else:
 				settingmenu = False
