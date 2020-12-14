@@ -9,6 +9,7 @@ import utility
 from constants import *
 
 DEBUG = True
+SLOWDOWN = 0.5 
 
 class AI(object):
 	def attack(self, enemy_ai):
@@ -205,6 +206,10 @@ def Battle(game, user, enemy_ai):
 			status.pre_battle(combatant)
 	game.display.refresh_combatant()
 
+	if settings.battle_speed > 1:
+		game.display.show_messages()
+		time.sleep(SLOWDOWN)
+
 	selected_target = None
 	first_choice = None
 	running = False
@@ -220,6 +225,10 @@ def Battle(game, user, enemy_ai):
 			for status in combatant.status:
 				status.pre_turn(combatant)
 		game.display.refresh_combatant()
+
+		if settings.battle_speed > 1:
+			game.display.show_messages()
+			time.sleep(SLOWDOWN)
 
 		#have the user select an action
 		selection_needed = True
@@ -421,6 +430,10 @@ def Battle(game, user, enemy_ai):
 					status.post_attack(first)
 				game.display.refresh_combatant()
 
+				if settings.battle_speed > 0:
+					game.display.show_messages()
+					time.sleep(SLOWDOWN)
+
 			#second attack, assuming they did not die
 			if second_is_attacking and second.hp > 0:
 				for status in second.status:
@@ -434,6 +447,12 @@ def Battle(game, user, enemy_ai):
 					status.post_attack(second)
 
 				game.display.refresh_combatant()
+
+
+				if settings.battle_speed > 0:
+					game.display.show_messages()
+					time.sleep(SLOWDOWN)
+
 		else:
 			game.player.combatants.append(possess)
 			print('Possess: {}'.format(str(possess)))
@@ -444,6 +463,9 @@ def Battle(game, user, enemy_ai):
 				status.post_turn(combatant)
 		game.display.refresh_combatant()
 
+		if settings.battle_speed > 1:
+			game.display.show_messages()
+			time.sleep(SLOWDOWN)
 		
 		if len(enemy_ai.get_available()) == 0:
 			battle_continue = False
