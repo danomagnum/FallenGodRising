@@ -7,6 +7,9 @@ import utility
 import math
 from constants import *
 
+MOVE_CUTOFF = 4
+MOVE_NERF_AFTER_CUTOFF = 0.9
+
 class Move(utility.Serializable):
 	def __init__(self,game, name = None, element_list = None, accuracy = None, power = None, mp = None,  default_target = None):
 		self.game = game
@@ -120,6 +123,16 @@ class Move(utility.Serializable):
 						level_factor1 = math.sqrt(level_factor1)
 
 						damage = hp_ratio * strdef_ratio * power_ratio * level_factor1
+
+
+					if user_attack_count > MOVE_CUTOFF:
+						# If the user has more than MOVE_CUTOFF moves, start nerfing all their moves
+						# Jack of all trades, master of none kind of thing.
+						# causes a tradeoff between move coverage and move power
+						power_factor = MOVE_NERF_AFTER_CUTOFF ** (user_attack_count - MOVE_CUTOFF)
+						power = power * power_factor
+
+
 
 					# Do elemental effects
 					for atk_element in self.elements:
