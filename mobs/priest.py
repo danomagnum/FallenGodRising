@@ -1,4 +1,4 @@
-from .characters import Character
+from .characters import Character, promote
 import moves
 import elements
 import utility

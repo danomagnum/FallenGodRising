@@ -13,17 +13,13 @@ Items:
 
 Battle:
 - One combatant is active at a time - this is indicated by a highlighted name
-- Only the active combatant gets to attack, but you can change who is currently active
-without missing a turn.
-- When an enemy is defeated, all combatants get exp. but the active combatant gets a
-slightly higher percentage
+- Only the active combatant gets to attack, but you can change who is currently active without missing a turn.
+- When an enemy is defeated, all combatants get exp. but the active combatant gets a slightly higher percentage
 - Some moves attack a single enemy (blast, strike) Some attack multiple (wave, rush)
-- Some moves have a chance at applying status conditions.  Most of these end after the
-battle but not all.
+- Some moves have a chance at applying status conditions.  Most of these end after the battle but not all.
 - You can run from a battle but the enemy will get a free strike on you.
-- Every move has its own MP pool.  When this is drained, you can still try to use the move
-but there is only a small chance you will be successfull
+- Every move has its own MP pool.  When this is drained, you can still try to use the move but there is only a small chance you will be successfull
 - The more you use a move, the stronger it becomes
 - On levelup some HP and MP is restored along with a general stat boost
-- If you don't have a full party and there is only one enemy, you can attempt to possess them,
-converting them to your team
+- If you don't have a full party and there is only one enemy, you can attempt to possess them, converting them to your team
+- If a combatant has 5 or more moves, they will have reduced effectiveness.  Jack of all trades master of none

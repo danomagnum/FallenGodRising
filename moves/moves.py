@@ -124,7 +124,7 @@ class Move(utility.Serializable):
 
 						damage = hp_ratio * strdef_ratio * power_ratio * level_factor1
 
-
+					user_attack_count = len(user.moves)
 					if user_attack_count > MOVE_CUTOFF:
 						# If the user has more than MOVE_CUTOFF moves, start nerfing all their moves
 						# Jack of all trades, master of none kind of thing.
