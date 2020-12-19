@@ -17,6 +17,7 @@ class Dromedary(Character):
 		self.base_arcane_defense = 54
 		self.base_speed = 55
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Earth, elements.Electric]
 
 	def level_22(self):
 		promote(self, Bactrian)	
@@ -34,6 +35,7 @@ class Bactrian(Character):
 		self.base_arcane_defense = 79
 		self.base_speed = 80
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Earth, elements.Electric]
 
 
 

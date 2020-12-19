@@ -127,7 +127,7 @@ class ThisZone(zone.LinearZone):
 						
 				if mob_party:
 					moblist = utility.select_by_level(level, self.mobchoices)
-					maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], gen_level, mob_party, mob_party[0].__name__))
+					entity = maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], gen_level, mob_party, mob_party[0].__name__))
 
 
 #####################

@@ -35,8 +35,11 @@ def party(game, battle_AI, world_AI, level, combatants, name=None, item_list = N
 			self.name = name
 			for c in combatants:
 				try:
+					instance = c(game, level=level)
+					instance.spawn_element()
 					self.combatants.append(c(game, level=level))
 				except:
+					c.spawn_element()
 					self.combatants.append(c)
 			if self.name is None:
 				self.name = self.combatants[0].name

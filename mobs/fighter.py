@@ -18,6 +18,8 @@ class Fighter(Character):
 		self.base_arcane_defense = 35
 		self.base_speed = 35
 		self.base_luck = 100
+		self.element_rate = 0.1
+		self.element_pref = [elements.Light, elements.Dark]
 
 
 	def level_03(self):
@@ -43,6 +45,8 @@ class Squire(Character):
 		self.base_arcane_defense = 60
 		self.base_speed = 45
 		self.base_luck = 100
+		self.element_rate = 0.1
+		self.element_pref = [elements.Light, elements.Dark]
 
 	def level_36(self):
 		promote(self, Knight)	
@@ -59,6 +63,8 @@ class Knight(Character):
 		self.base_arcane_defense = 85
 		self.base_speed = 55
 		self.base_luck = 100
+		self.element_rate = 0.1
+		self.element_pref = [elements.Light, elements.Dark]
 
 
 

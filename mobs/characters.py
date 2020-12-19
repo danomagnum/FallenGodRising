@@ -26,6 +26,8 @@ class Character(object):
 		self.moves = []
 		self._level = 1
 		self.stat_randomizer()
+		self.element_pref = None
+		self.element_rate = 0.40
 		utility.call_all('config', self)
 		#utility.call_all_configs(self)
 
@@ -50,6 +52,15 @@ class Character(object):
 	@elements.setter
 	def elements(self, value):
 		self._elements = value
+
+	def spawn_element(self):
+		# determine if this mob should have an element
+		if self.element_pref is not None:
+			if random.random() < self.element_rate:
+				max_elements = min(2, len(self.element_pref))
+				element_count = random.choice([1,1,1,1,1,1,max_elements])
+				self._elements = random.sample(self.element_pref, element_count)
+
 
 	def stat_randomizer(self):
 		# when the entity is created, give it some variety in power

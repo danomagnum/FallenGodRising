@@ -17,6 +17,8 @@ class Echo(Character):
 		self.base_arcane_defense = 40
 		self.base_speed = 90
 		self.base_luck = 100
+		self.element_rate = 0.9
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind]
 
 	def level_22(self):
 		promote(self, Shadow)	
@@ -34,6 +36,8 @@ class Shadow(Character):
 		self.base_arcane_defense = 80
 		self.base_speed = 100
 		self.base_luck = 100
+		self.element_rate = 0.9
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind]
 
 
 

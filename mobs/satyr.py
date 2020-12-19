@@ -17,6 +17,7 @@ class Satyr(Character):
 		self.base_arcane_defense = 55
 		self.base_speed = 45
 		self.base_luck = 100
+		self.element_pref = [elements.Earth, elements.Light, elements.Dark]
 
 	def level_24(self):
 		promote(self, Centaur)	
@@ -34,6 +35,7 @@ class Centaur(Character):
 		self.base_arcane_defense = 75
 		self.base_speed = 90
 		self.base_luck = 100
+		self.element_pref = [elements.Earth, elements.Light, elements.Dark]
 
 
 

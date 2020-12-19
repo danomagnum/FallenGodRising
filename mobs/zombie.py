@@ -17,6 +17,8 @@ class Zombie(Character):
 		self.base_arcane_defense = 85
 		self.base_speed = 93
 		self.base_luck = 100
+		self.element_rate = 0.2
+		self.element_pref = [elements.Earth, elements.Dark]
 
 
 

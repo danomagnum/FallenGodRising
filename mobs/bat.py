@@ -17,6 +17,7 @@ class Bat(Character):
 		self.base_arcane_defense = 20
 		self.base_speed = 80
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Electric, elements.Wind, elements.Dark]
 
 	def level_15(self):
 		self.add_move(moves.phy.Bite)
@@ -38,6 +39,7 @@ class Vampire(Character):
 		self.base_arcane_defense = 100
 		self.base_speed = 81
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Electric, elements.Dark]
 	
 	def level_25(self):
 		self.add_move(moves.stat.Drain)

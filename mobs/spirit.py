@@ -17,7 +17,7 @@ class Spirit(Character):
 		self.base_arcane_defense = 40
 		self.base_speed = 15
 		self.base_luck = 100
-
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 
 	def level_03(self):
 		if self.elements[0] in moves.typed_blasts:
@@ -43,6 +43,7 @@ class Spectre(Character):
 		self.base_arcane_defense = 80
 		self.base_speed = 30
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 
 
 	def level_03(self):
@@ -69,6 +70,7 @@ class Ghoul(Character):
 		self.base_arcane_defense = 110
 		self.base_speed = 30
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 
 
 	def level_03(self):

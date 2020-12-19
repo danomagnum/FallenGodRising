@@ -17,6 +17,7 @@ class Imp(Character):
 		self.base_arcane_defense = 90
 		self.base_speed = 42
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Electric, elements.Dark]
 
 	def level_10(self):
 		self.add_move(moves.stat.Focus)
@@ -41,6 +42,7 @@ class Demon(Character):
 		self.base_arcane_defense = 115
 		self.base_speed = 67
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Electric, elements.Dark]
 	
 
 	def level_27(self):

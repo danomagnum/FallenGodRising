@@ -17,6 +17,7 @@ class Wyrm(Character):
 		self.base_arcane_defense = 70
 		self.base_speed = 110
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Wind]
 
 
 

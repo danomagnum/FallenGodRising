@@ -17,6 +17,7 @@ class Goblin(Character):
 		self.base_arcane_defense = 40
 		self.base_speed = 50
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Earth, elements.Dark]
 
 	def level_16(self):
 		promote(self, HobGoblin)	
@@ -34,6 +35,7 @@ class HobGoblin(Character):
 		self.base_arcane_defense = 55
 		self.base_speed = 65
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Earth, elements.Dark]
 
 	def level_40(self):
 		promote(self, GoblinLord)	
@@ -51,6 +53,7 @@ class GoblinLord(Character):
 		self.base_arcane_defense = 75
 		self.base_speed = 85
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Earth, elements.Dark]
 
 
 
