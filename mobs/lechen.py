@@ -17,6 +17,7 @@ class Lechen(Character):
 		self.base_arcane_defense = 45
 		self.base_speed = 40
 		self.base_luck = 100
+		self.element_pref = [ elements.Water, elements.Earth]
 
 	def level_24(self):
 		promote(self, FlyTrap)	
@@ -34,6 +35,7 @@ class FlyTrap(Character):
 		self.base_arcane_defense = 65
 		self.base_speed = 55
 		self.base_luck = 100
+		self.element_pref = [ elements.Water, elements.Earth]
 
 
 

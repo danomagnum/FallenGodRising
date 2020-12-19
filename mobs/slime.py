@@ -17,6 +17,7 @@ class Slime(Character):
 		self.base_arcane_defense = 65
 		self.base_speed = 35
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Electric]
 
 	def level_26(self):
 		promote(self, Glob)	
@@ -34,7 +35,7 @@ class Glob(Character):
 		self.base_arcane_defense = 90
 		self.base_speed = 60
 		self.base_luck = 100
-
+		self.element_pref = [elements.Fire, elements.Electric]
 
 
 trash = [Slime]

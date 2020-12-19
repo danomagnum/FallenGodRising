@@ -18,6 +18,7 @@ class Gnats(Character):
 		self.base_arcane_defense = 20
 		self.base_speed = 50
 		self.base_luck = 100
+		self.element_pref = [ elements.Electric, elements.Wind]
 
 	def level_8(self):
 		promote(self, Skeeters)	
@@ -34,6 +35,7 @@ class Skeeters(Character):
 		self.base_arcane_defense = 25
 		self.base_speed = 35
 		self.base_luck = 100
+		self.element_pref = [ elements.Electric, elements.Wind]
 
 	def level_15(self):
 		promote(self, Locusts)	
@@ -50,6 +52,7 @@ class Locusts(Character):
 		self.base_arcane_defense = 80
 		self.base_speed = 75
 		self.base_luck = 100
+		self.element_pref = [ elements.Electric, elements.Wind]
 
 
 trash = [Gnats]

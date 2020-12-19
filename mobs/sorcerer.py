@@ -17,6 +17,7 @@ class Sorcerer(Character):
 		self.base_arcane_defense = 55
 		self.base_speed = 90
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 
 
 	def level_03(self):
@@ -42,6 +43,7 @@ class Wizard(Character):
 		self.base_arcane_defense = 70
 		self.base_speed = 105
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 
 
 	def level_03(self):
@@ -67,6 +69,7 @@ class Archmage(Character):
 		self.base_arcane_defense = 85
 		self.base_speed = 120
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth, elements.Electric, elements.Wind, elements.Light, elements.Dark]
 
 
 	def level_03(self):
@@ -81,3 +84,5 @@ class Archmage(Character):
 
 
 starters = [Sorcerer]
+okay = [Sorcerer, Wizard]
+good = [Archmage]

@@ -19,6 +19,8 @@ class Minotaur(Character):
 		self.base_speed = 90
 		self.base_luck = 100
 
+		self.element_pref = [elements.Light, elements.Dark]
+		self.element_rate = 0.3
 
 
 okay = [Minotaur]

@@ -9,6 +9,7 @@ class Whelp(Character):
 	def config(self):
 		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
+		self.element_pref = [elements.Fire, elements.Water, elements.Electric]
 
 	def base_stats(self):
 		self.base_hp = 41
@@ -26,6 +27,8 @@ class Drake(Character):
 	def config(self):
 		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
 		self.base_stats()
+		self.element_pref = [elements.Fire, elements.Water, elements.Electric]
+
 	def base_stats(self):
 		self.base_hp = 61
 		self.base_physical_strength = 84 
@@ -42,6 +45,8 @@ class Dragon(Character):
 	def config(self):
 		self.moves = [moves.phy.Strike(self.game), moves.stat.Taunt(self.game)]
 		self.base_stats()
+		self.element_pref = [elements.Fire, elements.Water, elements.Electric]
+
 	def base_stats(self):
 		self.base_hp = 91
 		self.base_physical_strength = 134

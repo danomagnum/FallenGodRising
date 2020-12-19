@@ -17,6 +17,7 @@ class Snake(Character):
 		self.base_arcane_defense = 25
 		self.base_speed = 60
 		self.base_luck = 100
+		self.element_pref = [elements.Water, elements.Earth, elements.Electric]
 
 	def level_24(self):
 		promote(self, Serpent)	
@@ -34,6 +35,7 @@ class Serpent(Character):
 		self.base_arcane_defense = 45
 		self.base_speed = 85
 		self.base_luck = 100
+		self.element_pref = [elements.Water, elements.Earth, elements.Electric]
 
 
 

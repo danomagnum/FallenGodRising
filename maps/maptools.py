@@ -24,6 +24,8 @@ def Random_Map_Insert(zone, entity, level=None):
 	entity.y = pos[1]
 	zone.add_entity(entity, level)
 
+	return entity
+
 def map_search(zone, id, level=0):
 	for y in range(len(zone.maps[level]) - 2):
 		for x in range(len(zone.maps[level][0]) - 2):

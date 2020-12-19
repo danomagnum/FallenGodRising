@@ -17,6 +17,7 @@ class Orc(Character):
 		self.base_arcane_defense = 50
 		self.base_speed = 35
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth]
 
 	def level_25(self):
 		promote(self, Troll)	
@@ -34,6 +35,7 @@ class Troll(Character):
 		self.base_arcane_defense = 80
 		self.base_speed = 45
 		self.base_luck = 100
+		self.element_pref = [elements.Fire, elements.Water, elements.Earth]
 
 
 

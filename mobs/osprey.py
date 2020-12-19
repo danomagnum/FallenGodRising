@@ -18,6 +18,8 @@ class Osprey(Character):
 		self.base_arcane_defense = 35
 		self.base_speed = 56
 		self.base_luck = 100
+		self.element_rate = 0.9
+		self.element_pref = [ elements.Wind ]
 
 	def level_18(self):
 		promote(self, Hawk)	
@@ -36,6 +38,7 @@ class Hawk(Character):
 		self.base_arcane_defense = 50
 		self.base_speed = 71
 		self.base_luck = 100
+		self.element_pref = [ elements.Wind ]
 
 	def level_36(self):
 		promote(self, Eagle)	
@@ -54,7 +57,7 @@ class Eagle(Character):
 		self.base_arcane_defense = 70
 		self.base_speed = 91
 		self.base_luck = 100
-
+		self.element_pref = [ elements.Wind ]
 
 
 
