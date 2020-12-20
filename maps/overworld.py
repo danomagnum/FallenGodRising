@@ -35,7 +35,7 @@ for i in os.listdir(path):
 
 music_per_biome = {elements.Sea: 'calm.mid',
                    elements.Marsh: 'odd.mid',
-		   elements.Plains: 'overworld1.mid',
+		   elements.Plains: 'alone.mid',
 		   elements.Desert: 'desert.mid',
 		   elements.Forest: 'forest.mid',
 		   elements.Mountains: 'mountains.mid',

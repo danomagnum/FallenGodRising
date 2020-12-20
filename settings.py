@@ -10,5 +10,5 @@ battle_speed = 0
 debug = True
 fog = True
 fog_old = False
-music = False
+music = True
 start_level = 2
