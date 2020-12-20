@@ -198,6 +198,7 @@ class Game(object):
 		if command == 'GODMODE':
 			for c in self.player.combatants:
 				c.level = 100
+			self.set_var('GLO', -90)
 			return
 
 		if '=' in command:
