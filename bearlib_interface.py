@@ -775,6 +775,45 @@ class Display(object):
 		#box.addstr(15, 1, "Status: {}".format(stat_list), None)
 
 
+	def show_move_stats(self, move, box):
+		box.erase()
+		box.box(opaque=True)
+		height, width = box.getmaxyx()
+		
+		#Name
+		color = "white"
+
+		box.addstr(0, 1, '{}'.format(move.name), color)
+		#HP
+		box.addstr(1, 1, 'Uses: {}'.format(move.uses), None)
+		box.addstr(2, 1, 'Power: {}'.format(move.power), None)
+		box.addstr(3, 1, 'MP: {} / {}'.format(move.mp, move.max_mp), None)
+		box.addstr(4, 1, 'Accuracy: {}'.format(move.accuracy), None)
+
+		element_list = ' '.join([str(element) for element in move.elements])
+		box.addstr(5, 1, "Elements: {}".format(element_list), None)
+
+		types = {True: 'Physical', False:'Arcane'}
+		box.addstr(6, 1, 'Attack Type: {}'.format(types[move.physical[0]]), None)
+		box.addstr(7, 1, 'Damage Type: {}'.format(types[move.physical[1]]), None)
+
+		targets = {-1: 'None',
+		            0: 'Self',
+			    1: 'Enemy',
+			    2: 'Any',
+			    3: 'Ally',
+			    4: 'Active',
+			    5: 'Multi Ally',
+			    6: 'Multi Enemy',
+			    7: 'Multi All',
+			    8: 'Inactive',
+			    9: 'Random Enemy',
+			    10:'Random Ally'}
+		
+		box.addstr(8, 1, 'Target: {}'.format(targets[move.default_target]), None)
+
+		box.addstr(9, 1, "{}".format(move.helptext), None)
+		
 
 
 	##################################
@@ -789,7 +828,7 @@ class Display(object):
 	##### Start Popup Draw Routines
 	##################################
 	
-	def popup(self, message, choices = None, selected=None, cols=2):
+	def popup(self, message, choices = None, selected=None, cols=2, callback_on_change=None):
 		if choices is None:
 			choices = [True, False]
 
@@ -798,7 +837,7 @@ class Display(object):
 		self.popupbox.addstr(1, 1, message)
 		#self.popupbox_menu.erase()
 		self.popupbox_menu.box(True)
-		return menu(self.popupbox_menu, choices, cols, selected, opaque=True)
+		return menu(self.popupbox_menu, choices, cols, selected, callback_on_change=callback_on_change, opaque=True)
 
 
 
@@ -946,6 +985,5 @@ class Display(object):
 def shutdown():
 	terminal.close()
 	sys.stdout = original_stdout
-
 
 
