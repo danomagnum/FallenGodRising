@@ -9,7 +9,7 @@ MULTI_ENEMY = 6 # all enemies
 MULTI_ALL = 7 # everyone
 INACTIVE = 8 # One of the non-active enemies
 RAND_ENEMY = 9 # Random Enemy
-RAND_ALLY = 9 # Random Friendly
+RAND_ALLY = 10 # Random Friendly
 
 USER = SELF
 
