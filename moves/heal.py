@@ -38,7 +38,7 @@ class Absorb(Move):
 		mode = max(min(high, damage * user.luck), low)
 		regain = random.triangular(low, high, mode)
 		user.hp += regain
-		print("{} gained {} hp".format(user.name, regain))
+		print("{} gained {} hp".format(user.name, int(regain)))
 		
 
 #self-target healing move

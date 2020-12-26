@@ -4,10 +4,12 @@ import elements
 import utility
 import random
 
+#TODO: these need more healing moves
+
 
 class Priest(Character):
 	def config(self):
-		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.heal.Transfuse(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 55
@@ -35,7 +37,7 @@ class Priest(Character):
 
 class Cleric(Character):
 	def config(self):
-		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.heal.Transfuse(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 70
@@ -64,7 +66,7 @@ class Cleric(Character):
 
 class Paladin(Character):
 	def config(self):
-		self.moves = [moves.phy.Strike(self.game), moves.stat.Buff(self.game)]
+		self.moves = [moves.phy.Strike(self.game), moves.heal.Transfuse(self.game)]
 		self.base_stats()
 	def base_stats(self):
 		self.base_hp = 90
