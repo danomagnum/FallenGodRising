@@ -19,6 +19,12 @@ from os.path import isfile, join
 import namegen
 #import pygame
 
+try:
+	#only used for debugging right now
+	import ow2img
+except:
+	pass
+
 class GameOver(Exception):
 	pass
 
