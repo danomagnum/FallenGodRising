@@ -207,7 +207,7 @@ def Battle(game, user, enemy_ai):
 	game.display.refresh_combatant()
 
 	if settings.battle_speed > 1:
-		game.display.show_messages()
+		game.display.show_btl_messages()
 		time.sleep(SLOWDOWN)
 		if settings.battle_speed > 3:
 			game.display.mapbox.getch()
@@ -229,7 +229,7 @@ def Battle(game, user, enemy_ai):
 		game.display.refresh_combatant()
 
 		if settings.battle_speed > 1:
-			game.display.show_messages()
+			game.display.show_btl_messages()
 			time.sleep(SLOWDOWN)
 			if settings.battle_speed > 3:
 				game.display.mapbox.getch()
@@ -435,7 +435,7 @@ def Battle(game, user, enemy_ai):
 				game.display.refresh_combatant()
 
 				if settings.battle_speed > 0:
-					game.display.show_messages()
+					game.display.show_btl_messages()
 					time.sleep(SLOWDOWN)
 					if settings.battle_speed > 3:
 						game.display.mapbox.getch()
@@ -456,7 +456,7 @@ def Battle(game, user, enemy_ai):
 
 
 				if settings.battle_speed > 0:
-					game.display.show_messages()
+					game.display.show_btl_messages()
 					time.sleep(SLOWDOWN)
 					if settings.battle_speed > 3:
 						game.display.mapbox.getch()
@@ -472,7 +472,7 @@ def Battle(game, user, enemy_ai):
 		game.display.refresh_combatant()
 
 		if settings.battle_speed > 1:
-			game.display.show_messages()
+			game.display.show_btl_messages()
 			time.sleep(SLOWDOWN)
 			if settings.battle_speed > 3:
 				game.display.mapbox.getch()

@@ -130,7 +130,7 @@ class Move(utility.Serializable):
 						# Jack of all trades, master of none kind of thing.
 						# causes a tradeoff between move coverage and move power
 						power_factor = MOVE_NERF_AFTER_CUTOFF ** (user_attack_count - MOVE_CUTOFF)
-						power = power * power_factor
+						damage = damage * power_factor
 
 
 
