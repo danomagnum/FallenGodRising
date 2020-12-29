@@ -12,7 +12,7 @@ ZONENAME = 'Fortress'
 
 class FortressZone(zone.LinearZone):
 	def config(self):
-		self.music = 'Adventure.mid'
+		self.music = 'Adventure'
 		#battle AI to use, #world AI to use, name, *mobs
 		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Barbarian]),
 		                   (2, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Barbarian, mobs.barbarian.Barbarian]),

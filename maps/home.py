@@ -38,7 +38,7 @@ class myAlter(entities.Alter):
 class HomeZone(zone.Zone):
 
 	def config(self):
-		self.music = 'wizard.mid'
+		self.music = 'wizard'
 
 	def level_000(self):
 		print('Tutorial> Navigate with WASD.  To continue, walk off the screen to the right.')

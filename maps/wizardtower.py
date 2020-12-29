@@ -11,7 +11,7 @@ ZONENAME = 'WizardTower'
 
 class ThisZone(zone.LinearZone):
 	def config(self):
-		self.music = 'wizard.mid'
+		self.music = 'wizard'
 		self.mob_list = [mobs.imp.Imp, mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard, mobs.sorcerer.Archmage]
 		self.mob_list = set(self.mob_list)
 		#battle AI to use, #world AI to use, name, *mobs
