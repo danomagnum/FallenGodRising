@@ -948,8 +948,14 @@ class Display(object):
 				bs_opt = 'Btl Spd. (Wait)'
 
 
+			if settings.music_mode == 0:
+				music_mode = 'Music (midi)'
+			elif settings.music_mode == 1:
+				music_mode = 'Music (ogg)'
 
-			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, bs_opt, 'Exit'] , cols=1, clear=False)
+
+
+			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, bs_opt, music_mode, 'Exit'] , cols=1, clear=False)
 			if setting == musicoption:
 				if settings.music == 1:
 					music_queue.put(['volume', 0])
@@ -976,6 +982,12 @@ class Display(object):
 				settings.battle_speed += 1
 				if settings.battle_speed > 4:
 					settings.battle_speed = 0
+			elif setting == music_mode:
+				if settings.music_mode == 0:
+					settings.music_mode = 1
+				elif settings.music_mode == 1:
+					settings.music_mode = 0
+				print('Restart Requried To Take Effect')
 			else:
 				settingmenu = False
 		settings._save()

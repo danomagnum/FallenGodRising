@@ -100,6 +100,8 @@ class Game(object):
 				return
 
 	def set_music(self, filename, fade_ms=1000, force=False):
+		if filename == None:
+			filename = self.music
 		if self.music_lock:
 			return
 		if filename == self.music and not force:
@@ -107,7 +109,8 @@ class Game(object):
 		if filename is not None:
 			#pygame.mixer.music.fadeout(1000)
 			self.music_queue.put(['fadeout'])
-			self.music_queue.put(['play', 'data/music/' + filename])
+			#self.music_queue.put(['play', 'data/music/' + filename])
+			self.music_queue.put(['play', filename])
 			#pygame.mixer.music.load('data/music/' + filename)
 			#pygame.mixer.music.play(loops = -1, start=0.0, fade_ms = fade_ms)
 			self.music = filename

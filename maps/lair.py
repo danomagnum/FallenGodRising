@@ -13,7 +13,7 @@ ZONENAME = 'Lair'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
-		self.music = 'Manor.mid'
+		self.music = 'Manor'
 		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.imp.Imp]),
 		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer]),
 		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.imp.Imp]),

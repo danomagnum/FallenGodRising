@@ -33,14 +33,14 @@ for i in os.listdir(path):
 			files.append(os.path.join(path, i))
 		
 
-music_per_biome = {elements.Sea: 'calm.mid',
-                   elements.Marsh: 'odd.mid',
-		   elements.Plains: 'alone.mid',
-		   elements.Desert: 'desert.mid',
-		   elements.Forest: 'forest.mid',
-		   elements.Mountains: 'mountains.mid',
-		   elements.Sky: 'Winter Frost.mid',
-		   elements.Underground: 'overworld1.mid'}
+music_per_biome = {elements.Sea: 'calm',
+                   elements.Marsh: 'odd',
+		   elements.Plains: 'alone',
+		   elements.Desert: 'desert',
+		   elements.Forest: 'forest',
+		   elements.Mountains: 'mountains',
+		   elements.Sky: 'Winter Frost',
+		   elements.Underground: 'overworld1'}
 
 
 moblist         = {elements.Sea: mobs.sea,

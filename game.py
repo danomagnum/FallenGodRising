@@ -73,7 +73,8 @@ try:
 		graphics_interface.initialize()
 		display = graphics_interface.Display()
 		while True:
-			music_queue.put(['play', 'data/music/mainmenu.mid'])
+			music_queue.put(['play', 'mainmenu'])
+			#music_queue.put(['play', 'data/music/mainmenu.mid'])
 			#pygame.mixer.music.load('data/music/mainmenu.mid')
 			#pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
 			display.mode = MAP
