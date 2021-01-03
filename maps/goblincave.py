@@ -12,12 +12,9 @@ ZONENAME = 'GoblinCave'
 
 class ThisZone(zone.LinearZone):
 	def config(self):
-		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin]),
-			           (5, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin]),
-			           (7, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.Goblin, mobs.goblin.HobGoblin]),
-			           (9, [battle.Random_AI, entities.BasicAI1, 'goblin', mobs.goblin.Goblin, mobs.goblin.HobGoblin, mobs.goblin.GoblinLord])]
+		self.mob_list = [mobs.goblin.Goblin, mobs.goblin.HobGoblin, mobs.goblin.GoblinLord]
+		self.mob_list = set(self.mob_list)
+
 	def level_009(self):
 		gen_level = 1
 		if self.game.player is not None:

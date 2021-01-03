@@ -13,14 +13,10 @@ ZONENAME = 'Lair'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
+		self.mob_list = [mobs.bat.Bat, mobs.bat.Vampire, mobs.skeleton.Skeleton, mobs.slime.Slime, mobs.slime.Glob, mobs.zombie.Zombie, mobs.spirit.Spirit, mobs.spirit.Spectre, mobs.spirit.Ghoul]
+		self.mob_list = set(self.mob_list)
 		self.music = 'Manor'
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.imp.Imp]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.imp.Imp]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard]),
-		                   (9, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Wizard, mobs.sorcerer.Sorcerer, mobs.sorcerer.Sorcerer]),
-		                   (13, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard]),
-		                   (17, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Wizard, mobs.sorcerer.Wizard, mobs.sorcerer.Archmage])]
+
 	def level_019(self):
 		gen_level = 1
 		if self.game.player is not None:

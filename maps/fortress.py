@@ -13,12 +13,7 @@ ZONENAME = 'Fortress'
 class FortressZone(zone.LinearZone):
 	def config(self):
 		self.music = 'Adventure'
-		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Barbarian]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Barbarian, mobs.barbarian.Barbarian]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Barbarian, mobs.barbarian.Juggernaut]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Barbarian, mobs.barbarian.Juggernaut, mobs.barbarian.Juggernaut]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'barbarian', mobs.barbarian.Juggernaut, mobs.barbarian.Warlord])]
+		self.mob_list = set([mobs.barbarian.Barbarian, mobs.barbarian.Juggernaut, mobs.barbarian.Warlord])
 
 #####################
 # populate the zone with entities

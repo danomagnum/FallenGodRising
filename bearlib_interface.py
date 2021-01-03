@@ -538,7 +538,15 @@ class Display(object):
 		#self.msgbox.erase()
 		self.msgbox.box(opaque=True)
 		for i in range(len(msgs)):
-			self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, msgs[i])
+			printstring = msgs[i] 
+			try:
+				self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, printstring)
+			except:
+				printstring = printstring.replace('[', '[[')
+				printstring = printstring.replace(']', ']]')
+				printstring = printstring.replace('{', '{{')
+				printstring = printstring.replace('}', '}}')
+				self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, printstring)
 		terminal.refresh()
 	
 	def show_btl_messages(self):
@@ -546,7 +554,15 @@ class Display(object):
 		self.btl_msgbox.erase()
 		self.btl_msgbox.box()
 		for i in range(len(msgs)):
-			self.btl_msgbox.addstr(self.btl_msgboxsize[0] - 2 - i, 1, msgs[i])
+			printstring = msgs[i] 
+			try:
+				self.msgbox.addstr(self.msgboxsize[0] - 2 - i, 1, printstring)
+			except:
+				printstring = printstring.replace('[', '[[')
+				printstring = printstring.replace(']', ']]')
+				printstring = printstring.replace('{', '{{')
+				printstring = printstring.replace('}', '}}')
+				self.btl_msgbox.addstr(self.btl_msgboxsize[0] - 2 - i, 1, printstring)
 		terminal.refresh()
 
 
