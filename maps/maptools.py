@@ -703,7 +703,7 @@ def add_stairs(map, up=True, down=True):
 		ydown = y
 
 
-def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None, biome=None):
+def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None, biome=None, inject_char=None):
 	ov_ht = len(game.overworld_minimap) - 1
 	ov_wd = len(game.overworld_minimap[0]) - 1
 	search = True
@@ -730,15 +730,22 @@ def overworld_inject(game, zone, entry_level = 0, newchar=None, mask=None, biome
 
 		ov_x2, ov_y2 = game.overworld.find_empty_position(level=ov_level)
 
-		z_x, z_y = zone.find_empty_position(level=entry_level)
 		z_entity = entities.ZoneWarp(game)
-		z_entity.x = z_x
-		z_entity.y = z_y
+
 		z_entity.new_x = ov_x2
 		z_entity.new_y = ov_y2
 		z_entity.new_zone = 'Overworld'
 		z_entity.char = '\x1D'
-		zone.add_entity(z_entity, entry_level)
+
+		if inject_char is None:
+			z_x, z_y = zone.find_empty_position(level=entry_level)
+			z_entity.x = z_x
+			z_entity.y = z_y
+			zone.add_entity(z_entity, entry_level)
+		else:
+			Positional_Map_Insert(zone, z_entity, inject_char, level=entry_level, replace=True)
+			z_x = z_entity.x
+			z_y = z_entity.y
 
 		ov_entity = entities.ZoneWarp(game)
 		ov_entity.x = ov_x2

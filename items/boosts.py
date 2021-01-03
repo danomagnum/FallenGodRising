@@ -111,6 +111,22 @@ class LuckBoost(Item):
 		print('{} used {} and gained {} luck'.format(target.name,self.name, gain))
 
 
+class MoveBoost(Item):
+	def config(self):
+		self.name = 'Action Shard'
+		self.weigth = 1
+		self.target_type = ANY
+		self.value = 100
+		self.rarity = 0.01
+		self.helptext = 'Permanently Boost Moves'
+		self.char = '\x0E'
+
+	def use(self, target):
+		for move in target.moves:
+			gain = random.randint(1, 2)
+			move.max_mp += gain
+			print("{}'s move {} gained {} max mp.".format(target.name,move.name, gain))
+	
 
 
 base_items = [ExpBoost, StrBoost, DefBoost, ArcStrBoost, ArcDefBoost, SpdBoost, LuckBoost]
