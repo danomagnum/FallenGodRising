@@ -12,6 +12,7 @@ import entities
 import maps.maptools as maptools
 import vision
 import settings
+import battle
 
 FOG_CHAR = '\x13'
 FOG_CHAR_SEEN = '\x14'
@@ -309,44 +310,44 @@ class Zone(object):
 				intersectors = [mobs.okay, mobs.trash]
 		elif depth < 0.3:
 			#choose one trash and one okay or two okay mobs per group or three trash
-			rv = random.random
+			rv = random.random()
 			if rv < 0.33:
 				intersectors = [mobs.okay, mobs.trash]
 			elif rv < 0.66:
 				intersectors = [mobs.okay, mobs.okay]
 			else:
-				intersectors = [mobs.trash, mobs.trash, trash]
+				intersectors = [mobs.trash, mobs.trash, mobs.trash]
 		elif depth < 0.6:
 			#two okay mobs per group  or two okay and one trash
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.okay, mobs.okay]
 			else:
 				intersectors = [mobs.okay, mobs.okay, mobs.trash]
 		elif depth < 0.7:
 			#two okay mobs per group or one good mob and two trash
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.okay, mobs.okay]
 			else:
 				intersectors = [mobs.good, mobs.trash, mobs.trash]
 		elif depth < 0.8:
 			#two good mobs per group or one good mob and two okay
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.good, mobs.good]
 			else:
 				intersectors = [mobs.good, mobs.okay, mobs.okay]
 		elif depth < 0.9:
 			#two good or three good
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.good, mobs.good]
 			else:
 				intersectors = [mobs.good, mobs.good, mobs.good]
 		else:
 			#three good or two good and one okay
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.good, mobs.good, mobs.okay]
 			else:
@@ -369,44 +370,44 @@ class Zone(object):
 				intersectors = [mobs.okay, mobs.trash]
 		elif depth < 0.3:
 			#choose one trash and one okay or two okay mobs per group or three trash
-			rv = random.random
+			rv = random.random()
 			if rv < 0.33:
 				intersectors = [mobs.okay, mobs.trash]
 			elif rv < 0.66:
 				intersectors = [mobs.okay, mobs.okay]
 			else:
-				intersectors = [mobs.trash, mobs.trash, trash]
+				intersectors = [mobs.trash, mobs.trash, mobs.trash]
 		elif depth < 0.6:
 			#two okay mobs per group  or two okay and one trash
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.okay, mobs.okay]
 			else:
 				intersectors = [mobs.okay, mobs.okay, mobs.trash]
 		elif depth < 0.7:
 			#two okay mobs per group or one good mob and two trash
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.okay, mobs.okay]
 			else:
 				intersectors = [mobs.good, mobs.trash, mobs.trash]
 		elif depth < 0.8:
 			#two good mobs per group or one good mob and two okay
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.good, mobs.good]
 			else:
 				intersectors = [mobs.good, mobs.okay, mobs.okay]
 		elif depth < 0.9:
 			#two good or three good
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.good, mobs.good]
 			else:
 				intersectors = [mobs.good, mobs.good, mobs.good]
 		else:
 			#three good or two good and one okay
-			rv = random.random
+			rv = random.random()
 			if rv < 0.5:
 				intersectors = [mobs.good, mobs.good, mobs.okay]
 			else:
@@ -705,12 +706,77 @@ def overworld_gen(maze):
 	return output
 
 class LinearZone(Zone):
+	def moblist(self, depth):
+		intersectors = []
+		if depth < 0.1:
+			#choose one trash mob or one okay mob per group
+			if random.random() < 0.5:
+				intersectors = [mobs.trash]
+			else:
+				intersectors = [mobs.okay]
+		elif depth < 0.2:
+			#choose one okay mob or one okay and one trash mob per group.
+			if random.random() < 0.5:
+				intersectors = [mobs.okay]
+			else:
+				intersectors = [mobs.okay, mobs.trash]
+		elif depth < 0.3:
+			#choose one trash and one okay or two okay mobs per group or three trash
+			rv = random.random()
+			if rv < 0.33:
+				intersectors = [mobs.okay, mobs.trash]
+			elif rv < 0.66:
+				intersectors = [mobs.okay, mobs.okay]
+			else:
+				intersectors = [mobs.trash, mobs.trash, mobs.trash]
+		elif depth < 0.6:
+			#two okay mobs per group  or two okay and one trash
+			rv = random.random()
+			if rv < 0.5:
+				intersectors = [mobs.okay, mobs.okay]
+			else:
+				intersectors = [mobs.okay, mobs.okay, mobs.trash]
+		elif depth < 0.7:
+			#two okay mobs per group or one good mob and two trash
+			rv = random.random()
+			if rv < 0.5:
+				intersectors = [mobs.okay, mobs.okay]
+			else:
+				intersectors = [mobs.good, mobs.trash, mobs.trash]
+		elif depth < 0.8:
+			#two good mobs per group or one good mob and two okay
+			rv = random.random()
+			if rv < 0.5:
+				intersectors = [mobs.good, mobs.good]
+			else:
+				intersectors = [mobs.good, mobs.okay, mobs.okay]
+		elif depth < 0.9:
+			#two good or three good
+			rv = random.random()
+			if rv < 0.5:
+				intersectors = [mobs.good, mobs.good]
+			else:
+				intersectors = [mobs.good, mobs.good, mobs.good]
+		else:
+			#three good or two good and one okay
+			rv = random.random()
+			if rv < 0.5:
+				intersectors = [mobs.good, mobs.good, mobs.okay]
+			else:
+				intersectors = [mobs.good, mobs.good, mobs.good]
+		return intersectors
+
+
 	def level_populate(self, level, visit_no):
 		gen_level = 1
 		if self.game.player is not None:
 			gen_level = self.game.player.combatants[0].level
-
 		gen_level += self.game.get_var('GLO')
+
+		# a metric for how far we are into the dungeon
+		depth = level / self.levels
+
+		print('visit {}'.format(visit_no))
 
 		if visit_no < 2:
 			#if I only want to populate on the first visit
@@ -724,9 +790,22 @@ class LinearZone(Zone):
 				else:
 					newitem = items.gen_base_item(self.game)
 				maptools.Random_Map_Insert(self, entities.Treasure(self.game, [newitem,]))
-			mob_count = random.randint(0, 6)
+
+			mob_min = random.randint(0,2)
+			mob_max = random.randint(5,7)
+			mob_count = random.randint(mob_min, mob_max)
+			print('mobs: {}'.format(mob_count))
+
 			for m in range(mob_count):
-				moblist = utility.select_by_level(level, self.mobchoices)
-				maptools.Random_Map_Insert(self, mobs.party(self.game, moblist[0], moblist[1], gen_level, moblist[3:], moblist[2]))
+				intersectors = self.moblist(depth)
+				print('intersectors: {}'.format(intersectors))
+				mob_party = []
+				for i in intersectors:
+					mob = self.mob_list.intersection(i)
+					if mob:
+						mob_party.append(random.sample(mob, 1)[0])
+						
+				if mob_party:
+					entity = maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, gen_level, mob_party, mob_party[0].__name__))
 
 

@@ -12,14 +12,15 @@ ZONENAME = 'Pyramid'
 class ThisZone(zone.LinearZone):
 	def config(self):
 		#battle AI to use, #world AI to use, name, *mobs
+		self.mob_list = [mobs.dromedary.Dromedary,
+		                 mobs.dromedary.Bactrian,
+				 mobs.minotaur.Minotaur,
+				 mobs.skeleton.Skeleton,
+				 mobs.snake.Snake,
+				 mobs.snake.Serpent]
+		self.mob_list = set(self.mob_list)
 		self.music = 'Purgatory'
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.imp.Imp]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.imp.Imp]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard]),
-		                   (9, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Wizard, mobs.sorcerer.Sorcerer, mobs.sorcerer.Sorcerer]),
-		                   (13, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Sorcerer, mobs.sorcerer.Sorcerer, mobs.sorcerer.Wizard]),
-		                   (17, [battle.Random_AI, entities.BasicAI1, 'wizard', mobs.sorcerer.Wizard, mobs.sorcerer.Wizard, mobs.sorcerer.Archmage])]
+
 	def level_019(self):
 		gen_level = 1
 		if self.game.player is not None:

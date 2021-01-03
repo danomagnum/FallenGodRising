@@ -11,14 +11,20 @@ ZONENAME = 'Sewers'
 
 class ThisZone(zone.LinearZone):
 	def config(self):
-		#battle AI to use, #world AI to use, name, *mobs
-		self.mobchoices = [(1, [battle.Random_AI, entities.BasicAI1, 'rat', mobs.rat.Rat]),
-		                   (2, [battle.Random_AI, entities.BasicAI1, 'spider', mobs.mobs.Spider]),
-		                   (3, [battle.Random_AI, entities.BasicAI1, 'spider', mobs.mobs.Spider, mobs.mobs.Spider]),
-		                   (5, [battle.Random_AI, entities.BasicAI1, 'imp', mobs.imp.Imp]),
-		                   (9, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.mobs.Skeleton]),
-		                   (13, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.mobs.Skeleton, mobs.mobs.Spider]),
-		                   (17, [battle.Random_AI, entities.BasicAI1, 'skeleton', mobs.mobs.Skeleton, mobs.mobs.Skeleton, mobs.mobs.Spider])]
+		self.mob_list = [mobs.rat.LittleRat,
+		                 mobs.rat.Rat,
+		                 mobs.skeleton.Skeleton,
+				 mobs.orc.Orc,
+				 mobs.orc.Troll,
+				 mobs.snake.Snake,
+				 mobs.snake.Serpent,
+				 mobs.zombie.Zombie,
+				 mobs.imp.Imp,
+				 mobs.echo.Echo,
+				 mobs.echo.Shadow]
+
+		self.mob_list = set(self.mob_list)
+
 	def level_019(self):
 		gen_level = 1
 		if self.game.player is not None:
