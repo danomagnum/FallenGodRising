@@ -60,7 +60,7 @@ def genzone(game):
 	alter = entities.Alter(game)
 	backpack = items.Backpack(game)
 	for x in range(random.randint(2,6)):
-		p = items.boosts.ArcDefBoost(game)
+		p = items.boosts.LuckBoost(game)
 		backpack.store(p)
 	alter.backpack = backpack
 	game.get_var('Alters').append(alter)

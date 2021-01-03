@@ -47,6 +47,7 @@ import maps.lair
 import maps.sewers
 import maps.town
 import maps.home
+import maps.lighthouse
 
 import music
 
@@ -162,9 +163,10 @@ try:
 					zone5 = maps.fortress.genzone(game)
 					#print('f done')
 					#display.show_messages()
-					zone3 = maps.lair.genzone(game)
+					zone6 = maps.lair.genzone(game)
 					#print('l done')
 					#display.show_messages()
+					zone7 = maps.lighthouse.genzone(game)
 
 					homezone = maps.home.genzone(game)
 

@@ -12,7 +12,7 @@ import settings
 
 class Battler(ActingEntity):
 	def config(self):
-		self.music = 'battle.mid'
+		self.music = 'battle'
 		self.blocking = True
 	def collide(self, entity, zone):
 		#self.enabled = False
