@@ -58,9 +58,9 @@ class BattleRobe(Gear):
 		self.target_type = EQUIP_BODY
 		self.char = '\x03'
 	def arcane_defense(self, initial):
-		return initial - (self.power * self.power)
+		return initial + (self.power * self.power)
 	def physical_defense(self, initial):
-		return initial + (self.power * self.power / 3.0)
+		return initial - (self.power * self.power / 3.0)
 
 class Plate(Gear):
 	def config(self):
