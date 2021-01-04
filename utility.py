@@ -1,4 +1,5 @@
 import random
+import math
 import inspect
 
 def call_all_recursive(value, method, instance):
@@ -208,3 +209,12 @@ def change_class_of_instance(instance, *newclasses):
 	return instance
 
 
+def dist_from_entity(entity1, entity2):
+	x0 = entity1.x
+	y0 = entity1.y
+	x1 = entity2.x
+	y1 = entity2.y
+	dx = x1 - x0
+	dy = y1 - y0
+	sumsq = dx * dx + dy * dy
+	return math.sqrt(sumsq)

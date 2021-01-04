@@ -101,7 +101,7 @@ class OverworldZone(zone.Zone):
 
 					#parties = []
 					mob_level = random.choice([gen_level, self.depth()])
-					maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.BasicAI1, mob_level, chosen_mobs))
+					maptools.Random_Map_Insert(self, mobs.party(self.game, battle.Random_AI, entities.PassiveTillClose, mob_level, chosen_mobs))
 				except:
 					pass
 

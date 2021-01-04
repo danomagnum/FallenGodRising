@@ -1,6 +1,7 @@
 from main import Entity, ActingEntity
 import battle
 import random
+import utility
 from constants import *
 #import characters
 import mobs
@@ -277,6 +278,74 @@ class DoomAI(Battler):
 	def tick(self, zone):
 		self.state(zone)
 
+
+
+class PassiveTillClose(Battler):
+	def config(self):
+		self.state = self.standby
+		self.standby_delay = 2
+		self.standby_counter = 0
+		self.flee_counter = 0
+		self.configured = 1
+		self.movingdir = None
+		self.target_map  = None
+
+	def standby(self, zone):
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			if utility.dist_from_entity(self, self.game.player) < 3:
+				self.standby_counter = 0
+				self.state = self.advancing
+
+	def battle_run(self):
+		self.state = self.flee
+
+	def advancing(self, zone):
+		dir = None
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			dir = self.toward_entity(self.game.player)
+
+		if dir is not None:
+			self.move(zone, dir)
+			self.target_map = self.game.player.dist_map
+		else:
+			if self.target_map is not None:
+				dir = self.follow_distmap(self.target_map)
+				if dir is None:
+					self.target_map = None
+					self.state = self.standby
+				else:
+					self.move(zone, dir)
+			else:
+				self.state = self.standby
+			
+	def flee(self, zone):
+		dir = None
+		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
+			dir = self.flee_entity(self.game.player)
+
+		if dir is not None:
+			self.move(zone, dir)
+			self.target_map = self.game.player.dist_map
+		else:
+			self.flee_counter += 1
+			if self.target_map is not None:
+				dir = self.flee_distmap(self.target_map)
+				if dir is None:
+					self.target_map = None
+					self.state = self.standby
+				else:
+					self.move(zone, dir)
+			else:
+				self.state = self.standby
+
+			if self.flee_counter > 5:
+				self.state = self.standby
+
+	def tick(self, zone):
+		self.state(zone)
+
+
+
 class BasicAI1(Battler):
 	STANDBY = 1
 	AGRESSIVE = 2
@@ -314,6 +383,7 @@ class BasicAI1(Battler):
 
 			if self.standby_counter < 1:
 				self.state = self.STANDBY
+
 
 
 class NPC(Entity):
