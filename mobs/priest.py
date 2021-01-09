@@ -17,7 +17,7 @@ class Priest(Character):
 		self.base_physical_defense = 52
 		self.base_arcane_strength = 40
 		self.base_arcane_defense = 40
-		self.base_speed = 41
+		self.base_speed = 56
 		self.base_luck = 100
 		self.element_rate = 0.2
 		self.element_pref = [ elements.Wind, elements.Light, elements.Dark]

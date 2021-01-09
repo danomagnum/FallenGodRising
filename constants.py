@@ -11,6 +11,8 @@ INACTIVE = 8 # One of the non-active enemies
 RAND_ENEMY = 9 # Random Enemy
 RAND_ALLY = 10 # Random Friendly
 
+WORLD = 50
+
 USER = SELF
 
 EQUIP_HEAD = 100

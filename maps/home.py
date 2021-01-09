@@ -62,6 +62,8 @@ class HomeZone(zone.Zone):
 			for x in range(3):
 				p = items.status.HealAll(self.game)
 				backpack.store(p)
+			tent = items.items.Tent_item(self.game)
+			backpack.store(tent)
 			backpack.gold = random.randint(20, 200)
 			t.backpack = backpack
 			t.char = '\x92'
