@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #coding: utf-8 
 
-from main import Entity
+from entities import Entity
 from constants import *
 import items
 import math

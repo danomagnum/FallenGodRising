@@ -34,6 +34,7 @@ class FireAnt(Character):
 		self.base_arcane_defense = 80
 		self.base_speed = 30
 		self.base_luck = 100
+		self.element_pref = [elements.Fire]
 
 
 
