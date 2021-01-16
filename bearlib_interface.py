@@ -967,7 +967,9 @@ class Display(object):
 			if settings.music_mode == 0:
 				music_mode = 'Music (midi)'
 			elif settings.music_mode == 1:
-				music_mode = 'Music (ogg)'
+				music_mode = 'Music (fb)'
+			elif settings.music_mode == 2:
+				music_mode = 'Music (gu)'
 
 
 
@@ -999,11 +1001,11 @@ class Display(object):
 				if settings.battle_speed > 4:
 					settings.battle_speed = 0
 			elif setting == music_mode:
-				if settings.music_mode == 0:
-					settings.music_mode = 1
-				elif settings.music_mode == 1:
+				if settings.music_mode == 2:
 					settings.music_mode = 0
-				print('Restart Requried To Take Effect')
+				else:
+					settings.music_mode += 1
+				music_queue.put(['modechange', settings.music_mode])
 			else:
 				settingmenu = False
 		settings._save()
