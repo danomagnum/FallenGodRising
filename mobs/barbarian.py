@@ -86,3 +86,5 @@ class Warlord(Character):
 
 
 starters = [Barbarian]
+okay = [Barbarian]
+good = [Juggernaut, Warlord]

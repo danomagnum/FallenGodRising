@@ -16,24 +16,32 @@ import os
 
 BASE_DIRECTORY = 'data/music/'
 
-modes = ['.mid', '.ogg']
+modes = {0:'.mid',
+         1:'_fb.ogg',
+         2:'_gu.ogg'}
 
 def thread(queue):
 	import pygame
 
 	pygame.mixer.init()
-	filename = ''
+	mode = settings.music_mode
+	songname = ''
 	while True:
 		msg = queue.get()
 		if msg[0] == 'play':
 			songname = msg[1]
-			filename = os.path.join(BASE_DIRECTORY, songname) + modes[settings.music_mode]
+			filename = os.path.join(BASE_DIRECTORY, songname) + modes[mode]
 			pygame.mixer.music.load(filename)
 			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
 		elif msg[0] == 'fadeout':
 			pygame.mixer.music.fadeout(1000)
 		elif msg[0] == 'volume':
 			pygame.mixer.music.set_volume(msg[1])
+		elif msg[0] == 'modechange':
+			mode = msg[1]
+			filename = os.path.join(BASE_DIRECTORY, songname) + modes[mode]
+			pygame.mixer.music.load(filename)
+			pygame.mixer.music.play(loops = -1, start=0.0, fade_ms=1000)
 		elif msg[0] == 'quit':
 			return
 

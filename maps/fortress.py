@@ -13,7 +13,7 @@ ZONENAME = 'Fortress'
 class FortressZone(zone.LinearZone):
 	def config(self):
 		self.music = 'Adventure'
-		self.mob_list = set([mobs.barbarian.Barbarian, mobs.barbarian.Juggernaut, mobs.barbarian.Warlord])
+		self.mob_list = set([mobs.wanderer.Wanderer, mobs.barbarian.Barbarian, mobs.barbarian.Juggernaut, mobs.barbarian.Warlord])
 
 #####################
 # populate the zone with entities
@@ -30,7 +30,7 @@ def genzone(game):
 		lev = grid.gridlevel()
 		if l == 0:
 			maptools.add_stairs(lev, up=False)
-		elif l == 3:
+		elif l == 11:
 			maptools.add_stairs(lev, down=False)
 		else:
 			maptools.add_stairs(lev)
