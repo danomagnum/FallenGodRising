@@ -42,7 +42,9 @@ class Item(utility.Serializable):
 
 	def use(self, target = None):
 		pass
+
 	def __str__(self):
 		return self.name
 
-
+	def usable(self):
+		return True
