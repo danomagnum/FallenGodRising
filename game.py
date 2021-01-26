@@ -48,6 +48,7 @@ import maps.sewers
 import maps.town
 import maps.home
 import maps.lighthouse
+import maps.final
 
 import music
 
@@ -167,6 +168,7 @@ try:
 					#print('l done')
 					#display.show_messages()
 					zone7 = maps.lighthouse.genzone(game)
+					zone8 = maps.final.genzone(game)
 
 					homezone = maps.home.genzone(game)
 
