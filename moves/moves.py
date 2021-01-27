@@ -207,6 +207,112 @@ class Move(utility.Serializable):
 			if self.mp < self.max_mp:
 				self.mp += 1
 
+
+class FixedDmgMove(Move):
+	def attack(self, user, targets): # do whatever the attack needs to do
+		if (self.mp > 0):
+			self.mp -= 1
+		else:
+			msg = '{} is out of MP to use move {}'.format(user.name,self.name)
+			self.mp = 0
+			if 0.2 * user.luck > random.random():
+				msg += ' but still attacks.'
+				print(msg)
+			else:
+				print(msg)
+				return
+		target_coefficient = 1.1 / len(targets)
+
+		for target in targets:
+			# figure out if the move hits.
+			hit_chance = ((user.speed/target.speed)/9) + user.accuracy/target.evasion * self.accuracy
+			damage = self.power
+
+			if hit_chance * user.luck > randval:
+
+				# calculate whether it is a critical hit:
+				crit_metric = CRIT_RATE * (user.luck / target.luck) * (user.speed / target.speed)
+				if random.random() < crit_metric:
+					crit_factor = 2 # crit
+					print('Crit!')
+				else:
+					crit_factor = 1
+
+				if self.power != 0: # zero power moves are status only
+					if self.physical[0]:
+						attack_str = user.physical_strength
+					else:
+						attack_str = user.arcane_strength
+					if self.physical[1]:
+						attack_def = target.physical_defense
+					else:
+						attack_def = target.arcane_defense
+
+					user_attack_count = len(user.moves)
+					if user_attack_count > MOVE_CUTOFF:
+						# If the user has more than MOVE_CUTOFF moves, start nerfing all their moves
+						# Jack of all trades, master of none kind of thing.
+						# causes a tradeoff between move coverage and move power
+						power_factor = MOVE_NERF_AFTER_CUTOFF ** (user_attack_count - MOVE_CUTOFF)
+						damage = damage * power_factor
+
+					# Do elemental effects
+					for atk_element in self.elements:
+						for target_element in target.elements:
+							damage *= atk_element.effectiveness(target_element, self.game.biome())
+						for user_element in user.elements:
+							if user_element == atk_element:
+								damage *= atk_element.bonus
+
+					self.uses += 1
+
+					# This makes athe attacks do more damage as you've got more experience using them
+					if damage > 0:
+						damage += ((damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+					else:
+						damage -= ((-damage + 1) * 3 * min(self.uses, 100.0) / 100.0 + 5) / 10.0
+
+					#use the attacker and defender item attack and defend checks.
+					for item in user.equipment.all_items():
+						damage = item.attack(damage, user, target)
+					for item in target.equipment.all_items():
+						damage = item.attack(damage, target, user)
+
+					# final damage randomization and adjustment based on luck
+					if NEWDIST:
+						# Using the triangle distribution now so the mean can be off-center
+						low = damage - (damage/8.0)
+						high = damage + (damage/8.0)
+						mode = max(min(high, damage * user.luck), low)
+						damage = random.triangular(low, high, mode)# normal distribution with stdev of 8% for randomness
+						#print low, high, mode, damage
+					else:
+						damage = random.normalvariate(damage, damage/8.0) # normal distribution with stdev of 8% for randomness
+					if damage >= 0:
+						damage = max(1,damage)
+					else:
+						damage = min(-1,damage)
+
+					#apply the damage
+					target.hp -= int(damage)
+
+					if user == target:
+						print('{} used move {} on themself for {}'.format(user.name,self.name, int(damage)))
+					else:
+						print('{} used move {} on {} for {}'.format(user.name,self.name, target.name, int(damage)))
+
+				else:
+					if user == target:
+						print('{} used move {} on themself'.format(user.name,self.name, target.name))
+					else:
+						print('{} used move {} on {}'.format(user.name,self.name, target.name))
+
+				utility.call_all('effect', self, user, target, damage)
+			else:
+				print('{} missed with move {} against {}'.format(user.name, self.name, target.name))
+
+
+
 class SelfDestruct(Move):
 	def config(self):
 		self.name = 'Self Destruct'
