@@ -873,9 +873,9 @@ class Inn(Entity):
 
 		print('Equip Value: {}'.format(equip_value))
 
-		equip_cost = equip_value / 3
+		equip_cost = equip_value / 30
 
-		cost = max(equip_cost, cost)
+		cost = int(max(equip_cost, cost))
 
 		if entity.is_player:
 			choice = self.game.display.popup('Sleep at the Inn? Cost: {}'.format(cost), ['Sleep', 'Leave'])
