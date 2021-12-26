@@ -9,7 +9,7 @@ class ExpBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Gain Some EXP.'
+		self._helptext = 'Gain Some EXP.'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -27,7 +27,7 @@ class StrBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Strength'
+		self._helptext = 'Permanently Boost Strength'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -42,7 +42,7 @@ class DefBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Defense'
+		self._helptext = 'Permanently Boost Defense'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -57,7 +57,7 @@ class ArcStrBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Arcane Strength'
+		self._helptext = 'Permanently Boost Arcane Strength'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -72,7 +72,7 @@ class ArcDefBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Arcane Defense'
+		self._helptext = 'Permanently Boost Arcane Defense'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -87,7 +87,7 @@ class SpdBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Speed'
+		self._helptext = 'Permanently Boost Speed'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -102,7 +102,7 @@ class LuckBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Luck'
+		self._helptext = 'Permanently Boost Luck'
 		self.char = '\x0E'
 
 	def use(self, target):
@@ -118,7 +118,7 @@ class MoveBoost(Item):
 		self.target_type = ANY
 		self.value = 100
 		self.rarity = 0.01
-		self.helptext = 'Permanently Boost Moves'
+		self._helptext = 'Permanently Boost Moves'
 		self.char = '\x0E'
 
 	def use(self, target):

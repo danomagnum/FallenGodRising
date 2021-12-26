@@ -12,7 +12,7 @@ class Item(utility.Serializable):
 		self.weight = 0
 		self.value = 0
 		self.rarity = 0.5
-		self.helptext = ''
+		self._helptext = ''
 		self.char = char
 		if uses is not None:
 			self.uses = uses
@@ -20,6 +20,9 @@ class Item(utility.Serializable):
 		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 		self.level = level
+	
+	def helptext(self):
+		return self._helptext
 
 	@property
 	def name(self):

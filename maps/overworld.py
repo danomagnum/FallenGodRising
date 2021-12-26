@@ -64,7 +64,8 @@ class OverworldZone(zone.Zone):
 
 		if visit_no < 2:
 			#if I only want to populate on the first visit
-			item_count = random.randint(0,2)
+			#item_count = random.randint(1,4)
+			item_count = int(random.triangular(1, 8, 2)) # 1,8,2 averages out to about 3
 			for i in range(item_count):
 				chance = random.random()
 				if chance < 0.3:

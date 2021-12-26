@@ -15,9 +15,9 @@ class HealAll(Item):
 		self.name = 'Heal All'
 		self.target_type = MULTI_ALLY
 		self.weight = 1
-		self.value = 500
+		self.value = 100
 		self.rarity = 0.1
-		self.helptext = 'Clear All Status'
+		self._helptext = 'Clear All Status'
 		self.char = '\x04'
 
 	def use(self, target):
@@ -30,7 +30,7 @@ class Potion(Item):
 		self.target_type = ANY
 
 		self.weight = 1
-		self.value = 300
+		self.value = 20
 		self.rarity = 0.3
 
 		self.effects = []
@@ -54,6 +54,10 @@ class Potion(Item):
 			target_effect = random.choice([PHYSTR, PHYDEF, SPCSTR, SPCDEF, SPEED, HP, MAXHP, ACCURACY, EVASION, LUCK, 'Poison'])
 			target_power = random.randrange(85, 115)/ 100.0
 
+			#High chance to just be an HP potion
+			if random.random() > 0.7:
+				target_effect = HP
+
 			if target_effect == HP:
 				self.effects.append(effects.healing.Recovery())
 			elif target_effect == 'Poison':
@@ -63,7 +67,7 @@ class Potion(Item):
 
 		self.prefixes = [e.name for e in self.effects]
 
-		self.helptext = 'Status Effect Potion'
+		self._helptext = 'Status Effect Potion'
 		self.char = '\x04'
 
 	def use(self, target):

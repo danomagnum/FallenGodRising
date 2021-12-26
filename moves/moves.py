@@ -36,13 +36,16 @@ class Move(utility.Serializable):
 			default_target=ACTIVE
 		self.default_target = default_target
 	
-		self.helptext = ''
+		self._helptext = ''
 
 		utility.call_all('config', self)
 		utility.call_all('postconfig', self)
 
 		self.ticks = 0
 		self._mp = self.max_mp
+
+	def helptext(self):
+		return self._helptext
 
 	@property
 	def mp(self):

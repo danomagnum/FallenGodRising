@@ -117,6 +117,13 @@ class Zone(object):
 		utility.call_all('config', self)
 		self.biome_map = None
 
+	def get_element(self):
+		if self.biome() is None:
+			return elements.Normal
+		else:
+			return elements.biomes[self.biome()]
+		
+
 	def fog_gen(self):
 		
 		for level in self.maps:
@@ -140,6 +147,12 @@ class Zone(object):
 			fog = vision.View(self.map, self.fog, ecoords)
 			fog.do_fov(self.game.player.x, self.game.player.y, 25)
 			self.fog[self.game.player.y][self.game.player.x] = ' '
+
+	def clear_fog(self):
+		for y in range(len(self.fog)):
+			for x in range(len(self.fog[y])):
+				self.fog[y][x] = ' '
+
 		
 	def get_music(self):
 		return self.music
@@ -798,7 +811,7 @@ class LinearZone(Zone):
 
 			for m in range(mob_count):
 				intersectors = self.moblist(depth)
-				print('intersectors: {}'.format(intersectors))
+				#print('intersectors: {}'.format(intersectors))
 				mob_party = []
 				for i in intersectors:
 					mob = self.mob_list.intersection(i)
