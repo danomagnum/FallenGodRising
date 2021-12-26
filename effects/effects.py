@@ -12,8 +12,11 @@ class Status(object):
 		self.life = 0
 		self.max_life = 0
 		utility.call_all('config', self)
+		self._helptext = ''
 
 		self.config()
+	def helptext(self):
+		return self._helptext
 	def config(self):
 		pass
 	def pre_battle(self, effected):
@@ -71,6 +74,7 @@ class StatMod(Status):
 	def __init__(self, multiplier, stat, name=None):
 		self.multiplier = multiplier
 		self.stat = stat
+		self._helptext = ''
 		Status.__init__(self, name=name)
 	def config(self):
 		typestr = ''
@@ -106,7 +110,7 @@ class StatMod(Status):
 			multstr = '--'
 		else:
 			multstr = ''
-		#self.name = '{} {}%'.format(self.stat,int(self.multiplier * 100))
+		self._helptext += '{} {}%'.format(self.stat,int(self.multiplier * 100))
 		self.name = typestr + multstr
 		self.max_life = 5
 

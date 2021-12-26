@@ -14,13 +14,14 @@ def town_entry(zone):
 	#zone.game.set_music('town')
 	if zone.level_visits[zone.level] == 1:
 		#first visit to town. populate NPCs
-		e = entities.Shop(zone.game)
 		gen_level = zone.game.player.level
-		e.backpack.gold = 100
 
+		e = entities.Shop(zone.game)
+		e.backpack.gold = 100
 		e.backpack.store(items.gen_gear(zone.game, gen_level))
 		e.backpack.store(items.scrolls.gen_movescroll(zone.game))
 		e.backpack.store(items.gen_base_item(zone.game))
+
 		for potion in range(10):
 			e.backpack.store(items.status.Potion(zone.game))
 			e.backpack.store(items.status.HealAll(zone.game))
@@ -30,6 +31,7 @@ def town_entry(zone):
 
 		i = entities.Inn(zone.game)
 		maptools.Random_Map_Insert(zone, i)
+		zone.clear_fog()
 
 def genzone(game, townname):
 	game.progress()

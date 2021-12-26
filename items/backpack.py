@@ -15,7 +15,7 @@ class ItemSlot(list):
 		return self[0].value
 
 	def helptext(self):
-		return self[0].helptext
+		return self[0].helptext()
 	
 	def take(self):
 		if len(self) >= 1:

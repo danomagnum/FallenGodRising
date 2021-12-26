@@ -22,7 +22,7 @@ class Character(object):
 		self.equipment = main.Equipment(game)
 		# stat growth rate for p.str, p.def, s.str, s.def, speed, maxhp
 		self.coefficients = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-		self.helptext = ''
+		self._helptext = ''
 		self.moves = []
 		self._level = 1
 		self.stat_randomizer()
@@ -35,6 +35,9 @@ class Character(object):
 		self.full_heal()
 		self._exp = self.exp_at_level(self.level)
 		self.initialized = True
+
+	def helptext(self):
+		return self._helptext
 
 	@property
 	def elements(self):
@@ -57,6 +60,7 @@ class Character(object):
 		# determine if this mob should have an element
 		if self.element_pref is not None:
 			if random.random() < self.element_rate:
+				#print('{} should have an element'.format(self.name))
 				max_elements = min(2, len(self.element_pref))
 				element_count = random.choice([1,1,1,1,1,1,max_elements])
 				self._elements = random.sample(self.element_pref, element_count)

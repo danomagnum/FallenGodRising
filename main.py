@@ -224,7 +224,10 @@ class Equipment(object):
 		self.Right = None
 		self.Hands = None
 		self.Token = None
-		self.helptext = ''
+		self._helptext = ''
+
+	def helptext(self):
+		return self._helptext
 	
 	def equip(self, item):
 		return_items = []

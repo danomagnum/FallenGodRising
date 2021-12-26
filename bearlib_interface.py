@@ -84,7 +84,6 @@ def font_setup():
 def initialize():
 	terminal.open()
 	terminal.set("window: size=200x50, title='Fallen God Rising';")
-	terminal.set("window: size=200x50;")
 	terminal.set("input: filter=[keyboard, mouse]")
 	font_setup()
 
@@ -702,6 +701,7 @@ class Display(object):
 			self.overworldbox.addstr(1, 18, 'Biome: {}'.format(str(self.game.biome())))
 			self.overworldbox.addstr(2, 18, 'Gold: {}'.format(str(self.game.player.backpack.gold)))
 			self.overworldbox.addstr(3, 18, 'Alters: {}'.format(str(len(self.game.get_var('Alters')))))
+			self.overworldbox.addstr(5, 18, 'Danger: {:,}'.format(self.game.zone.depth() + self.game.get_var('GLO')))
 			self.overworldbox.addstr(4, 18, 'Turn: {:,}'.format(self.game.ticks))
 		except:
 			pass
@@ -828,7 +828,7 @@ class Display(object):
 		
 		box.addstr(8, 1, 'Target: {}'.format(targets[move.default_target]), None)
 
-		box.addstr(9, 1, "{}".format(move.helptext), None)
+		box.addstr(9, 1, "{}".format(move.helptext()), None)
 		
 
 

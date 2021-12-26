@@ -41,7 +41,7 @@ class Entity(object):
 		self.enabled = True
 
 		self.is_player = is_player
-		self.helptext = ''
+		self._helptext = ''
 
 		self.passive = False
 		self.blocking = False
@@ -63,6 +63,8 @@ class Entity(object):
 
 		if self.defeated_text is None:
 			self.defeated_text = '{} was defeated'.format(self.name)
+	def helptext(self):
+		return self._helptext
 
 	def action_accumulate(self):
 		return 0

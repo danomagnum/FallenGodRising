@@ -11,5 +11,5 @@ debug = True
 fog = True
 fog_old = False
 music = True
-music_mode = 0
+music_mode = 1
 start_level = 2

@@ -17,7 +17,7 @@ class Key(Item):
 		self.weight = 0
 		self.value = 100
 		self.rarity = 0.5
-		self.helptext = 'Opens a generic door'
+		self._helptext = 'Opens a generic door'
 
 class Tent(entities.Entity):
 	def config(self):
@@ -46,7 +46,7 @@ class Tent_item(Item):
 		self.weight = 0
 		self.value = 1000
 		self.rarity = 0.1
-		self.helptext = 'A place to recover health'
+		self._helptext = 'A place to recover health'
 		self.target_type = WORLD
 
 	def use(self):
