@@ -2,13 +2,7 @@ import battle
 import random
 import utility
 from constants import *
-#import characters
-import mobs
-import sys
-from copy import deepcopy
-#import curses_interface as graphics_interface
 import bearlib_interface as graphics_interface
-import settings
 import items
 
 
@@ -123,12 +117,6 @@ class Entity(object):
 	def config(self):
 		pass
 
-	def get_available(self):
-		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
-	
-	def get_standby(self):
-		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
-	
 	def tick(self, zone):
 		pass
 
@@ -291,44 +279,6 @@ class Entity(object):
 					return RIGHT
 		return None
 
-
-
-	def toward_entity(self, entity):
-		y = self.y
-		x = self.x
-		up = -1
-		down = -1
-		left = -1
-		right = -1
-		if entity.dist_map:
-			ymax = len(entity.dist_map) - 1
-			xmax = len(entity.dist_map[0]) - 1
-			if y > 0:
-				up = entity.dist_map[y - 1][x]
-			if y < ymax:
-				down = entity.dist_map[y + 1][x]
-			if x > 0:
-				left = entity.dist_map[y][x - 1]
-			if x < xmax:
-				right = entity.dist_map[y][x + 1]
-
-			options = [up, down, left, right]
-
-			options = [opt for opt in options if opt >= 0]
-
-			if options:
-				minval = min(options)
-
-				if up == minval:
-					return UP
-				elif down == minval:
-					return DOWN 
-				elif left==minval:
-					return LEFT
-				elif right==minval:
-					return RIGHT
-		return None
-
 	def flee_entity(self, entity):
 		y = self.y
 		x = self.x
@@ -416,12 +366,17 @@ class Battler(ActingEntity):
 	def config(self):
 		self.music = 'battle'
 		self.blocking = True
+		self.battle = None
 	def collide(self, entity, zone):
 		#self.enabled = False
 		if entity.is_player == True: #Is the player if no AI
-			result = battle.Battle(self.game, entity, self)
+			if self.battle is not None:
+				b = self.battle
+				b.realtime()
+			else:
+				b = battle.Battle(self.game, entity, self)
 
-			if result == USER:
+			if not b.running:
 				self.enabled = False
 				entity.backpack.absorb(self.backpack, message = True)
 	def battle_run(self):
@@ -602,9 +557,6 @@ class Treasure(Entity):
 		self.enabled = False
 		entity.backpack.absorb(self.backpack, message = True)
 
-class Rat(RandWalker, Battler):
-	def config(self):
-		self.combatants.append(mobs.characters.Page(level=20))
 
 class TowardWalker(Entity):
 	def config(self):

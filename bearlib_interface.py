@@ -892,7 +892,7 @@ class Display(object):
 
 	def update_generation_progress(self, percent):
 		splashbox = self.splashbox
-		splashbox.addstr(y+6, 1, str(percent))
+		splashbox.addstr(6, 1, str(percent))
 
 
 	def show_txt(self, filename):
@@ -963,6 +963,13 @@ class Display(object):
 			elif settings.battle_speed == 4:
 				bs_opt = 'Btl Spd. (Wait)'
 
+			if settings.battle_mode == 0:
+				bm_opt = 'Btl Mod. (Free)'
+			elif settings.battle_mode == 1:
+				bm_opt = 'Btl Mod. (Turn)'
+			elif settings.battle_mode == 2:
+				bm_opt = 'Btl Mod. (Realtime)'
+
 
 			if settings.music_mode == 0:
 				music_mode = 'Music (midi)'
@@ -973,7 +980,7 @@ class Display(object):
 
 
 
-			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, bs_opt, music_mode, 'Exit'] , cols=1, clear=False)
+			setting = menu(self.menubox, [musicoption, fogoption, batan_opt, bs_opt, bm_opt, music_mode, 'Exit'] , cols=1, clear=False)
 			if setting == musicoption:
 				if settings.music == 1:
 					music_queue.put(['volume', 0])
@@ -1000,6 +1007,10 @@ class Display(object):
 				settings.battle_speed += 1
 				if settings.battle_speed > 4:
 					settings.battle_speed = 0
+			elif setting == bm_opt:
+				settings.battle_mode += 1
+				if settings.battle_mode > 2:
+					settings.battle_mode = 0
 			elif setting == music_mode:
 				if settings.music_mode == 2:
 					settings.music_mode = 0
