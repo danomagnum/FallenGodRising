@@ -6,25 +6,20 @@
 
 from bearlibterminal import terminal
 import sys
-import os
 import time
 import random
 import math
-import sayings
 import bearlibkeys as keys
 from constants import *
 
 import maps.maptools as maptools
 
-import vision
 
 import stdoutCatcher
 import settings
 
 import locale
 locale.setlocale(locale.LC_ALL, '')
-
-#from StringIO import StringIO
 
 
 DEBUG = True
@@ -332,6 +327,7 @@ def menu(window, options, cols = 2, selected = None, clear=True, callback_on_cha
 		pass
 	except:
 		pass # xterm does not like this
+
 	if selected < len(options):
 		if clear:
 			window.erase()
@@ -341,9 +337,6 @@ def menu(window, options, cols = 2, selected = None, clear=True, callback_on_cha
 			window.erase()
 		return None
 
-	if clear:
-		window.erase()
-
 
 MAX_COMBATANTS = 3
 
@@ -352,6 +345,7 @@ class Display(object):
 
 		XMAX, YMAX = TERMSIZE
 
+		self.game = game
 
 		self.statboxsize = [12, int(XMAX/MAX_COMBATANTS)]
 		self.charboxsize = (int(YMAX / MAX_COMBATANTS), 40)
@@ -456,7 +450,6 @@ class Display(object):
 					if history_position > 1:
 						history_position -= 1
 						string = history[-history_position]
-		self.refresh_full()
 
 	@property
 	def mode(self):
@@ -471,10 +464,6 @@ class Display(object):
 	##################################
 	##### General Draw Routines
 	##################################
-
-	def flash_screen(self, wait_time=0.25):
-		pass
-		time.sleep(wait_time)
 
 	def refresh_full(self):
 		if self.mode == MAP:
@@ -519,10 +508,6 @@ class Display(object):
 				terminal.refresh()
 
 
-		
-
-
-		
 	def clear(self):
 		self.mapbox.erase()
 		for box in self.nmeboxes:
@@ -574,12 +559,13 @@ class Display(object):
 		self.enemy = None
 		self.mode = MAP
 		self.clear()
-		self.refresh_full
+		self.refresh_full()
+
 	def start_battle(self, enemy):
 		self.enemy = enemy
 		self.mode = COMBAT
 		self.clear()
-		self.refresh_full
+		self.refresh_full()
 
 	def refresh_full_combat(self):
 		for i in range(MAX_COMBATANTS):
