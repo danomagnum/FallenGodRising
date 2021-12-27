@@ -1,9 +1,10 @@
 import sys
 HEADER = ['import self_save as _self_save\n', 
           '_save = _self_save.gen_save_func(__file__, __name__)\n',
-	  '################\n',
-	  '#Only Edit Below This Line\n',
-	  '################\n\n']
+          '################\n',
+          '#Only Edit Below This Line\n',
+          '################\n\n']
+
 
 def gen_save_func(file, name):
 	def save(headers=True):
@@ -23,6 +24,7 @@ def gen_save_func(file, name):
 		write_self.close()
 
 	return save
+
 
 def bootstrap(module):
 	module._save = gen_save_func(module.__file__, module.__name__)

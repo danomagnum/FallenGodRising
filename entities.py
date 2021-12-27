@@ -1,5 +1,7 @@
 import battle
 import random
+
+import settings
 import utility
 from constants import *
 import bearlib_interface as graphics_interface
@@ -7,7 +9,7 @@ import items
 
 
 class Entity(object):
-	def __init__(self,game, name=None, combatants = None, item_list=None, x=0, y=0, char=None, AI=None, is_player = False):
+	def __init__(self, game, name=None, combatants=None, item_list=None, x=0, y=0, char=None, AI=None, is_player=False):
 		self.game = game
 		self.defeated_text = None
 		self.music = None
@@ -43,7 +45,6 @@ class Entity(object):
 
 		self.action_points = 0
 		
-		#utility.call_all_configs(self)
 		utility.call_all('config', self)
 
 		if self.combatant is None:
@@ -57,6 +58,7 @@ class Entity(object):
 
 		if self.defeated_text is None:
 			self.defeated_text = '{} was defeated'.format(self.name)
+
 	def helptext(self):
 		return self._helptext
 
@@ -101,12 +103,10 @@ class Entity(object):
 		return action
 	
 	def get_available(self):
-		return [ combatant for combatant in self.combatants if combatant.hp > 0 ] 
+		return [combatant for combatant in self.combatants if combatant.hp > 0]
 	
 	def get_standby(self):
-		return [ combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant ] 
-
-
+		return [combatant for combatant in self.combatants if (combatant.hp > 0) and combatant != self.combatant]
 
 	@property
 	def level(self):
@@ -114,6 +114,7 @@ class Entity(object):
 		for c in self.combatants:
 			l = max(l, c.level)
 		return l
+
 	def config(self):
 		pass
 
@@ -168,9 +169,8 @@ class Entity(object):
 		d = 0
 		self.dist_map[y0][x0] = d
 		checked = set()
-		checked.add((x0,y0))
-		to_check = [(x0,y0)]
-		checking = []
+		checked.add((x0, y0))
+		to_check = [(x0, y0)]
 		i = 0
 		while len(to_check) > 0:
 			checking = to_check[:]
@@ -199,11 +199,11 @@ class Entity(object):
 							if pt[0] == x0 and pt[1] == y0:
 								print('error')
 							if (self.dist_map[pt[1]][pt[0]] > d) or (self.dist_map[pt[1]][pt[0]] < 0):
-								#print('error 2 {} {}'.format(d,self.dist_map[pt[1]][pt[0]] ))
 								self.dist_map[pt[1]][pt[0]] = d
 								to_check.append(pt)
 							i = i + 1
 							checked.add(pt)
+
 	def follow_distmap(self, dmap):
 		y = self.y
 		x = self.x
@@ -235,13 +235,11 @@ class Entity(object):
 				return UP
 			elif down == minval:
 				return DOWN 
-			elif left==minval:
+			elif left == minval:
 				return LEFT
-			elif right==minval:
+			elif right == minval:
 				return RIGHT
 		return None
-
-
 
 	def toward_entity(self, entity):
 		y = self.y
@@ -273,9 +271,9 @@ class Entity(object):
 					return UP
 				elif down == minval:
 					return DOWN 
-				elif left==minval:
+				elif left == minval:
 					return LEFT
-				elif right==minval:
+				elif right == minval:
 					return RIGHT
 		return None
 
@@ -309,12 +307,11 @@ class Entity(object):
 					return UP
 				elif down == maxval:
 					return DOWN 
-				elif left==maxval:
+				elif left == maxval:
 					return LEFT
-				elif right==maxval:
+				elif right == maxval:
 					return RIGHT
 		return None
-
 
 	def flee_distmap(self, dmap):
 		y = self.y
@@ -346,9 +343,9 @@ class Entity(object):
 					return UP
 				elif down == maxval:
 					return DOWN 
-				elif left==maxval:
+				elif left == maxval:
 					return LEFT
-				elif right==maxval:
+				elif right == maxval:
 					return RIGHT
 		return None
 
@@ -360,33 +357,36 @@ class ActingEntity(Entity):
 		return self.action_points
 
 
-
-
 class Battler(ActingEntity):
 	def config(self):
 		self.music = 'battle'
 		self.blocking = True
 		self.battle = None
+
 	def collide(self, entity, zone):
-		#self.enabled = False
-		if entity.is_player == True: #Is the player if no AI
+		# Is the player if no AI
+		if entity.is_player:
 			if self.battle is not None:
 				b = self.battle
-				b.realtime()
+				if settings.battle_mode == 2:
+					b.realtime()
+				else:
+					b.turnbased()
 			else:
 				b = battle.Battle(self.game, entity, self)
 
-			if not b.running:
+			if b.complete:
 				self.enabled = False
-				entity.backpack.absorb(self.backpack, message = True)
+				entity.backpack.absorb(self.backpack, message=True)
+
 	def battle_run(self):
 		pass
 
 	def tick(self, zone):
 		if len(self.get_available()) == 0:
 			self.enabled = False
-			print('{}: {}'.format(self.name,self.defeated_text))
-			#TODO: drop the backpack
+			print('{}: {}'.format(self.name, self.defeated_text))
+			# TODO: drop the backpack
 			if len(self.backpack) > 0:
 				t = Treasure(backpack=self.backpack)
 				t.x = self.x
@@ -404,7 +404,6 @@ class Alter(Entity):
 		self.recharge = 10
 
 	def collide(self, entity, zone):
-		#self.enabled = False
 		if entity.is_player:
 			choice = self.game.display.popup('Encountered {}'.format(self.name), ['Pray', 'Destroy', 'Leave'])
 			if choice == 'Pray':
@@ -438,16 +437,15 @@ class Alter(Entity):
 		pass
 			
 
-
 class Shop(Entity):
 	def config(self):
 		self.name = 'Shop'
 		self.char = '$'
 		self.blocking = True
 		self.passive = False
+
 	def collide(self, entity, zone):
 		SELLRATIO = 0.5
-		#self.enabled = False
 		if entity.is_player:
 			shopping = True
 			zonemode = self.game.display.mode
@@ -456,7 +454,7 @@ class Shop(Entity):
 				self.game.display.display_item_stats(choice, entity.backpack)
 
 			def update_info_box2(choice):
-				self.game.display.display_item_stats(choice, entity.backpack, cost_mult = SELLRATIO)
+				self.game.display.display_item_stats(choice, entity.backpack, cost_mult=SELLRATIO)
 
 			choice = self.game.display.popup('Shop {}'.format(self.name), ['Buy', 'Sell', 'Leave'])
 			while shopping:
@@ -473,8 +471,6 @@ class Shop(Entity):
 							shopping = False
 					else:
 						shopping = False
-
-
 
 				elif choice == 'Buy':
 					if len(self.backpack) > 0:
@@ -507,18 +503,17 @@ class Door(Entity):
 		self.char = '+'
 		self.key()
 		self.passive = True
+
 	def key(self):
 		self.lock = None
+
 	def collide(self, entity, zone):
-		#self.enabled = False
 		if self.lock is None:
 			self.char = '-'
 			self.vis_blocking = False
 			return WALKABLE
-			#self.enabled = False
 		elif self.lock in entity.backpack:
 			entity.backpack.take_by_name(self.lock)
-			#self.enabled = False
 			self.lock = None
 			self.vis_blocking = False
 			return WALKABLE
@@ -526,15 +521,15 @@ class Door(Entity):
 			print('Locked.  Key={}'.format(self.lock))
 
 
-
 class RandWalker(Entity):
 	def tick(self, zone):
 		if random.random() > 0.8:
 			self.move(zone, random.choice([UP, DOWN, LEFT, RIGHT]))
 
+
 class Treasure(Entity):
-	def __init__(self,game = None, item_list = None, backpack = None):
-		Entity.__init__(self, game, name=None, combatants = None, item_list=None, x=0, y=0, char='?', AI=None, is_player = False)
+	def __init__(self, game=None, item_list=None, backpack=None):
+		Entity.__init__(self, game, name=None, combatants=None, item_list=None, x=0, y=0, char='?', AI=None, is_player=False)
 		if backpack is not None:
 			self.backpack = backpack
 		if item_list is None:
@@ -555,12 +550,13 @@ class Treasure(Entity):
 
 	def collide(self, entity, zone):
 		self.enabled = False
-		entity.backpack.absorb(self.backpack, message = True)
+		entity.backpack.absorb(self.backpack, message=True)
 
 
 class TowardWalker(Entity):
 	def config(self):
 		self.walkchance = 0.75
+
 	def tick(self, zone):
 		if random.random() < self.walkchance:
 			dir = self.toward_entity(self.game.player)
@@ -576,7 +572,7 @@ class DoomAI(Battler):
 		self.flee_counter = 0
 		self.configured = 1
 		self.movingdir = None
-		self.target_map  = None
+		self.target_map = None
 
 	def standby(self, zone):
 		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
@@ -630,7 +626,6 @@ class DoomAI(Battler):
 
 	def tick(self, zone):
 		self.state(zone)
-
 
 
 class PassiveTillClose(Battler):
@@ -711,7 +706,6 @@ class BasicAI1(Battler):
 		self.configured = 1
 
 	def tick(self, zone):
-		#print('walking towards from {},{}'.format(self.x, self.y))
 		if zone.LOS_check(self.x, self.y, self.game.player.x, self.game.player.y):
 			self.standby_counter = 0
 		else:
@@ -721,7 +715,6 @@ class BasicAI1(Battler):
 			if self.standby_counter < 1:
 				self.state = self.AGRESSIVE
 		elif self.state == self.AGRESSIVE:
-			#dir = zone.toward_player(self.x, self.y)
 			dir = self.toward_entity(self.game.player)
 			if dir is not None:
 				self.move(zone, dir)
@@ -729,7 +722,6 @@ class BasicAI1(Battler):
 			if self.standby_counter > self.standby_delay:
 				self.state = self.STANDBY
 		elif self.state == self.FLEE:
-			#dir = zone.toward_player(self.x, self.y)
 			dir = self.flee_entity(self.game.player)
 			if dir is not None:
 				self.move(zone, dir)
@@ -738,18 +730,19 @@ class BasicAI1(Battler):
 				self.state = self.STANDBY
 
 
-
 class NPC(Entity):
 	def config(self):
 		self.name = 'NPC'
 		self.char = 'N'
 		self.passive = True
+
 	def collide(self, entity, zone):
 		if entity.is_player:
 			return self.NPC(zone)
 	
 	def NPC(self, zone):
 		return WALKABLE
+
 
 class UpStairs(Entity):
 
@@ -769,8 +762,8 @@ class UpStairs(Entity):
 			zone.remove_entity(entity)
 			zone.add_entity(entity, zone.level - 1)
 
-class DownStairs(Entity):
 
+class DownStairs(Entity):
 	def config(self):
 		self.char = '>'
 		self.new_x = None
@@ -786,6 +779,7 @@ class DownStairs(Entity):
 		else:
 			zone.remove_entity(entity)
 			zone.add_entity(entity, zone.level + 1)
+
 
 class ZoneWarp(Entity):
 	def config(self):
@@ -809,6 +803,7 @@ class Inn(Entity):
 		self.char = '\x16'
 		self.blocking = True
 		self.passive = False
+
 	def collide(self, entity, zone):
 		modifier = self.game.get_var('GLO')
 		
@@ -816,8 +811,7 @@ class Inn(Entity):
 
 		cost = max(100, cost)
 
-
-		#If you look like you've got money, it might cost more
+		# If you look like you've got money, it might cost more
 		# Add up the value of all equipped items of the combatants
 		# and then use some fraction of that as a minimum cost
 		equip_value = 0

@@ -1,15 +1,15 @@
-import math
 import random
 import time
 import main
 import sayings
 import settings
-import sys
 import utility
 from constants import *
 
 DEBUG = True
 SLOWDOWN = 0.5
+
+# region Battle AI
 
 class AI(object):
 	def attack(self, enemy_ai):
@@ -177,7 +177,9 @@ class Skiddish_AI(AI):
 			return random.choice([ATTACK, SWITCH])
 		else:
 			return random.choice([ATTACK, ATTACK])
+# endregion
 
+# region Battle Actions
 ###########################################
 ##  Battle Actions
 ###########################################
@@ -219,7 +221,7 @@ class UserItem(Action):
 
 	@property
 	def Priority(self):
-		return 100 + self.item.value
+		return 100 + self.item.cost()
 
 class EnemyChange(Action):
 	def __init__(self, enemy_ai, user):
@@ -239,10 +241,8 @@ class UserChange(Action):
 		self.user = user
 
 	def Execute(self, battle):
-		if self.user.get_standby():
-			change_choice = battle.game.display.battlemenu(self.user.get_standby())
-			if change_choice is not None:
-				self.user.combatant = change_choice
+			if self.user.hp > 0:
+				battle.user.combatant = self.user
 
 	@property
 	def Priority(self):
@@ -275,19 +275,17 @@ class UserPosses(Action):
 		chance = hp_ratio * attempt_ratio
 		if random.random() < chance:
 			possess = possess_candidate
-			winner = USER
-			battle_continue = False
 			print('Possessed {}'.format(possess.name))
-			battle.player.combatants.append(possess)
-			battle.enemy_ai.cobatants.remove(possess)
+			battle.user.combatants.append(possess)
+			battle.enemy_ai.combatants.remove(possess)
+			battle.running = False
+			battle.complete = True
 		else:
 			print('Possession Attempt {} Was Unsuccessful.'.format(battle.possess_tries))
 
+# endregion
 
-
-###########################################
-##  Battle Logic
-###########################################
+# region Battle Logic
 
 class Battle(object):
 	def __init__(self, game, user, enemy_ai):
@@ -306,8 +304,10 @@ class Battle(object):
 		self.first_choice = None
 		self.user_move = None
 		self.user_item = None
+		self.selected_target = None
 
 		self.running = True
+		self.complete = False
 
 		self.game.display.enemy = self.enemy_ai
 
@@ -317,12 +317,15 @@ class Battle(object):
 		else:
 			self.prebattle()
 			self.start_battle()
-			while self.running:
-				self.run_turn()
+			self.turnbased()
 
 		if not self.running:
 			self.end_battle()
 
+	def turnbased(self):
+		self.running = True
+		while self.running:
+			self.run_turn()
 
 	def realtime(self):
 		self.game.display.enemy = self.enemy_ai
@@ -468,12 +471,12 @@ class Battle(object):
 
 					elif target == main.ENEMY:
 						if len(self.enemy_ai.get_available()) > 1:
-							selected_target = self.game.display.battlemenu(self.enemy_ai.get_available(),
-																	  selected=selected_target)
-							if selected_target is not None:
+							self.selected_target = self.game.display.battlemenu(self.enemy_ai.get_available(),
+																	  selected=self.selected_target)
+							if self.selected_target is not None:
 								return UserAttack(user=self.user.combatant,
 												 move=self.user_move,
-												 target=[selected_target])
+												 target=[self.selected_target])
 						else:
 							return UserAttack(user=self.user.combatant,
 											 move=self.user_move,
@@ -511,7 +514,10 @@ class Battle(object):
 			elif self.first_choice == 'Change':
 				if settings.battle_mode == 1:
 					# if we are in "turn choice" mode we lose our turn
-					return UserChange(self.user)
+					if self.user.get_standby():
+						change_choice = self.game.display.battlemenu(self.user.get_standby())
+						if change_choice is not None:
+							return UserChange(change_choice)
 				else:
 					# if we are in "free choice" mode we don't
 					if self.user.get_standby():
@@ -545,7 +551,7 @@ class Battle(object):
 										target=item_target)
 
 			elif self.first_choice == 'Possess':
-				return UserPosses(self)
+				return UserPosses()
 
 			elif self.first_choice == 'Run':
 				return ActionRun()
@@ -584,7 +590,7 @@ class Battle(object):
 					self.game.display.mapbox.getch()
 
 			if not self.running:
-				break;
+				break
 
 		self.game.display.show_btl_messages()
 		self.posturn()
@@ -619,8 +625,8 @@ class Battle(object):
 					# print("{} sent out {}".format(enemy_ai.name, e.name))
 					self.game.display.refresh_combatant()
 				else:
-					battle_continue = False
-					winner = USER
+					self.complete = True
+					self.running = False
 
 		if self.user.combatant.hp == 0:
 			if self.user.get_standby():
@@ -648,3 +654,5 @@ class Battle(object):
 
 		self.game.ticks += 1
 
+
+# endregion
