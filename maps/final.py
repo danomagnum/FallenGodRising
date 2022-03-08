@@ -12,7 +12,7 @@ class FinalZone(zone.LinearZone):
 	def config(self):
 		self.mob_list = [mobs.sorcerer.Archmage]
 		self.mob_list = set(self.mob_list)
-		self.music = 'wizard'
+		self.music = 'pulsartg'
 
 	def level_018(self):
 		if self.level_visits[18] == 1:
